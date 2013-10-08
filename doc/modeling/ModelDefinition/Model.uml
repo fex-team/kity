@@ -3,12 +3,6 @@
   dslVersion="1.0.0.0"
   Id="f1569750-3ce2-4347-a492-20e6c10cf126"
   name="Kity" xmlns="http://schemas.microsoft.com/dsltools/ModelStore">
-  <ownedCommentsInternal>
-    <comment
-      Id="fa2dad3e-f065-41af-a9f0-692127402695">
-      <body>IGraphicProvider 是了解右边这些接口和类的，针对不同的类型会有不同的绘制方法</body>
-    </comment>
-  </ownedCommentsInternal>
   <profileInstances>
     <packageHasProfileInstances
       Id="0caec977-1f8c-4ba3-a7db-8cc9ad9cc73b">
