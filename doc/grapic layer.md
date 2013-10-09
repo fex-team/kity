@@ -80,7 +80,6 @@
 ## addEventListener(name, handler(EventObject)) : this ##
 添加事件处理函数。图层上所有图形的事件将会派发到注册的 handler 中。支持处理的事件有 mousedown / mouseup / mousemove / keydown / keyup / touchstart / touchmove / touchend
 
-
 ## removeEventListener(name, handler) : this ##
 取消事件处理函数
 
@@ -313,6 +312,11 @@
 ## setHeight(float height) : this ##
 设置椭圆的高度
 
+
+---
+
+
+
 # Polygon
 > 基类 : Path
 
@@ -366,7 +370,7 @@
 ## Kity.Graphic.Curve(Array<Points\> points) ##
 快捷构造函数
 
-## appendPoint(Point point): this ##
+## appendPoint(float x, float y): this ##
 添加一个关键点到曲线上
 
 ## close(): Path ##
@@ -381,7 +385,7 @@
 # Polyline
 > 基类 : Path
 
-## addPoint(Point point): this ##
+## appendPoint(float x, float y): this ##
 添加一个折线的顶点
 
 ## close(): Ploygon ##
