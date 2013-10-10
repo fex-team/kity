@@ -34,7 +34,7 @@
           </nestedChildShapes>
         </classShape>
         <classShape Id="bfd1c509-8490-4ec9-abdf-16a3ffc6f440" isExpanded="false" absoluteBounds="6.25, 4.375, 1.5, 0.5" hideQualifiedName="false" increaseHeight="0" customColor="181, 193, 223">
-          <classMoniker Id="0e0cae5c-8e3f-4cee-8509-2ef6733b1e6f" LastKnownName="Bitmap" />
+          <classMoniker Id="0e0cae5c-8e3f-4cee-8509-2ef6733b1e6f" LastKnownName="Image" />
           <nestedChildShapes>
             <AttributeElementListCompartment Id="8abfbf62-dbd2-41a2-a89d-ff4b0c86f930" absoluteBounds="6.2650000000000006, 4.7650000000000006, 1.4700000000000002, 0.226318359375" name="AttributesCompartment" titleTextColor="Black" itemTextColor="Black" />
             <OperationElementListCompartment Id="b727f050-94bc-4288-ad13-2cc5fb3a0d38" absoluteBounds="6.2650000000000006, 5.001318359375, 1.4700000000000002, 0.226318359375" name="OperationsCompartment" titleTextColor="Black" itemTextColor="Black" />
@@ -111,7 +111,7 @@
           </nestedChildShapes>
         </classShape>
         <classShape Id="c9e3ea58-f310-4bb3-9857-45e88f6da92e" isExpanded="false" absoluteBounds="19.875, 2.75, 1.5, 0.5" hideQualifiedName="false" increaseHeight="0" customColor="181, 193, 223">
-          <classMoniker Id="dd5c3620-5c30-4883-ae3b-05a688e44824" LastKnownName="BitmapBrush" />
+          <classMoniker Id="dd5c3620-5c30-4883-ae3b-05a688e44824" LastKnownName="ImageBrush" />
           <nestedChildShapes>
             <AttributeElementListCompartment Id="38825c30-1453-4d65-9be3-e548439bc63d" absoluteBounds="19.89, 3.1400000000000006, 1.4700000000000002, 0.226318359375" name="AttributesCompartment" titleTextColor="Black" itemTextColor="Black" />
             <OperationElementListCompartment Id="5ffc9073-a5e8-47fd-8a99-482753960ff2" absoluteBounds="19.89, 3.3763183593750004, 1.4700000000000002, 0.226318359375" name="OperationsCompartment" titleTextColor="Black" itemTextColor="Black" />

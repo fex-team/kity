@@ -68,7 +68,7 @@
             </class>
           </packageHasNamedElement>
           <packageHasNamedElement>
-            <class Id="0e0cae5c-8e3f-4cee-8509-2ef6733b1e6f" name="Bitmap" isAbstract="false" isLeaf="false" isActiveClass="false">
+            <class Id="0e0cae5c-8e3f-4cee-8509-2ef6733b1e6f" name="Image" isAbstract="false" isLeaf="false" isActiveClass="false">
               <elementDefinition Id="075a160a-c261-4720-850d-d6a20dae0b09" />
               <generalsInternal>
                 <generalization Id="d869707d-e602-417a-8f47-37a17549ac8e" isSubstitutable="false">
@@ -269,7 +269,7 @@
             </class>
           </packageHasNamedElement>
           <packageHasNamedElement>
-            <class Id="dd5c3620-5c30-4883-ae3b-05a688e44824" name="BitmapBrush" isAbstract="false" isLeaf="false" isActiveClass="false">
+            <class Id="dd5c3620-5c30-4883-ae3b-05a688e44824" name="ImageBrush" isAbstract="false" isLeaf="false" isActiveClass="false">
               <elementDefinition Id="1dcba9b5-8c06-4040-87e9-a7c64bf0072e" />
               <suppliersInternal>
                 <interfaceRealization Id="cf98bba5-2fd0-45a9-9053-f86fe067b8f2">

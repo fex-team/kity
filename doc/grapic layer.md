@@ -93,10 +93,10 @@ Class.extend( Paper, Group, {
 ### Kity.Paper(HTMLElement container) ###
 构造函数，给定父容器 Dom，在父容器上创建 Paper 和呈现
 
-### getWidth() : int ###
+### getWidth() : float ###
 获取 Paper 的宽度，单位为px
 
-### getHeight() : int ###
+### getHeight() : float ###
 返回 Paper 的高度，单位为px
 
 ### setWidth(float width) : this ###
@@ -105,7 +105,7 @@ Class.extend( Paper, Group, {
 ### setHeight(float height) : this ###
 设置 Paper 的高度，单位为px 
 
-### setViewBox(Box box) : Box ###
+### setViewBox(float x, float y, float width, float height) : this ###
 设置 Paper 的坐标范围
 
 > 比如说，ViewBox 为 (0, 0, 100, 100) 的时候，一个大小为 (10, 10) 的矩形宽度占据了 Paper 的十分之一。若 Paper 实际大小为 1000px * 1000px 时，矩形实际大小就是 100px * 100px
@@ -333,7 +333,7 @@ Class.extend( Paper, Group, {
 
 
 
-## Polyline
+## Polyline ##
 > 基类 : Path
 
 ### appendPoint(float x, float y): this ###
@@ -341,3 +341,16 @@ Class.extend( Paper, Group, {
 
 ### close(): Ploygon ###
 闭合当前折线，返回一个多边形
+
+
+
+---
+
+
+## Image ##
+> 基类 : Shape
+
+用于显示图片
+
+### setUrl(string url) ###
+设置图片的URL

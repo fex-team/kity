@@ -107,7 +107,7 @@
     <packageHasNamedElement>
       <class
         Id="075a160a-c261-4720-850d-d6a20dae0b09"
-        name="Bitmap"
+        name="Image"
         isAbstract="false"
         isLeaf="false"
         isActiveClass="false">
@@ -754,7 +754,7 @@
     <packageHasNamedElement>
       <class
         Id="1dcba9b5-8c06-4040-87e9-a7c64bf0072e"
-        name="BitmapBrush"
+        name="ImageBrush"
         isAbstract="false"
         isLeaf="false"
         isActiveClass="false">
