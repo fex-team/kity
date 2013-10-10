@@ -70,7 +70,7 @@
         isActiveClass="false">
         <generalsInternal>
           <generalization
-            Id="17f66ad5-b1ab-40d4-a3a9-633a9d384e28"
+            Id="d6879ae4-c572-4b2c-af0e-a8e871fe56a0"
             isSubstitutable="false">
             <classMoniker
               Id="88280de5-4c0e-41cc-8391-d38f02206b40"
@@ -113,7 +113,7 @@
         isActiveClass="false">
         <generalsInternal>
           <generalization
-            Id="27619322-c81e-462c-b5bf-693f7c8e185a"
+            Id="7728b33a-300c-47de-8dca-fa37125fce1e"
             isSubstitutable="false">
             <classMoniker
               Id="88280de5-4c0e-41cc-8391-d38f02206b40"
@@ -136,6 +136,20 @@
             <interfaceMoniker
               Id="74ff50bf-eccf-468c-a887-eae28cb80e4c"
               LastKnownName="IDrawable"
+              LastKnownLocation="Graphic.uml" />
+          </interfaceRealization>
+          <interfaceRealization
+            Id="63d163de-53b1-4ec6-9a06-bf47e9641b3d">
+            <interfaceMoniker
+              Id="aad9b105-3464-44f7-89b6-b3482f7fab84"
+              LastKnownName="EventHandler"
+              LastKnownLocation="Graphic.uml" />
+          </interfaceRealization>
+          <interfaceRealization
+            Id="095e1356-cae5-42e5-96b8-ea5b609ff28f">
+            <interfaceMoniker
+              Id="f09bb0cf-079b-4c86-a458-0ca2a15c52ee"
+              LastKnownName="Styled"
               LastKnownLocation="Graphic.uml" />
           </interfaceRealization>
         </suppliersInternal>
@@ -225,7 +239,7 @@
         </suppliersInternal>
         <generalsInternal>
           <generalization
-            Id="0ce3adf4-2d36-46f3-a16b-9609f878614e"
+            Id="596488ca-a2c0-4b1b-b2a7-5c4a008fb3eb"
             isSubstitutable="false">
             <classMoniker
               Id="88280de5-4c0e-41cc-8391-d38f02206b40"
@@ -307,6 +321,13 @@
             <interfaceMoniker
               Id="cbfdd0cd-4898-4e44-87b2-a0dd806ff83c"
               LastKnownName="Container"
+              LastKnownLocation="Graphic.uml" />
+          </interfaceRealization>
+          <interfaceRealization
+            Id="eecbd560-4944-4838-b6fe-2fda8144d2d7">
+            <interfaceMoniker
+              Id="aad9b105-3464-44f7-89b6-b3482f7fab84"
+              LastKnownName="EventHandler"
               LastKnownLocation="Graphic.uml" />
           </interfaceRealization>
         </suppliersInternal>
@@ -1441,6 +1462,111 @@
           </association>
         </targetEnds>
       </Interface>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <Interface
+        Id="aad9b105-3464-44f7-89b6-b3482f7fab84"
+        name="EventHandler"
+        isAbstract="false"
+        isLeaf="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="4ef7f1b4-ae3a-4b97-81d2-6dd086a3138b"
+        name="Text"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <generalsInternal>
+          <generalization
+            Id="fca504ab-5b13-4a4c-8dda-3cd94ca0a1bf"
+            isSubstitutable="false">
+            <classMoniker
+              Id="88280de5-4c0e-41cc-8391-d38f02206b40"
+              LastKnownName="Shape"
+              LastKnownLocation="Graphic.uml" />
+          </generalization>
+        </generalsInternal>
+        <targetEnds>
+          <association
+            Id="b0bb4af9-be4c-4787-8843-bbc0bbe1c2b4"
+            isDerived="false"
+            sourceEndRoleName="Text"
+            targetEndRoleName="TextSpan"
+            isLeaf="false"
+            isAbstract="false">
+            <classMoniker
+              Id="b26094da-6f59-4183-b239-f0336851bb25"
+              LastKnownName="TextSpan"
+              LastKnownLocation="Graphic.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="6f7d0228-5d05-4a1b-a5c5-920073549c7b"
+                  name="Text"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="Shared"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="7b14137f-8a71-498e-90a0-ff08e09021bb"
+                  name="TextSpan"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false">
+                  <lowerValueInternal>
+                    <literalString
+                      Id="692f51e6-512c-4b2a-8270-9160bf6d0e77"
+                      name="Lower"
+                      value="*" />
+                  </lowerValueInternal>
+                  <upperValueInternal>
+                    <literalString
+                      Id="e0aa2447-5b05-41d5-9f35-c61531bf8cbe"
+                      name="Upper"
+                      value="*" />
+                  </upperValueInternal>
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+        </targetEnds>
+      </class>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <Interface
+        Id="f09bb0cf-079b-4c86-a458-0ca2a15c52ee"
+        name="Styled"
+        isAbstract="false"
+        isLeaf="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="b26094da-6f59-4183-b239-f0336851bb25"
+        name="TextSpan"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <suppliersInternal>
+          <interfaceRealization
+            Id="3d38ddad-5dbf-45e0-8c9c-851a95b24725">
+            <interfaceMoniker
+              Id="f09bb0cf-079b-4c86-a458-0ca2a15c52ee"
+              LastKnownName="Styled"
+              LastKnownLocation="Graphic.uml" />
+          </interfaceRealization>
+        </suppliersInternal>
+      </class>
     </packageHasNamedElement>
   </packagedElements>
 </package>

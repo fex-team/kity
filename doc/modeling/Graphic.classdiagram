@@ -52,9 +52,9 @@
             <class Id="b1cecb15-d271-4823-be0d-037065787fa1" name="Path" isAbstract="false" isLeaf="false" isActiveClass="false">
               <elementDefinition Id="3c658896-e832-497e-add0-7392ae5ce05c" />
               <generalsInternal>
-                <generalization Id="9eca186e-a0c2-4185-8471-e21f295a7564" isSubstitutable="false">
+                <generalization Id="29d81c7d-585e-4218-a3ea-7ea3155c1962" isSubstitutable="false">
                   <classMoniker Id="3278d87a-6cc8-4275-b478-d56d23aacbb6" LastKnownName="Shape" />
-                  <elementDefinition Id="17f66ad5-b1ab-40d4-a3a9-633a9d384e28" />
+                  <elementDefinition Id="d6879ae4-c572-4b2c-af0e-a8e871fe56a0" />
                 </generalization>
               </generalsInternal>
               <ownedAttributesInternal>
@@ -71,9 +71,9 @@
             <class Id="0e0cae5c-8e3f-4cee-8509-2ef6733b1e6f" name="Image" isAbstract="false" isLeaf="false" isActiveClass="false">
               <elementDefinition Id="075a160a-c261-4720-850d-d6a20dae0b09" />
               <generalsInternal>
-                <generalization Id="d869707d-e602-417a-8f47-37a17549ac8e" isSubstitutable="false">
+                <generalization Id="dea47758-5c1b-404f-8ca8-d1330cac6f18" isSubstitutable="false">
                   <classMoniker Id="3278d87a-6cc8-4275-b478-d56d23aacbb6" LastKnownName="Shape" />
-                  <elementDefinition Id="27619322-c81e-462c-b5bf-693f7c8e185a" />
+                  <elementDefinition Id="7728b33a-300c-47de-8dca-fa37125fce1e" />
                 </generalization>
               </generalsInternal>
             </class>
@@ -81,6 +81,16 @@
           <packageHasNamedElement>
             <class Id="3278d87a-6cc8-4275-b478-d56d23aacbb6" name="Shape" isAbstract="true" isLeaf="false" isActiveClass="false">
               <elementDefinition Id="88280de5-4c0e-41cc-8391-d38f02206b40" />
+              <suppliersInternal>
+                <interfaceRealization Id="2d0f2a69-80db-4225-b51b-6dc5f02c4443">
+                  <interfaceMoniker Id="509a8a6b-008d-498a-8c33-5d55eb920de4" LastKnownName="EventHandler" />
+                  <elementDefinition Id="63d163de-53b1-4ec6-9a06-bf47e9641b3d" />
+                </interfaceRealization>
+                <interfaceRealization Id="f68949ad-7ff3-4b44-85fd-39c95a31db15">
+                  <interfaceMoniker Id="ebc4d5ba-c601-449f-9b49-d37505a8df4f" LastKnownName="Styled" />
+                  <elementDefinition Id="095e1356-cae5-42e5-96b8-ea5b609ff28f" />
+                </interfaceRealization>
+              </suppliersInternal>
               <ownedAttributesInternal>
                 <property Id="adb5c2fe-7366-4647-9592-3d8690216481" name="box" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
                   <elementDefinition Id="26f0da5e-23c5-4f38-b155-3b5a5698754f" />
@@ -119,9 +129,9 @@
                 </interfaceRealization>
               </suppliersInternal>
               <generalsInternal>
-                <generalization Id="5a4e56f6-b78f-46f6-83ab-bb080a0de105" isSubstitutable="false">
+                <generalization Id="8d5b626e-3d13-4d87-bf6a-38f6db04d969" isSubstitutable="false">
                   <classMoniker Id="3278d87a-6cc8-4275-b478-d56d23aacbb6" LastKnownName="Shape" />
-                  <elementDefinition Id="0ce3adf4-2d36-46f3-a16b-9609f878614e" />
+                  <elementDefinition Id="596488ca-a2c0-4b1b-b2a7-5c4a008fb3eb" />
                 </generalization>
               </generalsInternal>
             </class>
@@ -133,6 +143,10 @@
                 <interfaceRealization Id="7e7709c4-d5ec-4309-aa67-c92c4b99171b">
                   <interfaceMoniker Id="bb03407b-2072-4eaf-8c00-bfc70eefd358" LastKnownName="Container" />
                   <elementDefinition Id="d8aa673c-4e30-4e9f-b0a4-acd70e90b512" />
+                </interfaceRealization>
+                <interfaceRealization Id="523ad334-2ba4-4fc1-b1d3-044882e13620">
+                  <interfaceMoniker Id="509a8a6b-008d-498a-8c33-5d55eb920de4" LastKnownName="EventHandler" />
+                  <elementDefinition Id="eecbd560-4944-4838-b6fe-2fda8144d2d7" />
                 </interfaceRealization>
               </suppliersInternal>
               <ownedAttributesInternal>
@@ -496,6 +510,66 @@
                 </association>
               </targetEnds>
             </Interface>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <Interface Id="509a8a6b-008d-498a-8c33-5d55eb920de4" name="EventHandler" isAbstract="false" isLeaf="false">
+              <elementDefinition Id="aad9b105-3464-44f7-89b6-b3482f7fab84" />
+            </Interface>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="3275d26a-67fa-44aa-84fb-568e47da2ef2" name="Text" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="4ef7f1b4-ae3a-4b97-81d2-6dd086a3138b" />
+              <generalsInternal>
+                <generalization Id="5bfdcc4f-31c1-4214-9909-9f55645fa90d" isSubstitutable="false">
+                  <classMoniker Id="3278d87a-6cc8-4275-b478-d56d23aacbb6" LastKnownName="Shape" />
+                  <elementDefinition Id="fca504ab-5b13-4a4c-8dda-3cd94ca0a1bf" />
+                </generalization>
+              </generalsInternal>
+              <targetEnds>
+                <association Id="7818346d-ca18-437e-ae0c-4a5326f5f999" isDerived="false" sourceEndRoleName="Text" targetEndRoleName="TextSpan" isLeaf="false" isAbstract="false">
+                  <classMoniker Id="36a07985-432e-4d07-af15-c8b63204fae9" LastKnownName="TextSpan" />
+                  <relationshipOwnedElementsInternal>
+                    <associationHasOwnedEnds>
+                      <memberEnd Id="8e02bad5-4719-4d29-82cc-b0b022ca8a98" name="Text" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="Shared" isComposite="false" isNavigableOwned="false">
+                        <elementDefinition Id="6f7d0228-5d05-4a1b-a5c5-920073549c7b" />
+                      </memberEnd>
+                    </associationHasOwnedEnds>
+                    <associationHasOwnedEnds>
+                      <memberEnd Id="83c289d9-a7be-439c-9309-2c9291c6141a" name="TextSpan" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                        <lowerValueInternal>
+                          <literalString Id="c2474757-acd6-4007-b944-92c5e98b945a" name="Lower" value="*">
+                            <elementDefinition Id="692f51e6-512c-4b2a-8270-9160bf6d0e77" />
+                          </literalString>
+                        </lowerValueInternal>
+                        <upperValueInternal>
+                          <literalString Id="9291a4a7-d59e-46e4-8d7b-7cef6435902a" name="Upper" value="*">
+                            <elementDefinition Id="e0aa2447-5b05-41d5-9f35-c61531bf8cbe" />
+                          </literalString>
+                        </upperValueInternal>
+                        <elementDefinition Id="7b14137f-8a71-498e-90a0-ff08e09021bb" />
+                      </memberEnd>
+                    </associationHasOwnedEnds>
+                  </relationshipOwnedElementsInternal>
+                  <elementDefinition Id="b0bb4af9-be4c-4787-8843-bbc0bbe1c2b4" />
+                </association>
+              </targetEnds>
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <Interface Id="ebc4d5ba-c601-449f-9b49-d37505a8df4f" name="Styled" isAbstract="false" isLeaf="false">
+              <elementDefinition Id="f09bb0cf-079b-4c86-a458-0ca2a15c52ee" />
+            </Interface>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="36a07985-432e-4d07-af15-c8b63204fae9" name="TextSpan" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="b26094da-6f59-4183-b239-f0336851bb25" />
+              <suppliersInternal>
+                <interfaceRealization Id="ea49f9d2-d9b6-4e07-a0d3-83ce505a8991">
+                  <interfaceMoniker Id="ebc4d5ba-c601-449f-9b49-d37505a8df4f" LastKnownName="Styled" />
+                  <elementDefinition Id="3d38ddad-5dbf-45e0-8c9c-851a95b24725" />
+                </interfaceRealization>
+              </suppliersInternal>
+            </class>
           </packageHasNamedElement>
         </packagedElements>
       </package>
