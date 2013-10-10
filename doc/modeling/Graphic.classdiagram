@@ -127,59 +127,14 @@
             </class>
           </packageHasNamedElement>
           <packageHasNamedElement>
-            <class Id="2fe385d4-5764-41b0-bd06-a1f601841307" name="Layer" isAbstract="false" isLeaf="false" isActiveClass="false">
-              <elementDefinition Id="a0ea0a3e-6a35-439e-a4cd-58d14eeaf848" />
-              <suppliersInternal>
-                <interfaceRealization Id="81d897b5-30c1-4642-8949-689430748e2e">
-                  <interfaceMoniker Id="bb03407b-2072-4eaf-8c00-bfc70eefd358" LastKnownName="Container" />
-                  <elementDefinition Id="b3407432-25bf-46c9-94ea-6580eb7b39e3" />
-                </interfaceRealization>
-              </suppliersInternal>
-              <ownedOperationsInternal>
-                <operation Id="b47d0a42-f635-4204-aa2f-ac6cdd1f09b3" name="draw" isLeaf="false" isStatic="false" isAbstract="false" concurrency="Sequential" isQuery="false">
-                  <elementDefinition Id="b9bd79a3-b510-43cc-86c5-d91588fe67d4" />
-                  <ownedParameters>
-                    <operationHasOwnedParameters>
-                      <parameter Id="9943c660-f09d-4cbe-9ca7-c7fe47709780" name="provider" direction="In" isUnique="false">
-                        <elementDefinition Id="308ddf28-a9f6-461b-8375-eb0956de204a" />
-                      </parameter>
-                    </operationHasOwnedParameters>
-                  </ownedParameters>
-                </operation>
-              </ownedOperationsInternal>
-            </class>
-          </packageHasNamedElement>
-          <packageHasNamedElement>
             <class Id="524bd4c2-23f0-4518-b460-f54c2106217c" name="Paper" isAbstract="false" isLeaf="false" isActiveClass="false">
               <elementDefinition Id="04444b1e-dfb6-4488-a64f-2c703d314197" />
-              <targetEnds>
-                <association Id="edec2792-a114-42cd-b4b7-1a72b9d91c9e" isDerived="false" sourceEndRoleName="Paper" targetEndRoleName="Layer" isLeaf="false" isAbstract="false">
-                  <classMoniker Id="2fe385d4-5764-41b0-bd06-a1f601841307" LastKnownName="Layer" />
-                  <relationshipOwnedElementsInternal>
-                    <associationHasOwnedEnds>
-                      <memberEnd Id="da60a221-8371-431d-83f1-ae6084e38b32" name="Paper" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="Shared" isComposite="false" isNavigableOwned="false">
-                        <elementDefinition Id="00a9ca2a-127c-4b67-bb00-e5fd846a34da" />
-                      </memberEnd>
-                    </associationHasOwnedEnds>
-                    <associationHasOwnedEnds>
-                      <memberEnd Id="7ef0706b-bd2e-4b35-b130-e8b840ba74e7" name="Layer" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
-                        <lowerValueInternal>
-                          <literalString Id="dec2cf71-8c84-415b-b34e-40402b2e7e43" name="Lower" value="1">
-                            <elementDefinition Id="9d0e1ce3-a8e1-4c87-a058-aeba533c2eca" />
-                          </literalString>
-                        </lowerValueInternal>
-                        <upperValueInternal>
-                          <literalString Id="3edcfed0-62fb-4a1d-b1e6-831f014f8f95" name="Upper" value="*">
-                            <elementDefinition Id="60ff9d68-675f-4fb4-b514-d068f7ac8b04" />
-                          </literalString>
-                        </upperValueInternal>
-                        <elementDefinition Id="32c40589-d6e4-43bf-b5d7-a994eb50890c" />
-                      </memberEnd>
-                    </associationHasOwnedEnds>
-                  </relationshipOwnedElementsInternal>
-                  <elementDefinition Id="e5f23a03-959e-449f-b587-d1b7534edba0" />
-                </association>
-              </targetEnds>
+              <suppliersInternal>
+                <interfaceRealization Id="7e7709c4-d5ec-4309-aa67-c92c4b99171b">
+                  <interfaceMoniker Id="bb03407b-2072-4eaf-8c00-bfc70eefd358" LastKnownName="Container" />
+                  <elementDefinition Id="d8aa673c-4e30-4e9f-b0a4-acd70e90b512" />
+                </interfaceRealization>
+              </suppliersInternal>
               <ownedAttributesInternal>
                 <property Id="0e7009e6-62cd-4f4f-9a35-47aec2db4d96" name="viewbox" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
                   <elementDefinition Id="9eb96130-9103-4822-8c77-40211cfeba35" />

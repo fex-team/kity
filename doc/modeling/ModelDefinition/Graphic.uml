@@ -302,6 +302,13 @@
               LastKnownName="IVew"
               LastKnownLocation="Graphic.uml" />
           </interfaceRealization>
+          <interfaceRealization
+            Id="d8aa673c-4e30-4e9f-b0a4-acd70e90b512">
+            <interfaceMoniker
+              Id="cbfdd0cd-4898-4e44-87b2-a0dd806ff83c"
+              LastKnownName="Container"
+              LastKnownLocation="Graphic.uml" />
+          </interfaceRealization>
         </suppliersInternal>
         <targetEnds>
           <association
