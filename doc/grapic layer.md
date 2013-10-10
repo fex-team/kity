@@ -287,7 +287,7 @@ CSS 样式支持
 ### kity.rect(float width, float height) : Rect ###
 构造函数，给定矩形的大小
 
-#### kity.rect(float x, float y, float width, float height) : Rect
+### kity.rect(float x, float y, float width, float height) : Rect ###
 构造函数，给定矩形的大小和位置
 
 ### setWidth(float width) : this ###
@@ -387,7 +387,7 @@ CSS 样式支持
 > 基类 : Path
 表示一条曲线
 
-### kity.curve(Array<Points\> points) : Curve ###
+### kity.curve(Array<Points> points) : Curve ###
 快捷构造函数，给定曲线经过的点
 
 ### insetPoint(float x, float y [, int index]) : this ###
@@ -408,7 +408,7 @@ CSS 样式支持
 ### kity.polyline() : Polygon ###
 构造函数，创建空折线
 
-### kity.polyline(Array<Point\>) : Polygon ###
+### kity.polyline(Array<Point>) : Polygon ###
 用点序列来创建折线
 
 ### getPoints() : Array<Point> ###
