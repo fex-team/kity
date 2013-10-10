@@ -250,3 +250,153 @@
 
 ## close(): Ploygon ##
 闭合当前折线，返回一个多边形
+
+# Brush #
+
+> inherit: Class
+>
+> fullname: Kity.Graphic.Brush
+
+根据画刷设置图形背景样式
+
+## get(Shape shape):this ##
+获取当前图形画刷
+
+## set(Shape shape):this ##
+设置当前图形画刷
+
+# colorBrush #
+> inherit: Class
+>
+> implement: Graphic.Brush
+
+根据纯色画刷设置图形背景
+
+# linearGradientBrush #
+> inherit: Class
+>
+> implement: Graphic.Brush
+
+根据线性渐变画刷设置图形背景
+
+# RadialGradientBrush #
+> inherit: Class
+>
+> implement: Graphic.Brush
+
+根据环形渐变画刷设置图形背景
+
+# BitmapBrush #
+> inherit: Class
+>
+> implement: Graphic.Brush
+
+根据位图画刷设置图形背景
+
+# Pen #
+
+> inherit: Class
+>
+> fullname: Kity.Graphic.Pen
+
+根据画笔设置当前图形边框样式
+
+## get(Shape shape):this ##
+获取当前图形画笔
+
+## set(Shape shape):this ##
+设置当前图形画笔
+
+# SolidPen #
+> inherit: Class
+>
+> implement: Graphic.Brush
+
+根据画笔设置图形边框为实线
+
+# DashedPen #
+> inherit: Class
+>
+> implement: Graphic.Brush
+
+根据画笔设置图形边框为虚线
+
+# Filter #
+
+> inherit: Class
+>
+> fullname: Kity.Graphic.Pen
+
+根据滤镜设置图形滤镜效果
+
+## get(Shape shape):this ##
+获取当前图形滤镜
+
+## set(Shape shape):this ##
+设置当前图形滤镜
+
+# BlurFilter #
+> inherit: Class
+>
+> implement: Graphic.Brush
+
+设置图形滤镜为模糊
+
+# ShadowFilter #
+> inherit: Class
+>
+> implement: Graphic.Brush
+
+设置图形滤镜为阴影
+
+# Color #
+> inherit: Class
+
+图形色值操作
+
+## get(Shape shape):this ##
+获取当前图形色值
+
+## set(Shape shape,string value):this ##
+设置当前图形色值
+
+## hsb(h,s,b):this ##
+转换hsb为hex
+
+## hsb2rgb(h,s,v):this ##
+转换hsb为rgb
+
+## hsl(h,s,l):this ##
+转换hsl为hex
+
+## hsl2rgb(h,s,l):this ##
+转换hsl为rgb
+
+## rgb(h,s,l):this ##
+转换rgb为hex
+
+## rgb2hsb(h,s,l):this ##
+转换rgb为hsb
+
+## rgb2hsl(h,s,l):this ##
+转换rgb为hsl
+
+
+# Transform #
+> inherit: Class
+
+图形变换
+
+## translate(Shape shape,int x,int y):this ##
+移动图形
+
+## rotate(Shape shape,int degress,int [cx],int [cy]):this ##
+旋转图形
+_注:如果cx&&cy没有被指定默认是图形中心_
+
+## scale(Shape shape,int sx,int sy,int [cx],int [cy]):this ##
+缩放图形
+_注:如果cx&&cy没有被指定默认是图形中心_
+
+## matrix(Shape shape,int a,int b,int c,int d,int e,int f):this ##
+根据变换矩阵设置图形
