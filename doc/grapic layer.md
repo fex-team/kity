@@ -23,7 +23,7 @@ Class.extend( Paper, Group, {
 
 
 ## Container ##
-> 基类 : Class
+> 接口
 
 提供作为图形的容器的功能
 
@@ -55,7 +55,7 @@ Class.extend( Paper, Group, {
 
 
 ## EventHandler ##
-> 基类 ： Class
+> 接口
 
 表示可以处理图形事件的接口
 
@@ -90,8 +90,11 @@ Class.extend( Paper, Group, {
 > 实现 : Container, EventHandler
 > 所有图形的
 
-### Kity.Paper(HTMLElement container) ###
+### kity.paper(HTMLElement container) : Paper ###
 构造函数，给定父容器 Dom，在父容器上创建 Paper 和呈现
+
+### kity.paper(string id) : Paper ###
+构造函数，给定父容器 id，在父容器上创建 Paper 和呈现
 
 ### getWidth() : float ###
 获取 Paper 的宽度，单位为px
@@ -125,12 +128,44 @@ Class.extend( Paper, Group, {
 
 
 
-## Shape
+## Styled ##
+> 接口
+
+CSS 样式支持
+
+### addClass(string className) : this ###
+添加 CSS Class
+
+### removeClass(string className) : this ###
+删除 CSS Class
+
+### hasClass(string className) : this ###
+判断是否存在指定的 class
+
+### setStyle(Plain styles) ##
+设置元素的样式
+
+
+
+---
+
+
+
+## Shape ##
 > 基类 : Class
-> 抽象类 : true
-> 实现 : EventHandler
+> 抽象
+> 实现 : EventHandler, Styled
 
 表示一个图形
+
+### setId(string id) : this ###
+设置图形的 id
+
+### getId() : string ###
+获得图形的 id
+
+### getType() : string ###
+获得图形的类型
 
 ### getX() : float ###
 获得图形的 x 坐标
@@ -171,18 +206,6 @@ Class.extend( Paper, Group, {
 ### *removeFilter(Filter filter) : this ###
 删除滤镜
 
-### addClass(string className) : this ###
-添加 CSS Class
-
-### removeClass(string className) : this ###
-删除 CSS Class
-
-### hasClass(string className) : this ###
-判断是否存在指定的 class
-
-### setStyle(Plain styles) ##
-设置元素的样式
-
 
 
 ---
@@ -192,13 +215,43 @@ Class.extend( Paper, Group, {
 ## Path
 > 基类 : Shape
 
-表示一条路径
+表示一个路径（闭合或不闭合）
 
-### getPathData() : String ###
+### kity.path() : Path ###
+构造函数，创建一条空路径
+
+### kity.path(string data): Path ###
+构造函数，用指定的路径数据创建路径
+
+### getPathData() : string ###
 获得路径的数据表示
 
-### setPathData(String data) : this ###
+### setPathData(string data) : this ###
 设置路径的数据
+
+### moveTo(x, y) : this ###
+设置路径当前位置
+
+### moveBy(dx, dy) : this ###
+设置路径当前位置（相对位置）
+
+### lineTo(x, y) : this ###
+从当前位置绘制一条直线到指定的位置
+
+### lineBy(dx, dy) : this ###
+从当前位置绘制一条直线到指定的位置（相对位置）
+
+### besierTo(x1, y1, x2, y2, x, y) : this ###
+绘制贝塞尔曲线
+
+### besierBy(x1, y1, x2, y2, x, y) : this ###
+绘制贝塞尔曲线（相对位置）
+
+### close() : this ###
+闭合当前路径
+
+### isClosed() : bool ###
+判断当前路径是否已闭合
 
 ### strokeBy(Pen pen) : this ###
 用指定的画笔描边路径
@@ -217,6 +270,9 @@ Class.extend( Paper, Group, {
  
 将多个图形组合成新的图形，请参照 Container
 
+## kity.group() ##
+构造函数创建一个空的组
+
 
 
 ---
@@ -228,8 +284,11 @@ Class.extend( Paper, Group, {
 
 表示一个矩形
 
-### Kity.Graphic.Rect(float width, float height) ###
-快捷构造函数
+### kity.rect(float width, float height) : Rect ###
+构造函数，给定矩形的大小
+
+#### kity.rect(float x, float y, float width, float height) : Rect
+构造函数，给定矩形的大小和位置
 
 ### setWidth(float width) : this ###
 设置矩形的宽度
@@ -254,14 +313,18 @@ Class.extend( Paper, Group, {
 
 表示一个椭圆
 
-### Kity.Graphic.Ellipse(float width, float height) ###
-快捷构造函数
+### kity.ellipse(float width, float height) ###
+快捷构造椭圆，给定椭圆的大小
+
+### kity.ellipse(float x, float y, float width, float height) ###
+快速构造椭圆，给定椭圆的位置和大小
 
 ### setWidth(float width) : this ###
 设置椭圆的宽度
 
 ### setHeight(float height) : this ###
 设置椭圆的高度
+
 
 
 ---
@@ -273,14 +336,20 @@ Class.extend( Paper, Group, {
 
 表示一个多边形
 
-### Kity.Graphic.Polygon(Array<Point\>) : Polygon ###
-用点序列来构造多边形
+### kity.polygon() : Polygon ###
+构造函数，创建一个空多边形
 
-### appendPoint(float x, float y) ###
-追加一个点到多边形上
+### kity.polygon(Array<Point\>) : Polygon ###
+用点序列来构造多边形
 
 ### getPoints() : Array<Point> ###
 获得多边形的点序列
+
+### insertPoint(float x, float y [, int index]) : this ###
+插入一个点到多边形上，可以指定插入的位置，不指定则插入到最后
+
+### setPoint(int index, float x, float y) : this ###
+设置多边形某个顶点的坐标
 
 
 
@@ -293,7 +362,7 @@ Class.extend( Paper, Group, {
 
 表示一条线段
 
-### Kity.Graphic.Line(float x1, float y1, float x2, float y2) ###
+### kity.line(float x1, float y1, float x2, float y2) ###
 快捷构造函数
 
 ### setPoint1(float x, float y) : this ###
@@ -318,14 +387,14 @@ Class.extend( Paper, Group, {
 > 基类 : Path
 表示一条曲线
 
-### Kity.Graphic.Curve(Array<Points\> points) ###
-快捷构造函数
+### kity.curve(Array<Points\> points) : Curve ###
+快捷构造函数，给定曲线经过的点
 
-### appendPoint(float x, float y): this ###
-添加一个关键点到曲线上
+### insetPoint(float x, float y [, int index]) : this ###
+插入一个曲线关键点，可以指定插入位置，不指定则插入到最后
 
-### close(): Path ###
-返回一个闭合的图形
+### setPoint(int index, float x, float y) : this ###
+设置曲线某个关键点的坐标
 
 
 
@@ -336,11 +405,20 @@ Class.extend( Paper, Group, {
 ## Polyline ##
 > 基类 : Path
 
-### appendPoint(float x, float y): this ###
-添加一个折线的顶点
+### kity.polyline() : Polygon ###
+构造函数，创建空折线
 
-### close(): Ploygon ###
-闭合当前折线，返回一个多边形
+### kity.polyline(Array<Point\>) : Polygon ###
+用点序列来创建折线
+
+### getPoints() : Array<Point> ###
+获得折线的点序列
+
+### insertPoint(float x, float y [, int index]) : this ###
+插入一个点到折线上，可以指定插入的位置，不指定则插入到最后
+
+### setPoint(int index, float x, float y) : this ###
+设置折线某个顶点的坐标
 
 
 
@@ -352,5 +430,62 @@ Class.extend( Paper, Group, {
 
 用于显示图片
 
-### setUrl(string url) ###
-设置图片的URL
+### kity.image(string url) : Image ###
+
+### setUrl(string url) : this ###
+设置图片的 URL
+
+### getUrl() : string
+获取图片的 URL
+
+
+
+---
+
+
+
+## Text ##
+> 基类 : Shape
+
+用于显示文字
+
+### kity.text() : Text ###
+创建一个空的文本
+
+### kity.text(string content) : Text ###
+创建一个具有指定内容的文本
+
+### setContent(string content) : this ###
+设置文本内容
+
+### getContent() : string
+获得文本内容
+
+### addSpan(TextSpan tspan) : this ###
+添加一个文本块，可以给文本块指定样式
+
+### setPath(string pathdata) : ###
+设置文本的排列路径
+
+
+
+---
+
+
+
+## TextSpan ##
+> 基类 : Class
+> 实现 : Styled
+
+内联文本块
+
+### kity.tspan(string content) ###
+创建具有指定内容的文本框
+
+### setContent(string content) ###
+设置文本块内容
+
+### getContent() : string ###
+获得文本块内容
+
+
