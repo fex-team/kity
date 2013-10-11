@@ -1,252 +1,706 @@
-# Class #
-> inherit: Object
-> 
-> fullname: Kity.Class
- 
+# Kity Graphic Layer API #
+
+## Class ##
+> 基类 : Object
+
 所有类的基类
 
-# Container #
+### [Static] extend( class0 [, classi...], extensions ) ###
+拓展功能到指定的类上
 
-> inherit: Class
-> 
-> fullname: Kity.Graphic.Container
+```javascript
+Class.extend( Paper, Group, {
+    getAllShape: function() { ... },
+    getShapeCount: function() { ... },
+    ...
+})
+```
+
+
+
+
+
+
+## Container ##
+> 接口
 
 提供作为图形的容器的功能
 
-## all() : Array<Shape\> ##
-
+### getAllShape() : Array<Shape\> ###
 获得容器中所有的图形
 
-## count() : int
-
+### getShapeCount() : int
 获得容器中图形的数量
 
-## find(string id) : Shape
+### getShapeById(string id) : Shape
+根据 id 获得指定的图形
 
-查找具有指定 id 的图形
+### getShapeByClass(string className) : Array<Shape>
+根据 CSS Class 获得指定的图形集合
 
-## add(Shape shape) : this ##
-
+### addShape(Shape shape) : this ###
 添加图形到容器中
 
-## remove(Shape shape) : this ##
-
+### removeShape(Shape shape) : this ###
 删除指定的图形
 
-## clear() : this ##
+### clear() : this ###
 清除容器中所有的图形
 
-# Layer #
 
-> inherit: Class
-> 
-> implement: Graphic.Container
 
-表示一个图层。上面的图层会覆盖下面的图层。
 
-## Layer(String name) : this ##
-构造函数
 
-## setName(String name) : this ##
-设置图层的名称
 
-## getName() : String ##
-返回图层的名称
+## EventHandler ##
+> 接口
 
-## getPosition() : int ##
-获得图层的位置。图层的位置决定了视觉上的位置，值越大的图层越在上面。
+表示可以处理图形事件的接口
 
-## setOpacity(float number) : this ##
-设置图层的透明度，取值范围为 0 - 1，0 表示完全透明，1 表示完全不透明
+### addEventListener(name, handler(ShapeEvent)) ###
+注册指定的事件（如 mousedown、 mousemove、 mouseup、 click、 keydown 等）
 
-## getOpacity() : number ##
-返回图层的透明度，取值范围为 0 - 1，0 表示完全透明，1 表示完全不透明
+### removeEventListener(name, handler(ShapeEvent)) ###
+取消已注册的事件
 
-## getGroup() : String ##
 
-获取图层的分组名称，null 表示不属于任何图层
 
-## setGroup(String group) : this ##
 
-设置图层的分组名称，null 表示不属于任何图层
 
-# Paper #
 
-> inherit: Class
+## ShapeEvent ##
+> 基类 ： DomEvent
 
-> 负责管理图层、图形和视图
+包装原生事件对象，并且提供点击的 Shape 实例
 
-## getSize() : Size ##
-获取 Paper 的大小
+### targetShape : Shape ###
+点击的 Shape 实例
 
-## setSize(Size size) : this ##
-返回 Paper 的大小
 
-## getViewBox() : Box ##
-获得 Paper 的坐标范围。
+
+
+
+
+## Paper ##
+> 基类 : Class
+> 实现 : Container, EventHandler
+> 所有图形的
+
+### kity.paper(HTMLElement container) : Paper ###
+构造函数，给定父容器 Dom，在父容器上创建 Paper 和呈现
+
+### kity.paper(string id) : Paper ###
+构造函数，给定父容器 id，在父容器上创建 Paper 和呈现
+
+### getWidth() : float ###
+获取 Paper 的宽度，单位为px
+
+### getHeight() : float ###
+返回 Paper 的高度，单位为px
+
+### setWidth(float width) : this ###
+设置 Paper 的宽度，单位为px
+
+### setHeight(float height) : this ###
+设置 Paper 的高度，单位为px
+
+### setViewBox(float x, float y, float width, float height) : this ###
+设置 Paper 的坐标范围
 
 > 比如说，ViewBox 为 (0, 0, 100, 100) 的时候，一个大小为 (10, 10) 的矩形宽度占据了 Paper 的十分之一。若 Paper 实际大小为 1000px * 1000px 时，矩形实际大小就是 100px * 100px
 
-## setViewBox(Box box) : Box ##
-设置 Paper 的坐标范围
+### getViewBox() : Box ###
+获得 Paper 的坐标范围。
 
-## getLayerByName(String name) : Layer ##
-获得具有指定名称的图层
-
-## getLayerByPosition(int position) : Layer ##
-获得指定位置上的图层
-
-## getLayersByGroup(String group) : Array<Layer\>
-获得指定分组的图层
-
-## getAllLayers() : Array<Layer\>
-获得所有的图层
-
-## getActiveLayer() : Layer ##
-获得当前激活的图层
-
-## setActiveLayer(Layer layer) : this ##
-设置当前激活的图层，Paper 上有切仅有一个激活图层
-
-## addLayer(Layer layer[, int position]) : this
-添加新的图层。如果指定了位置，则添加到指定位置中；如果没有指定位置，则添加在最上面；
-此操作会更新相关图层的 position，position 大于插入点的图层，其 position 递增
-
-## removeLayer(Layer layer) : this ##
-删除指定的图层。此操作会更新相关图层的 position，position 大于插入点的图层，其 position 递减
-
-## addShape(Shape shape) : this ##
+### addShape(Shape shape) : this ###
 在激活图层上添加图形
 
-## removeShape(Shape shape) : this ##
+### removeShape(Shape shape) : this ###
 在激活图层上删除图形
 
-# Shape
-> inherit: Class
-> 
-> abstract: true
+
+
+
+
+
+## Styled ##
+> 接口
+
+CSS 样式支持
+
+### addClass(string className) : this ###
+添加 CSS Class
+
+### removeClass(string className) : this ###
+删除 CSS Class
+
+### hasClass(string className) : this ###
+判断是否存在指定的 class
+
+### setStyle(Plain styles) ##
+设置元素的样式
+
+
+
+
+
+
+## Shape ##
+> 基类 : Class
+> 抽象
+> 实现 : EventHandler, Styled
 
 表示一个图形
 
-## getBoundaryBox() : Box ##
+### setId(string id) : this ###
+设置图形的 id
+
+### getId() : string ###
+获得图形的 id
+
+### getType() : string ###
+获得图形的类型
+
+### getX() : float ###
+获得图形的 x 坐标
+
+### getY() : float ###
+获得图形的 y 坐标
+
+### setX(float x) : this ###
+设置图形的 x 坐标
+
+### setY(float y) : this ###
+设置图形的 y 坐标
+
+### getWidth() : int ###
+获取图形的宽度
+
+### getHeight() : int ###
+返回图形的高度
+
+### getBoundaryBox() : Box ###
 获得图形的边界
 
-## getPosition() : Point ##
-获得图形的位置
-
-## setPosition(Point position) : this ##
-设置图形的位置
-
-## getTransform() : Transform
+### getTransform() : Transform
 获取图形当前的变换矩阵
 
-## setTransform(Transform transform) : this ##
+### setTransform(Transform transform) : this ###
 设置图形的变换矩阵
 
-## *addFilter(Filter filter) : this ##
+### addTo(Container container) : this ###
+把图形添加到指定的容器中
+
+### remove() : this ###
+从当前图形的容器上移除当前图形
+
+### *addFilter(Filter filter) : this ###
 添加滤镜
 
-## *removeFilter(Filter filter) : this ##
+### *removeFilter(Filter filter) : this ###
 删除滤镜
 
-# Path
-> inherit: Shape
 
-表示一条路径
 
-## getPathData() : String ##
+
+
+
+## Path
+> 基类 : Shape
+
+表示一个路径（闭合或不闭合）
+
+### kity.path() : Path ###
+构造函数，创建一条空路径
+
+### kity.path(string data): Path ###
+构造函数，用指定的路径数据创建路径
+
+### getPathData() : string ###
 获得路径的数据表示
 
-## setPathData(String data) : this ##
+### setPathData(string data) : this ###
 设置路径的数据
 
-## stroke(Pen pen) : this ##
+### moveTo(x, y) : this ###
+设置路径当前位置
+
+### moveBy(dx, dy) : this ###
+设置路径当前位置（相对位置）
+
+### lineTo(x, y) : this ###
+从当前位置绘制一条直线到指定的位置
+
+### lineBy(dx, dy) : this ###
+从当前位置绘制一条直线到指定的位置（相对位置）
+
+### besierTo(x1, y1, x2, y2, x, y) : this ###
+绘制贝塞尔曲线
+
+### besierBy(x1, y1, x2, y2, x, y) : this ###
+绘制贝塞尔曲线（相对位置）
+
+### close() : this ###
+闭合当前路径
+
+### isClosed() : bool ###
+判断当前路径是否已闭合
+
+### strokeBy(Pen pen) : this ###
 用指定的画笔描边路径
 
-## fill(Brush brush) : this ##
+### fillBy(Brush brush) : this ###
 用指定的画刷填充路径
 
-# Group
-> inherit: Shape
-> 
-> inplement: Container
- 
+
+
+
+
+## Group
+> 基类 : Shape
+> 实现 : Container
+
 将多个图形组合成新的图形，请参照 Container
 
-# Rect
-> inherit: ClosedPath
+## kity.group() ##
+构造函数创建一个空的组
+
+
+
+
+
+
+## Rect
+> 基类 : Path
 
 表示一个矩形
 
-## getSize() : Size ##
-获取矩形的大小
+### kity.rect(float width, float height) : Rect ###
+构造函数，给定矩形的大小
 
-## setSize(Size size) : this ##
-设置矩形的大小
+### kity.rect(float x, float y, float width, float height) : Rect ###
+构造函数，给定矩形的大小和位置
 
-## getRadius() : int ###
+### setWidth(float width) : this ###
+设置矩形的宽度
+
+### setHeight(float height) : this ###
+设置矩形的高度
+
+### getRadius() : int #####
 获得矩形的圆角大小
 
-## setRadius(int radius) : this ##
+### setRadius(int radius) : this ###
 设置矩形的圆角大小
 
 
-# Ellipse
-> inherit: ClosedPath
+
+
+
+
+## Ellipse
+> 基类 : Path
 
 表示一个椭圆
 
-## getSize() : Size ##
-获得椭圆的大小
+### kity.ellipse(float width, float height) ###
+快捷构造椭圆，给定椭圆的大小
 
-## setSize(Size size) : this ##
-设置椭圆的大小
+### kity.ellipse(float x, float y, float width, float height) ###
+快速构造椭圆，给定椭圆的位置和大小
 
-# Polygon
-> inherit: ClosedPath
+### setWidth(float width) : this ###
+设置椭圆的宽度
+
+### setHeight(float height) : this ###
+设置椭圆的高度
+
+
+
+
+
+
+## Polygon
+> 基类 : Path
 
 表示一个多边形
 
-## new Polygon(Array<Point\>) : Polygon ##
+### kity.polygon() : Polygon ###
+构造函数，创建一个空多边形
+
+### kity.polygon(Array<Point\>) : Polygon ###
 用点序列来构造多边形
 
-## getPoints() : Array<Point> ##
+### getPoints() : Array<Point> ###
 获得多边形的点序列
 
+### insertPoint(float x, float y [, int index]) : this ###
+插入一个点到多边形上，可以指定插入的位置，不指定则插入到最后
 
-# Line
-> inherit: Path
+### setPoint(int index, float x, float y) : this ###
+设置多边形某个顶点的坐标
+
+
+
+
+
+
+## Line
+> 基类 : Path
 
 表示一条线段
 
-## setPoint1(Point point) : this ##
+### kity.line(float x1, float y1, float x2, float y2) ###
+快捷构造函数
+
+### setPoint1(float x, float y) : this ###
 设置线段第一个端点的位置
 
-## getPoint1() : Point ##
+### getPoint1() : Point ###
 获取线段第一个端点的位置
 
-## setPoint2(Point point) : this ##
+### setPoint2(float x, float y) : this ###
 设置线段第二个端点的位置
 
-## getPoint2() : Point ##
+### getPoint2() : Point ###
 获取线段第二个端点的位置
 
 
-# Curve
-> inherit: Path
+
+
+
+
+## Curve
+> 基类 : Path
 表示一条曲线
 
-## addPoint(Point point): this ##
-添加一个关键点到曲线上
+### kity.curve(Array<Points> points) : Curve ###
+快捷构造函数，给定曲线经过的点
 
-## close(): ClosedPath ##
-返回一个闭合的图形
+### insetPoint(float x, float y [, int index]) : this ###
+插入一个曲线关键点，可以指定插入位置，不指定则插入到最后
 
-# Polyline
-> inherit: Path
+### setPoint(int index, float x, float y) : this ###
+设置曲线某个关键点的坐标
 
-## addPoint(Point point): this ##
-添加一个折线的顶点
 
-## close(): Ploygon ##
-闭合当前折线，返回一个多边形
+
+
+
+
+## Polyline ##
+> 基类 : Path
+
+### kity.polyline() : Polygon ###
+构造函数，创建空折线
+
+### kity.polyline(Array<Point>) : Polygon ###
+用点序列来创建折线
+
+### getPoints() : Array<Point> ###
+获得折线的点序列
+
+### insertPoint(float x, float y [, int index]) : this ###
+插入一个点到折线上，可以指定插入的位置，不指定则插入到最后
+
+### setPoint(int index, float x, float y) : this ###
+设置折线某个顶点的坐标
+
+
+
+
+
+## Image ##
+> 基类 : Shape
+
+用于显示图片
+
+### kity.image(string url) : Image ###
+
+### setUrl(string url) : this ###
+设置图片的 URL
+
+### getUrl() : string
+获取图片的 URL
+
+
+
+
+
+
+## Text ##
+> 基类 : Shape
+
+用于显示文字
+
+### kity.text() : Text ###
+创建一个空的文本
+
+### kity.text(string content) : Text ###
+创建一个具有指定内容的文本
+
+### setContent(string content) : this ###
+设置文本内容
+
+### getContent() : string
+获得文本内容
+
+### addSpan(TextSpan tspan) : this ###
+添加一个文本块，可以给文本块指定样式
+
+### setPath(string pathdata) : ###
+设置文本的排列路径
+
+
+
+
+
+
+## TextSpan ##
+> 基类 : Class
+> 实现 : Styled
+
+内联文本块
+
+### kity.tspan(string content) ###
+创建具有指定内容的文本框
+
+### setContent(string content) ###
+设置文本块内容
+
+### getContent() : string ###
+获得文本块内容
+
+
+
+
+## Brush ##
+
+> inherit: Class
+>
+> fullname: Kity.Brush
+
+根据画刷设置图形背景样式
+
+### toString() : string ###
+获取画刷颜色
+
+
+# ColorBrush #
+> inherit: Class
+>
+> implement: Kity.Brush
+
+根据纯色画刷设置图形背景
+
+### kity.ColorBrush(string value) : this ###
+创建一个画刷
+
+### setColor(string value) : this ###
+设置画刷颜色
+
+# LinearGradientBrush #
+> inherit: Class
+>
+> implement: Kity.Brush
+
+根据线性渐变画刷设置图形背景
+
+### kity.LinearGradientBrush() : this ###
+创建一个画刷
+
+### addStop(float area,string color,float opacity) : this ###
+设置画刷区间颜色
+
+# RadialGradientBrush #
+> inherit: Class
+>
+> implement: Kity.Brush
+
+根据环形渐变画刷设置图形背景
+
+### kity.RadialGradientBrush() : this ###
+创建一个画刷
+
+### addStop(float area,string color,float opacity) : this ###
+设置画刷区间颜色
+
+# ImageBrush #
+> inherit: Class
+>
+> implement: Kity.Brush
+
+根据位图画刷设置图形背景
+
+### kity.ImageBrush(string url) : this ###
+创建一个画刷
+
+### setUrl(string url) : this ###
+设置画刷URL
+---
+
+## Pen ##
+
+> inherit: Class
+>
+> fullname: Kity.Pen
+
+根据画笔设置当前图形边框样式
+
+### getColor():String ###
+获取当前图形画笔色值
+
+### getWidth():int ###
+获取当前图形画笔大小
+
+### setColor(string color):this ###
+设置当前图形画笔颜色
+
+### setWidth(int size):this ###
+设置当前图形画笔大小
+
+## SolidPen ##
+> inherit: Class
+>
+> implement: Kity.Brush
+
+根据画笔设置图形边框为实线
+
+### kity.SolidPen(string color,int size) : this ###
+创建一个笔刷
+
+## DashedPen ##
+> inherit: Class
+>
+> implement: Kity.Brush
+
+根据画笔设置图形边框为虚线
+
+### kity.DashedPen(string color,int size) : this ###
+创建一个笔刷
+
+---
+
+## Filter ##
+> inherit: Class
+>
+> fullname: Kity.Pen
+
+根据滤镜设置图形滤镜效果
+
+### toString():string ###
+获取当前图形滤镜
+
+
+## BlurFilter ##
+> inherit: Class
+>
+> implement: Kity.Brush
+
+设置图形滤镜为模糊
+
+### kity.BlurFilter(int blur) : this ###
+创建一个滤镜
+
+### setBlurFilter(int blur):this ###
+设置当前图形滤镜模糊值
+
+### getBlurFilter():this ###
+获取当前图形滤镜模糊值
+
+## ShadowFilter ##
+> inherit: Class
+>
+> implement: Kity.Brush
+
+设置图形滤镜为阴影
+
+### getShadowFilterOffset():this ###
+获取当前图形滤镜偏移
+
+### setShadowFilterOffset(int x,int y):this ###
+设置当前图形滤镜偏移
+
+### getShadowFilterBlur():this ###
+获取当前图形滤镜模糊值
+
+### setShadowFilterBlur(int blur):this ###
+设置当前图形滤镜模糊值
+
+### getShadowFilterBlur():this ###
+设置当前图形滤镜模糊值
+
+### setShadowFilteColor(string color):this ###
+设置当前图形滤镜颜色
+
+---
+
+## Color ##
+> inherit: Class
+>
+> fullname: Kity.Color
+图形色值操作
+
+### kity.Color(String color) : this ###
+创建一个颜色对象
+
+### toString():string ###
+获取当前图形色值
+
+### set(String value):this ###
+设置当前图形色值
+
+### [Static]hsb(h,s,b):this ###
+转换hsb为hex
+
+### [Static]hsb2rgb(h,s,v):this ###
+转换hsb为rgb
+
+### [Static]hsl(h,s,l):this ###
+转换hsl为hex
+
+### [Static]hsl2rgb(h,s,l):this ###
+转换hsl为rgb
+
+### [Static]rgb(h,s,l):this ###
+转换rgb为hex
+
+### [Static]rgb2hsb(h,s,l):this ###
+转换rgb为hsb
+
+### [Static]rgb2hsl(h,s,l):this ###
+转换rgb为hsl
+
+---
+
+## Matrix ##
+> inherit: Class
+
+图形变换
+
+### getTranslate():this ###
+获取图形平移
+
+### setTranslate(int x,int y):this ###
+设置图形平移
+
+### getRotate():this ###
+获取图形旋转
+
+### setRotate(int degress,int [cx],int [cy]):this ###
+设置图形旋转
+_注:如果cx&&cy没有被指定默认是图形中心_
+
+### getScale():this ###
+获取图形缩放
+
+### setScale(int sx,int sy,int [cx],int [cy]):this ###
+设置图形缩放
+_注:如果cx&&cy没有被指定默认是图形中心_
+
+### getMatrix():this ###
+获取图形变换矩阵
+
+### setMatrix(int a,int b,int c,int d,int e,int f):this ###
+设置图形变换矩阵
+
