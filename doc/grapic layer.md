@@ -627,9 +627,9 @@ CSS 样式支持
 _注:如果cx&&cy没有被指定默认是图形中心_
 
 ### scale(int sx,int sy,int [cx],int [cy]):this ###
-    缩放图形
+缩放图形
 _注:如果cx&&cy没有被指定默认是图形中心_
 
 ### matrix(int a,int b,int c,int d,int e,int f):this ###
-根据变换矩阵  设置图形
+根据变换矩阵设置图形
 
