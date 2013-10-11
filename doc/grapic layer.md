@@ -478,41 +478,44 @@ CSS 样式支持
 
 > inherit: Class
 >
-> fullname: Kity.Graphic.Brush
+> fullname: Kity.Brush
 
 根据画刷设置图形背景样式
 
-### get():this ###
+### kity.Brush() : Brush ###
+创建一个画刷
+
+### get():Brush ###
 获取当前图形画刷
 
-### set():this ###
+### set():Brush ###
 设置当前图形画刷
 
 # ColorBrush #
 > inherit: Class
 >
-> implement: Graphic.Brush
+> implement: Kity.Brush
 
 根据纯色画刷设置图形背景
 
 # LinearGradientBrush #
 > inherit: Class
 >
-> implement: Graphic.Brush
+> implement: Kity.Brush
 
 根据线性渐变画刷设置图形背景
 
 # RadialGradientBrush #
 > inherit: Class
 >
-> implement: Graphic.Brush
+> implement: Kity.Brush
 
 根据环形渐变画刷设置图形背景
 
 # ImageBrush #
 > inherit: Class
 >
-> implement: Graphic.Brush
+> implement: Kity.Brush
 
 根据位图画刷设置图形背景
 
@@ -522,12 +525,18 @@ CSS 样式支持
 
 > inherit: Class
 >
-> fullname: Kity.Graphic.Pen
+> fullname: Kity.Pen
 
 根据画笔设置当前图形边框样式
 
-### get():this ###
-获取当前图形画笔
+### kity.Pen() : Pen ###
+创建一个笔刷
+
+### getColor():String ###
+获取当前图形画笔色值
+
+### getWidth():int ###
+获取当前图形画笔大小
 
 ### setColor(string color):this ###
 设置当前图形画笔颜色
@@ -538,14 +547,14 @@ CSS 样式支持
 ## SolidPen ##
 > inherit: Class
 >
-> implement: Graphic.Brush
+> implement: Kity.Brush
 
 根据画笔设置图形边框为实线
 
 ## DashedPen ##
 > inherit: Class
 >
-> implement: Graphic.Brush
+> implement: Kity.Brush
 
 根据画笔设置图形边框为虚线
 
@@ -554,27 +563,30 @@ CSS 样式支持
 ## Filter ##
 > inherit: Class
 >
-> fullname: Kity.Graphic.Pen
+> fullname: Kity.Pen
 
 根据滤镜设置图形滤镜效果
 
-### get():this ###
+### kity.Filter() : Filter ###
+创建一个滤镜
+
+### get():Filter ###
 获取当前图形滤镜
 
-### set():this ###
+### set():Filter ###
 设置当前图形滤镜
 
 ## BlurFilter ##
 > inherit: Class
 >
-> implement: Graphic.Brush
+> implement: Kity.Brush
 
 设置图形滤镜为模糊
 
 ## ShadowFilter ##
 > inherit: Class
 >
-> implement: Graphic.Brush
+> implement: Kity.Brush
 
 设置图形滤镜为阴影
 
@@ -582,34 +594,38 @@ CSS 样式支持
 
 ## Color ##
 > inherit: Class
-
+>
+> fullname: Kity.Color
 图形色值操作
 
-### get():string ###
+### kity.Color() : Color ###
+创建一个颜色对象
+
+### get():Color ###
 获取当前图形色值
 
-### set(String value):string ###
+### set(String value):Color ###
 设置当前图形色值
 
-### [Static]hsb(h,s,b):string ###
+### [Static]hsb(h,s,b):Color ###
 转换hsb为hex
 
-### [Static]hsb2rgb(h,s,v):string ###
+### [Static]hsb2rgb(h,s,v):Color ###
 转换hsb为rgb
 
-### [Static]hsl(h,s,l):string ###
+### [Static]hsl(h,s,l):Color ###
 转换hsl为hex
 
-### [Static]hsl2rgb(h,s,l):string ###
+### [Static]hsl2rgb(h,s,l):Color ###
 转换hsl为rgb
 
-### [Static]rgb(h,s,l):string ###
+### [Static]rgb(h,s,l):Color ###
 转换rgb为hex
 
-### [Static]rgb2hsb(h,s,l):string ###
+### [Static]rgb2hsb(h,s,l):Color ###
 转换rgb为hsb
 
-### [Static]rgb2hsl(h,s,l):string ###
+### [Static]rgb2hsl(h,s,l):Color ###
 转换rgb为hsl
 
 ---
