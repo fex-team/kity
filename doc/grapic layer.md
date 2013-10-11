@@ -482,13 +482,13 @@ CSS 样式支持
 
 根据画刷设置图形背景样式
 
-### kity.Brush() : Brush ###
+### kity.Brush() : this ###
 创建一个画刷
 
-### get():Brush ###
+### get():this ###
 获取当前图形画刷
 
-### set():Brush ###
+### set():this ###
 设置当前图形画刷
 
 # ColorBrush #
@@ -529,7 +529,7 @@ CSS 样式支持
 
 根据画笔设置当前图形边框样式
 
-### kity.Pen() : Pen ###
+### kity.Pen() : this ###
 创建一个笔刷
 
 ### getColor():String ###
@@ -598,34 +598,34 @@ CSS 样式支持
 > fullname: Kity.Color
 图形色值操作
 
-### kity.Color() : Color ###
+### kity.Color() : this ###
 创建一个颜色对象
 
-### get():Color ###
+### get():this ###
 获取当前图形色值
 
-### set(String value):Color ###
+### set(String value):this ###
 设置当前图形色值
 
-### [Static]hsb(h,s,b):Color ###
+### [Static]hsb(h,s,b):this ###
 转换hsb为hex
 
-### [Static]hsb2rgb(h,s,v):Color ###
+### [Static]hsb2rgb(h,s,v):this ###
 转换hsb为rgb
 
-### [Static]hsl(h,s,l):Color ###
+### [Static]hsl(h,s,l):this ###
 转换hsl为hex
 
-### [Static]hsl2rgb(h,s,l):Color ###
+### [Static]hsl2rgb(h,s,l):this ###
 转换hsl为rgb
 
-### [Static]rgb(h,s,l):Color ###
+### [Static]rgb(h,s,l):this ###
 转换rgb为hex
 
-### [Static]rgb2hsb(h,s,l):Color ###
+### [Static]rgb2hsb(h,s,l):this ###
 转换rgb为hsb
 
-### [Static]rgb2hsl(h,s,l):Color ###
+### [Static]rgb2hsl(h,s,l):this ###
 转换rgb为hsl
 
 ---
