@@ -482,14 +482,6 @@ CSS 样式支持
 
 根据画刷设置图形背景样式
 
-### kity.Brush() : this ###
-创建一个画刷
-
-### get():this ###
-获取当前图形画刷
-
-### set():this ###
-设置当前图形画刷
 
 # ColorBrush #
 > inherit: Class
@@ -498,12 +490,24 @@ CSS 样式支持
 
 根据纯色画刷设置图形背景
 
+### kity.ColorBrush(string value) : this ###
+创建一个画刷
+
+### setColor(string value) : this ###
+创建一个画刷
+
 # LinearGradientBrush #
 > inherit: Class
 >
 > implement: Kity.Brush
 
 根据线性渐变画刷设置图形背景
+
+### kity.LinearGradientBrush() : this ###
+创建一个画刷
+
+### addStop(float area,string color,float opacity) : this ###
+设置画刷区间颜色
 
 # RadialGradientBrush #
 > inherit: Class
@@ -512,12 +516,21 @@ CSS 样式支持
 
 根据环形渐变画刷设置图形背景
 
+### kity.RadialGradientBrush() : this ###
+创建一个画刷
+
+### addStop(float area,string color,float opacity) : this ###
+设置画刷区间颜色
+
 # ImageBrush #
 > inherit: Class
 >
 > implement: Kity.Brush
 
 根据位图画刷设置图形背景
+
+### kity.ImageBrush(string url) : this ###
+创建一个画刷
 
 ---
 
@@ -528,9 +541,6 @@ CSS 样式支持
 > fullname: Kity.Pen
 
 根据画笔设置当前图形边框样式
-
-### kity.Pen() : this ###
-创建一个笔刷
 
 ### getColor():String ###
 获取当前图形画笔色值
@@ -551,12 +561,18 @@ CSS 样式支持
 
 根据画笔设置图形边框为实线
 
+### kity.SolidPen(string color,int size) : this ###
+创建一个笔刷
+
 ## DashedPen ##
 > inherit: Class
 >
 > implement: Kity.Brush
 
 根据画笔设置图形边框为虚线
+
+### kity.DashedPen(string color,int size) : this ###
+创建一个笔刷
 
 ---
 
@@ -567,14 +583,9 @@ CSS 样式支持
 
 根据滤镜设置图形滤镜效果
 
-### kity.Filter() : Filter ###
-创建一个滤镜
-
-### get():Filter ###
+### toString():string ###
 获取当前图形滤镜
 
-### set():Filter ###
-设置当前图形滤镜
 
 ## BlurFilter ##
 > inherit: Class
@@ -583,12 +594,28 @@ CSS 样式支持
 
 设置图形滤镜为模糊
 
+### kity.BlurFilter(int blur) : this ###
+创建一个滤镜
+
+### setBlurFilter(int blur):this ###
+设置当前图形滤镜模糊值
+
+
 ## ShadowFilter ##
 > inherit: Class
 >
 > implement: Kity.Brush
 
 设置图形滤镜为阴影
+
+### setShadowFilterOffset(int x,int y):this ###
+设置当前图形滤镜偏移
+
+### setShadowFilterBlur(int blur):this ###
+设置当前图形滤镜模糊值
+
+### setShadowFilteColor(string color):this ###
+设置当前图形滤镜颜色
 
 ---
 
@@ -598,10 +625,10 @@ CSS 样式支持
 > fullname: Kity.Color
 图形色值操作
 
-### kity.Color() : this ###
+### kity.Color(String color) : this ###
 创建一个颜色对象
 
-### get():this ###
+### toString():string ###
 获取当前图形色值
 
 ### set(String value):this ###
@@ -630,22 +657,34 @@ CSS 样式支持
 
 ---
 
-## Transform ##
+## Matrix ##
 > inherit: Class
 
 图形变换
 
-### translate(int x,int y):this ###
-移动图形
+### getTranslate():this ###
+获取图形平移
 
-### rotate(int degress,int [cx],int [cy]):this ###
-旋转图形
+### setTranslate(int x,int y):this ###
+设置图形平移
+
+### getRotate(int degress,int [cx],int [cy]):this ###
+获取图形旋转
+
+### setRotate(int degress,int [cx],int [cy]):this ###
+设置图形旋转
 _注:如果cx&&cy没有被指定默认是图形中心_
 
-### scale(int sx,int sy,int [cx],int [cy]):this ###
-缩放图形
+### getScale(int sx,int sy,int [cx],int [cy]):this ###
+获取图形缩放
+
+### setScale(int sx,int sy,int [cx],int [cy]):this ###
+设置图形缩放
 _注:如果cx&&cy没有被指定默认是图形中心_
 
-### matrix(int a,int b,int c,int d,int e,int f):this ###
-根据变换矩阵设置图形
+### getMatrix():this ###
+获取图形变换矩阵
+
+### setMatrix(int a,int b,int c,int d,int e,int f):this ###
+设置图形变换矩阵
 
