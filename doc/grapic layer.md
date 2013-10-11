@@ -482,6 +482,9 @@ CSS 样式支持
 
 根据画刷设置图形背景样式
 
+### toString() : string ###
+获取画刷颜色
+
 
 # ColorBrush #
 > inherit: Class
@@ -494,7 +497,7 @@ CSS 样式支持
 创建一个画刷
 
 ### setColor(string value) : this ###
-创建一个画刷
+设置画刷颜色
 
 # LinearGradientBrush #
 > inherit: Class
@@ -532,6 +535,8 @@ CSS 样式支持
 ### kity.ImageBrush(string url) : this ###
 创建一个画刷
 
+### setUrl(string url) : this ###
+设置画刷URL
 ---
 
 ## Pen ##
@@ -600,6 +605,8 @@ CSS 样式支持
 ### setBlurFilter(int blur):this ###
 设置当前图形滤镜模糊值
 
+### getBlurFilter():this ###
+获取当前图形滤镜模糊值
 
 ## ShadowFilter ##
 > inherit: Class
@@ -608,10 +615,19 @@ CSS 样式支持
 
 设置图形滤镜为阴影
 
+### getShadowFilterOffset():this ###
+获取当前图形滤镜偏移
+
 ### setShadowFilterOffset(int x,int y):this ###
 设置当前图形滤镜偏移
 
+### getShadowFilterBlur():this ###
+获取当前图形滤镜模糊值
+
 ### setShadowFilterBlur(int blur):this ###
+设置当前图形滤镜模糊值
+
+### getShadowFilterBlur():this ###
 设置当前图形滤镜模糊值
 
 ### setShadowFilteColor(string color):this ###
@@ -668,14 +684,14 @@ CSS 样式支持
 ### setTranslate(int x,int y):this ###
 设置图形平移
 
-### getRotate(int degress,int [cx],int [cy]):this ###
+### getRotate():this ###
 获取图形旋转
 
 ### setRotate(int degress,int [cx],int [cy]):this ###
 设置图形旋转
 _注:如果cx&&cy没有被指定默认是图形中心_
 
-### getScale(int sx,int sy,int [cx],int [cy]):this ###
+### getScale():this ###
 获取图形缩放
 
 ### setScale(int sx,int sy,int [cx],int [cy]):this ###
