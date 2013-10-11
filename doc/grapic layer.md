@@ -1,59 +1,55 @@
 # Kity Graphic Layer API #
 
-## Class ##
-> 基类 : Object
+## Parent ##
+> 功能拓展
 
-所有类的基类
+提供一个容器功能
 
-### [Static] extend( class0 [, classi...], extensions ) ###
-拓展功能到指定的类上
+### getChildren() : Array ###
+获得容器中所有的子元素
 
-```javascript
-Class.extend( Paper, Group, {
-    getAllShape: function() { ... },
-    getShapeCount: function() { ... },
-    ...
-})
-```
+### getChild(int pos) : object ###
+获得指定位置的子元素
 
+### getFirstChild() : object ###
+获得首个子元素
 
-
-
-
-
-## Container ##
-> 接口
-
-提供作为图形的容器的功能
-
-### getAllShape() : Array<Shape\> ###
-获得容器中所有的图形
-
-### getShapeCount() : int
-获得容器中图形的数量
-
-### getShapeById(string id) : Shape
-根据 id 获得指定的图形
-
-### getShapeByClass(string className) : Array<Shape>
+### getLastChild() : object ###
 根据 CSS Class 获得指定的图形集合
 
-### addShape(Shape shape) : this ###
-添加图形到容器中
+### indexOf(object child) : int ###
+获取指定子元素的位置，如果不存在则返回-1
 
-### removeShape(Shape shape) : this ###
-删除指定的图形
+### forEachChild(Function fn [, bool deep]) : this ###
+迭代每个子元素，如果给定了 deep 为true，则会迭代到实现了 parent 的对象的子元素
+
+### addChild(object child, int pos) : this ###
+添加子元素到指定的位置
+
+### appendChild(object child) : this ###
+追加子元素到指定的位置
+
+### prependChild(object child) : this ###
+添加子元素到最前头的位置
+
+### removeChild(int pos) : this ###
+删除指定位置的子元素
 
 ### clear() : this ###
-清除容器中所有的图形
+清除容器中所有的子元素
 
+### Child.remove() ###
+子元素从容器移除自身
+
+### Child.getParent() ###
+子元素获得包含自身的容器
 
 
 
 
 
 ## EventHandler ##
-> 接口
+> 功能拓展
 
 表示可以处理图形事件的接口
 
@@ -78,6 +74,17 @@ Class.extend( Paper, Group, {
 
 
 
+## Serializable ###
+> 接口
+
+表示一个类的实例是可序列化和反序列化的。如果一个类是可序列化的，那么在所有使用该类型的参数中，都可以使用字符串表示。
+
+### toString() : string ###
+返回当前实例的完整字符串表示
+
+### parse(string data) : this ###
+从字符串表示反序列化自身
+
 
 
 
@@ -86,10 +93,10 @@ Class.extend( Paper, Group, {
 > 实现 : Container, EventHandler
 > 所有图形的
 
-### kity.paper(HTMLElement container) : Paper ###
+### Ppaper(HTMLElement container) : Paper ###
 构造函数，给定父容器 Dom，在父容器上创建 Paper 和呈现
 
-### kity.paper(string id) : Paper ###
+### Ppaper(string id) : Paper ###
 构造函数，给定父容器 id，在父容器上创建 Paper 和呈现
 
 ### getWidth() : float ###
@@ -112,19 +119,13 @@ Class.extend( Paper, Group, {
 ### getViewBox() : Box ###
 获得 Paper 的坐标范围。
 
-### addShape(Shape shape) : this ###
-在激活图层上添加图形
-
-### removeShape(Shape shape) : this ###
-在激活图层上删除图形
-
 
 
 
 
 
 ## Styled ##
-> 接口
+> 功能拓展
 
 CSS 样式支持
 
@@ -147,7 +148,7 @@ CSS 样式支持
 
 ## Shape ##
 > 基类 : Class
-> 抽象
+> 抽象类
 > 实现 : EventHandler, Styled
 
 表示一个图形
@@ -167,17 +168,26 @@ CSS 样式支持
 ### getY() : float ###
 获得图形的 y 坐标
 
+### getPosition() : Point ###
+获得图形的位置
+
 ### setX(float x) : this ###
 设置图形的 x 坐标
 
 ### setY(float y) : this ###
 设置图形的 y 坐标
 
+### setPosition(float x, float y) ###
+设置图形的位置
+
 ### getWidth() : int ###
 获取图形的宽度
 
 ### getHeight() : int ###
 返回图形的高度
+
+### getSize() : Size ###
+返回图形的大小
 
 ### getBoundaryBox() : Box ###
 获得图形的边界
@@ -190,9 +200,6 @@ CSS 样式支持
 
 ### addTo(Container container) : this ###
 把图形添加到指定的容器中
-
-### remove() : this ###
-从当前图形的容器上移除当前图形
 
 ### *addFilter(Filter filter) : this ###
 添加滤镜
@@ -210,10 +217,10 @@ CSS 样式支持
 
 表示一个路径（闭合或不闭合）
 
-### kity.path() : Path ###
+### Path() : Path ###
 构造函数，创建一条空路径
 
-### kity.path(string data): Path ###
+### Path(string data): Path ###
 构造函数，用指定的路径数据创建路径
 
 ### getPathData() : string ###
@@ -237,7 +244,7 @@ CSS 样式支持
 ### besierTo(x1, y1, x2, y2, x, y) : this ###
 绘制贝塞尔曲线
 
-### besierBy(x1, y1, x2, y2, x, y) : this ###
+### besierBy(dx1, dy1, dx2, dy2, dx, dy) : this ###
 绘制贝塞尔曲线（相对位置）
 
 ### close() : this ###
@@ -246,10 +253,10 @@ CSS 样式支持
 ### isClosed() : bool ###
 判断当前路径是否已闭合
 
-### strokeBy(Pen pen) : this ###
+### stroke(Pen pen) : this ###
 用指定的画笔描边路径
 
-### fillBy(Brush brush) : this ###
+### fill(Brush brush) : this ###
 用指定的画刷填充路径
 
 
@@ -275,10 +282,10 @@ CSS 样式支持
 
 表示一个矩形
 
-### kity.rect(float width, float height) : Rect ###
+### Rect(float width, float height) : Rect ###
 构造函数，给定矩形的大小
 
-### kity.rect(float x, float y, float width, float height) : Rect ###
+### Rect(float x, float y, float width, float height) : Rect ###
 构造函数，给定矩形的大小和位置
 
 ### setWidth(float width) : this ###
@@ -303,10 +310,10 @@ CSS 样式支持
 
 表示一个椭圆
 
-### kity.ellipse(float width, float height) ###
+### Ellipse(float width, float height) ###
 快捷构造椭圆，给定椭圆的大小
 
-### kity.ellipse(float x, float y, float width, float height) ###
+### Ellipse(float x, float y, float width, float height) ###
 快速构造椭圆，给定椭圆的位置和大小
 
 ### setWidth(float width) : this ###
@@ -322,23 +329,15 @@ CSS 样式支持
 
 ## Polygon
 > 基类 : Path
+> 实现 : Parent
 
-表示一个多边形
+表示一个多边形，其子元素表示其顶点序列
 
-### kity.polygon() : Polygon ###
+### Polygon() : Polygon ###
 构造函数，创建一个空多边形
 
-### kity.polygon(Array<Point\>) : Polygon ###
+### Polygon(Array<Point>) : Polygon ###
 用点序列来构造多边形
-
-### getPoints() : Array<Point> ###
-获得多边形的点序列
-
-### insertPoint(float x, float y [, int index]) : this ###
-插入一个点到多边形上，可以指定插入的位置，不指定则插入到最后
-
-### setPoint(int index, float x, float y) : this ###
-设置多边形某个顶点的坐标
 
 
 
@@ -372,16 +371,15 @@ CSS 样式支持
 
 ## Curve
 > 基类 : Path
-表示一条曲线
+> 实现 : Parent
 
-### kity.curve(Array<Points> points) : Curve ###
+表示一条曲线，其子元素表示其经过的点序列
+
+### Curve() : Curve ###
+构造函数，初始化一条曲线
+
+### Curve(Array<Points> points) : Curve ###
 快捷构造函数，给定曲线经过的点
-
-### insetPoint(float x, float y [, int index]) : this ###
-插入一个曲线关键点，可以指定插入位置，不指定则插入到最后
-
-### setPoint(int index, float x, float y) : this ###
-设置曲线某个关键点的坐标
 
 
 
@@ -390,21 +388,15 @@ CSS 样式支持
 
 ## Polyline ##
 > 基类 : Path
+> 实现 : Parent
 
-### kity.polyline() : Polygon ###
+表示一条折线，其子元素是其顶点
+
+### Polyline() : Polygon ###
 构造函数，创建空折线
 
-### kity.polyline(Array<Point>) : Polygon ###
+### Polyline(Array<Point>) : Polygon ###
 用点序列来创建折线
-
-### getPoints() : Array<Point> ###
-获得折线的点序列
-
-### insertPoint(float x, float y [, int index]) : this ###
-插入一个点到折线上，可以指定插入的位置，不指定则插入到最后
-
-### setPoint(int index, float x, float y) : this ###
-设置折线某个顶点的坐标
 
 
 
@@ -415,7 +407,7 @@ CSS 样式支持
 
 用于显示图片
 
-### kity.image(string url) : Image ###
+### Image(string url) : Image ###
 
 ### setUrl(string url) : this ###
 设置图片的 URL
@@ -430,13 +422,14 @@ CSS 样式支持
 
 ## Text ##
 > 基类 : Shape
+> 实现 : Parent
 
-用于显示文字
+用于显示文字，其子元素为单独控制样式的 TextSpan
 
-### kity.text() : Text ###
+### Text() : Text ###
 创建一个空的文本
 
-### kity.text(string content) : Text ###
+### Text(string content) : Text ###
 创建一个具有指定内容的文本
 
 ### setContent(string content) : this ###
@@ -444,9 +437,6 @@ CSS 样式支持
 
 ### getContent() : string
 获得文本内容
-
-### addSpan(TextSpan tspan) : this ###
-添加一个文本块，可以给文本块指定样式
 
 ### setPath(string pathdata) : ###
 设置文本的排列路径
@@ -462,7 +452,7 @@ CSS 样式支持
 
 内联文本块
 
-### kity.tspan(string content) ###
+### TextSpan(string content) ###
 创建具有指定内容的文本框
 
 ### setContent(string content) ###
@@ -472,3 +462,308 @@ CSS 样式支持
 获得文本块内容
 
 
+
+
+
+
+
+## Color ##
+> 基类 : Class
+> 实现 : Serializable
+
+表示一个颜色
+
+### Color() : this ###
+初始化一个颜色，表示透明
+
+### setRGB(int r, int g, int b [, int a]) : this
+设置当前颜色的值，透明度可选，取值均为 0 - 255
+
+### setAlpha(int a) : this ###
+设置当前颜色的透明度，取值为 0 - 255
+
+### toRGB() : string ###
+获得当前颜色的 RGB 表示： rgb(r, g, b)
+
+### toRGBA() : string ###
+获得当前颜色的 RGBA 表示: rgba(r, g, b, a)
+
+### toHEX() : string ###
+获得当前颜色的 HEX 表示: #RRGGBB
+
+### toHSB() : string ###
+获得当前颜色的 HSB 表示: hsb(h, s, b)
+
+
+
+
+
+
+
+
+## Brush ##
+> 基类 : Class
+> 抽象类
+> 实现 : Serializable
+
+表示一个画刷，用于填充 Path
+
+### getType() : string ###
+获取画刷的类型
+
+
+
+
+
+
+
+
+# ColorBrush #
+> 基类: Brush
+
+表示一个用纯色填充的画刷
+
+### ColorBursh() ###
+构造函数，初始化一个纯色填充的画刷
+
+### ColorBrush(Color color) : this ###
+构造函数，使用指定的颜色初始化画刷
+
+### setColor(Color color) : this ###
+设置画刷颜色
+
+### getColor() : Color ###
+获取画刷的颜色
+
+
+
+
+
+
+
+
+# LinearGradientBrush #
+> 基类 : Brush
+
+表示用线性渐变填充的画刷
+
+### LinearGradientBrush() : this ###
+初始化线性渐变画刷
+
+### addStop(float x, float y, Color color) : this ###
+设置指定位置上的颜色
+
+
+
+
+
+
+# RadialGradientBrush #
+> 基类 : Brush
+
+表示用径向渐变填充的画刷
+
+### RadialGradientBrush() : this ###
+初始化一个径向填充的画刷
+
+### setCenter(float x, float y) ###
+设置径向渐变的起始位置
+
+### getCenter() ###
+获得径向渐变的结束为止
+
+### setRatio(float ratio) : this ###
+设置径向渐变的比例，就是 y / x。 默认值为 1，呈圆形。
+
+### getRatio() : this ###
+获取线性渐变的比例
+
+### addStop(float radius, Color color) : this ###
+设置距离中心点指定半径的颜色，如果 ratio 不为 1，则该距离是 x 轴上的距离
+
+
+
+
+
+
+
+# ImageBrush #
+> 基类 : Brush
+
+表示用位图填充的画刷
+
+### ImageBrush(string url) : this ###
+初始化一个位图画刷，指定位图位置
+
+### setUrl(string url) : this ###
+设置画刷位图的 URL
+
+### getUrl() : string ###
+获取画刷的位图 URL
+
+
+
+
+
+
+## Pen ##
+> 基类 : Class
+> 抽象类
+> 实现 : Serializable
+
+根据画笔设置当前图形边框样式
+
+### getColor() : Color ###
+获取当前图形画笔色值
+
+### getSize() : float ###
+获取当前图形画笔粗细
+
+### setColor(Color color) : this ###
+设置当前图形画笔颜色
+
+### setSize(float size) : this ###
+设置当前图形画笔的粗细
+
+
+
+
+
+
+## SolidPen ##
+> 基类 : Pen
+
+绘制实线描边的画笔
+
+### SolidPen(Color color, float size) : this ###
+用初始的颜色和大小创建实线画笔
+
+
+
+
+
+
+## DashedPen ##
+> 基类 : Pen
+
+绘制虚线描边的画笔
+
+### DashedPen(Color color, float size [, float dash [, float space]]) : this ###
+创建指定颜色和大小的虚线画笔，也可以可选指定虚线的段长和间隔长度
+
+### setDash(float dash) : this ###
+设置虚线的段长
+
+### getDash() : float ###
+获取虚线的段长
+
+### setSpace(float space) : this ###
+设置虚线段之间的间隔长度
+
+### getSpace() : float ###
+获取虚线段之间的间隔长度
+
+
+
+
+
+
+## Filter ##
+> 基类 : Class
+> 实现 : Serializable
+
+表示一个应用到图形上的滤镜
+
+
+
+
+
+
+## BlurFilter ##
+> 基类 : Filter
+
+设置图形滤镜为模糊
+
+### BlurFilter(int blur) : this ###
+创建一个滤镜
+
+### setBlurFilter(int blur):this ###
+设置当前图形滤镜模糊值
+
+### getBlurFilter():this ###
+获取当前图形滤镜模糊值
+
+
+
+
+
+
+## ShadowFilter ##
+> inherit: Class
+>
+> implement: Kity.Brush
+
+设置图形滤镜为阴影
+
+### getShadowFilterOffset():this ###
+获取当前图形滤镜偏移
+
+### setShadowFilterOffset(int x,int y):this ###
+设置当前图形滤镜偏移
+
+### getShadowFilterBlur():this ###
+获取当前图形滤镜模糊值
+
+### setShadowFilterBlur(int blur):this ###
+设置当前图形滤镜模糊值
+
+### getShadowFilterBlur():this ###
+设置当前图形滤镜模糊值
+
+### setShadowFilteColor(string color):this ###
+设置当前图形滤镜颜色
+
+
+
+
+
+
+
+## Matrix ##
+> 基类 : Class
+> 实现 : Serializable
+
+图形变换
+
+### getTranslate() : Point ###
+获取当前矩阵表示的平移量
+
+### setTranslate(int x, int y) : this ###
+设置矩阵的平移量
+
+### getRotate() : float ###
+获取矩阵表示的旋转角度（deg）
+
+### setRotate(int degress) : this ###
+设置矩阵表示的旋转角度
+
+### getScaleX() : float ###
+获取矩阵表示的X缩放比例
+
+### getScaleY() : float
+设置矩阵表示的Y缩放比例
+
+### setScale(float sx, float sy) : this ###
+设置矩阵表示的缩放比例
+
+### setAnchor(float x, float y) : this ###
+设置矩阵应用的旋转锚点
+
+### getAnchor() : Point ###
+获取矩阵应用的旋转锚点
+
+### getMatrix() : Plain ###
+获取矩阵的数据： { a: float, b: float, c: ...}
+
+### setMatrix(float a, float b, float c, float d, float e, float f): this ###
+设置矩阵的数据

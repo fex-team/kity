@@ -26,7 +26,7 @@ paper.setHeight("600px"); //这里也支持链式调用
 var rect = new Kity.Rect(10, 10, 40, 30);
 rect.fillBy("red");
 paper.addShape(rect);
-
+```
 
 ## * 使用路径绘制平行四边形，并用渐变填充，虚线描边 ##
 
