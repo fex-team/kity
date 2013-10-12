@@ -230,16 +230,16 @@
         isActiveClass="false">
         <suppliersInternal>
           <interfaceRealization
-            Id="6680047c-de70-49b8-880a-f6f3c745e0c3">
+            Id="85172b05-5949-4fe5-85a3-13c1c3b5a44e">
             <interfaceMoniker
               Id="cbfdd0cd-4898-4e44-87b2-a0dd806ff83c"
-              LastKnownName="Container"
+              LastKnownName="Parent"
               LastKnownLocation="Graphic.uml" />
           </interfaceRealization>
         </suppliersInternal>
         <generalsInternal>
           <generalization
-            Id="596488ca-a2c0-4b1b-b2a7-5c4a008fb3eb"
+            Id="9ede38fe-7ee5-470a-94bb-6476eaa921ab"
             isSubstitutable="false">
             <classMoniker
               Id="88280de5-4c0e-41cc-8391-d38f02206b40"
@@ -268,7 +268,7 @@
             Id="b3407432-25bf-46c9-94ea-6580eb7b39e3">
             <interfaceMoniker
               Id="cbfdd0cd-4898-4e44-87b2-a0dd806ff83c"
-              LastKnownName="Container"
+              LastKnownName="Parent"
               LastKnownLocation="Graphic.uml" />
           </interfaceRealization>
         </suppliersInternal>
@@ -320,7 +320,7 @@
             Id="d8aa673c-4e30-4e9f-b0a4-acd70e90b512">
             <interfaceMoniker
               Id="cbfdd0cd-4898-4e44-87b2-a0dd806ff83c"
-              LastKnownName="Container"
+              LastKnownName="Parent"
               LastKnownLocation="Graphic.uml" />
           </interfaceRealization>
           <interfaceRealization
@@ -714,9 +714,20 @@
     <packageHasNamedElement>
       <Interface
         Id="e7add928-ea12-4961-b5d8-e22b6d842101"
-        name="IBrush"
+        name="Brush"
         isAbstract="false"
-        isLeaf="false" />
+        isLeaf="false">
+        <generalsInternal>
+          <generalization
+            Id="eaba546d-69bf-4a72-96b4-46eaafb5afa0"
+            isSubstitutable="false">
+            <interfaceMoniker
+              Id="64a1c65b-6fec-451c-a881-d0952648e789"
+              LastKnownName="Serializable"
+              LastKnownLocation="Graphic.uml" />
+          </generalization>
+        </generalsInternal>
+      </Interface>
     </packageHasNamedElement>
     <packageHasNamedElement>
       <class
@@ -730,10 +741,20 @@
             Id="db443644-7dac-4287-9435-d973dfbfd032">
             <interfaceMoniker
               Id="e7add928-ea12-4961-b5d8-e22b6d842101"
-              LastKnownName="IBrush"
+              LastKnownName="Brush"
               LastKnownLocation="Graphic.uml" />
           </interfaceRealization>
         </suppliersInternal>
+        <generalsInternal>
+          <generalization
+            Id="5048f122-eab1-414f-bc6d-3f2f68faaefa"
+            isSubstitutable="false">
+            <classMoniker
+              Id="5f2f62fe-74ac-43e8-941c-19140cc79443"
+              LastKnownName="Brush"
+              LastKnownLocation="Graphic.uml" />
+          </generalization>
+        </generalsInternal>
       </class>
     </packageHasNamedElement>
     <packageHasNamedElement>
@@ -748,10 +769,20 @@
             Id="d0d6d00a-739c-42f6-ba37-2b3243cd582b">
             <interfaceMoniker
               Id="e7add928-ea12-4961-b5d8-e22b6d842101"
-              LastKnownName="IBrush"
+              LastKnownName="Brush"
               LastKnownLocation="Graphic.uml" />
           </interfaceRealization>
         </suppliersInternal>
+        <generalsInternal>
+          <generalization
+            Id="05889a3a-251c-4f6b-bdda-dfafaf313401"
+            isSubstitutable="false">
+            <classMoniker
+              Id="5f2f62fe-74ac-43e8-941c-19140cc79443"
+              LastKnownName="Brush"
+              LastKnownLocation="Graphic.uml" />
+          </generalization>
+        </generalsInternal>
       </class>
     </packageHasNamedElement>
     <packageHasNamedElement>
@@ -766,10 +797,20 @@
             Id="4f41852f-361f-47c8-b2fc-873c1544fc11">
             <interfaceMoniker
               Id="e7add928-ea12-4961-b5d8-e22b6d842101"
-              LastKnownName="IBrush"
+              LastKnownName="Brush"
               LastKnownLocation="Graphic.uml" />
           </interfaceRealization>
         </suppliersInternal>
+        <generalsInternal>
+          <generalization
+            Id="414a1a01-97c1-428d-adcb-cb06f8bf18ca"
+            isSubstitutable="false">
+            <classMoniker
+              Id="5f2f62fe-74ac-43e8-941c-19140cc79443"
+              LastKnownName="Brush"
+              LastKnownLocation="Graphic.uml" />
+          </generalization>
+        </generalsInternal>
       </class>
     </packageHasNamedElement>
     <packageHasNamedElement>
@@ -784,18 +825,38 @@
             Id="28ab4f3a-8dd9-422f-9307-ec8d672159f2">
             <interfaceMoniker
               Id="e7add928-ea12-4961-b5d8-e22b6d842101"
-              LastKnownName="IBrush"
+              LastKnownName="Brush"
               LastKnownLocation="Graphic.uml" />
           </interfaceRealization>
         </suppliersInternal>
+        <generalsInternal>
+          <generalization
+            Id="e3893150-3c5b-436c-8d0f-00006bdc2185"
+            isSubstitutable="false">
+            <classMoniker
+              Id="5f2f62fe-74ac-43e8-941c-19140cc79443"
+              LastKnownName="Brush"
+              LastKnownLocation="Graphic.uml" />
+          </generalization>
+        </generalsInternal>
       </class>
     </packageHasNamedElement>
     <packageHasNamedElement>
       <Interface
         Id="85a4605d-cfba-4b4a-9759-eedd8627b229"
-        name="IPen"
+        name="Pen"
         isAbstract="false"
         isLeaf="false">
+        <generalsInternal>
+          <generalization
+            Id="3c2e7435-32c1-42f0-89dd-a5224eb9e10c"
+            isSubstitutable="false">
+            <interfaceMoniker
+              Id="64a1c65b-6fec-451c-a881-d0952648e789"
+              LastKnownName="Serializable"
+              LastKnownLocation="Graphic.uml" />
+          </generalization>
+        </generalsInternal>
         <ownedAttributes>
           <property
             Id="68496e8b-1151-4cd6-886d-2c2551d42bf8"
@@ -834,10 +895,20 @@
             Id="48310403-df71-48bd-afc6-00616a720e44">
             <interfaceMoniker
               Id="85a4605d-cfba-4b4a-9759-eedd8627b229"
-              LastKnownName="IPen"
+              LastKnownName="Pen"
               LastKnownLocation="Graphic.uml" />
           </interfaceRealization>
         </suppliersInternal>
+        <generalsInternal>
+          <generalization
+            Id="d372bd6c-dddb-4bd1-a6d2-34c8db563f8c"
+            isSubstitutable="false">
+            <classMoniker
+              Id="1a6e9140-7226-4979-bf9c-e7ccb30cc0b0"
+              LastKnownName="Pen"
+              LastKnownLocation="Graphic.uml" />
+          </generalization>
+        </generalsInternal>
       </class>
     </packageHasNamedElement>
     <packageHasNamedElement>
@@ -852,10 +923,20 @@
             Id="c9cb46a2-76e3-4123-9d20-4bd5d968afab">
             <interfaceMoniker
               Id="85a4605d-cfba-4b4a-9759-eedd8627b229"
-              LastKnownName="IPen"
+              LastKnownName="Pen"
               LastKnownLocation="Graphic.uml" />
           </interfaceRealization>
         </suppliersInternal>
+        <generalsInternal>
+          <generalization
+            Id="21ac3e2e-b6d2-4a9d-9424-e54046fcb6a0"
+            isSubstitutable="false">
+            <classMoniker
+              Id="1a6e9140-7226-4979-bf9c-e7ccb30cc0b0"
+              LastKnownName="Pen"
+              LastKnownLocation="Graphic.uml" />
+          </generalization>
+        </generalsInternal>
       </class>
     </packageHasNamedElement>
     <packageHasNamedElement>
@@ -865,6 +946,15 @@
         isAbstract="false"
         isLeaf="false"
         isActiveClass="false">
+        <suppliersInternal>
+          <interfaceRealization
+            Id="51c37bdc-99b9-4bd5-a17a-e85516d9e9f6">
+            <interfaceMoniker
+              Id="64a1c65b-6fec-451c-a881-d0952648e789"
+              LastKnownName="Serializable"
+              LastKnownLocation="Graphic.uml" />
+          </interfaceRealization>
+        </suppliersInternal>
         <ownedAttributesInternal>
           <property
             Id="db67ba25-ef29-4882-8e06-14c04387312a"
@@ -920,6 +1010,15 @@
         isAbstract="false"
         isLeaf="false"
         isActiveClass="false">
+        <suppliersInternal>
+          <interfaceRealization
+            Id="8f17ea4f-7d37-47e9-b4b3-7ec6f069cea4">
+            <interfaceMoniker
+              Id="64a1c65b-6fec-451c-a881-d0952648e789"
+              LastKnownName="Serializable"
+              LastKnownLocation="Graphic.uml" />
+          </interfaceRealization>
+        </suppliersInternal>
         <ownedAttributesInternal>
           <property
             Id="e053fc7e-4f11-41ee-9d58-975519da8f83"
@@ -949,10 +1048,19 @@
     <packageHasNamedElement>
       <class
         Id="28976194-c74d-47bf-a8ab-f6ba7d1d9f87"
-        name="Transform"
+        name="Matrix"
         isAbstract="false"
         isLeaf="false"
         isActiveClass="false">
+        <suppliersInternal>
+          <interfaceRealization
+            Id="f386c238-2f79-49de-8786-3fc14e52155d">
+            <interfaceMoniker
+              Id="64a1c65b-6fec-451c-a881-d0952648e789"
+              LastKnownName="Serializable"
+              LastKnownLocation="Graphic.uml" />
+          </interfaceRealization>
+        </suppliersInternal>
         <ownedAttributesInternal>
           <property
             Id="7466bf32-f680-4c3c-9011-18413fa21a3e"
@@ -1059,9 +1167,20 @@
     <packageHasNamedElement>
       <Interface
         Id="a38dde31-0b40-4952-bfe7-37444ea05d07"
-        name="IFilter"
+        name="Filter"
         isAbstract="false"
-        isLeaf="false" />
+        isLeaf="false">
+        <generalsInternal>
+          <generalization
+            Id="174283bd-8b40-4313-8de3-e70f0b60f2a5"
+            isSubstitutable="false">
+            <interfaceMoniker
+              Id="64a1c65b-6fec-451c-a881-d0952648e789"
+              LastKnownName="Serializable"
+              LastKnownLocation="Graphic.uml" />
+          </generalization>
+        </generalsInternal>
+      </Interface>
     </packageHasNamedElement>
     <packageHasNamedElement>
       <class
@@ -1075,10 +1194,20 @@
             Id="d87a3de7-a999-4260-a054-c099c01480e6">
             <interfaceMoniker
               Id="a38dde31-0b40-4952-bfe7-37444ea05d07"
-              LastKnownName="IFilter"
+              LastKnownName="Filter"
               LastKnownLocation="Graphic.uml" />
           </interfaceRealization>
         </suppliersInternal>
+        <generalsInternal>
+          <generalization
+            Id="8e14e5e5-ef91-481e-8a21-422990e3ba7b"
+            isSubstitutable="false">
+            <classMoniker
+              Id="7da7b784-ec18-463c-b2cd-17be345b28a4"
+              LastKnownName="Filter"
+              LastKnownLocation="Graphic.uml" />
+          </generalization>
+        </generalsInternal>
       </class>
     </packageHasNamedElement>
     <packageHasNamedElement>
@@ -1093,10 +1222,20 @@
             Id="44220a2b-7e48-452a-a685-3ac7beea9f88">
             <interfaceMoniker
               Id="a38dde31-0b40-4952-bfe7-37444ea05d07"
-              LastKnownName="IFilter"
+              LastKnownName="Filter"
               LastKnownLocation="Graphic.uml" />
           </interfaceRealization>
         </suppliersInternal>
+        <generalsInternal>
+          <generalization
+            Id="6b028c30-ad7e-4cc5-b9ca-8afa7e40cb21"
+            isSubstitutable="false">
+            <classMoniker
+              Id="7da7b784-ec18-463c-b2cd-17be345b28a4"
+              LastKnownName="Filter"
+              LastKnownLocation="Graphic.uml" />
+          </generalization>
+        </generalsInternal>
       </class>
     </packageHasNamedElement>
     <packageHasNamedElement>
@@ -1404,64 +1543,9 @@
     <packageHasNamedElement>
       <Interface
         Id="cbfdd0cd-4898-4e44-87b2-a0dd806ff83c"
-        name="Container"
+        name="Parent"
         isAbstract="false"
-        isLeaf="false">
-        <targetEnds>
-          <association
-            Id="cca3f994-9a2e-48bd-a821-ce915a9a5ff0"
-            isDerived="false"
-            sourceEndRoleName="IContainer"
-            targetEndRoleName="Shape"
-            isLeaf="false"
-            isAbstract="false">
-            <classMoniker
-              Id="88280de5-4c0e-41cc-8391-d38f02206b40"
-              LastKnownName="Shape"
-              LastKnownLocation="Graphic.uml" />
-            <relationshipOwnedElementsInternal>
-              <associationHasOwnedEnds>
-                <memberEnd
-                  Id="6c365465-87c7-4b8c-9207-c387a8dda256"
-                  name="IContainer"
-                  isLeaf="false"
-                  isStatic="false"
-                  isReadOnly="false"
-                  isDerived="false"
-                  isDerivedUnion="false"
-                  aggregation="Shared"
-                  isComposite="false"
-                  isNavigableOwned="false" />
-              </associationHasOwnedEnds>
-              <associationHasOwnedEnds>
-                <memberEnd
-                  Id="511ae335-cedd-4013-8083-12ac7ab7b983"
-                  name="Shape"
-                  isLeaf="false"
-                  isStatic="false"
-                  isReadOnly="false"
-                  isDerived="false"
-                  isDerivedUnion="false"
-                  aggregation="None"
-                  isComposite="false">
-                  <lowerValueInternal>
-                    <literalString
-                      Id="efa0bdea-6c48-4c91-8dc7-40f8bafd9f38"
-                      name="Lower"
-                      value="*" />
-                  </lowerValueInternal>
-                  <upperValueInternal>
-                    <literalString
-                      Id="5f02aa2f-3db0-4eb1-9ead-a4e7c6a97419"
-                      name="Upper"
-                      value="*" />
-                  </upperValueInternal>
-                </memberEnd>
-              </associationHasOwnedEnds>
-            </relationshipOwnedElementsInternal>
-          </association>
-        </targetEnds>
-      </Interface>
+        isLeaf="false" />
     </packageHasNamedElement>
     <packageHasNamedElement>
       <Interface
@@ -1563,6 +1647,67 @@
             <interfaceMoniker
               Id="f09bb0cf-079b-4c86-a458-0ca2a15c52ee"
               LastKnownName="Styled"
+              LastKnownLocation="Graphic.uml" />
+          </interfaceRealization>
+        </suppliersInternal>
+      </class>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <Interface
+        Id="64a1c65b-6fec-451c-a881-d0952648e789"
+        name="Serializable"
+        isAbstract="false"
+        isLeaf="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="1a6e9140-7226-4979-bf9c-e7ccb30cc0b0"
+        name="Pen"
+        isAbstract="true"
+        isLeaf="false"
+        isActiveClass="false">
+        <suppliersInternal>
+          <interfaceRealization
+            Id="4957928c-10a0-46ba-9bc5-d1b9bae95f22">
+            <interfaceMoniker
+              Id="64a1c65b-6fec-451c-a881-d0952648e789"
+              LastKnownName="Serializable"
+              LastKnownLocation="Graphic.uml" />
+          </interfaceRealization>
+        </suppliersInternal>
+      </class>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="7da7b784-ec18-463c-b2cd-17be345b28a4"
+        name="Filter"
+        isAbstract="true"
+        isLeaf="false"
+        isActiveClass="false">
+        <suppliersInternal>
+          <interfaceRealization
+            Id="533fcb1a-c1af-49f2-a400-8b29ad58e9bb">
+            <interfaceMoniker
+              Id="64a1c65b-6fec-451c-a881-d0952648e789"
+              LastKnownName="Serializable"
+              LastKnownLocation="Graphic.uml" />
+          </interfaceRealization>
+        </suppliersInternal>
+      </class>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="5f2f62fe-74ac-43e8-941c-19140cc79443"
+        name="Brush"
+        isAbstract="true"
+        isLeaf="false"
+        isActiveClass="false">
+        <suppliersInternal>
+          <interfaceRealization
+            Id="e5a25003-2c2d-40b9-addd-0000125844b7">
+            <interfaceMoniker
+              Id="64a1c65b-6fec-451c-a881-d0952648e789"
+              LastKnownName="Serializable"
               LastKnownLocation="Graphic.uml" />
           </interfaceRealization>
         </suppliersInternal>
