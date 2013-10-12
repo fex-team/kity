@@ -15,9 +15,9 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
 //todo 顺序
-        '../_src/core/*.js',
-        './tools/js/UserAction.js',
-        '../_test/core/*.js',
+        './_src/core/*.js',
+        './_test/tools/js/UserAction.js',
+        './_test/core/*.js',
 //        './examples.js'//这是各种断言和用例编写方法的例子,真的写用例时把这个注了
     ],
 
@@ -70,10 +70,10 @@ module.exports = function(config) {
     singleRun: false,
     //coverage
     reporters: ['progress', 'coverage'],
-    preprocessors: {'../_src/*/*.js': ['coverage']},
+    preprocessors: {'./_src/core/*.js': ['coverage']},
     coverageReporter: {
           type: 'html',
-          dir: './coverage/'
+          dir: './_test/coverage/'
     }
   });
 };
