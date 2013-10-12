@@ -17,8 +17,9 @@ module.exports = function(config) {
 
         './src/Song.js',
         './src/Player.js',
+        './tools/js/UserAction.js',
         './test/SpecHelper.js',
-        './test/PlayerSpec.js'
+        './test/Player.js'
     ],
 
 
