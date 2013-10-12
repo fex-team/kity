@@ -1,5 +1,51 @@
 # Kity Graphic Layer API #
 
+## Serializable ###
+> 接口
+
+表示一个类的实例是可序列化和反序列化的。如果一个类是可序列化的，那么在所有使用该类型的参数中，都可以使用字符串表示。
+
+### toString() : string ###
+返回当前实例的完整字符串表示
+
+### parse(object data) : this ###
+从给定的数据（字符串、数字、JSON等，取决于实现的类型）表示反序列化自身
+
+
+
+
+
+## Point ##
+> 数据契约（JSON 格式）
+
+表示一个点，结构如下：
+
+```javascript
+{
+    x : <float>,
+    y : <float>
+}
+```
+
+
+
+
+
+## Size ##
+> 数据契约（JSON 格式）
+
+表示一个尺寸，结构如下：
+
+```
+{
+    width : <float>,
+    height : <float>
+}
+```
+
+
+
+
 ## Parent ##
 > 功能拓展
 
@@ -18,7 +64,7 @@
 根据 CSS Class 获得指定的图形集合
 
 ### indexOf(object child) : int ###
-获取指定子元素的位置，如果不存在则返回-1
+获取指定子元素的位置，如果不存在则返回 -1
 
 ### forEachChild(Function fn [, bool deep]) : this ###
 迭代每个子元素，如果给定了 deep 为true，则会迭代到实现了 parent 的对象的子元素
@@ -74,29 +120,16 @@
 
 
 
-## Serializable ###
-> 接口
-
-表示一个类的实例是可序列化和反序列化的。如果一个类是可序列化的，那么在所有使用该类型的参数中，都可以使用字符串表示。
-
-### toString() : string ###
-返回当前实例的完整字符串表示
-
-### parse(string data) : this ###
-从字符串表示反序列化自身
-
-
-
 
 ## Paper ##
 > 基类 : Class
-> 实现 : Container, EventHandler
+> 实现 : Parent, EventHandler
 > 所有图形的
 
 ### Ppaper(HTMLElement container) : Paper ###
 构造函数，给定父容器 Dom，在父容器上创建 Paper 和呈现
 
-### Ppaper(string id) : Paper ###
+### Paper(string id) : Paper ###
 构造函数，给定父容器 id，在父容器上创建 Paper 和呈现
 
 ### getWidth() : float ###
@@ -192,14 +225,14 @@ CSS 样式支持
 ### getBoundaryBox() : Box ###
 获得图形的边界
 
-### getTransform() : Transform
+### getTransform() : Matrix
 获取图形当前的变换矩阵
 
-### setTransform(Transform transform) : this ###
+### setTransform(Matrix matrix) : this ###
 设置图形的变换矩阵
 
-### addTo(Container container) : this ###
-把图形添加到指定的容器中
+### mergeTransform(Matrix matrix) : this ###
+合并图形的变换矩阵
 
 ### *addFilter(Filter filter) : this ###
 添加滤镜
@@ -212,7 +245,7 @@ CSS 样式支持
 
 
 
-## Path
+## Path ##
 > 基类 : Shape
 
 表示一个路径（闭合或不闭合）
@@ -263,13 +296,16 @@ CSS 样式支持
 
 
 
+
+
+
 ## Group
 > 基类 : Shape
-> 实现 : Container
+> 实现 : Parent
  
-将多个图形组合成新的图形，请参照 Container
+将多个图形组合成新的图形，请参照 Parent
 
-## kity.group() ##
+## Group() ##
 构造函数创建一个空的组
 
 
@@ -285,7 +321,7 @@ CSS 样式支持
 ### Rect(float width, float height) : Rect ###
 构造函数，给定矩形的大小
 
-### Rect(float x, float y, float width, float height) : Rect ###
+### Rect(float width, float height, float x, float y) : Rect ###
 构造函数，给定矩形的大小和位置
 
 ### setWidth(float width) : this ###
@@ -294,10 +330,13 @@ CSS 样式支持
 ### setHeight(float height) : this ###
 设置矩形的高度
 
-### getRadius() : int #####
+### setSize(float width, float height) ###
+设置矩形的大小
+
+### getRadius() : float #####
 获得矩形的圆角大小
 
-### setRadius(int radius) : this ###
+### setRadius(float radius) : this ###
 设置矩形的圆角大小
 
 
@@ -321,6 +360,9 @@ CSS 样式支持
 
 ### setHeight(float height) : this ###
 设置椭圆的高度
+
+### setSize(float width, float height) : this ###
+设置椭圆的大小
 
 
 
@@ -349,7 +391,7 @@ CSS 样式支持
 
 表示一条线段
 
-### kity.line(float x1, float y1, float x2, float y2) ###
+### Line(float x1, float y1, float x2, float y2) ###
 快捷构造函数
 
 ### setPoint1(float x, float y) : this ###
@@ -545,13 +587,26 @@ CSS 样式支持
 # LinearGradientBrush #
 > 基类 : Brush
 
-表示用线性渐变填充的画刷
+表示用线性渐变填充的画刷。线性渐变的方向和大小由两个值决定。起始位置和结束，使用(px, py)来表示，取值0 - 1，表示渐变的开始和结束位置在图形的指定比例处。默认是 (0,0) 和 (0, 1)
+渐变的颜色通过添加 ColorStop 来指定
 
 ### LinearGradientBrush() : this ###
 初始化线性渐变画刷
 
-### addStop(float x, float y, Color color) : this ###
-设置指定位置上的颜色
+### setStartPosition(float px, float py) ###
+设置渐变起始位置
+
+### setEndPosition(float px, float py) ###
+设置渐变结束位置
+
+### getStartPosition() : Point ###
+获取渐变起始位置
+
+### getEndPosition() : Point ###
+获取渐变结束位置
+
+### addStop(float pos, Color color) : this ###
+设置指定位置上的颜色，pos取值范围为 0 - 1，表示在渐变区间的比例的颜色
 
 
 
@@ -561,25 +616,25 @@ CSS 样式支持
 # RadialGradientBrush #
 > 基类 : Brush
 
-表示用径向渐变填充的画刷
+表示用径向渐变填充的画刷。径向渐变用三个值表示。中心位置和半径表示其范围，都用 0 - 1 作为值域。焦点表示径向渐变的起始位置。
 
 ### RadialGradientBrush() : this ###
 初始化一个径向填充的画刷
 
-### setCenter(float x, float y) ###
-设置径向渐变的起始位置
+### setCenter(float cx, float cy) ###
+设置径向渐变的中心位置
 
-### getCenter() ###
-获得径向渐变的结束为止
+### getCenter() : Point ###
+获得径向渐变的中心位置
 
-### setRatio(float ratio) : this ###
-设置径向渐变的比例，就是 y / x。 默认值为 1，呈圆形。
+### setFocal(float fx, float fy) : this ###
+设置径向渐变的焦点位置
 
-### getRatio() : this ###
-获取线性渐变的比例
+### getFocal() : Point ###
+获取线性渐变的焦点位置
 
-### addStop(float radius, Color color) : this ###
-设置距离中心点指定半径的颜色，如果 ratio 不为 1，则该距离是 x 轴上的距离
+### addStop(float pos, Color color) : this ###
+设置渐变指定区间位置的颜色，取值范围 0 - 1
 
 
 
@@ -616,13 +671,13 @@ CSS 样式支持
 ### getColor() : Color ###
 获取当前图形画笔色值
 
-### getSize() : float ###
+### getWidth() : float ###
 获取当前图形画笔粗细
 
 ### setColor(Color color) : this ###
 设置当前图形画笔颜色
 
-### setSize(float size) : this ###
+### setWidth(float width) : this ###
 设置当前图形画笔的粗细
 
 
@@ -767,3 +822,6 @@ CSS 样式支持
 
 ### setMatrix(float a, float b, float c, float d, float e, float f): this ###
 设置矩阵的数据
+
+### merge(Matrix another) : Matrix ###
+合并另一个转换矩阵，返回合并后的矩阵
