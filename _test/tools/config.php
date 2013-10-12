@@ -9,11 +9,11 @@
 class Config
 
 {
-    public static $projroot = "../";
+    public static $projroot = "../../";
     //相对于projroot的路径
-    public static $src_PATH = "src/" ;
+    public static $src_PATH = "_src/" ;
 
-    public static $test_PATH = "test/";
+    public static $test_PATH = "_test/";
 
     public static $helperFiles =  array( "SpecHelper.js" );
 }

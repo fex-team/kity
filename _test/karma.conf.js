@@ -14,12 +14,11 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-
-        './src/Song.js',
-        './src/Player.js',
+//todo 顺序
+        '../_src/core/*.js',
         './tools/js/UserAction.js',
-        './test/SpecHelper.js',
-        './test/Player.js'
+        '../_test/core/*.js',
+//        './examples.js'//这是各种断言和用例编写方法的例子,真的写用例时把这个注了
     ],
 
 
@@ -59,7 +58,7 @@ module.exports = function(config) {
     // - Safari (only Mac)
     // - PhantomJS
     // - IE (only Windows)
-    browsers: ['Chrome','Firefox'],
+    browsers: ['Chrome'],
 
 
     // If browser does not capture in given timeout [ms], kill it
@@ -69,9 +68,9 @@ module.exports = function(config) {
     // Continuous Integration mode
     // if true, it capture browsers, run tests and exit
     singleRun: false,
-
+    //coverage
     reporters: ['progress', 'coverage'],
-    preprocessors: {'./src/*.js': ['coverage']},
+    preprocessors: {'../_src/*/*.js': ['coverage']},
     coverageReporter: {
           type: 'html',
           dir: './coverage/'
