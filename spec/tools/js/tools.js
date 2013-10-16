@@ -8,6 +8,9 @@
 function hasClass(obj, cls) {
     return obj.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
 }
+function addClass(ele,cls) {
+    if (!this.hasClass(ele,cls)) ele.className += " "+cls;
+}
 function removeClass(obj, cls) {
     var clsArray= cls.split( " ");
     for(var i=0;i<clsArray.length;i++){
@@ -17,7 +20,14 @@ function removeClass(obj, cls) {
         }
     }
 }
-
+function empty(obj){
+    var childs = obj.childNodes;
+    if(childs.length==0)return obj;
+    for(var i=0;i<childs.length;i++){
+        obj.removeChild(childs[i]);
+    }
+    return obj
+}
 function slideToggle(obj){
     //todo 先写个大意,待完成
     if(obj.style.display=='none'){
@@ -33,7 +43,7 @@ customEvent.prototype = {
     addListener:function  (type, listener) {
         this.listeners[type] = listener;
     },
-    fireEvent:function (type) {
+    fireEvent:function (type,arguments) {
         if(this.listeners[type]){
             return this.listeners[type].apply(this, arguments);
         }
@@ -41,8 +51,8 @@ customEvent.prototype = {
     }
 }
 //var c =new customEvent();
-//c.addListener('a',function(){
-//    alert('adfasdf');
+//c.addListener('a',function(s){
+//    alert(s);
 //});
-//c.fireEvent('a');
+//c.fireEvent('a',{string:'asdfsadfsdf'});
 

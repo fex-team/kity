@@ -12,3 +12,9 @@ describe(" example", function() {
         expect(true).customMatchers(true);
     });
 });
+describe(" example2", function() {
+    //这里使用的是SpecHelper里面自定义的断言
+    it('helper',function(){
+        expect(true).customMatchers(true);
+    });
+});

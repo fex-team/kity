@@ -8,6 +8,7 @@
 /**
  * 为批量运行提供入口，参数携带batchrun=true
  */
+
 function run( kiss, runnext ) {
 
     window.document.title = kiss;
@@ -42,101 +43,97 @@ function run( kiss, runnext ) {
     /**
      * 超时处理
      */
-    var toh = setTimeout( function () {
-        if ( !window.brtest.breakOnError )
-            $( wb ).trigger( 'done', [ new Date().getTime(), {
-                failed:1,
-                passed:1
-            }, frames[0].$_jscoverage, 'timeout' ] );
-    }, wb.timeout );
+//    var toh = setTimeout( function () {
+//        if ( !window.brtest.breakOnError )
+//            $( wb ).trigger( 'done', [ new Date().getTime(), {
+//                failed:1,
+//                passed:1
+//            }, frames[0].$_jscoverage, 'timeout' ] );
+//    }, wb.timeout );
 
     /**
      * 为当前用例绑定一个一次性事件
      */
-    $( wb ).one( 'done', function ( event, time, result, covinfo ) {
-        clearTimeout( toh );
-        var wb = window.brtest, errornum = result.failed, allnum = result.failed + result.passed;
-        wb.kissend = new Date().getTime();
-        if ( covinfo !== null )// 如果支持覆盖率
-        {
-            wb.kisscov[wb.kiss] = covinfo;
-
-        }
-        wb.kissnode.removeClass( 'running_case' );
-        /*
-         * ext_qunit.js的_d方法会触发done事件
-         * top.$(wbkiss).trigger('done', [ new Date().getTime(), args ]); new Date().getTime()指向a参数，args指向b参数
-         */
-        wb.kisses[wb.kiss] = errornum + ';' + allnum + ';_;' + wb.kissstart + ';' + wb.kissend;
-//        var html =  '<strong><span style="color: red">'+kiss + '</span></strong>:失败/所有:<strong><span style="color: red">'+errornum + '</span></strong>/' + allnum + ',开始:' + wb.kissstart + ',结束:' + wb.kissend +'耗时:'+(wb.kissend-wb.kissstart) +'\n';
-        var args = kiss + ': 失败/所有:' + errornum + '/' + allnum + ',耗时:' + (wb.kissend - wb.kissstart);
-        var html = upath + '../br/log.php?loginfo=' + args;
-
-        html += '&detail='+result.detail;
-
-        if ( errornum > 0 )
-            html += '&fail=true';
-
-        if ( errornum > 0 ) {
-            wb.kissnode.addClass( 'fail_case' );
-            // wb.kisses[kiss + '_error'] =
-            // window.frames[0].innerHTML;
-        } else
-            wb.kissnode.addClass( 'pass_case' );
-        if ( wb.runnext && (!wb.breakOnError || parseInt( wb.kisses[wb.kiss].split( ',' )[0] ) == 0) ) {
-            var nextA = wb.kissnode.next()[0];
-            if ( nextA.tagName == 'A' ) {
-                if ( wb.kisses[nextA.title] === undefined ) {
-                    run( nextA.title, wb.runnext );
-                }
-                html += "&next=" + nextA.title;
-            } else {
-                /* 隐藏执行区 */
-                // $('div#id_runningarea').toggle();
-                /* ending 提交数据到后台 */
-                html += '&next=@_@end';
-                wb.kisses['config'] = location.search.substring( 1 );
-//                var url = /mail=true/.test( location.search ) ? 'record.php' : 'report.php';
-                var url = 'report.php';
-                covcalc();
-                /**
-                 * 启动时间，结束时间，校验点失败数，校验点总数
-                 */
-                $.ajax( {
-                    url:url,
-                    type:'post',
-                    data:wb.kisses,
-                    success:function ( msg ) {
-                        // $('#id_testlist').hide();
-                        /* 展示报告区 */
-                        $( '#id_reportarea' ).show().html( msg );
-                    },
-                    error:function ( xhr, msg ) {
-                        alert( 'fail' + msg );
-                    }
-                } );
-            }
-        }
-        te.log( html );
-    } );
+//    $( wb ).one( 'done', function ( event, time, result, covinfo ) {
+//        clearTimeout( toh );
+//        var wb = window.brtest, errornum = result.failed, allnum = result.failed + result.passed;
+//        wb.kissend = new Date().getTime();
+//        if ( covinfo !== null )// 如果支持覆盖率
+//        {
+//            wb.kisscov[wb.kiss] = covinfo;
+//
+//        }
+//        wb.kissnode.removeClass( 'running_case' );
+//
+//        wb.kisses[wb.kiss] = errornum + ';' + allnum + ';_;' + wb.kissstart + ';' + wb.kissend;
+//
+//        var args = kiss + ': 失败/所有:' + errornum + '/' + allnum + ',耗时:' + (wb.kissend - wb.kissstart);
+//        var html = upath + '../br/log.php?loginfo=' + args;
+//
+//        html += '&detail='+result.detail;
+//
+//        if ( errornum > 0 )
+//            html += '&fail=true';
+//
+//        if ( errornum > 0 ) {
+//            wb.kissnode.addClass( 'fail_case' );
+//
+//        } else
+//            wb.kissnode.addClass( 'pass_case' );
+//        if ( wb.runnext && (!wb.breakOnError || parseInt( wb.kisses[wb.kiss].split( ',' )[0] ) == 0) ) {
+//            var nextA = wb.kissnode.next()[0];
+//            if ( nextA.tagName == 'A' ) {
+//                if ( wb.kisses[nextA.title] === undefined ) {
+//                    run( nextA.title, wb.runnext );
+//                }
+//                html += "&next=" + nextA.title;
+//            } else {
+//
+//                /* ending 提交数据到后台 */
+//                html += '&next=@_@end';
+//                wb.kisses['config'] = location.search.substring( 1 );
+//                var url = 'report.php';
+//                covcalc();
+//                /**
+//                 * 启动时间，结束时间，校验点失败数，校验点总数
+//                 */
+//                $.ajax( {
+//                    url:url,
+//                    type:'post',
+//                    data:wb.kisses,
+//                    success:function ( msg ) {
+//                        /* 展示报告区 */
+//                        $( '#id_reportarea' ).show().html( msg );
+//                    },
+//                    error:function ( xhr, msg ) {
+//                        alert( 'fail' + msg );
+//                    }
+//                } );
+//            }
+//        }
+//        te.log( html );
+//    } );
 
     /**
      * 初始化执行区并通过嵌入iframe启动用例执行
      */
     var url = 'run.php?case=' + kiss + '&time=' + new Date().getTime() + "&"
         + location.search.substring( 1 );
-    // + (location.search.length > 0 ? '&' + location.search.substring(1)
-    // : '');
 
     var fdiv = 'id_div_frame_' + kiss.split( '.' ).join( '_' );
     var fid = 'id_frame_' + kiss.split( '.' ).join( '_' );
-    wb.kissnode.addClass( 'running_case' );
-    if ( $( 'input#id_control_hidelist' ).attr( 'checked' ) )
-        $( 'div#id_testlist' ).css( 'display', 'none' );
+    addClass(wb.kissnode,'running_case');
+
     /* 隐藏报告区 */
-    $( 'div#id_reportarea' ).empty().hide();
+//    $( 'div#id_reportarea' ).empty().hide();
     /* 展示执行区 */
-    $( 'div#id_runningarea' ).empty().css( 'display', 'block' ).append( '<iframe id="' + fid + '" src="' + url + '" class="runningframe"></iframe>' );
+    var runningarea = document.getElementById( 'id_runningarea');
+    empty(runningarea).style.display = 'block';
+    var iframe = document.createElement('iframe');
+    iframe.id = fid;
+    iframe.src = url;
+    addClass(iframe,"runningframe");
+    runningarea.appendChild(iframe );
     wb.kissstart = new Date().getTime();
 };
 // 需要根据一次批量执行整合所有文件的覆盖率情况

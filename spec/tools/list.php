@@ -20,7 +20,7 @@ if ( !$quirk ) {
 <!--    <script type="text/javascript" src="js/testrunner.js"></script>-->
     <script type="text/javascript" src="js/tools.js"></script>
 <!--    <script type="text/javascript" src="js/UserAction.js"></script>-->
-<!--    <script type="text/javascript" src="js/run.js"></script>-->
+    <script type="text/javascript" src="js/run.js"></script>
     <link media="screen" href="css/test.css" type="text/css"
           rel="stylesheet"/>
 </head>

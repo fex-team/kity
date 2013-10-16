@@ -25,11 +25,19 @@ $title = $c->name;
     <link rel="stylesheet" type="text/css" href="lib/jasmine-1.3.0/jasmine.css">
     <script type="text/javascript" src="lib/jasmine-1.3.0/jasmine.js"></script>
     <script type="text/javascript" src="lib/jasmine-1.3.0/jasmine-html.js"></script>
-
+    <script type="text/javascript" src="js/ext_jasmine.js"></script>
     <?php $c->print_js(); ?>
 
 </head>
 <script type="text/javascript">
+    //todo
+    //     if (parent && parent.brtest) {
+    //            parent.$(parent.brtest).trigger('done', [ new Date().getTime(), {
+    //                failed : args[0],
+    //                passed : args[1],
+    //                detail:args[2]
+    //            }, window._$jscoverage || null ]);
+    //        }
     (function() {
         var jasmineEnv = jasmine.getEnv();
         jasmineEnv.updateInterval = 1000;
