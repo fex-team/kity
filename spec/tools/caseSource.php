@@ -100,7 +100,7 @@ class Kiss
             if ( $c->match( $matcher ) ) {
                 $newName = explode( '\\.' , $name );
                 $newName = $newName[ count( $newName ) - 1 ];
-                print( "<a href=\"run.php?case=$name\" id=\"$c->case_id\"  target=\"_blank\" title=\"$name\" onclick=\"run('$name');return false;\">". $newName . "</a>\n" );
+                print( "<a href=\"run.php?case=$name\" id=\"$c->case_id\"  target=\"_blank\" title=\"$name\" onclick=\"run('$name');return false;\">". $newName . "</a>" );
             }
         }
     }

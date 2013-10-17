@@ -36,20 +36,49 @@ function slideToggle(obj){
         obj.style.display='block';
     }
 }
-var customEvent = function () {
+var triggerEvent = function () {
     this.listeners = [];
-};
-customEvent.prototype = {
-    addListener:function  (type, listener) {
+    this.customOne = function  (type, listener) {
         this.listeners[type] = listener;
+        for (var i = 0, l = this.listeners.length; i < l; i++) {
+            if (this.listeners[i] === this.listeners[type]) {
+                this.listeners.splice(i, 1);
+                i--;
+            }
+        }
     },
-    fireEvent:function (type,arguments) {
+    this.customTrigger = function (type,arguments) {
         if(this.listeners[type]){
             return this.listeners[type].apply(this, arguments);
         }
         return false;
     }
-}
+};
+//triggerEvent.prototype = {
+//    customOne:function  (type, listener) {
+//        this.listeners[type] = listener;
+//        for (var i = 0, l = this.listeners.length; i < l; i++) {
+//            if (this.listeners[i] === this.listeners[type]) {
+//                this.listeners.splice(i, 1);
+//                i--;
+//            }
+//        }
+//    },
+//    customTrigger:function (type,arguments) {
+//        if(this.listeners[type]){
+//            return this.listeners[type].apply(this, arguments);
+//        }
+//        return false;
+//    }
+////    ,removeListener:function (type, listener) {
+////        for (var i = 0, l = this.listeners.length; i < l; i++) {
+////            if (this.listeners[i] === this.listeners[type]) {
+////                this.listeners.splice(i, 1);
+////                i--;
+////            }
+////        }
+////    }
+// }
 //var c =new customEvent();
 //c.addListener('a',function(s){
 //    alert(s);

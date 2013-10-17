@@ -6,45 +6,53 @@
  * To change this template use File | Settings | File Templates.
  */
 /**
- * 重载QUnit部分接口实现批量执行控制功能
+ * rewrite jasmine function to support batchrun
  */
-debugger
-//jasmane : if (self.index < self.blocks.length && !(this.abort && !this.ensured[self.index])) {
 (function() {
     if (!jasmine)
         return;
-    var n = jasmine.Queue.prototype.next_,s = jasmine.Queue.prototype.start;
-//todo  写到调用HtmlReporter前
-    function _n(self,args /* failures, total */) {
-                 // the last Queue in the file has done ,there is no more Suite or Queue
-//           if(self.index == self.blocks.length || (this.abort && !this.ensured[self.index])){
-//        //display failed Suite
+    var s = jasmine.Queue.prototype.start
+//        ,n = jasmine.Queue.prototype.next_
+        ,f = jasmine.Runner.prototype.finishCallback;
+    function _f(self,args /* failures, total */) {
+        //todo  写到调用HtmlReporter后
+        /*another way to apply:
+        *
+        * var reporterView = self.env.reporter.subReporters_[0].getReporterView();
+        *totalSpecCount,completeSpecCount,failedCount,passedCount
+        *reporterView.views.specs[0].detail
+        * */
+        var totalSpecCount = 0,failedCount = 0,passedCount = 0;
+        var tmpSpec = null;
+        for(var i=0;i<self.suites_.length;i++){
+            for(var j=0;j<self.suites_[i].specs_.length;j++){
+                totalSpecCount++;
+                tmpSpec = self.suites_[i].specs_[j].results_.items_;
+                for(var k=0;k<tmpSpec;k++){
+                if(tmpSpec[k].passed_){
+                    passedCount++;
+                }else{
+                    failedCount++;
+                }
+                }
+            }
+        }
+        //display failed Suite
 //        $('li.fail ol').toggle();
-          //     if (parent && parent.brtest) {
-//            parent.$(parent.brtest).trigger('done', [ new Date().getTime(), {
-//                failed : args[0],
-//                passed : args[1],
-//                detail:args[2]
-//            }, window._$jscoverage || null ]);
-//        }
-//           }
-
-//
+             if (parent && parent.brtest) {
+                parent.brtest.customTrigger('done', [ new Date().getTime(), {
+                failed : failedCount,
+                passed : passedCount,
+                detail : self.suites_,
+                total  : totalSpecCount
+                    //todo jscoverage
+            }, window._$jscoverage || null ]);
+        }
     }
-    function _s(self,args /* failures, total */) {
-
-    }
-//    QUnit.moduleStart = function() {
-//        stop();
-//        /* 为批量执行等待import.php正确返回 */
-//        var h = setInterval(function() {
-//            if (window && window['baidu']) {
-//                clearInterval(h);
-//                ms.apply(this, arguments);
-//                start();
-//            }
-//        }, 20);
-//    };
+    jasmine.Runner.prototype.finishCallback = function(){
+        f.apply(this, arguments);
+        _f(this,arguments);
+    };
     jasmine.Queue.prototype.start =function(){
         //todo
         /* wait for import.php return */
@@ -55,8 +63,17 @@ debugger
 //            }
 //        }, 20);
     };
-    jasmine.Queue.prototype.next_ = function() {
-        _n(this,arguments);
-        n.apply(this, arguments);
-    };
+
+//    function _n(self,args /* failures, total */) {
+        /* //  do not delete the following lines:
+         // the last Queue in the file has done ,there is no more Suite or Queue
+         if(self.index == self.blocks.length || (this.abort && !this.ensured[self.index])){
+         }
+         */
+//    }
+//    jasmine.Queue.prototype.next_ = function() {
+//        _n(this,arguments);
+//        n.apply(this, arguments);
+//    };
+
 })();

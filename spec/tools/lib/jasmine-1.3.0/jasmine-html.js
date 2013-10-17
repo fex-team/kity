@@ -120,6 +120,13 @@ jasmine.HtmlReporter = function(_doc) {
 
     return spec.getFullName().indexOf(focusedSpecName()) === 0;
   };
+/*
+* add by dongyancen for rewrite finishCallback in ext_jasmine to record the runner result
+* 10/17/2013
+* */
+//  self.getReporterView = function(){
+//      return reporterView ;
+//  };
 
   return self;
 

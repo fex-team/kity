@@ -400,3 +400,9 @@ describe("runs+waitsFor examples", function() {
     });
 });
 
+describe(" example2", function() {
+    //这里使用的是SpecHelper里面自定义的断言
+    it('helper',function(){
+        expect(true).toBe(true);
+    });
+});
