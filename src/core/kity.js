@@ -1,0 +1,1 @@
+var Kity = window.Kity || {};
