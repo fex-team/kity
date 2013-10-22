@@ -15,7 +15,7 @@ describe("define()", function() {
 				}
 			});
 
-			dog = new Dog("kity");
+			dog = new kity.Dog("kity");
 		});
 
 		it("can be instantiated", function(){
@@ -23,7 +23,7 @@ describe("define()", function() {
 		});
 
 		it("is instanceof Dog", function() {
-			expect(dog instanceof Dog).toBeTruthy();
+			expect(dog instanceof kity.Dog).toBeTruthy();
 		});
 	});
 
@@ -31,7 +31,7 @@ describe("define()", function() {
 		
 		var satsuma;
 		beforeEach(function() {
-			define("Animal", {
+			define("zoo.Animal", {
 				constructor: function Animal(age) {
 					this.setAge(age);
 				},
@@ -42,39 +42,42 @@ describe("define()", function() {
 					return this._age;
 				},
 				toString: function() {
-					return "Animal";
+					return "Animal aged " + this.getAge();
 				}
 			});
 
-			define("Dog", {
-				super: "Animal",
+			define("zoo.Dog", {
+				super: "zoo.Animal",
 				constructor: function Dog() {
-					this.super().constructor(12);
+					this.super("Animal").constructor(12);
 				},
 				bark: function() {
 					return "Dog bark";
 				},
 				toString: function() {
-					return this.super().toString() + " Dog";
+					return this.super("Animal").toString() + " Dog";
 				}
 			});
 
-			define("Satsuma", {
-				super: "Dog",
+			define("zoo.Satsuma", {
+				super: "zoo.Dog",
+				constructor: function() {
+					this.super("Dog").constructor();
+				},
 				toString: function() {
-					return this.super().toString() + " Satsuma";
+					return this.super("Dog").toString() + " Satsuma";
 				}
 			});
 
-			satsuma = new Satsuma();
+			satsuma = new kity.zoo.Satsuma();
 		});
 
 		describe("satsuma instance", function() {
 			it("should be instanceof Dog", function() {
-				expect(satsuma instanceof Dog).toBeTruthy();
+				expect(satsuma instanceof kity.zoo.Dog).toBeTruthy();
 			});
 			it("should be instanceof Animal", function() {
-				expect(satsuma instanceof Animal).toBeTruthy();
+				expect(satsuma instanceof kity.zoo.Animal).toBeTruthy();
 			});
 			it("should be aged 12", function() {
 				expect(satsuma.getAge()).toBe(12);
@@ -83,7 +86,8 @@ describe("define()", function() {
 				expect(satsuma.bark()).toBe("Dog bark");
 			});
 			it("should call all the super to string", function() {
-				expect(satsuma.toString()).toBe("Animal Dog Satsuma");
+				satsuma.setAge(14);
+				expect(satsuma.toString()).toBe("Animal aged 14 Dog Satsuma");
 			});
 		});
 		
