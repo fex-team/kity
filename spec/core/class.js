@@ -1,9 +1,9 @@
 describe("define()", function() {
 
 	describe("define class Dog", function() {
-		var dog;
+		var dog, Dog;
 		beforeEach(function() {			
-			define("Dog", {
+			Dog = createClass("Dog", {
 				constructor: function( name ) {
 					this.setName(name);
 				},
@@ -15,7 +15,7 @@ describe("define()", function() {
 				}
 			});
 
-			dog = new kity.Dog("kity");
+			dog = new Dog("kity");
 		});
 
 		it("can be instantiated", function(){
@@ -23,15 +23,15 @@ describe("define()", function() {
 		});
 
 		it("is instanceof Dog", function() {
-			expect(dog instanceof kity.Dog).toBeTruthy();
+			expect(dog instanceof Dog).toBeTruthy();
 		});
 	});
 
-	describe("inherit Dog from animal", function() {
+	describe("inherit Dog from Animal", function() {
 		
-		var satsuma;
+		var Animal, Dog, Satsuma, satsuma;
 		beforeEach(function() {
-			define("zoo.Animal", {
+			Animal = createClass("zoo.Animal", {
 				constructor: function Animal(age) {
 					this.setAge(age);
 				},
@@ -46,38 +46,35 @@ describe("define()", function() {
 				}
 			});
 
-			define("zoo.Dog", {
-				super: "zoo.Animal",
+			Dog = createClass("zoo.Dog", {
+				base: "zoo.Animal",
 				constructor: function Dog() {
-					this.super("Animal").constructor(12);
+					this.callBase(12);
 				},
 				bark: function() {
 					return "Dog bark";
 				},
 				toString: function() {
-					return this.super("Animal").toString() + " Dog";
+					return this.callBase() + " Dog";
 				}
 			});
 
-			define("zoo.Satsuma", {
-				super: "zoo.Dog",
-				constructor: function() {
-					this.super("Dog").constructor();
-				},
+			Satsuma = createClass("zoo.Satsuma", {
+				base: "zoo.Dog",
 				toString: function() {
-					return this.super("Dog").toString() + " Satsuma";
+					return this.callBase() + " Satsuma";
 				}
 			});
 
-			satsuma = new kity.zoo.Satsuma();
+			satsuma = new Satsuma();
 		});
 
 		describe("satsuma instance", function() {
 			it("should be instanceof Dog", function() {
-				expect(satsuma instanceof kity.zoo.Dog).toBeTruthy();
+				expect(satsuma instanceof Dog).toBeTruthy();
 			});
 			it("should be instanceof Animal", function() {
-				expect(satsuma instanceof kity.zoo.Animal).toBeTruthy();
+				expect(satsuma instanceof Animal).toBeTruthy();
 			});
 			it("should be aged 12", function() {
 				expect(satsuma.getAge()).toBe(12);

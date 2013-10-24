@@ -8,9 +8,8 @@
 
 (function (){
     var paths  = [
-            'core/kity.js',
-            'core/utils.js',
-            'core/define.js'
+    		'core/kity.js',
+            'core/class.js'
         ],
         baseURL = '../../src/';
     for (var i=0,pi;pi = paths[i++];) {

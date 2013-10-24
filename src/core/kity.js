@@ -1,4 +1,4 @@
-var kity = window.kity || {};
+var Kity = window.Kity || {};
 
-kity.version = "1.0.0";
-kity.debug = true;
+Kity.version = "1.0.0";
+Kity.debug = true;
