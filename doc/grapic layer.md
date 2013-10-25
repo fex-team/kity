@@ -66,8 +66,8 @@
 ### indexOf(object child) : int ###
 获取指定子元素的位置，如果不存在则返回 -1
 
-### forEachChild(Function fn [, bool deep]) : this ###
-迭代每个子元素，如果给定了 deep 为true，则会迭代到实现了 parent 的对象的子元素
+### forEachChild(Function fn) : this ###
+迭代每个子元素
 
 ### addChild(object child, int pos) : this ###
 添加子元素到指定的位置
@@ -87,7 +87,7 @@
 ### Child.remove() ###
 子元素从容器移除自身
 
-### Child.getParent() ###
+### Child.parent ###
 子元素获得包含自身的容器
 
 
@@ -122,11 +122,11 @@
 
 
 ## Paper ##
-> 基类 : Class
-> 实现 : Parent, EventHandler
+> 基类 : Parent
+> 实现 : EventHandler
 > 所有图形的
 
-### Ppaper(HTMLElement container) : Paper ###
+### Paper(HTMLElement container) : Paper ###
 构造函数，给定父容器 Dom，在父容器上创建 Paper 和呈现
 
 ### Paper(string id) : Paper ###
