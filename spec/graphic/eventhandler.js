@@ -9,7 +9,7 @@ describe("Kity.EventHandler", function () {
 		});
 	});
 
-	describe("removeEventListener(name, handler)"， function() {
+	describe("removeEventListener(name, handler)", function() {
 		it("should not call the handler after the handler removed", function() {
 
 		});
