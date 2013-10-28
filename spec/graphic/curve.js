@@ -1,6 +1,6 @@
 describe("Kity.Curve", function () {
     it("should be an instance of Path", function() {
-
+       
     });
 
     it("should be an instance of Shape", function() {
