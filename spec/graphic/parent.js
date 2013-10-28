@@ -154,7 +154,7 @@ describe("Kity.Parent", function () {
         });
 
         it("should return this reference", function() {
-            expect(parent.addChild("item1")).toBe(parent);
+            expect(parent.appendChild("item1")).toBe(parent);
         });
     });
 
@@ -166,7 +166,7 @@ describe("Kity.Parent", function () {
         });
 
         it("should return this reference", function() {
-            expect(parent.addChild("item1")).toBe(parent);
+            expect(parent.prependChild("item1")).toBe(parent);
         });
     });
 
