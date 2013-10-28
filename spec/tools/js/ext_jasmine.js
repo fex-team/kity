@@ -22,13 +22,14 @@
         *totalSpecCount,completeSpecCount,failedCount,passedCount
         *reporterView.views.specs[0].detail
         * */
+
         var totalSpecCount = 0,failedCount = 0,passedCount = 0;
         var tmpSpec = null;
         for(var i=0;i<self.suites_.length;i++){
             for(var j=0;j<self.suites_[i].specs_.length;j++){
                 totalSpecCount++;
                 tmpSpec = self.suites_[i].specs_[j].results_.items_;
-                for(var k=0;k<tmpSpec;k++){
+                for(var k=0;k<tmpSpec.length;k++){
                 if(tmpSpec[k].passed_){
                     passedCount++;
                 }else{
