@@ -66,8 +66,8 @@
 ### indexOf(object child) : int ###
 获取指定子元素的位置，如果不存在则返回 -1
 
-### forEachChild(Function fn [, bool deep]) : this ###
-迭代每个子元素，如果给定了 deep 为true，则会迭代到实现了 parent 的对象的子元素
+### forEachChild(Function fn) : this ###
+迭代每个子元素
 
 ### addChild(object child, int pos) : this ###
 添加子元素到指定的位置
@@ -87,7 +87,7 @@
 ### Child.remove() ###
 子元素从容器移除自身
 
-### Child.getParent() ###
+### Child.parent ###
 子元素获得包含自身的容器
 
 
@@ -122,11 +122,11 @@
 
 
 ## Paper ##
-> 基类 : Class
-> 实现 : Parent, EventHandler
+> 基类 : Parent
+> 实现 : EventHandler
 > 所有图形的
 
-### Ppaper(HTMLElement container) : Paper ###
+### Paper(HTMLElement container) : Paper ###
 构造函数，给定父容器 Dom，在父容器上创建 Paper 和呈现
 
 ### Paper(string id) : Paper ###
@@ -516,25 +516,44 @@ CSS 样式支持
 表示一个颜色
 
 ### Color() : this ###
-初始化一个颜色，表示透明
+初始化一个颜色
 
-### setRGB(int r, int g, int b [, int a]) : this
-设置当前颜色的值，透明度可选，取值均为 0 - 255
+### set(string name, float value) : this
+设置当前颜色的某一个分量值，支持：
 
-### setAlpha(int a) : this ###
-设置当前颜色的透明度，取值为 0 - 255
+* r/red - RGB 颜色表示中的红色分量（取值0-255）
+* g/green - RGB 颜色表示中的绿色分量（取值0-255）
+* b/blue - RGB 颜色表示中的蓝色分量（取值0-255）
+* h/hue - HSL 颜色表示中的色环角度（取值0-360）
+* s/saturation - HSL 颜色表示中的饱和度（取值0-100）
+* l/lightness - HSL 颜色表示中的亮度（取值0-100）
+* a/alpha - 颜色的透明度（取值0 - 1）
+
+设置 RGB 的分量会影响 HSL 的分量，反之亦然。
+
+### increase(string name, float inc) ###
+增加当前颜色某个分值的值，如果溢出，会设置为对应的最大值
+
+### decrease(string name, float dsc) ###
+减少当前颜色某个分值的值，如果溢出，会这职位对应的最小值
+
+### get(string name) : this ###
+获取当前颜色的某一个分量值，支持的名称和set方法中规定一致
 
 ### toRGB() : string ###
-获得当前颜色的 RGB 表示： rgb(r, g, b)
-
-### toRGBA() : string ###
-获得当前颜色的 RGBA 表示: rgba(r, g, b, a)
+获得当前颜色的 RGB 表示： RGB(r, g, b)，这种表示形式会丢失颜色的透明度信息
 
 ### toHEX() : string ###
-获得当前颜色的 HEX 表示: #RRGGBB
+获得当前颜色的 HEX 表示: #RRGGBB，这种表示形式会丢失颜色的透明度信息
 
-### toHSB() : string ###
-获得当前颜色的 HSB 表示: hsb(h, s, b)
+### toHSL() : string ###
+获得当前颜色的 HSL 表示: HSL(h, s%, l%)，这种表示形式会丢失颜色的透明度信息
+
+### toRGBA() : string ###
+获得当前颜色的 RGBA 表示: RGBA(r, g, b, a)
+
+### toHSLA() : string ###
+获得当前颜色的 HSLA 表示：HSLA(h, s%, l%, a)
 
 
 

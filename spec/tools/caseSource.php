@@ -42,7 +42,7 @@ class Kiss
         /*load ua*/
         print "<script type='text/javascript' src='./js/UserAction.js' ></script>\n";
         /* load case source*/
-        $importurl = "./import.php";
+        $importurl = "../import.js";
         print "<script type='text/javascript' src='".$importurl."' ></script>\n";
 
         /* load case and case dependents*/
