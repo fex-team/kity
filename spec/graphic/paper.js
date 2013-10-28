@@ -2,101 +2,81 @@ var EventHandler = require("graphic/eventhandler");
 var Parent = require("graphic/parent");
 var Paper = require("graphic/paper");
 describe("Kity.Paper", function() {
+    var container, paper, node;
+
+    beforeEach(function() {
+        container = document.createElement("div");
+        paper = new Paper( container );
+        document.body.appendChild(container);
+        node = container.firstChild;
+    });
 
     it("在容器上创建了 SVG 元素", function() {
-        var container = document.createElement("div");
-        document.body.appendChild(container);
-        var paper = new Paper( container );
-        expect(container.firstChild.tagName.toLowerCase()).toBe('svg');
+        expect(node.tagName.toLowerCase()).toBe('svg');
     });
 
-    it("should extends Kity.Parent", function() {
-
+    it("实现 Parent", function() {
+        expect(new Paper()).hasImplement(Parent);
     });
 
-    it("should extends Kity.EventHandler", function() {
-
+    it("实现 EventHandler", function() {
+        expect(new Paper()).hasImplement(EventHandler);
     });
-
-    describe("Paper(HTMLElement container)", function() {
-        it("can be constructed by an html element as container", function() {
-
-        });
-    })
 
     describe("Paper(string id)", function() {
-        it("can be constructed by an html element's id as it's container", function() {
-            
+        it("可以通过容器 id 来创建", function() {                   
+            var container = document.createElement("div");
+            container.id = "paper-container"
+            document.body.appendChild(container);
+            var paper = new Paper( 'paper-container' );
+            expect(container.firstChild.tagName.toLowerCase()).toBe('svg');
         });
     });
 
     describe("getContainer()", function(){      
-        it("should return the parent container reference", function() {
-
+        it("返回容器的引用", function() {
+            expect(paper.getContainer()).toBe(container);
         });
     });
 
-    describe("getWidth()", function() {
-        it("should return the width of the paper, in px", function() {
-
+    describe("尺寸控制", function() {
+        var link;
+        before(function() {
+            link = paper.setWidth(100).setHeight(100);
+        });
+        it("正确设置节点的大小", function() {
+            expect(node.getAttribute("width")).toBe(100);
+            expect(node.getAttribute("height")).toBe(100);
+        });
+        it("正确获取节点的大小", function() {
+            expect(paper.getWidth()).toBe(100);
+            expect(paper.getHeight()).toBe(100);
+        });
+        it("保持链式调用", function() {
+            expect(link).toBe(paper);
         });
     });
 
-    describe("getHeight()", function() {
-        it("should return the height of the paper, in px", function() {
-
-        });
-    });
-
-    describe("setWidth()", function() {
-        it("should set the width of the paper", function() {
-
+    describe("视野控制", function() {
+        var rect;
+        beforeEach(function() {
+            paper.setWidth(800).setHeight(600).setViewBox(-40, -30, 80, 60);
         });
 
-        it("should return this reference", function(){
-
-        });
-    });
-
-    describe("setHeight()", function() {
-        it("should set the height of the paper", function() {
-
+        it("正确地设置了viewBox属性", function() {
+            expect(node.getAttribute("viewBox")).toBe('-40 -30 80 60');
         });
 
-        it("should return this reference", function(){
-
-        });
-    });
-
-    describe("setViewBox(float x, float y, float width, float height)", function() {
-        it("should let the viewbox x to be the left most of shape rendering", function() {
-
+        it("正确地解析viewBox属性", function() {
+            var box = paper.getViewBox();
+            expect(box.x).toBe(-40);
+            expect(box.y).toBe(-30);
+            expect(box.width).toBe(80);
+            expect(box.height).toBe(60);
         });
 
-        it("should let the viewbox y to be the top most of shape rendering", function() {
-
-        });
-
-        it("should let the viewbox width to be the width of shape rendering", function() {
-
-        });
-
-        it("should let the viewbox height to be the height of shape rendering", function() {
-
-        });
-
-        it("should return this reference", function(){
-
-        });
-    });
-
-    describe("getViewBox()", function(){ 
-        it("should return the viewbox of the paper", function() {
-
-        });
-
-        it("should offer a zoom value of the viewbox", function() {
-            
+        it("保证链式调用", function(){
+            expect(paper.setViewBox(0,0,1,1)).toBe(paper);
         });
     });
 });
