@@ -93,7 +93,7 @@ class Kiss
     public static function listcase( $matcher = "*" )
     {
 
-        require_once 'filehelper.php';
+        require_once 'fileHelper.php';
         /*get files both in src path and test path*/
         $caselist = getSameFile(Config::$projroot.Config::$src_PATH , Config::$projroot.Config::$test_PATH , '' );
         sort($caselist,SORT_STRING);
@@ -114,7 +114,7 @@ class Kiss
     {
         $srcpath = Config::$projroot.Config::$src_PATH;
         $testpath = Config::$projroot.Config::$test_PATH;
-        require_once 'filehelper.php';
+        require_once 'fileHelper.php';
         $caselist = getSameFile( $srcpath , $testpath , '' );
         $srclist = getSrcOnlyFile( $srcpath , $testpath , '' );
         $srcList = array();
