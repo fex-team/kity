@@ -195,29 +195,11 @@ CSS 样式支持
 ### getType() : string ###
 获得图形的类型
 
-### getX() : float ###
-获得图形的 x 坐标
-
-### getY() : float ###
-获得图形的 y 坐标
-
-### getPosition() : Point ###
-获得图形的位置
-
-### setX(float x) : this ###
-设置图形的 x 坐标
-
-### setY(float y) : this ###
-设置图形的 y 坐标
-
-### setPosition(float x, float y) ###
-设置图形的位置
-
 ### getWidth() : int ###
-获取图形的宽度
+获取图形所占的宽度
 
 ### getHeight() : int ###
-返回图形的高度
+返回图形所占的高度
 
 ### getSize() : Size ###
 返回图形的大小
