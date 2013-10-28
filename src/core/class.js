@@ -179,4 +179,4 @@ define(function(require, exports, module){
         return classmap[fullClassName] = thisClass;
     }
         
-})();
+});
