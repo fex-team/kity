@@ -112,7 +112,6 @@ function run(kiss, runnext) {
         }
         //todo log
 //        te.log( html );
-        debugger
     });
     /**
      * 初始化执行区并通过嵌入iframe启动用例执行

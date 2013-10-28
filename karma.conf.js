@@ -15,10 +15,18 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
 //todo 顺序
-        './_src/core/*.js',
-        './_test/tools/js/UserAction.js',
-        './_test/core/*.js',
-//        './examples.js'//这是各种断言和用例编写方法的例子,真的写用例时把这个注了
+        './src/core/kity.js',
+        './src/core/define.js',
+        './src/core/utils.js',
+        './src/graphic/*.js',
+        './spec/tools/js/UserAction.js',
+        './spec/core/*.js',
+        './spec/graphic/*.js'
+//        './spec/_examples.js'//这是各种断言和用例编写方法的例子,真的写用例时把这个注了
+//        ,'./spec_examples/src/Song.js'
+//        ,'./spec/_examples/src/Player.js'
+//        ,'./spec/_examples/spec/SpecHelper.js'
+//,'./spec/_examples/spec/Player.js'
     ],
 
 
@@ -70,10 +78,12 @@ module.exports = function(config) {
     singleRun: false,
     //coverage
     reporters: ['progress', 'coverage'],
-    preprocessors: {'./_src/core/*.js': ['coverage']},
+    preprocessors: {
+        './src/core/*.js': ['coverage']
+    ,'./src/graphic/*.js': ['coverage']},
     coverageReporter: {
           type: 'html',
-          dir: './_test/coverage/'
+          dir: './spec/coverage/'
     }
   });
 };

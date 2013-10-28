@@ -33,7 +33,6 @@ describe("Kity.EventHandler", function () {
     });
 
     describe("removeEventListener(name, handler)"， function() {
-
         it("取消注册后不触发", function() {
             var fired = false;
             function listener (e) {
@@ -45,5 +44,5 @@ describe("Kity.EventHandler", function () {
             rect.node.dispatchEvent(new MouseEvent('click'));
             expect(fired).toBeFalsy();
         });
-    })
+    });
 }); 
