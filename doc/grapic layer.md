@@ -216,6 +216,15 @@ CSS 样式支持
 ### mergeTransform(Matrix matrix) : this ###
 合并图形的变换矩阵
 
+### translate(float dx, float dy) : this ###
+移动图形
+
+### rotate(float degree) : this ###
+旋转图形
+
+### scale(float sx [, float sy]) ###
+缩放图形，如果不给定sy，则等比缩放（认为sy = sx）
+
 ### *addFilter(Filter filter) : this ###
 添加滤镜
 
@@ -227,22 +236,13 @@ CSS 样式支持
 
 
 
-## Path ##
-> 基类 : Shape
+## PathDrawer ##
+> 基类 : BaseClass
 
-表示一个路径（闭合或不闭合）
+提供操作 PathData 的工具类
 
-### Path() : Path ###
-构造函数，创建一条空路径
-
-### Path(string data): Path ###
-构造函数，用指定的路径数据创建路径
-
-### getPathData() : string ###
-获得路径的数据表示
-
-### setPathData(string data) : this ###
-设置路径的数据
+### PathDrawer(Path path) ###
+构造时给定 PathDrawer 要操作的 Path
 
 ### moveTo(x, y) : this ###
 设置路径当前位置
@@ -264,6 +264,31 @@ CSS 样式支持
 
 ### close() : this ###
 闭合当前路径
+
+
+
+
+
+
+## Path ##
+> 基类 : Shape
+
+表示一个路径（闭合或不闭合）
+
+### Path() : Path ###
+构造函数，创建一条空路径
+
+### Path(string data): Path ###
+构造函数，用指定的路径数据创建路径
+
+### getPathData() : string ###
+获得路径的数据表示
+
+### setPathData(string data) : this ###
+设置路径的数据。为了防止派生的图形不被非法修改，有些子类可能会保护改方法不被调用，或者使调用无效。实例化Path能保证该方法的有效性。
+
+### getDrawer() : PathDrawer ###
+获得路径数据绘制工具，用于构建或更新路径。注意，闭合的路径调用该方法时会返回 null。
 
 ### isClosed() : bool ###
 判断当前路径是否已闭合
