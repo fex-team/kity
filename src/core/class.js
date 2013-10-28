@@ -11,7 +11,7 @@
 define(function(require, exports, module){
     // fullClassName => Class 映射
     var classmap = {};
-    var config = require("config");
+    var config = require("core/config");
 
     // 方便调试查看
     if(config.debug) {
@@ -179,4 +179,4 @@ define(function(require, exports, module){
         return classmap[fullClassName] = thisClass;
     }
         
-})();
+});

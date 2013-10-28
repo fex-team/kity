@@ -32,23 +32,29 @@ class Kiss
     public function print_js(  )
     {
 
+        print "<script type='text/javascript' src='./lib/seajs-2.1.1/sea-debug.js' ></script>\n";
+        print "<script>seajs.config( {
+            base: '../../src'
+        } );
+        </script>\n";
         /*load ua*/
         print "<script type='text/javascript' src='./js/UserAction.js' ></script>\n";
         /* load case source*/
-        $importurl = "../import.js";
-        print "<script type='text/javascript' src='".$importurl."' ></script>\n";
+//        $importurl = "../import.js";
+//        $importurl = "./import.php";
+//        print "<script type='text/javascript' src='".$importurl."' ></script>\n";
 
         /* load case and case dependents*/
         $ps = explode( '/' , $this->name );
         /*load helper*/
         foreach(Config::$helperFiles as $f){
-            array_pop( $ps );
-            array_push( $ps , $f );
-            if ( file_exists( $this->testPath . implode( '/' , $ps ) ) ) {
-                print '<script type="text/javascript" src="' . $this->testPath .  implode( '/' , $ps ) . '"></script>' . "\n";
+            if ( file_exists( $this->testPath .  $f  ) ) {
+                print '<script type="text/javascript" src="' . $this->testPath . $f  . '"></script>' . "\n";
             }
         }
-        print '<script type="text/javascript" src="' . $this->testPath. $this->name . '.js"></script>' . "\n";
+//        print '<script type="text/javascript" src="' . $this->testPath. $this->name . '.js"></script>' . "\n";
+
+        print '<script>seajs.use( "../'. $this->name .'" )</script>';
     }
     public function match( $matcher )
     {
