@@ -52,9 +52,13 @@ class Kiss
                 print '<script type="text/javascript" src="' . $this->testPath . $f  . '"></script>' . "\n";
             }
         }
-        $caseContent = file_get_contents( dirname( __FILE__ ) . '/../' . $this->name . '.js', 'r' );
-        print '<script>define("case_start", function ( require ) {'. $caseContent .'});</script>';
-        print '<script>seajs.use( "case_start" )</script>';
+        $testFilePath = dirname( __FILE__ ) . '/../' . $this->name . '.js';
+        if(file_exists($testFilePath)){
+            $caseContent = file_get_contents($testFilePath, 'r' );
+            print '<script>define("case_start", function ( require ) {'. $caseContent .'});</script>';
+            print '<script>seajs.use( "case_start" )</script>';
+        }
+
     }
     public function match( $matcher )
     {
