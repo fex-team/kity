@@ -696,7 +696,6 @@ CSS 样式支持
 
 ## Pen ##
 > 基类 : Class
-> 抽象类
 > 实现 : Serializable
 
 根据画笔设置当前图形边框样式
@@ -713,44 +712,23 @@ CSS 样式支持
 ### setWidth(float width) : this ###
 设置当前图形画笔的粗细
 
+### setCapStyle(string linecap) ###
+设置画笔描边时，端点的样式，取值有：butt、round、suqare
 
+### setJoinStyle(string linejoin) ###
+设置描边转折点的样式，取值有：miter、round、bevel
 
+### getCapStyle() : string ###
+获得画笔当前设置的描边端点样式
 
+### getJoinStyle() : string ###
+获得画笔当前设置的描边转折点样式
 
+### getDashArray() : Array<float> ###
+获取虚线的段长和间隔的定义数组，如果为空，则绘制实线
 
-## SolidPen ##
-> 基类 : Pen
-
-绘制实线描边的画笔
-
-### SolidPen(Color color, float size) : this ###
-用初始的颜色和大小创建实线画笔
-
-
-
-
-
-
-## DashedPen ##
-> 基类 : Pen
-
-绘制虚线描边的画笔
-
-### DashedPen(Color color, float size [, float dash [, float space]]) : this ###
-创建指定颜色和大小的虚线画笔，也可以可选指定虚线的段长和间隔长度
-
-### setDash(float dash) : this ###
-设置虚线的段长
-
-### getDash() : float ###
-获取虚线的段长
-
-### setSpace(float space) : this ###
-设置虚线段之间的间隔长度
-
-### getSpace() : float ###
-获取虚线段之间的间隔长度
-
+### setDashArray(Array<float>) : this ###
+设置虚线的段长河间隔的定义数组
 
 
 
