@@ -1,37 +1,42 @@
 describe("Kity.Polygon", function () {
-	it("should be an instance of Path", function() {
 
-	});
+    var Polyline = require( 'graphic/Polygon' );
 
-	it("should be an instance of Shape", function() {
+    it("无参构造Polygon", function() {
 
-	});
+        var polygon = new Polygon();
 
-	it("should extend Parent", function() {
+        expect( polygon.getPathData() ).toBe( "" );
+        expect( polygon.getChildren().length ).toBe( 0 );
 
-	});
+    });
 
-	describe("Polygon()", function() {
-		it("should create an empty polygon", function() {
+    it("点集合构造Polygon", function() {
 
-		});
-	});
+        var polygon = new Polygon( [ {
+            x: 3,
+            y: 2
+        }, {
+            x: 4,
+            y: 2
+        } ] );
 
-	describe("Polygon(points)", function() {
-		it("should create an polygon with initial points", function() {
+        expect( polygon.getPathData() ).not.toBe( "" );
+        expect( polygon.getChildren().length ).toBe( 2 );
 
-		});
-	});
+    });
 
-	describe("addChild(point)", function() {
-		it("should add a key point to the polygon", function() {
+    it("child操作验证", function() {
 
-		});
-	});
+        var polygon = new Polygon();
 
-	describe("removeChild(pos)", function() {
-		it("should remove a key point from the polygon in given position", function() {
+        polygon.addChild( new Point( 3, 2 ) );
+        expect( polygon.getPathData() ).not.toBe( "" );
+        expect( polygon.getChildren().length ).toBe( 1 );
+        polygon.removeChild( 0 );
+        expect( polygon.getPathData() ).toBe( "" );
+        expect( polygon.getChildren().length ).toBe( 0 );
 
-		});
-	});
+    });
+
 });
