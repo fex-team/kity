@@ -1,55 +1,30 @@
 describe("Kity.Text", function () {
-    it("should be an instance of Shape", function() {
+
+    var Text = require( "graphic/text" );
+
+    it("无参数构造", function() {
+
+        var text = new Text();
+
+        expect( text.getContent() ).toBe( "" );
 
     });
 
-    it("should extend Parent", function() {
+    it("带参数构造", function() {
+
+        var text = new Text( "test" );
+
+        expect( text.getContent() ).toBe( "test" );
 
     });
 
-    describe("Text(content)", function() {
-        it("should create a text with initial content", function() {
+    it("content操作", function() {
 
-        });
+        var text = new Text( "test" );
+
+        text.setContent( "hello world!" );
+        expect( text.getContent() ).toBe( "hello world!" );
+
     });
 
-    describe("setContent()", function() {
-        it("should set the text content", function() {
-
-        });
-
-        it("should return this reference", function() {
-
-        });
-    });
-
-    describe("getContent()", function() {
-        it("should return the text content", function() {
-
-        });
-
-        it("should ignore textspan tag", function() {
-
-        });
-    });
-
-    describe("setPath()", function() {
-        it("should let the text arrage in given path", function() {
-
-        });
-
-        it("should return this reference", function() {
-
-        });
-    });
-
-    describe("getPath()", function() {
-        it("should return undefined if no path is set", function() {
-
-        });
-
-        it("should return text path if a path is set", function() {
-
-        });
-    });
 });
