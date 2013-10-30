@@ -1,31 +1,42 @@
 describe("Kity.Polyline", function () {
-    it("should be an instance of Path", function() {
+
+    var Polyline = require( 'graphic/polyline' );
+
+    it("无参构造Polyline", function() {
+
+        var polyline = new Polyline();
+
+        expect( polyline.getPathData() ).toBe( "" );
+        expect( polyline.getChildren().length ).toBe( 0 );
 
     });
 
-    it("should be an instance of Shape", function() {
+    it("点集合构造Polyline", function() {
+
+        var polyline = new Polyline( [ {
+            x: 3,
+            y: 2
+        }, {
+            x: 4,
+            y: 2
+        } ] );
+
+        expect( polyline.getPathData() ).not.toBe( "" );
+        expect( polyline.getChildren().length ).toBe( 2 );
 
     });
 
-    it("should extend Parent", function() {
+    it("child操作验证", function() {
+
+        var polyline = new Polyline();
+
+        polyline.addChild( { x: 3, y: 2 } );
+        expect( polyline.getPathData() ).not.toBe( "" );
+        expect( polyline.getChildren().length ).toBe( 1 );
+        polyline.removeChild( 0 );
+        expect( polyline.getPathData() ).toBe( "" );
+        expect( polyline.getChildren().length ).toBe( 0 );
 
     });
 
-    describe("Polyline(points)", function() {
-        it("should create an polyline with initial points", function() {
-
-        });
-    });
-
-    describe("addChild(point)", function() {
-        it("should add a key point to the polyline", function() {
-
-        });
-    });
-
-    describe("removeChild(pos)", function() {
-        it("should remove a key point from the polyline in given position", function() {
-
-        });
-    });
 });
