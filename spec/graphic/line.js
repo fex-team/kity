@@ -35,22 +35,22 @@ describe("Kity.Line", function () {
     });
 
     describe("setPoint1()", function() {
-        it("should set the first point of the line", function() {
-            
+        it("设置第一个点", function() {
+            expect(line.setPoint1(20, 10).getPoint1()).toMatchPlain({ x: 20, y: 10});
         });
 
-        it("should return this reference", function() {
-
+        it("保持链式调用", function() {
+            // 上面的方法能保证
         });
     });
 
     describe("setPoint2()", function() {
-        it("should set the second point of the line", function() {
-
+        it("设置第一个点", function() {
+            expect(line.setPoint2(20, 10).getPoint2()).toMatchPlain({ x: 20, y: 10});
         });
 
-        it("should return this reference", function() {
-
+        it("保持链式调用", function() {
+            // 上面的方法能保证
         });
     });
 });
