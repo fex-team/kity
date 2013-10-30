@@ -37,6 +37,14 @@ define(function(require, exports, module){
         return targetClass._base_;
     }
 
+    function setMixins( targetClass, mixins ) {
+        targetClass._mixins_ = mixins;
+    }
+
+    function getMixins( targetClass, mixins ) {
+        return targetClass._mixins_;
+    }
+
     function setMethodName( method, name ) {
         method._method_name_ = name;
     }
@@ -52,7 +60,7 @@ define(function(require, exports, module){
     // 获得正在调用的函数所在的类
     function getCallerClass( caller, instance ) {
         var name = getMethodName( caller ),
-                callerClass = getInstanceClass(instance);
+            callerClass = getInstanceClass(instance);
 
         while(callerClass.prototype[name] != caller) {
             callerClass = getBase(callerClass);
@@ -75,6 +83,18 @@ define(function(require, exports, module){
     BaseClass.prototype.callBase = function() {
         var caller = arguments.callee.caller
         var method = getBase( getCallerClass( caller, this ) ).prototype[ getMethodName(caller) ];
+        return method.apply( this, arguments );
+    }
+
+    BaseClass.prototype.mixin = function( name ) {        
+        var caller = arguments.callee.caller;
+        var method = getMixins( getCallerClass( caller, this ) )[ name ];
+        return method.apply( this, Array.prototype.slice.call(arguments, 1) );
+    }
+
+    BaseClass.prototype.callMixin = function() {
+        var caller = arguments.callee.caller;
+        var method = getMixins( getCallerClass( caller, this ) )[ getMethodName(caller) ];
         return method.apply( this, arguments );
     }
 
@@ -155,20 +175,26 @@ define(function(require, exports, module){
         thisClass.prototype.constructor = thisClass;
 
         // mixins
-        if( defines.mixin instanceof Array ) {
-            var i, length = defines.minxin.length;
+        if( defines.mixins instanceof Array ) {
+            var mixins = {};
+            var i, length = defines.mixins.length;
             for(i = 0; i < length; i++) {
-                var ext = getClassInfo(defines.minxin[i]), 
-                    proto = ext.constructor.prototype;
+                var mixin = getClassInfo(defines.mixins[i]), 
+                    proto = mixin.constructor.prototype;
                 for(var m in proto) {
-                    thisClass.prototype[m] = proto[m];
+                    if(m !== 'constructor') {
+                        // 现在不解析拓展之间的冲突
+                        mixins[m] = thisClass.prototype[m] = proto[m];
+                    }
                 }
             }
+            // 保存拓展的方法，改写后还能调用
+            setMixins(thisClass, mixins);
         }
 
 
         // 下面这些不需要拷贝到原型链上
-        delete defines["minxin"];
+        delete defines["mixin"];
         delete defines["constructor"];
         delete defines["base"];
 
