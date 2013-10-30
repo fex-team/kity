@@ -16,11 +16,11 @@ describe("Kity.Paper", function() {
     });
 
     it("实现 Parent", function() {
-        expect(new Paper()).hasImplement(Parent);
+        expect(new Paper()).toImplement(Parent);
     });
 
     it("实现 EventHandler", function() {
-        expect(new Paper()).hasImplement(EventHandler);
+        expect(new Paper()).toImplement(EventHandler);
     });
 
     describe("Paper(string id)", function() {
@@ -41,7 +41,7 @@ describe("Kity.Paper", function() {
 
     describe("尺寸控制", function() {
         var link;
-        before(function() {
+        beforeEach(function() {
             link = paper.setWidth(100).setHeight(100);
         });
         it("正确设置节点的大小", function() {
