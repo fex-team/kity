@@ -1,5 +1,6 @@
-describe("define()", function() {
-
+describe("createClass", function() {
+	var createClass = require('core/class').createClass;
+	
 	describe("define class Dog", function() {
 		var dog, Dog;
 		beforeEach(function() {			

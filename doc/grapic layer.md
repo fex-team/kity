@@ -195,29 +195,11 @@ CSS 样式支持
 ### getType() : string ###
 获得图形的类型
 
-### getX() : float ###
-获得图形的 x 坐标
-
-### getY() : float ###
-获得图形的 y 坐标
-
-### getPosition() : Point ###
-获得图形的位置
-
-### setX(float x) : this ###
-设置图形的 x 坐标
-
-### setY(float y) : this ###
-设置图形的 y 坐标
-
-### setPosition(float x, float y) ###
-设置图形的位置
-
 ### getWidth() : int ###
-获取图形的宽度
+获取图形所占的宽度
 
 ### getHeight() : int ###
-返回图形的高度
+返回图形所占的高度
 
 ### getSize() : Size ###
 返回图形的大小
@@ -234,6 +216,15 @@ CSS 样式支持
 ### mergeTransform(Matrix matrix) : this ###
 合并图形的变换矩阵
 
+### translate(float dx, float dy) : this ###
+移动图形
+
+### rotate(float degree) : this ###
+旋转图形
+
+### scale(float sx [, float sy]) ###
+缩放图形，如果不给定sy，则等比缩放（认为sy = sx）
+
 ### *addFilter(Filter filter) : this ###
 添加滤镜
 
@@ -245,22 +236,13 @@ CSS 样式支持
 
 
 
-## Path ##
-> 基类 : Shape
+## PathDrawer ##
+> 基类 : BaseClass
 
-表示一个路径（闭合或不闭合）
+提供操作 PathData 的工具类
 
-### Path() : Path ###
-构造函数，创建一条空路径
-
-### Path(string data): Path ###
-构造函数，用指定的路径数据创建路径
-
-### getPathData() : string ###
-获得路径的数据表示
-
-### setPathData(string data) : this ###
-设置路径的数据
+### PathDrawer(Path path) ###
+构造时给定 PathDrawer 要操作的 Path
 
 ### moveTo(x, y) : this ###
 设置路径当前位置
@@ -282,6 +264,31 @@ CSS 样式支持
 
 ### close() : this ###
 闭合当前路径
+
+
+
+
+
+
+## Path ##
+> 基类 : Shape
+
+表示一个路径（闭合或不闭合）
+
+### Path() : Path ###
+构造函数，创建一条空路径
+
+### Path(string data): Path ###
+构造函数，用指定的路径数据创建路径
+
+### getPathData() : string ###
+获得路径的数据表示
+
+### setPathData(string data) : this ###
+设置路径的数据。为了防止派生的图形不被非法修改，有些子类可能会保护改方法不被调用，或者使调用无效。实例化Path能保证该方法的有效性。
+
+### getDrawer() : PathDrawer ###
+获得路径数据绘制工具，用于构建或更新路径。注意，闭合的路径调用该方法时会返回 null。
 
 ### isClosed() : bool ###
 判断当前路径是否已闭合
@@ -689,7 +696,6 @@ CSS 样式支持
 
 ## Pen ##
 > 基类 : Class
-> 抽象类
 > 实现 : Serializable
 
 根据画笔设置当前图形边框样式
@@ -706,44 +712,23 @@ CSS 样式支持
 ### setWidth(float width) : this ###
 设置当前图形画笔的粗细
 
+### setCapStyle(string linecap) ###
+设置画笔描边时，端点的样式，取值有：butt、round、suqare
 
+### setJoinStyle(string linejoin) ###
+设置描边转折点的样式，取值有：miter、round、bevel
 
+### getCapStyle() : string ###
+获得画笔当前设置的描边端点样式
 
+### getJoinStyle() : string ###
+获得画笔当前设置的描边转折点样式
 
+### getDashArray() : Array<float> ###
+获取虚线的段长和间隔的定义数组，如果为空，则绘制实线
 
-## SolidPen ##
-> 基类 : Pen
-
-绘制实线描边的画笔
-
-### SolidPen(Color color, float size) : this ###
-用初始的颜色和大小创建实线画笔
-
-
-
-
-
-
-## DashedPen ##
-> 基类 : Pen
-
-绘制虚线描边的画笔
-
-### DashedPen(Color color, float size [, float dash [, float space]]) : this ###
-创建指定颜色和大小的虚线画笔，也可以可选指定虚线的段长和间隔长度
-
-### setDash(float dash) : this ###
-设置虚线的段长
-
-### getDash() : float ###
-获取虚线的段长
-
-### setSpace(float space) : this ###
-设置虚线段之间的间隔长度
-
-### getSpace() : float ###
-获取虚线段之间的间隔长度
-
+### setDashArray(Array<float>) : this ###
+设置虚线的段长河间隔的定义数组
 
 
 
