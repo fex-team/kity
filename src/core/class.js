@@ -6,7 +6,9 @@
  *     defines.base         {String}         基类的名称。名称要使用全名。（因为base是javascript未来保留字，所以不用base）
  *     defines.mixin        {Array<String>}  要混合到新类的类集合
  *     defines.<method>     {Function}       其他类方法
- *     
+ *
+ * TODO:
+ *     Mixin 构造函数调用支持
  */
 define(function(require, exports, module){
     // fullClassName => Class 映射
@@ -182,6 +184,7 @@ define(function(require, exports, module){
                 var mixin = getClassInfo(defines.mixins[i]), 
                     proto = mixin.constructor.prototype;
                 for(var m in proto) {
+                    // 构造函数不能拷贝
                     if(m !== 'constructor') {
                         // 现在不解析拓展之间的冲突
                         mixins[m] = thisClass.prototype[m] = proto[m];
