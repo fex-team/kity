@@ -8,7 +8,7 @@ describe("Kity.Polygon", function () {
 
         expect( polygon.getPathData() ).toBe( "" );
         expect( polygon.getChildren().length ).toBe( 0 );
-
+        expect( polygon.isClosed() ).toBe( false );
     });
 
     it("点集合构造Polygon", function() {
@@ -23,6 +23,7 @@ describe("Kity.Polygon", function () {
 
         expect( polygon.getPathData() ).not.toBe( "" );
         expect( polygon.getChildren().length ).toBe( 2 );
+        expect( polygon.isClosed() ).toBe( true );
 
     });
 
@@ -30,7 +31,7 @@ describe("Kity.Polygon", function () {
 
         var polygon = new Polygon();
 
-        polygon.addChild( new Point( 3, 2 ) );
+        polygon.addChild( { x: 3, y: 2 } );
         expect( polygon.getPathData() ).not.toBe( "" );
         expect( polygon.getChildren().length ).toBe( 1 );
         polygon.removeChild( 0 );

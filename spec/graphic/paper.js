@@ -26,7 +26,7 @@ describe("Kity.Paper", function() {
     describe("Paper(string id)", function() {
         it("可以通过容器 id 来创建", function() {                   
             var container = document.createElement("div");
-            container.id = "paper-container"
+            container.id = "paper-container";
             document.body.appendChild(container);
             var paper = new Paper( 'paper-container' );
             expect(container.firstChild.tagName.toLowerCase()).toBe('svg');

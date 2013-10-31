@@ -8,7 +8,7 @@ describe("Kity.Path", function() {
         var path = new Path();
 
         expect( path.getPathData() ).toBe( "" );
-        expect( path.isClosed() ).toBe( true );
+        expect( path.isClosed() ).toBe( false );
 
     });
 

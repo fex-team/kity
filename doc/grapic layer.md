@@ -102,10 +102,8 @@
 ### addEventListener(name, handler(ShapeEvent)) ###
 注册指定的事件（如 mousedown、 mousemove、 mouseup、 click、 keydown 等）
 
-### removeEventListener(name, handler(ShapeEvent)) ###
-取消已注册的事件
-
-
+### removeEventListener(name [, handler(ShapeEvent)]) ###
+取消已注册的事件。如果不传绑定的处理函数，将取消所有指定类型的绑定
 
 
 
@@ -378,20 +376,20 @@ CSS 样式支持
 
 表示一个椭圆
 
-### Ellipse(float width, float height) ###
+### Ellipse(float radiusX, float radiusY) ###
 快捷构造椭圆，给定椭圆的大小
 
-### Ellipse(float x, float y, float width, float height) ###
+### Ellipse(float radiusX, float radiusY, float x, float y) ###
 快速构造椭圆，给定椭圆的位置和大小
 
-### getWidth() : float ###
-获得椭圆的宽度
+### getRadius() : Point ###
+获得椭圆的半径
 
-### getHeight() : float ###
-获得椭圆的高度
+### getRadiusX() : float ###
+获得椭圆在 x 轴上的半径
 
-### getSize() : Size ###
-获得椭圆的尺寸（宽度和高度）
+### getRadiusY() : float ###
+获得椭圆在 y 轴上的半径
 
 ### getCenter() : Point ###
 获得椭圆圆心的位置
@@ -402,14 +400,14 @@ CSS 样式支持
 ### getCenterY() : float ###
 获得椭圆圆心位置的 y 坐标
 
-### setWidth(float width) : this ###
-设置椭圆的宽度
+### setRadius(float radiusX, float radiusY) : this ###
+设置椭圆的半径
 
-### setHeight(float height) : this ###
-设置椭圆的高度
+### setRadiusX(float radiusX) : this ###
+设置椭圆在 x 轴上的半径
 
-### setSize(float width, float height) : this ###
-设置椭圆的大小
+### setRadiusY(float radiusY) : this ###
+设置椭圆在 y 轴上的半径
 
 ### setCenter(float x, float y) : this ###
 设置椭圆圆心的位置
@@ -572,7 +570,10 @@ CSS 样式支持
 表示一个颜色
 
 ### Color() : this ###
-初始化一个颜色
+得到 RGBA(0, 0, 0, 0) 的颜色
+
+### Color(string colorString) ###
+用指定的 Color String 来创建颜色，支持常用
 
 ### set(string name, float value) : this
 设置当前颜色的某一个分量值，支持：
@@ -729,7 +730,7 @@ CSS 样式支持
 
 表示用位图填充的画刷
 
-### ImageBrush(string url) : this ###
+### ImageBrush([string url]) : this ###
 初始化一个位图画刷，指定位图位置
 
 ### setUrl(string url) : this ###
@@ -871,5 +872,5 @@ CSS 样式支持
 ### setMatrix(float a, float b, float c, float d, float e, float f): this ###
 设置矩阵的数据
 
-### merge(Matrix another) : Matrix ###
+### mergeMatrix(Matrix another) : Matrix ###
 合并另一个转换矩阵，返回合并后的矩阵

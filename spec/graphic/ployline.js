@@ -8,6 +8,7 @@ describe("Kity.Polyline", function () {
 
         expect( polyline.getPathData() ).toBe( "" );
         expect( polyline.getChildren().length ).toBe( 0 );
+        expect( polyline.isClosed() ).toBe( false );
 
     });
 
@@ -23,6 +24,7 @@ describe("Kity.Polyline", function () {
 
         expect( polyline.getPathData() ).not.toBe( "" );
         expect( polyline.getChildren().length ).toBe( 2 );
+        expect( polyline.isClosed() ).toBe( false );
 
     });
 
@@ -37,6 +39,7 @@ describe("Kity.Polyline", function () {
         expect( polyline.getPathData() ).toBe( "" );
         expect( polyline.getChildren().length ).toBe( 0 );
 
+        expect( polyline.isClosed() ).toBe( false );
     });
 
 });

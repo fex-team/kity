@@ -44,5 +44,23 @@ describe("Kity.EventHandler", function () {
             rect.node.dispatchEvent(new MouseEvent('click'));
             expect(fired).toBeFalsy();
         });
+
+        it("不传递handler全部取消", function() {
+
+            var fired1 = false, fired2 = false;
+            function listener1 (e) {
+                fired1 = true;
+                expect(e.targetShape).toBe(rect);
+            }
+            function listener2 (e) {
+                fired2 = true;
+                expect(e.targetShape).toBe(rect);
+            }
+            rect.addEventListener('click', listener1);
+            rect.addEventListener('click', listener2);
+            rect.removeEventListener('click');
+            rect.node.dispatchEvent(new MouseEvent('click'));
+            expect(fired1 || fired2).toBeFalsy();
+        })
     });
 }); 
