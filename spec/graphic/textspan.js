@@ -1,27 +1,22 @@
 describe("Kity.TextSpan", function () {
-    it("should extend Styled", function() {
+
+    var TextSpan = require( "graphic/textspan" );
+
+    it("构造测试", function() {
+
+        var textspan = new TextSpan( "test" );
+
+        expect( textspan.getContent() ).toBe( "test" );
 
     });
 
-    describe("TextSpan(content)", function() {
-        it("should create a TextSpan with initial content", function() {
+    it("content操作", function() {
 
-        });
+        var textspan = new TextSpan( "test" );
+
+        textspan.setContent( "hello world!" );
+        expect( textspan.getContent() ).toBe( "hello world!" );
+
     });
 
-    describe("setContent()", function() {
-        it("should set the content of the text span", function() {
-
-        });
-
-        it("should return this reference", function() {
-
-        });
-    });
-
-    describe("getContent()", function() {
-        it("should return the content of the text span", function() {
-
-        });
-    })
 });

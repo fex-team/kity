@@ -352,7 +352,23 @@ CSS 样式支持
 ### setRadius(float radius) : this ###
 设置矩形的圆角大小
 
+### getPosition() : Point ###
+获取矩形位置的坐标点
 
+### setPosition( float x, float y ) : this ###
+设置矩形的位置坐标
+
+### getPositionX() : float ###
+获取矩形在X轴上的位置
+
+### getPositionY() : float ###
+获取矩形在Y轴上的位置
+
+### setPositionX（ float x ） : this ###
+设置矩形在X轴上的位置
+
+### setPositionY（ float y ） : this ###
+设置矩形在Y轴上的位置
 
 
 
@@ -516,6 +532,9 @@ CSS 样式支持
 
 ### getContent() : string
 获得文本内容
+
+### appendContent( content ) : Text
+向文本内追加内容
 
 ### setPath(string pathdata) : ###
 设置文本的排列路径

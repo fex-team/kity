@@ -1,37 +1,19 @@
 describe("Kity.Styled", function () {
-	describe("addClass(string className)", function() {
-		it("should add the given class to the current styled object", function() {
 
-		});
+    var Styled = require( "graphic/styled" );
 
-		it("should return this reference", function() {
+    it("className测试", function() {
 
-		});
-	});
+        var styled = new Styled();
 
-	describe("removeClass(string className)", function() {
-		it("should remove the given class from the current styled object", function() {
+        styled.addClass( "test" );
 
-		});
+        expect( styled.hasClass( "test" ) ).toBe( true );
+        expect( styled.hasClass( "test1" ) ).toBe( false );
+        styled.removeClass( "test" );
+        expect( styled.hasClass( "test" ) ).toBe( false );
 
-		it("should return this reference", function() {
 
-		});
-	});
+    });
 
-	describe("hasClass(string className)", function() {
-		it("should return true when the styled object contains the given class, otherwise return false", function() {
-
-		});
-	});
-
-	describe("setStyle(Plain styles)", function() {
-		it("should apply all style rules the given styles definded", function() {
-
-		});
-
-		it("should apply the named style with the given value when 2 arguments pass", function() {
-
-		});
-	});
 });

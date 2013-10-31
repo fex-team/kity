@@ -1,58 +1,67 @@
 describe("Kity.Rect", function () {
-	it("should be an instance of Path", function() {
 
-	});
+    var Rect = require( 'graphic/rect' );
 
-	it("should be an instance of Shape", function() {
+    it("初始化宽高构造Rect", function() {
 
-	});
+        var rect = new Rect( 100, 50 );
 
-	describe("Rect(width, height)", function() {
-		it("should create a rect with initial width and height", function(){
+        expect( rect.getWidth() ).toBe( 100 );
+        expect( rect.getHeight() ).toBe( 50 );
+        //默认初始位置为(0,0)
+        expect( rect.getPosition().x ).toBe( 0 );
+        expect( rect.getPosition().y ).toBe( 0 );
 
-		});
-	});
+    });
 
-	describe("Rect(width, height, x, y)", function() {
-		it("should create a rect with initial size and position", function() {
+    it("给定初始位置和宽高构造Rect", function() {
 
-		});
-	});
+        var rect = new Rect( 100, 50, 10, 20 );
 
-	describe("setWidth()", function() {
-		it("should set the width of the rect", function() {
+        expect( rect.getWidth() ).toBe( 100 );
+        expect( rect.getHeight() ).toBe( 50 );
+        expect( rect.getPosition().x ).toBe( 10 );
+        expect( rect.getPosition().y ).toBe( 20 );
 
-		});
+    });
 
-		it("should return this reference", function() {
+    it("setWidth和setHeight接口测试", function() {
 
-		});
-	});
+        var rect = new Rect( 100, 50, 10, 20 );
 
-	describe("setHeight()", function() {
-		it("should set the height of the rect", function() {
+        rect.setWidth( 500 ).setHeight( 300 );
 
-		});
+        expect( rect.getWidth() ).toBe( 500 );
+        expect( rect.getHeight() ).toBe( 300 );
 
-		it("should return this reference", function() {
+    });
 
-		});
-	});
+    it("圆角接口测试", function() {
 
+        var rect = new Rect( 100, 50, 10, 20 );
 
-	describe("setRadius()", function() {
-		it("should set the radius of the rectangle", function() {
+        rect.setRadius( 5 );
 
-		});
+        expect( rect.getRadius() ).toBe( 5 );
 
-		it("should return this reference", function() {
+    });
 
-		});
-	});
+    it("位置接口测试", function() {
 
-	describe("getRadius()", function() {
-		it("should return the radius of the rectangle", function() {
+        var rect = new Rect( 100, 50, 10, 20 );
 
-		});
-	});
+        expect( rect.getPositionX() ).toBe( 10 );
+        expect( rect.getPositionY() ).toBe( 20 );
+
+        rect.setPositionX( 50 );
+        rect.setPositionY( 150 );
+
+        expect( rect.getPositionX() ).toBe( 50 );
+        expect( rect.getPositionY() ).toBe( 150 );
+
+        expect( rect.getPosition().x ).toBe( 50 );
+        expect( rect.getPosition().y ).toBe( 150 );
+
+    });
+
 })
