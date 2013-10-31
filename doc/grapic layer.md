@@ -834,23 +834,17 @@ CSS 样式支持
 ### getTranslate() : Point ###
 获取当前矩阵表示的平移量
 
-### setTranslate(int x, int y) : this ###
-设置矩阵的平移量
+### addTranslate(int x, int y) : this ###
+添加一个偏移数据到矩阵上
 
-### getRotate() : float ###
-获取矩阵表示的旋转角度（deg）
+### addRotate(int degress) : this ###
+添加一个旋转数据到矩阵上
 
-### setRotate(int degress) : this ###
-设置矩阵表示的旋转角度
+### addScale(float sx, float sy) : this ###
+增加缩放数据到矩阵上，只给一个参数则等比缩放
 
-### getScaleX() : float ###
-获取矩阵表示的X缩放比例
-
-### getScaleY() : float
-设置矩阵表示的Y缩放比例
-
-### setScale(float sx, float sy) : this ###
-设置矩阵表示的缩放比例
+### addSkew(float sx, float sy) : this ###
+添加倾斜到矩阵上，只给一个参数等比倾斜
 
 ### getMatrix() : Plain ###
 获取矩阵的数据： { a: float, b: float, c: ...}
