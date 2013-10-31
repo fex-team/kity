@@ -46,4 +46,22 @@ describe("Kity.Rect", function () {
 
     });
 
+    it("位置接口测试", function() {
+
+        var rect = new Rect( 100, 50, 10, 20 );
+
+        expect( rect.getPositionX() ).toBe( 10 );
+        expect( rect.getPositionY() ).toBe( 20 );
+
+        rect.setPositionX( 50 );
+        rect.setPositionY( 150 );
+
+        expect( rect.getPositionX() ).toBe( 50 );
+        expect( rect.getPositionY() ).toBe( 150 );
+
+        expect( rect.getPosition().x ).toBe( 50 );
+        expect( rect.getPosition().y ).toBe( 150 );
+
+    });
+
 })
