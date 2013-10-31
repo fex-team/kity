@@ -32,7 +32,7 @@ describe("Kity.EventHandler", function () {
         });
     });
 
-    describe("removeEventListener(name, handler)"， function() {
+    describe("removeEventListener(name, handler)", function() {
         it("取消注册后不触发", function() {
             var fired = false;
             function listener (e) {

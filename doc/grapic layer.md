@@ -207,6 +207,12 @@ CSS 样式支持
 ### getBoundaryBox() : Box ###
 获得图形的边界
 
+### setAnchor(float x, float y) : this ###
+设置矩阵应用的旋转锚点
+
+### getAnchor() : Point ###
+获取矩阵应用的旋转锚点
+
 ### getTransform() : Matrix
 获取图形当前的变换矩阵
 
@@ -378,6 +384,24 @@ CSS 样式支持
 ### Ellipse(float x, float y, float width, float height) ###
 快速构造椭圆，给定椭圆的位置和大小
 
+### getWidth() : float ###
+获得椭圆的宽度
+
+### getHeight() : float ###
+获得椭圆的高度
+
+### getSize() : Size ###
+获得椭圆的尺寸（宽度和高度）
+
+### getCenter() : Point ###
+获得椭圆圆心的位置
+
+### getCenterX() : float ###
+获得椭圆圆心位置的 x 坐标
+
+### getCenterY() : float ###
+获得椭圆圆心位置的 y 坐标
+
 ### setWidth(float width) : this ###
 设置椭圆的宽度
 
@@ -387,8 +411,14 @@ CSS 样式支持
 ### setSize(float width, float height) : this ###
 设置椭圆的大小
 
+### setCenter(float x, float y) : this ###
+设置椭圆圆心的位置
 
+### setCenterX(float x) : this ###
+设置椭圆圆心位置的 x 坐标
 
+### setCenterY(float y) : this ###
+设置椭圆圆心位置的 y 坐标
 
 
 
@@ -840,12 +870,6 @@ CSS 样式支持
 
 ### setScale(float sx, float sy) : this ###
 设置矩阵表示的缩放比例
-
-### setAnchor(float x, float y) : this ###
-设置矩阵应用的旋转锚点
-
-### getAnchor() : Point ###
-获取矩阵应用的旋转锚点
 
 ### getMatrix() : Plain ###
 获取矩阵的数据： { a: float, b: float, c: ...}
