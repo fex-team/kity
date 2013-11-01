@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
     var utils = require('core/utils');
-    require('core/class').createClass("graphic.Matrix", {
+    require('core/class').createClass("kity.graphic.Matrix", {
         constructor: function() {
             this.setMatrix(1, 0, 0, 1, 0, 0);
         },
