@@ -1,0 +1,12 @@
+{
+    "undef" : true,
+    "unused" : true,
+    "strict" : false,
+    "curly" : true,
+    "indent" : 4,
+    "newcap" : true,
+    "trailing" : true,
+    "predef" : [
+        "define"
+    ]
+}

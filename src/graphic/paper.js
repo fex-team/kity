@@ -28,6 +28,10 @@ define(function(require, exports, module) {
 
 		setHeight: function() {
 			this.node.getAttribute("height");
+		},
+
+		setViewBox: function() {
+			var attr = this.node.
 		}
 	});
 });
