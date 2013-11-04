@@ -10,8 +10,8 @@ describe("Kity.LinearGradientBrush", function() {
 
         expect( startPosition.x ).toBe( 0 );
         expect( startPosition.y ).toBe( 0 );
-        expect( endPosition.x ).toBe( 0 );
-        expect( endPosition.y ).toBe( 1 );
+        expect( endPosition.x ).toBe( 1 );
+        expect( endPosition.y ).toBe( 0 );
 
     });
 

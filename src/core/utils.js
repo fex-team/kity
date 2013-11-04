@@ -30,6 +30,10 @@ define(function(require, exports, module) {
                 }
             }
             return t;
+        },
+        clone: function( obj ) {
+            var cloned = {};
+            for(var m in obj) if( obj.hasOwnProperty(m) ) cloned[m] = obj[m]; 
         }
     };
 

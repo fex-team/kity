@@ -120,8 +120,8 @@
 
 
 ## Paper ##
-> 基类 : Parent
-> 实现 : EventHandler
+> 基类 : BaseClass
+> 实现 : EventHandler, DefContainer
 > 所有图形的
 
 ### Paper(HTMLElement container) : Paper ###
@@ -150,6 +150,11 @@
 ### getViewBox() : Box ###
 获得 Paper 的坐标范围。
 
+### createDef(string tagName) ###
+添加具有指定类型的 def，会给其分配一个 id
+
+### removeDef(string id) ###
+移除具有指定 id 的 def
 
 
 
@@ -663,7 +668,7 @@ CSS 样式支持
 # LinearGradientBrush #
 > 基类 : Brush
 
-表示用线性渐变填充的画刷。线性渐变的方向和大小由两个值决定。起始位置和结束，使用(px, py)来表示，取值0 - 1，表示渐变的开始和结束位置在图形的指定比例处。默认是 (0,0) 和 (0, 1)
+表示用线性渐变填充的画刷。线性渐变的方向和大小由两个值决定。起始位置和结束，使用(px, py)来表示，取值0 - 1，表示渐变的开始和结束位置在图形的指定比例处。默认是 (0,0) 和 (1, 0)
 渐变的颜色通过添加 ColorStop 来指定
 
 ### LinearGradientBrush() : this ###
@@ -681,8 +686,8 @@ CSS 样式支持
 ### getEndPosition() : Point ###
 获取渐变结束位置
 
-### addStop(float pos, Color color) : this ###
-设置指定位置上的颜色，pos取值范围为 0 - 1，表示在渐变区间的比例的颜色
+### addStop(float offset, Color color) : this ###
+设置指定位置上的颜色，offset取值范围为 0 - 1，表示在渐变区间的比例的颜色
 
 
 
@@ -716,7 +721,7 @@ CSS 样式支持
 ### getRadius() : float ###
 获取径向渐变的半径
 
-### addStop(float pos, Color color) : this ###
+### addStop(float offset, Color color) : this ###
 设置渐变指定区间位置的颜色，取值范围 0 - 1
 
 
@@ -851,9 +856,6 @@ CSS 样式支持
 
 图形变换
 
-### getTranslate() : Point ###
-获取当前矩阵表示的平移量
-
 ### addTranslate(int x, int y) : this ###
 添加一个偏移数据到矩阵上
 
@@ -864,7 +866,7 @@ CSS 样式支持
 增加缩放数据到矩阵上，只给一个参数则等比缩放
 
 ### addSkew(float sx, float sy) : this ###
-添加倾斜到矩阵上，只给一个参数等比倾斜
+添加倾斜数据到矩阵上，只给一个参数等比倾斜
 
 ### getMatrix() : Plain ###
 获取矩阵的数据： { a: float, b: float, c: ...}

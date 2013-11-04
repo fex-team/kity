@@ -1,16 +1,15 @@
 define(function(require, exports, module) {
 	var createClass = require('core/class').createClass;
 	var utils = require('core/utils');
+	var svg = require('graphic/svg');
 	return createClass("Kity.graphic.Paper", {
-
-		base: "Kity.graphic.Parent",
 
 		constructor: function( container ) {
 			this.callBase();
 			if(utils.isString( container )) {
 				container = document.getElementById( container );
 			}
-			this.node = document.createElement("SVG");;
+			this.node = svg.createNode('svg');
 			container.appendChild(this.node);
 		},
 
@@ -28,7 +27,7 @@ define(function(require, exports, module) {
 		},
 
 		setHeight: function() {
-			this.node.getAttribute("height")
+			this.node.getAttribute("height");
 		}
-	})
+	});
 });
