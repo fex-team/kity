@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
 
-    var className = "kity.graphic.LinearGradientBrush";
+    var className = 'LinearGradientBrush';
     var svg = require('graphic/svg');
     
     return require('core/class').createClass( className, {
@@ -13,7 +13,7 @@ define(function(require, exports, module) {
         },
 
         getType: function() {
-            return "LinearGradientBrush";
+            return 'LinearGradientBrush';
         },
 
         setStartPosition: function(px, py) {

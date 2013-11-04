@@ -1,12 +1,17 @@
 {
     "undef" : true,
-    "unused" : true,
+    "unused" : false,
     "strict" : false,
     "curly" : true,
-    "indent" : 4,
     "newcap" : true,
     "trailing" : true,
+    "white": false,
     "predef" : [
-        "define"
+        "define",
+        "require",
+        "describe",
+        "expect",
+        "beforeEach",
+        "it"
     ]
 }

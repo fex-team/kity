@@ -5,7 +5,7 @@ define(function(require, exports, module) {
         parent.removeChild(index);
         return this;
     }
-    return require("core/class").createClass("Kity.graphic.Parent", {
+    return require('core/class').createClass('Parent', {
         getChildren: function() {
             return this._children || (this._children = []);
         },
@@ -37,7 +37,7 @@ define(function(require, exports, module) {
             if( !( pos >= 0 && pos < length ) ) {
                 pos = length;
             }
-            if( pos == 0 ) {
+            if( pos === 0 ) {
                 children.unshift( child );
             } else if ( pos == length ) {
                 children.push( child );
@@ -47,7 +47,7 @@ define(function(require, exports, module) {
                 after = children.slice(pos);
                 this._children = before.concat(after);
             }
-            if( typeof(child) == 'object' ) {
+            if( typeof(child) === 'object' ) {
                 child.parent = this;
                 child.remove = childRemove;
             }
@@ -65,9 +65,11 @@ define(function(require, exports, module) {
                 child = children[pos],
                 before, after;
 
-            if( child === undefined ) return this;
+            if( child === undefined ) {
+                return this;
+            }
 
-            if( pos == 0 ) {
+            if( pos === 0 ) {
                 children.pop();
             } else if ( pos == length - 1 ) {
                 children.shift();
@@ -77,13 +79,19 @@ define(function(require, exports, module) {
                 this._children = before.concat(after);
             }
 
-            if ( child.parent ) delete child.parent;
-            if ( child.remove ) delete child.remove;
+            if ( child.parent ) {
+                delete child.parent;
+            }
+            if ( child.remove ) {
+                delete child.remove;
+            }
 
             return this;
         },
         clear: function() {
-            while(this.getChildren().length) this.removeChild(0);
+            while(this.getChildren().length) {
+                this.removeChild(0);
+            }
             return this;
         }
     });

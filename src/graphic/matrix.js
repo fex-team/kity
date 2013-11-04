@@ -14,19 +14,21 @@ define(function(require, exports, module) {
         };
     }
 
-    require('core/class').createClass("kity.graphic.Matrix", {
-        constructor: function() {
-            if (arguments.length) {
-                this.setMatrix.apply(this, arguments);
-            }
-            else {
-                this.setMatrix(1, 0, 0, 1, 0, 0);
-            }
-        },
+    function Matrix() {
+        if (arguments.length) {
+            this.setMatrix.apply(this, arguments);
+        }
+        else {
+            this.setMatrix(1, 0, 0, 1, 0, 0);
+        }
+    }
+
+    require('core/class').createClass('Matrix', {
+        constructor: Matrix,
 
         addTranslate: function(x, y) {
             this.m = mergeMatrixData(this.m, {
-                a: 1, c: 0, e: x
+                a: 1, c: 0, e: x,
                 b: 0, d: 1, f: y
             });
         },
@@ -35,13 +37,15 @@ define(function(require, exports, module) {
             var rad = deg * Math.PI / 180;
             var sin = Math.sin(rad), cos = Math.cos(rad);
             this.m = mergeMatrixData(this.m, {
-                a:  cos, c: -sin, e: 0
+                a:  cos, c: -sin, e: 0,
                 b: -sin, d:  cos, f: 0
             });
         },
 
         addScale: function( sx, sy ) {
-            if( sy === undefined ) sy = sx;
+            if( sy === undefined ) {
+                sy = sx;
+            }
             this.m = mergeMatrixData(this.m, {
                 a: sx, c:  0, e: 0,
                 b: 0,  d: sy, f: 0
@@ -49,19 +53,21 @@ define(function(require, exports, module) {
         },
 
         addSkew: function( degX, degY ) {
-            if(degY === undefined) degY = degX;
+            if(degY === undefined) {
+                degY = degX;
+            }
             var tx = Math.tan( degX ), ty = Math.tan( degY );
             this.m = mergeMatrixData(this.m, {
-                a: 1 + tx * ty, c: tx, e: 0
+                a: 1 + tx * ty, c: tx, e: 0,
                 b: ty,          d: 1,  f: 0
             });
         },
 
         setMatrix: function(a, b, c, d, e, f) {
             if(arguments.length === 1) {
-                this.m = utils.clone(m);
+                this.m = utils.clone( arguments[0] );
             } else {
-                this.m = { a: a, b: b, c: c, d: d, e: e, f: f };                
+                this.m = { a: a, b: b, c: c, d: d, e: e, f: f };
             }
         },
 
@@ -71,6 +77,6 @@ define(function(require, exports, module) {
 
         mergeMatrix: function(matrix) {
             return new Matrix( mergeMatrixData(this.m, matrix.m) );
-        },
+        }
     });
 });

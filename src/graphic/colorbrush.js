@@ -1,8 +1,8 @@
 define(function(require, exports, module) {
 
-    var Color = require("kity.graphic.Color");
+    var Color = require('graphic/color');
 
-    var className = "kity.graphic.ColorBrush";
+    var className = 'ColorBrush';
     
     return require('core/class').createClass( className, {
         base: 'kity.graphic.ColorBrush',

@@ -1,11 +1,12 @@
 define(function(require, exports, module) {
 
-    var className = "kity.graphic.GradientBrush";
+    var className = 'GradientBrush';
+    var svg = require('graphic/svg');
     
     return require('core/class').createClass( className, {
-        base: 'kity.graphic.Brush',
+        base: 'Brush',
 
-        constructor: function() {            
+        constructor: function() {
             this.callBase();
             this.stops = [];
         },
