@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Path Example</title>
+    <script src="../dev-lib/sea.js"></script>
+    <script>
+        seajs.config({
+            base: '../src'
+        });
+        define('start', function (require) {
+            var Path = require('graphic/path');
+            var Paper = require('graphic/paper');
+            var Color = require('graphic/color');
+            var LinearGradientBrush = require('graphic/lineargradientbrush');
+
+            var paper = new Paper(document.body);
+            paper.setWidth(800).setHeight(600);
+
+            var path = new Path();
+            //path.setPathData('M10 10 L100 100 200 50 z');
+            var d = path.getDrawer();
+            d.moveTo(10, 10).lineTo(100, 100).lineTo(200, 50).close();
+
+            paper.addChild(path);
+
+            var brush = new LinearGradientBrush();
+            brush.addStop(0, Color.parse('red'))
+                .addStop(0.5, Color.parse('yellow'))
+                .addStop(1, Color.parse('blue'));
+
+            path.fill(brush);
+        });
+        seajs.use('start');
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

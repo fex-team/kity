@@ -2,10 +2,12 @@ define(function(require, exports, module) {
     var createClass = require('core/class').createClass;
     var utils = require('core/utils');
     var svg = require('graphic/svg');
+    var Parent = require('graphic/parent');
+    var EventHandler = require('graphic/EventHandler');
     var id = 0;
     return createClass('Paper', {
 
-        mixins: ['Parent', 'EventHandler'],
+        mixins: [Parent, EventHandler],
 
         constructor: function( container ) {
             this.callBase();
@@ -16,7 +18,7 @@ define(function(require, exports, module) {
             this.container = container;
             container.appendChild(this.node);
 
-            this.defs = svg.createNode('def');
+            this.defs = svg.createNode('defs');
             this.node.appendChild(this.defs);
         },
 
@@ -84,10 +86,10 @@ define(function(require, exports, module) {
         },
 
         createDef: function(tagName) {
-            var node = svg.createNode(tagName);
-            this.def.appendChild(node);
-            node.id = tagName + '_def_' + id++;
-            return this;
+            var def = svg.createNode(tagName);
+            this.defs.appendChild(def);
+            def.id = tagName + '_def_' + id++;
+            return def;
         },
 
         removeDef: function(id) {

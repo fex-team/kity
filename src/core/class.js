@@ -14,10 +14,6 @@ define(function (require, exports) {
 
     var config = require('core/config');
 
-
-    // name => Class 映射
-    var classmap = {};
-
     function setClassName(targetClass, name) {
         targetClass._class_name_ = name;
     }
@@ -128,11 +124,7 @@ define(function (require, exports) {
     exports.createClass = function (classname, defines) {
         var thisClass, baseClass;
 
-        if (defines.base) {
-            baseClass = classmap[ defines.base ];
-        } else {
-            baseClass = BaseClass;
-        }
+        baseClass = defines.base || BaseClass;
 
         if (defines.hasOwnProperty('constructor')) {
             thisClass = defines.constructor;
@@ -165,7 +157,7 @@ define(function (require, exports) {
             var mixins = {};
             var i, length = defines.mixins.length;
             for (i = 0; i < length; i++) {
-                var mixin = classmap[ defines.mixins[i] ],
+                var mixin = defines.mixins[i],
                     proto = mixin.prototype;
                 for (var m in proto) {
                     // 构造函数不能拷贝
@@ -189,7 +181,6 @@ define(function (require, exports) {
                 setMethodName(thisClass.prototype[name] = defines[name], name);
             }
         }
-        classmap[classname] = thisClass;
         return thisClass;
     };
 
