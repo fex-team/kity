@@ -1,37 +1,97 @@
 define(function(require, exports, module) {
-	var createClass = require('core/class').createClass;
-	var utils = require('core/utils');
-	var svg = require('graphic/svg');
-	return createClass("Kity.graphic.Paper", {
+    var createClass = require('core/class').createClass;
+    var utils = require('core/utils');
+    var svg = require('graphic/svg');
+    var id = 0;
+    return createClass('Paper', {
 
-		constructor: function( container ) {
-			this.callBase();
-			if(utils.isString( container )) {
-				container = document.getElementById( container );
-			}
-			this.node = svg.createNode('svg');
-			container.appendChild(this.node);
-		},
+        mixins: ['Parent', 'EventHandler'],
 
-		getWidth: function() {
-			return this.node.getAttribute("width");
-		},
+        constructor: function( container ) {
+            this.callBase();
+            if(utils.isString( container )) {
+                container = document.getElementById( container );
+            }
+            this.node = svg.createNode('svg');
+            this.container = container;
+            container.appendChild(this.node);
 
-		setWidth: function( width ) {
-			this.node.setAttribute("width", width);
-			return this;
-		},
+            this.defs = svg.createNode('def');
+            this.node.appendChild(this.defs);
+        },
 
-		getHeigth: function() {
-			return this.node.getAttribute("height");
-		},
+        getContainer: function() {
+            return this.container;
+        },
 
-		setHeight: function() {
-			this.node.getAttribute("height");
-		},
+        getWidth: function() {
+            return +this.node.getAttribute('width');
+        },
 
-		setViewBox: function() {
-			var attr = this.node.
-		}
-	});
+        setWidth: function( width ) {
+            this.node.setAttribute('width', width);
+            return this;
+        },
+
+        getHeight: function() {
+            return +this.node.getAttribute('height');
+        },
+
+        setHeight: function( height ) {
+            this.node.setAttribute('height', height);
+            return this;
+        },
+
+        getViewBox: function() {
+            var attr = this.node.getAttribute('viewBox');
+            if (attr === null) {
+                return {
+                    x: 0,
+                    y: 0,
+                    width: this.getWidth(),
+                    height: this.getHeigth()
+                };
+            } else {
+                attr = attr.split(' ');
+                return {
+                    x: +attr[0],
+                    y: +attr[1],
+                    width: + attr[2],
+                    height: + attr[3]
+                };
+            }
+        },
+
+        setViewBox: function(x, y, width, height) {
+            this.node.setAttribute('viewBox', [x, y, width, height].join(' '));
+            return this;
+        },
+
+        addChild: function(shape, pos) {
+            if( pos === undefined || pos < 0 || pos >= this.getChildren().length ) {
+                pos = this.getChildren().length;
+            }
+            this.callMixin(shape, pos);
+            this.node.insertBefore(shape.node, this.node.childNodes[pos + 1]);
+        },
+
+        removeChild: function(pos) {
+            var shape = this.getChild(pos);
+            if(shape) {
+                this.node.removeChild(shape.node);
+            }
+            this.callMixin(pos);
+        },
+
+        createDef: function(tagName) {
+            var node = svg.createNode(tagName);
+            this.def.appendChild(node);
+            node.id = tagName + '_def_' + id++;
+            return this;
+        },
+
+        removeDef: function(id) {
+            this.def.removeChild(this.def.getElementById(id));
+        }
+    });
 });

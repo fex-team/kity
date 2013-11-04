@@ -2,17 +2,21 @@ define(function(require, exports, module) {
 
     var utils = {
         each : function(obj, iterator, context) {
-            if (obj == null) return;
+            if (obj === null) {
+                return;
+            }
             if (obj.length === +obj.length) {
                 for (var i = 0, l = obj.length; i < l; i++) {
-                    if(iterator.call(context, obj[i], i, obj) === false)
+                    if(iterator.call(context, obj[i], i, obj) === false) {
                         return false;
+                    }
                 }
             } else {
                 for (var key in obj) {
                     if (obj.hasOwnProperty(key)) {
-                        if(iterator.call(context, obj[key], key, obj) === false)
+                        if(iterator.call(context, obj[key], key, obj) === false) {
                             return false;
+                        }
                     }
                 }
             }
@@ -33,14 +37,18 @@ define(function(require, exports, module) {
         },
         clone: function( obj ) {
             var cloned = {};
-            for(var m in obj) if( obj.hasOwnProperty(m) ) cloned[m] = obj[m]; 
+            for(var m in obj) {
+                if( obj.hasOwnProperty(m) ) {
+                    cloned[m] = obj[m];
+                }
+            }
         }
     };
 
-    utils.each(['String', 'Function', 'Array', 'Number', 'RegExp', 'Object','Boolean'], function (v) {
+    utils.each(['String', 'Function', 'Array', 'Number', 'RegExp', 'Object', 'Boolean'], function (v) {
         utils['is' + v] = function (obj) {
             return Object.prototype.toString.apply(obj) == '[object ' + v + ']';
-        }
+        };
     });
 
     return utils;

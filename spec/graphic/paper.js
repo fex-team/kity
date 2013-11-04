@@ -16,15 +16,15 @@ describe("Kity.Paper", function() {
     });
 
     it("实现 Parent", function() {
-        expect(new Paper()).toImplement(Parent);
+        expect(paper).toImplement(Parent);
     });
 
     it("实现 EventHandler", function() {
-        expect(new Paper()).toImplement(EventHandler);
+        expect(paper).toImplement(EventHandler);
     });
 
     describe("Paper(string id)", function() {
-        it("可以通过容器 id 来创建", function() {                   
+        it("可以通过容器 id 来创建", function() {
             var container = document.createElement("div");
             container.id = "paper-container";
             document.body.appendChild(container);
@@ -33,7 +33,7 @@ describe("Kity.Paper", function() {
         });
     });
 
-    describe("getContainer()", function(){      
+    describe("getContainer()", function(){
         it("返回容器的引用", function() {
             expect(paper.getContainer()).toBe(container);
         });
@@ -45,8 +45,8 @@ describe("Kity.Paper", function() {
             link = paper.setWidth(100).setHeight(100);
         });
         it("正确设置节点的大小", function() {
-            expect(node.getAttribute("width")).toBe(100);
-            expect(node.getAttribute("height")).toBe(100);
+            expect(node.getAttribute("width")).toBe('100');
+            expect(node.getAttribute("height")).toBe('100');
         });
         it("正确获取节点的大小", function() {
             expect(paper.getWidth()).toBe(100);

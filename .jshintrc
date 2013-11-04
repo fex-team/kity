@@ -6,6 +6,7 @@
     "newcap" : true,
     "trailing" : true,
     "white": false,
+    "quotmark": false,
     "predef" : [
         "define",
         "require",

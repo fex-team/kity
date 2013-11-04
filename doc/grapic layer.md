@@ -150,10 +150,10 @@
 ### getViewBox() : Box ###
 获得 Paper 的坐标范围。
 
-### createDef(string tagName) ###
+### internal createDef(string tagName) ###
 添加具有指定类型的 def，会给其分配一个 id
 
-### removeDef(string id) ###
+### internal removeDef(string id) ###
 移除具有指定 id 的 def
 
 
