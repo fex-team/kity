@@ -1,5 +1,5 @@
 describe("Kity.Parent", function () {
-    var Parent = require("graphic/parent")
+    var Parent = require("graphic/parent");
     var parent;
 
     beforeEach(function() {
@@ -199,5 +199,5 @@ describe("Kity.Parent", function () {
         it("should return this reference", function() {
             expect(parent.clear()).toBe(parent);
         });
-    })
+    });
 });

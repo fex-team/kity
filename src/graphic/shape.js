@@ -1,10 +1,16 @@
 define(function(require, exports, module) {
-
-    var className = "kity.graphic.";
-    
-    return require('core/class').createClass( className, {
-        constructor: function() {
-            
+    var svg = require('graphic/svg');
+    var Paper = require('graphic/paper');
+    return require('core/class').createClass( 'Shape', {
+        constructor: function( tagName ) {
+            this.node = svg.createNode( tagName );
+        },
+        getPaper: function() {
+            var parent = this.parent;
+            while(parent && !(parent instanceof Paper)) {
+                parent = parent.parent;
+            }
+            return parent;
         }
     });
 });

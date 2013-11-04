@@ -1,26 +1,28 @@
 define(function(require, exports, module) {
 
-    var className = "kity.graphic.GradientBrush";
+    var svg = require('graphic/svg');
+    var Brush = require('graphic/brush');
     
-    return require('core/class').createClass( className, {
-        base: 'kity.graphic.Brush',
+    return require('core/class').createClass( 'GradientBrush', {
+        base: Brush,
 
-        constructor: function() {            
+        constructor: function() {
             this.callBase();
             this.stops = [];
         },
 
         addStop: function(offset, color) {
             this.stops.push({offset: offset, color: color});
+            return this;
         },
 
         getGradientDef: function(paper) {
-            throw new Error('abstract method');
+            throw new Error('abstract method called');
         },
 
         fill: function( path ) {
             var node = path.node;
-            var paper = path.paper;
+            var paper = path.getPaper();
             var gradient = this.getGradientDef( paper );
 
             for(var i = 0, l = this.stops.length; i < l; i++) {

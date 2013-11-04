@@ -1,11 +1,11 @@
 define(function(require, exports, module) {
 
-    var className = "kity.graphic.RadialGradientBrush";
+    var GradientBrush = require('gradient/gradientbrush');
     
-    return require('core/class').createClass( className, {
-        base: 'kity.graphic.GradientBrush',
+    return require('core/class').createClass( 'RadialGradientBrush', {
+        base: GradientBrush,
 
-        constructor: function() {            
+        constructor: function() {
             this.callBase();
             this.setCenter(0.5, 0.5);
             this.setFacal(0.5, 0.5);
@@ -13,8 +13,8 @@ define(function(require, exports, module) {
         },
 
         getType: function() {
-            return 'GradientBrush';
-        }
+            return 'RadialGradientBrush';
+        },
 
         setCenter: function(cx, cy) {
             this.c = {x: cx, y: cy};

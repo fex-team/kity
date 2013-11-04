@@ -180,6 +180,10 @@ define(function(require, exports, module) {
     //Color 静态方法
     utils.extend( Color, {
 
+        parse: function ( valStr ) {
+
+
+        },
         /*
          * 十六进制格式转化为rgb表示
          * 如果传递的字符串不可解析， 则返回null， 否则返回一个PlainObject， 其key包含： r, g, b
