@@ -334,9 +334,6 @@ CSS 样式支持
 
 表示一个矩形
 
-### Rect(float width, float height) : Rect ###
-构造函数，给定矩形的大小
-
 ### Rect(float width, float height, float x, float y) : Rect ###
 构造函数，给定矩形的大小和位置
 

@@ -1,10 +1,12 @@
 define(function(require, exports, module) {
 
-    var className = "kity.graphic.";
-    
-    return require('core/class').createClass( className, {
-        constructor: function() {
-            
+    return require('core/class').createClass( 'Polyline', {
+
+        base: require( 'polyline' ),
+
+        constructor: function () {
+            this.points = [].slice.call( arguments, 0 );
         }
+
     });
 });
