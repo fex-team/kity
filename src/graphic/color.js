@@ -159,10 +159,8 @@ define(function(require, exports, module) {
             },
 
             toHSLA: function () {
-
                 var hslValue = ColorUtils.rgbValueToHSLValue( this._color );
                 hslValue.a = this._color.a;
-
                 return ColorUtils.hslaValueToHSLAString( hslValue );
 
             },
@@ -267,6 +265,8 @@ define(function(require, exports, module) {
                 min = null,
                 result = {};
 
+            rgbValue = utils.extend( {}, rgbValue );
+
             rgbValue.r = rgbValue.r / 255;
             rgbValue.g = rgbValue.g / 255;
             rgbValue.b = rgbValue.b / 255;
@@ -335,6 +335,8 @@ define(function(require, exports, module) {
             var q = null,
                 p = null,
                 result = {};
+
+            hslValue = utils.extend( {}, hslValue );
 
             hslValue.h = hslValue.h / 360;
             hslValue.s = hslValue.s / 100;
