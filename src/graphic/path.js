@@ -91,8 +91,8 @@ define(function(require, exports, module) {
                 stroke: pen.getColor().toRGB(),
                 'stroke-width': pen.getWidth(),
                 'stroke-opacity': pen.getOpacity() === 1 ? null : pen.getOpacity(),
-                'stroke-linecap': pen.getLinecap(),
-                'stroke-linejoin': pen.getLinejoin(),
+                'stroke-linecap': pen.getLineCap(),
+                'stroke-linejoin': pen.getLineJoin(),
                 'stroke-dasharray': pen.getDashArray() ? pen.getDashArray().join( ", " ) : null
             } );
 

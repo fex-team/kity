@@ -38,14 +38,16 @@ define( function ( require, exports, module ) {
 //    paper.addChild( line );
 
     //折线
-//    var paper = new Paper( document.body ),
-//        polyline = new Polyline();
-//
-//    polyline.addChild( { x: 10, y: 20 } );
-////
-////    debugger;
-//
-//    paper.addChild( polyline );
+    var paper = new Paper( document.body ),
+        polyline = new Polyline(),
+        pen = new Pen( new Color( "#ff00ff" ) );
+
+    polyline.appendChild( { x: 10, y: 20 } );
+    polyline.appendChild( { x: 30, y: 60 } );
+    polyline.appendChild( { x: 20, y: 50 } );
+
+    polyline.stroke( pen );
+    paper.addChild( polyline );
 
     //pen测试
 //    var paper = new Paper( document.body ),

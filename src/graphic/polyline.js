@@ -35,6 +35,16 @@ define(function(require, exports, module) {
 
         addChild: function () {
 
+            this.callMixin.apply( this, arguments );
+
+            this.update();
+
+        },
+
+        removeChild: function () {
+
+            this.callMixin.apply( this, arguments );
+
             this.update();
 
         }
