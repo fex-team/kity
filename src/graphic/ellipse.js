@@ -15,7 +15,10 @@ define(function(require, exports, module) {
             this.rx = rx;
             this.ry = ry;
 
-            this.update();
+            //防止createClass构造原型链时报错
+            if ( arguments.length > 0 ) {
+                this.update();
+            }
 
         },
 
