@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
 
-    var utils = require( 'core/utils' );
+    var Utils = require( 'core/utils' );
 
     return require('core/class').createClass( 'Ellipse', {
 
@@ -8,66 +8,94 @@ define(function(require, exports, module) {
 
         constructor: function( cx, cy, rx, ry ) {
 
-            this.center = {
-                x: cx,
-                y: cy
-            };
+            this.callBase();
 
-            this.radius = {
-                x: rx,
-                y: ry
-            }
+            this.cx = cx;
+            this.cy = cy;
+            this.rx = rx;
+            this.ry = ry;
+
+            this.update();
+
+        },
+
+        update: function () {
+
+            var pathData = [
+
+                'M ' + ( this.cx + this.rx ) + ' ' + this.cy,
+                ' A ' + this.rx + ' ' + this.ry,
+                ' 0 1 1 ' + ( this.rx ) + ' ' + this.cy,
+                ' A ' + this.rx + ' ' + this.ry,
+                ' 0 1 1 ' + ( this.cx + this.rx ) + ' ' + this.cy,
+                ' Z'
+
+            ];
+
+            this.setPathData( pathData.join( "" ) );
 
         },
 
         getRadius: function () {
-            return utils.extend( {}, this.radius );
+            return {
+                x: this.rx,
+                y: this.ry
+            }
         },
 
         getRadiusX: function () {
-            return this.radius.x;
+            return this.rx;
         },
 
         getRadiusY: function () {
-            return this.radius.y;
+            return this.ry;
         },
 
         getCenter: function () {
-            return utils.extend( {}, this.center );
+            return {
+                x: this.cx,
+                y: this.cy
+            };
         },
 
         getCenterX: function () {
-            return this.center.x;
+            return this.cx;
         },
 
         getCenterY: function () {
-            return this.center.y;
+            return this.cy;
         },
 
-        setRadius: function ( cx, cy ) {
-            this.center.x = cx;
-            this.center.y = cy;
+        setRadius: function ( rx, ry ) {
+            this.rx = rx;
+            this.ry = ry;
+            this.update();
         },
 
         setRadiusX: function ( rx ) {
-            this.radius.x = rx;
+            this.rx = rx;
+            this.update();
         },
 
         setRadiusY: function ( ry ) {
-            this.radius.y = ry;
+            this.ry = ry;
+            this.update();
         },
 
         setCenter: function ( cx, cy ) {
-            this.center.x = cx;
-            this.center.y = cy;
+            this.cx = cx;
+            this.cy = cy;
+            this.update();
         },
 
         setCenterX: function ( cx ) {
-            this.center.x = cx;
+            this.cx = cx;
+            this.update();
         },
 
         setCenterY: function ( cy ) {
-            this.center.y = cy;
+            this.cy = cy;
+            this.update();
         }
 
 
