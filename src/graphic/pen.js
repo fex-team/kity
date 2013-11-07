@@ -54,25 +54,25 @@ define(function(require, exports, module) {
 
         },
 
-        getLinecap: function () {
+        getLineCap: function () {
 
             return this.linecap;
 
         },
 
-        setLinecap: function ( linecap ) {
+        setLineCap: function ( linecap ) {
 
             this.linecap = linecap;
 
         },
 
-        getLinejoin: function () {
+        getLineJoin: function () {
 
             return this.linejoin;
 
         },
 
-        setLinejoin: function ( linejoin ) {
+        setLineJoin: function ( linejoin ) {
 
             this.linejoin = linejoin;
 

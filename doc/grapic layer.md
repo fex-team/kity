@@ -764,16 +764,16 @@ CSS 样式支持
 ### setWidth(float width) : this ###
 设置当前图形画笔的粗细
 
-### setLinecap(string linecap) ###
+### setLineCap(string linecap) ###
 设置画笔描边时，端点的样式，取值有：butt、round、suqare
 
-### setLinejoin(string linejoin) ###
+### setLineJoin(string linejoin) ###
 设置描边转折点的样式，取值有：miter、round、bevel
 
-### getLinecap() : string ###
+### getLineCap() : string ###
 获得画笔当前设置的描边端点样式
 
-### getLinejoin() : string ###
+### getLineJoin() : string ###
 获得画笔当前设置的描边转折点样式
 
 ### getOpacity() : number ###
