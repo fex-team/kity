@@ -1,11 +1,42 @@
 define(function(require, exports, module) {
 
+    var Utils = require( "core/utils" ),
+        Parent = require( "graphic/parent" );
+
     return require('core/class').createClass( 'Polyline', {
 
-        base: require( 'polyline' ),
+        base: require( 'graphic/path' ),
+
+        mixins: [ Parent ],
 
         constructor: function () {
-            this.points = [].slice.call( arguments, 0 );
+
+            this.callBase();
+            this._children = [].slice.call( arguments, 0 );
+
+        },
+
+        update: function () {
+
+            var pathData = [],
+                command = null;
+
+            Utils.each( this._children, function ( point, index ) {
+
+                command = index === 0 ? 'M' : 'L';
+
+                pathData.push( command + ' ' + point.x + ' ' + point.y );
+
+            } );
+
+            this.setPathData( pathData.join( ", " ) );
+
+        },
+
+        addChild: function () {
+
+            this.update();
+
         }
 
     });

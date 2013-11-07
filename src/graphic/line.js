@@ -2,14 +2,18 @@ define(function(require, exports, module) {
 
     return require('core/class').createClass( 'Line', {
 
-        base: require( 'graphic/line' ),
+        base: require( 'graphic/path' ),
 
         constructor: function( x1, y1, x2, y2 ) {
+
+            this.callBase();
 
             this.x1 = x1;
             this.x2 = x2;
             this.y1 = y1;
             this.y2 = y2;
+
+            this.update();
 
         },
 
@@ -37,6 +41,17 @@ define(function(require, exports, module) {
                 x: this.x2,
                 y: this.y2
             };
+        },
+
+        update: function () {
+
+            var pathData = [
+                'M ' + this.x1 + ' ' + this.y1,
+                ' L ' + this.x2 + ' ' + this.y2
+            ];
+
+            this.setPathData( pathData.join( "" ) );
+
         }
 
     });

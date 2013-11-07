@@ -1,5 +1,5 @@
 define(function(require, exports, module) {
-    var utils = require('core/utils');
+    var Utils = require('core/utils');
     var createClass = require('core/class').createClass;
     var Shape = require('graphic/shape');
 
@@ -37,7 +37,30 @@ define(function(require, exports, module) {
         close: function() {
             return this.appendData( ['z'] );
         }
-    });
+    }),
+        PathUtils = {};
+
+    Utils.extend( PathUtils, {
+
+        //向给定的图形添加给定的属性
+        dumpAttributes: function ( shape, attrs ) {
+
+            var node = shape.node;
+
+            Utils.each( attrs, function ( val, key ) {
+
+                if ( val ) {
+                    node.setAttribute( key, val );
+                } else {
+                    node.removeAttribute( key );
+                }
+
+            } );
+
+        }
+
+    } );
+
     return createClass( 'Path', {
         base: Shape,
         constructor: function( data ) {
@@ -62,7 +85,17 @@ define(function(require, exports, module) {
             return !!~data.indexOf('z') || !!~data.indexOf('Z');
         },
         stroke: function( pen ) {
-            pen.stroke(this);
+
+            //根据画笔设置描边属性
+            PathUtils.dumpAttributes( this, {
+                stroke: pen.getColor().toRGB(),
+                'stroke-width': pen.getWidth(),
+                'stroke-opacity': pen.getOpacity() === 1 ? null : pen.getOpacity(),
+                'stroke-linecap': pen.getLinecap(),
+                'stroke-linejoin': pen.getLinejoin(),
+                'stroke-dasharray': pen.getDashArray() ? pen.getDashArray().join( ", " ) : null
+            } );
+
             return this;
         },
         fill: function( brush ) {

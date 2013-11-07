@@ -2,7 +2,7 @@
  * 图形事件包装类
  * */
 
-define( function ( rquire, exprots, module ) {
+define( function ( require, exprots, module ) {
 
     return require('core/class').createClass( 'EventHandler', {
 
