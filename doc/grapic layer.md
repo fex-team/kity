@@ -150,6 +150,9 @@
 ### getViewBox() : Box ###
 获得 Paper 的坐标范围。
 
+### getShapeById(id) : Shape ###
+获得具有指定 id 的图形
+
 ### internal createDef(string tagName) ###
 添加具有指定类型的 def，会给其分配一个 id
 
@@ -228,11 +231,13 @@ CSS 样式支持
 ### translate(float dx, float dy) : this ###
 移动图形
 
-### rotate(float degree) : this ###
+### rotate(float degree [, float cx, float cy]) : this ###
 旋转图形
 
 ### scale(float sx [, float sy]) ###
 缩放图形，如果不给定sy，则等比缩放（认为sy = sx）
+
+### 
 
 ### *addFilter(Filter filter) : this ###
 添加滤镜

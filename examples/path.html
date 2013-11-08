@@ -25,9 +25,9 @@
             paper.addChild(path);
 
             var brush = new LinearGradientBrush();
-            brush.addStop(0, Color.parse('red'))
-                .addStop(0.5, Color.parse('yellow'))
-                .addStop(1, Color.parse('blue'));
+            brush.addStop(0, Color.parse('#ff0000'))
+                .addStop(0.5, Color.parse('#ffff00'))
+                .addStop(1, Color.parse('#0000ff'));
 
             path.fill(brush);
         });

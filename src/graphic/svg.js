@@ -4,6 +4,10 @@ define( function(require, exports, module) {
     return {
         createNode: function(name) {
             return doc.createElementNS(ns, name);
+        },
+        defaults: {
+            stroke: 'none',
+            fill: 'none'
         }
-    }
+    };
 });

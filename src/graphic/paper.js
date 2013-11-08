@@ -9,17 +9,22 @@ define(function(require, exports, module) {
 
         mixins: [Parent, EventHandler],
 
-        constructor: function( container ) {
+        constructor: function(container) {
             this.callBase();
-            if(utils.isString( container )) {
-                container = document.getElementById( container );
+            if (utils.isString(container)) {
+                container = document.getElementById(container);
             }
             this.node = svg.createNode('svg');
+            this.node.paper = this;
             this.container = container;
             container.appendChild(this.node);
 
             this.defs = svg.createNode('defs');
             this.node.appendChild(this.defs);
+        },
+
+        getNode: function() {
+            return this.node;
         },
 
         getContainer: function() {
@@ -30,7 +35,7 @@ define(function(require, exports, module) {
             return +this.node.getAttribute('width');
         },
 
-        setWidth: function( width ) {
+        setWidth: function(width) {
             this.node.setAttribute('width', width);
             return this;
         },
@@ -39,7 +44,7 @@ define(function(require, exports, module) {
             return +this.node.getAttribute('height');
         },
 
-        setHeight: function( height ) {
+        setHeight: function(height) {
             this.node.setAttribute('height', height);
             return this;
         },
@@ -58,8 +63,8 @@ define(function(require, exports, module) {
                 return {
                     x: +attr[0],
                     y: +attr[1],
-                    width: + attr[2],
-                    height: + attr[3]
+                    width: +attr[2],
+                    height: +attr[3]
                 };
             }
         },
@@ -70,16 +75,20 @@ define(function(require, exports, module) {
         },
 
         addChild: function(shape, pos) {
-            if( pos === undefined || pos < 0 || pos >= this.getChildren().length ) {
+            if (pos === undefined || pos < 0 || pos >= this.getChildren().length) {
                 pos = this.getChildren().length;
             }
             this.callMixin(shape, pos);
             this.node.insertBefore(shape.node, this.node.childNodes[pos + 1]);
         },
 
+        getShapeById: function(id) {
+            return this.node.getElementById(id).shape;
+        },
+
         removeChild: function(pos) {
             var shape = this.getChild(pos);
-            if(shape) {
+            if (shape) {
                 this.node.removeChild(shape.node);
             }
             this.callMixin(pos);
