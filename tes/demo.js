@@ -13,6 +13,8 @@ define( function ( require, exports, module ) {
         Color = require( "graphic/color" ),
         Ellipse = require( "graphic/ellipse" ),
         Circle = require( "graphic/circle" ),
+        Image = require( "graphic/image" ),
+        Polygon = require( "graphic/polygon" ),
         Polyline = require( "graphic/polyline" );
 
 //    var paper = new Paper( document.body ),
@@ -38,16 +40,16 @@ define( function ( require, exports, module ) {
 //    paper.addChild( line );
 
     //折线
-    var paper = new Paper( document.body ),
-        polyline = new Polyline(),
-        pen = new Pen( new Color( "#ff00ff" ) );
-
-    polyline.appendChild( { x: 10, y: 20 } );
-    polyline.appendChild( { x: 30, y: 60 } );
-    polyline.appendChild( { x: 20, y: 50 } );
-
-    polyline.stroke( pen );
-    paper.addChild( polyline );
+//    var paper = new Paper( document.body ),
+//        polyline = new Polyline(),
+//        pen = new Pen( new Color( "#ff00ff" ) );
+//
+//    polyline.appendChild( { x: 10, y: 20 } );
+//    polyline.appendChild( { x: 30, y: 60 } );
+//    polyline.appendChild( { x: 20, y: 50 } );
+//
+//    polyline.stroke( pen );
+//    paper.addChild( polyline );
 
     //pen测试
 //    var paper = new Paper( document.body ),
@@ -82,6 +84,35 @@ define( function ( require, exports, module ) {
 //        circle = new Circle( 50, 50, 20 );
 //
 //    paper.appendChild( circle );
+
+    //图片测试
+//    var image = new Image( "http://www.baidu.com/img/bdlogo.gif", 100, 100 ),
+//        paper = new Paper( document.body );
+//
+//    paper.appendChild( image );
+//
+//    window.tt = image;
+
+    //多边形
+    var polygon = new Polygon( [ { x: 1, y: 2 }, { x: 50, y: 10 }, { x: 120, y: 300 } ] ),
+        paper = new Paper( document.body );
+
+    polygon.stroke( new Pen( new Color( "#f0f" ) ) );
+//    polygon.appendChild( { x: 32, y: 40 } );
+    paper.addChild( polygon );
+    window.tt = polygon;
+
+    //折线
+//    var polyline = new Polyline( [ { x: 1, y: 2 }, { x: 50, y: 10 }, { x: 120, y: 300 } ] ),
+//        paper = new Paper( document.body );
+//
+////    polygon.appendChild( { x: 32, y: 40 } );
+//    paper.addChild( polyline );
+//    polyline.stroke( new Pen( new Color( "#ff0000" ) ) );
+//    window.tt = polyline;
+
+    //
+
 
 
 } );

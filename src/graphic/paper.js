@@ -15,6 +15,8 @@ define(function(require, exports, module) {
                 container = document.getElementById( container );
             }
             this.node = svg.createNode('svg');
+            this.node.setAttribute( "xmlns", "http://www.w3.org/2000/svg" );
+            this.node.setAttribute( "xmlns:xlink", "http://www.w3.org/1999/xlink" );
             this.container = container;
             container.appendChild(this.node);
 
