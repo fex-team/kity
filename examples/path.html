@@ -3,6 +3,12 @@
 <head>
     <title>Path Example</title>
     <script src="../dev-lib/sea.js"></script>
+    <style>
+        .stroke-green {
+            stroke: green;
+            stroke-linejoin: round;
+        }
+    </style>
     <script>
         seajs.config({
             base: '../src'
@@ -12,12 +18,13 @@
             var Paper = require('graphic/paper');
             var Color = require('graphic/color');
             var LinearGradientBrush = require('graphic/lineargradientbrush');
+            var Matrix = require('graphic/matrix');
 
             var paper = new Paper(document.body);
             paper.setWidth(800).setHeight(600);
             paper.setViewBox(0, 0, 400, 300);
 
-            var path = new Path();
+            var path = window.path = new Path();
             //path.setPathData('M10 10 L100 100 200 50 z');
             var d = path.getDrawer();
             d.moveTo(10, 10).lineTo(100, 100).lineTo(200, 50).close();
@@ -25,11 +32,12 @@
             paper.addChild(path);
 
             var brush = new LinearGradientBrush();
-            brush.addStop(0, Color.parse('#ff0000'))
-                .addStop(0.5, Color.parse('#ffff00'))
-                .addStop(1, Color.parse('#0000ff'));
+            brush.addStop(0, '#ff0000')
+            brush.addStop(0.5, '#ffff00')
+            brush.addStop(1, '#0000ff');
 
             path.fill(brush);
+            path.setStyle({ 'stroke-width': '5' }).addClass('stroke-green');
         });
         seajs.use('start');
     </script>

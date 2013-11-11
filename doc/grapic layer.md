@@ -339,9 +339,6 @@ CSS 样式支持
 
 表示一个矩形
 
-### Rect(float width, float height) : Rect ###
-构造函数，给定矩形的大小
-
 ### Rect(float width, float height, float x, float y) : Rect ###
 构造函数，给定矩形的大小和位置
 
@@ -772,17 +769,23 @@ CSS 样式支持
 ### setWidth(float width) : this ###
 设置当前图形画笔的粗细
 
-### setCapStyle(string linecap) ###
+### setLineCap(string linecap) ###
 设置画笔描边时，端点的样式，取值有：butt、round、suqare
 
-### setJoinStyle(string linejoin) ###
+### setLineJoin(string linejoin) ###
 设置描边转折点的样式，取值有：miter、round、bevel
 
-### getCapStyle() : string ###
+### getLineCap() : string ###
 获得画笔当前设置的描边端点样式
 
-### getJoinStyle() : string ###
+### getLineJoin() : string ###
 获得画笔当前设置的描边转折点样式
+
+### getOpacity() : number ###
+获取当前画笔的透明度值
+
+### setOpacity( number opacity ): this ###
+设置当前画笔的透明度
 
 ### getDashArray() : Array<float> ###
 获取虚线的段长和间隔的定义数组，如果为空，则绘制实线

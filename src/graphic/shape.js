@@ -1,72 +1,76 @@
-define(function(require, exports, module) {
+define(function (require, exports, module) {
     var svg = require('graphic/svg');
     var Paper = require('graphic/paper');
     var EventHandler = require('graphic/eventhandler');
     var Styled = require('graphic/styled');
     var Matrix = require('graphic/matrix');
 
-    return require('core/class').createClass( 'Shape', {
+    return require('core/class').createClass('Shape', {
         mixins: [EventHandler, Styled],
-        constructor: function( tagName ) {
-            this.node = svg.createNode( tagName );
+        constructor: function (tagName) {
+            this.node = svg.createNode(tagName);
             this.node.shape = this;
         },
-        getNode: function() {
+        getNode: function () {
             return this.node;
         },
-        getType: function() {
+        getType: function () {
             throw new Error("abstract method called");
         },
-        getBoundaryBox: function() {
+        getBoundaryBox: function () {
             var box = this.node.getBBox();
             return box;
         },
-        getRenderBox: function() {
+        getRenderBox: function () {
             // TODO: may be implement later
         },
-        getWidth: function() {
+        getWidth: function () {
             return this.getBoundaryBox().width;
         },
-        getHeight: function() {
+        getHeight: function () {
             return this.getBoundaryBox().height;
         },
-        getSize: function() {
+        getSize: function () {
             var box = this.getBoundaryBox();
             delete box.x;
             delete box.y;
             return box;
         },
-        getPaper: function() {
+        getPaper: function () {
             var parent = this.parent;
-            while(parent && !(parent instanceof Paper)) {
+            while (parent && !(parent instanceof Paper)) {
                 parent = parent.parent;
             }
             return parent || null;
         },
-        getTransform: function() {
-            return new Matrix(this.node.getAttribute("transform"));
+        getTransform: function () {
+            return Matrix.parse(this.node.getAttribute("transform"));
         },
-        setTransform: function(matrix) {
+        setTransform: function (matrix) {
             this.node.setAttribute("transform", matrix);
             return this;
         },
-        mergeTransform: function(matrix) {
-            return this.setTransform(this.getTransform().merge(matrix));
+        resetTransform: function () {
+            this.node.removeAttribute('transform');
+            return this;
         },
-        translate: function(dx, dy) {
+        mergeTransform: function (matrix) {
+            return this.setTransform(this.getTransform().mergeMatrix(matrix));
+        },
+        translate: function (dx, dy) {
             return this.mergeTransform(new Matrix().addTranslate(dx, dy));
         },
-        rotate: function( deg, cx, cy ) {
+        rotate: function (deg, cx, cy) {
             return this.mergeTransform(new Matrix().addRotate(deg, cx, cy));
         },
-        scale: function( sx, sy ) {
-            if(sy === undefined) {
+        scale: function (sx, sy) {
+            if (sy === undefined) {
                 sy = sx;
             }
             return this.mergeTransform(new Matrix().addScale(sx, sy));
         },
-        skew: function( sx, sy ) {
-            if(sy === undefined) {
+        skew: function (sx, sy) {
+            if (sy === undefined) {
                 sy = sx;
             }
             return this.mergeTransform(new Matrix().addSkew(sx, sy));

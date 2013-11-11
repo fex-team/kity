@@ -1,10 +1,15 @@
 define(function(require, exports, module) {
 
-    var className = "kity.graphic.";
-    
-    return require('core/class').createClass( className, {
+    return require('core/class').createClass( 'Group', {
+
+        base: require( 'graphic/shape' ),
+
         constructor: function() {
-            
+
+            this.callBase( 'g' );
+
         }
+
     });
+
 });

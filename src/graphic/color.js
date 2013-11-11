@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
 
-    var utils = require('core/utils'),
+    var Utils = require('core/utils'),
 
         ColorUtils = {},
 
@@ -8,51 +8,36 @@ define(function(require, exports, module) {
 
             constructor: function() {
 
-                var colorValue = arguments,
-                    tmp = null;
+                var colorValue = null;
 
-                this._init();
+                //parse构造
+                if ( typeof arguments[ 0 ] === 'string' ) {
 
-                //16进制表示形式转化为rgba表示
-                if ( /^#/.test( arguments[ 0 ] ) ) {
+                    colorValue = Color.parseToValue( arguments[ 0 ] );
 
-                    colorValue = Color.hexToRGBValue( arguments[0] );
-
+                    //解析失败
                     if ( colorValue === null ) {
-                        throw new Error( 'Color: Syntax Error' );
+                        colorValue.r = 0;
+                        colorValue.g = 0;
+                        colorValue.b = 0;
+                        colorValue.a = 1;
                     }
 
-                    tmp = colorValue;
-                    colorValue = [];
+                } else {
 
-                    colorValue.push( tmp.r );
-                    colorValue.push( tmp.g );
-                    colorValue.push( tmp.b );
-                    colorValue.push( 1 );
+                    colorValue = {
+                        r: arguments[0] | 0,
+                        g: arguments[1] | 0,
+                        b: arguments[2] | 0,
+                        //alpha 默认为1
+                        a: parseFloat( arguments[ 3 ] ) || 1
+                    };
+
+                    colorValue = ColorUtils.overflowFormat( colorValue );
 
                 }
 
-                this._color = {
-                    r: Math.min( this._MAX_VALUE.r, Math.floor( colorValue[ 0 ] ) ) | 0,
-                    g: Math.min( this._MAX_VALUE.g, Math.floor( colorValue[ 1 ] ) ) | 0,
-                    b: Math.min( this._MAX_VALUE.b, Math.floor( colorValue[ 2 ] ) ) | 0,
-                    a: Math.min( this._MAX_VALUE.a, colorValue[ 3 ] ) | 0
-                };
-
-            },
-
-            _init: function () {
-
-                //各分量可表示的最大值
-                this._MAX_VALUE = {
-                    r: 255,
-                    g: 255,
-                    b: 255,
-                    h: 360,
-                    s: 100,
-                    l: 100,
-                    a: 1
-                };
+                this._color = colorValue;
 
             },
 
@@ -61,7 +46,7 @@ define(function(require, exports, module) {
                 var values = null;
 
                 //设置的值非法
-                if ( !this._MAX_VALUE[ name ] ) {
+                if ( !Color._MAX_VALUE[ name ] ) {
                     throw new Error( 'Color set(): Illegal parameter' );
                 }
 
@@ -69,7 +54,7 @@ define(function(require, exports, module) {
                     value = Math.floor( value );
                 }
 
-                value = Math.min( this._MAX_VALUE[name], value );
+                value = Math.min( Color._MAX_VALUE[name], value );
 
                 //hsl分量
                 if ( "hsl".indexOf( name ) !== -1 ) {
@@ -86,15 +71,14 @@ define(function(require, exports, module) {
                     //转回rgb
                     values = ColorUtils.hslValueToRGBValue( values );
 
-                    console.log(values)
                     //更新rgb分量
-                    utils.extend( this._color, values );
+                    Utils.extend( this._color, values );
 
                     return this;
 
                 }
 
-                this._color[ name ] = Math.min( this._MAX_VALUE[name], value );
+                this._color[ name ] = Math.max( Color._MIN_VALUE[ name ], Math.min( Color._MAX_VALUE[name], value ) );
 
                 return this;
 
@@ -103,7 +87,7 @@ define(function(require, exports, module) {
             increase: function ( name, value ) {
 
                 //设置的值非法
-                if ( !this._MAX_VALUE[ name ] ) {
+                if ( !Color._MAX_VALUE[ name ] ) {
                     throw new Error( 'Color set(): Illegal parameter' );
                 }
 
@@ -121,7 +105,7 @@ define(function(require, exports, module) {
 
             get: function ( name ) {
 
-                if ( !this._MAX_VALUE[ name ] ) {
+                if ( !Color._MAX_VALUE[ name ] ) {
                     return null;
                 }
 
@@ -159,16 +143,18 @@ define(function(require, exports, module) {
             },
 
             toHSLA: function () {
-
                 var hslValue = ColorUtils.rgbValueToHSLValue( this._color );
                 hslValue.a = this._color.a;
-
                 return ColorUtils.hslaValueToHSLAString( hslValue );
 
             },
 
             //默认实现是调用toRGBA
             toString: function () {
+
+                if ( this._color.a === 1 ) {
+                    return this.toRGB();
+                }
 
                 return this.toRGBA();
 
@@ -178,12 +164,106 @@ define(function(require, exports, module) {
 
 
     //Color 静态方法
-    utils.extend( Color, {
+    Utils.extend( Color, {
+
+        //各分量可表示的最大值
+        _MAX_VALUE: {
+            r: 255,
+            g: 255,
+            b: 255,
+            h: 360,
+            s: 100,
+            l: 100,
+            a: 1
+        },
+
+        //各分量最小值
+        _MIN_VALUE: {
+            r: 0,
+            g: 0,
+            b: 0,
+            h: 0,
+            s: 0,
+            l: 0,
+            a: 0
+        },
 
         parse: function ( valStr ) {
 
+            var rgbValue = Color.parseToValue( valStr );
+
+            return new Color( rgbValue.r, rgbValue.g, rgbValue.b, rgbValue.a );
 
         },
+
+        parseToValue: function ( valStr ) {
+
+            var rgbValue = {},
+                hasAlpha = false,
+                keys = [ 'r', 'g', 'b' ];
+
+            //hex格式
+            if ( /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test( valStr ) ) {
+
+                valStr = RegExp.$1.split( "" );
+
+                Utils.each( keys, function ( key, index ) {
+
+                    if ( valStr.length === 3 ) {
+
+                        rgbValue[ key ] = ColorUtils.toNumber( valStr[ index ] + valStr[ index ] );
+
+                    } else {
+
+                        rgbValue[ key ] = ColorUtils.toNumber( valStr[ index*2 ] + valStr[ index*2+1 ] );
+
+                    }
+
+                } );
+
+                rgbValue.a = 1;
+
+                //rgb或者rgba格式
+            } else if ( /^(rgba?)/i.test( valStr ) ) {
+
+                hasAlpha = RegExp.$1.length === 4;
+
+                valStr = valStr.replace( /^rgba?/i, '' ).replace( /\s+/g, '').replace( /[^0-9,.]/g, '').split( "," )
+
+                Utils.each( keys, function ( key, index ) {
+
+                    rgbValue[ key ] = valStr[ index ] | 0;
+
+                } );
+
+                rgbValue.a = hasAlpha ? parseFloat( valStr[ 3 ] ) : 1;
+
+                //hsl格式
+            } else if ( /^(hsla?)/i.test( valStr ) ) {
+
+                hasAlpha = RegExp.$1.length === 4;
+
+                valStr = valStr.replace( /^hsla?/i, '' ).replace( /\s+/g, '').replace( /[^0-9,.]/g, '').split( "," );
+
+                //记录hsl值
+                rgbValue.h = valStr[ 0 ] | 0;
+                rgbValue.s = valStr[ 1 ] | 0;
+                rgbValue.l = valStr[ 2 ] | 0;
+
+                //hsl值转换为rgb值
+                rgbValue = ColorUtils.hslValueToRGBValue( rgbValue );
+
+                rgbValue.a = hasAlpha ? parseFloat( valStr[ 3 ] ) : 1;
+
+                //其他格式非法
+            } else {
+                return null;
+            }
+
+            return ColorUtils.overflowFormat( rgbValue );
+
+        },
+
         /*
          * 十六进制格式转化为rgb表示
          * 如果传递的字符串不可解析， 则返回null， 否则返回一个PlainObject， 其key包含： r, g, b
@@ -210,16 +290,16 @@ define(function(require, exports, module) {
 
             if ( /^#/.test( hexValue ) ) {
 
-                if ( /^#([a-f0-9]{3})$/.test( hexValue ) ) {
+                if ( /^#([a-f0-9]{3})$/i.test( hexValue ) ) {
 
-                    utils.each( RegExp.$1.split( "" ), function ( ele, index ) {
+                    Utils.each( RegExp.$1.split( "" ), function ( ele, index ) {
 
                         value[ index*2 ] = ele;
                         value[ index*2 + 1 ] = ele;
 
                     } );
 
-                } else if ( /^#([a-f0-9]{6})$/.test( arguments[ 0 ] ) ) {
+                } else if ( /^#([a-f0-9]{6})$/i.test( arguments[ 0 ] ) ) {
 
                     value = RegExp.$1.split( "" );
 
@@ -231,7 +311,7 @@ define(function(require, exports, module) {
 
                 for ( var i = 0, len = KEY_MAP.length; i < len; i++ ) {
 
-                    result[ KEY_MAP[ i ] ] = parseInt( value[ i*2 ] + value[ i*2+1 ], 16 );
+                    result[ KEY_MAP[ i ] ] = ColorUtils.toNumber( value[ i*2 ] + value[ i*2+1 ] );
 
                 }
 
@@ -258,7 +338,7 @@ define(function(require, exports, module) {
     } );
 
     //内部工具对象
-    utils.extend( ColorUtils, {
+    Utils.extend( ColorUtils, {
 
         //rgb值对象转换为hsl值对象
         rgbValueToHSLValue: function ( rgbValue ) {
@@ -266,6 +346,8 @@ define(function(require, exports, module) {
             var max = null,
                 min = null,
                 result = {};
+
+            rgbValue = Utils.extend( {}, rgbValue );
 
             rgbValue.r = rgbValue.r / 255;
             rgbValue.g = rgbValue.g / 255;
@@ -335,6 +417,8 @@ define(function(require, exports, module) {
             var q = null,
                 p = null,
                 result = {};
+
+            hslValue = Utils.extend( {}, hslValue );
 
             hslValue.h = hslValue.h / 360;
             hslValue.s = hslValue.s / 100;
@@ -432,6 +516,34 @@ define(function(require, exports, module) {
         hslaValueToHSLAString: function ( hslaValue ) {
 
             return 'hsla('+ hslaValue.h +', '+ hslaValue.s +'%, '+ hslaValue.l +'%, '+ hslaValue.a +')';
+
+        },
+
+        //16进制的2个数字转化为10进制， 如果转化失败， 返回0
+        toNumber: function ( value ) {
+            return Number( '0x'+value ) | 0;
+        },
+
+        //溢出控制
+        overflowFormat: function ( value ) {
+
+            var tmpValue = Utils.extend( {}, value ),
+                keys = 'rgba';
+
+            Utils.each( keys.split( "" ), function ( key ) {
+
+                if ( !tmpValue.hasOwnProperty( key ) ) {
+                    return;
+                }
+
+                //上溢出
+                tmpValue[ key ] = Math.min( Color._MAX_VALUE[ key ], tmpValue[ key ] );
+                //下溢出
+                tmpValue[ key ] = Math.max( Color._MIN_VALUE[ key ], tmpValue[ key ] );
+
+            } );
+
+            return tmpValue;
 
         }
 

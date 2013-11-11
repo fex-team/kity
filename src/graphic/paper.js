@@ -3,7 +3,7 @@ define(function(require, exports, module) {
     var utils = require('core/utils');
     var svg = require('graphic/svg');
     var Parent = require('graphic/parent');
-    var EventHandler = require('graphic/EventHandler');
+    var EventHandler = require('graphic/eventhandler');
     var id = 0;
     return createClass('Paper', {
 
