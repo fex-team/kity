@@ -53,7 +53,7 @@ define(function (require, exports) {
     // 方便调试查看
     if (config.debug) {
         var origin = Function.prototype.toString;
-        Function.prototype.toString = function() {
+        Function.prototype.toString = function () {
             return getClassName(this) || origin.call(this);
         };
     }
@@ -84,19 +84,19 @@ define(function (require, exports) {
     // 直接调用 base 类的同名方法
     BaseClass.prototype.callBase = function () {
         var caller = arguments.callee.caller;
-        var method = getBase(getCallerClass(caller, this)).prototype[ getMethodName(caller) ];
+        var method = getBase(getCallerClass(caller, this)).prototype[getMethodName(caller)];
         return method.apply(this, arguments);
     };
 
     BaseClass.prototype.mixin = function (name) {
         var caller = arguments.callee.caller;
-        var method = getMixins(getCallerClass(caller, this))[ name ];
+        var method = getMixins(getCallerClass(caller, this))[name];
         return method.apply(this, Array.prototype.slice.call(arguments, 1));
     };
 
     BaseClass.prototype.callMixin = function () {
         var caller = arguments.callee.caller;
-        var method = getMixins(getCallerClass(caller, this))[ getMethodName(caller) ];
+        var method = getMixins(getCallerClass(caller, this))[getMethodName(caller)];
         return method.apply(this, arguments);
     };
 
