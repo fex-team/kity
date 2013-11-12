@@ -40,7 +40,7 @@ define(function(require, exports, module) {
 
                 command = index === 0 ? 'M' : 'L';
 
-                pathData.push( command + ' ' + point.x + ',' + point.y + " " );
+                pathData.push( command + ' ' + point.x + " " + point.y + " " );
 
             } );
 

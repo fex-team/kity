@@ -94,16 +94,16 @@ define( function ( require, exports, module ) {
 //
 //    window.tt = image;
 
-    //多边形
-    var polygon = new Polygon( [ { x: 1, y: 2 }, { x: 50, y: 10 }, { x: 120, y: 300 } ] ),
-        paper = new Paper( document.body );
-
-    polygon.node.setAttribute( "fill", "transparent" );
-    polygon.stroke( new Pen( new Color( "blue" ) ) );
-//    polygon.appendChild( { x: 32, y: 40 } );
-    paper.addChild( polygon );
-
-    window.tt = Palette;
+//    //多边形
+//    var polygon = new Polygon( [ { x: 1, y: 2 }, { x: 50, y: 10 }, { x: 120, y: 300 } ] ),
+//        paper = new Paper( document.body );
+//
+//    polygon.node.setAttribute( "fill", "transparent" );
+//    polygon.stroke( new Pen( new Color( "blue" ) ) );
+////    polygon.appendChild( { x: 32, y: 40 } );
+//    paper.addChild( polygon );
+//
+//    window.tt = Palette;
 
     //折线
 //    var polyline = new Polyline( [ { x: 1, y: 2 }, { x: 50, y: 10 }, { x: 120, y: 300 } ] ),
@@ -114,8 +114,13 @@ define( function ( require, exports, module ) {
 //    polyline.stroke( new Pen( new Color( "#ff0000" ) ) );
 //    window.tt = polyline;
 
-    //
+    //圆
+    var circle = new Circle( 50, 50, 30 ),
+        paper = new Paper( document.body );
 
+    circle.stroke( new Pen( new Color( "red" ) ) );
+//    polygon.appendChild( { x: 32, y: 40 } );
+    paper.addChild( circle );
 
 
 } );
