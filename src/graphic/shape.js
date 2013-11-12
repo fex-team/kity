@@ -9,6 +9,8 @@ define(function (require, exports, module) {
         mixins: [EventHandler, Styled],
         constructor: function (tagName) {
             this.node = svg.createNode(tagName);
+            //设置path图形的fill为透明色
+            this.node.setAttribute( "fill", "transparent" );
             this.node.shape = this;
         },
         getNode: function () {
