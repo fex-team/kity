@@ -2,6 +2,8 @@ define(function(require, exports, module) {
 
     var Utils = require('core/utils'),
 
+        Palette = require( 'graphic/palette' ),
+
         ColorUtils = {},
 
         Color = require('core/class').createClass( "Color", {
@@ -201,6 +203,15 @@ define(function(require, exports, module) {
             var rgbValue = {},
                 hasAlpha = false,
                 keys = [ 'r', 'g', 'b' ];
+
+            //颜色名字字符串->hex格式字符串
+            if ( /^[a-z]+$/i.test( valStr ) ) {
+
+                valStr = Palette.parse( valStr );
+
+            }
+
+            /* 颜色转换 */
 
             //hex格式
             if ( /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test( valStr ) ) {
