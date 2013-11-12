@@ -23,7 +23,7 @@ define(function (require, exports, module) {
             this.node.appendChild(this.shapeNode);
 
             this.resourceNode = svg.createNode('defs');
-            this.node.appendChild(this.defsNode);
+            this.node.appendChild(this.resourceNode);
 
             this.resources = new Parent();
         },
