@@ -15,6 +15,7 @@ define( function ( require, exports, module ) {
         Circle = require( "graphic/circle" ),
         Image = require( "graphic/image" ),
         Polygon = require( "graphic/polygon" ),
+        Palette = require( "graphic/palette" ),
         Polyline = require( "graphic/polyline" );
 
 //    var paper = new Paper( document.body ),
@@ -101,7 +102,8 @@ define( function ( require, exports, module ) {
     polygon.stroke( new Pen( new Color( "blue" ) ) );
 //    polygon.appendChild( { x: 32, y: 40 } );
     paper.addChild( polygon );
-    window.tt = polygon;
+
+    window.tt = Palette;
 
     //折线
 //    var polyline = new Polyline( [ { x: 1, y: 2 }, { x: 50, y: 10 }, { x: 120, y: 300 } ] ),

@@ -2,7 +2,7 @@ define(function(require, exports, module) {
 
     var Utils = require('core/utils'),
 
-        Palette = require( 'graphic/palette' ),
+        StandardColor = require( "graphic/standardcolor" ),
 
         ColorUtils = {},
 
@@ -19,10 +19,14 @@ define(function(require, exports, module) {
 
                     //解析失败
                     if ( colorValue === null ) {
-                        colorValue.r = 0;
-                        colorValue.g = 0;
-                        colorValue.b = 0;
-                        colorValue.a = 1;
+
+                        colorValue = {
+                            r: 0,
+                            g: 0,
+                            b: 0,
+                            a: 1
+                        };
+
                     }
 
                 } else {
@@ -190,6 +194,15 @@ define(function(require, exports, module) {
             a: 0
         },
 
+        /*
+         * 检测给定的颜色字符串是否是合法的hex格式字符串
+         */
+        isHex: function ( color ) {
+
+            return /^#([a-f0-9]{3}|[a-f0-9]{6})$/i.test( color );
+
+        },
+
         parse: function ( valStr ) {
 
             var rgbValue = Color.parseToValue( valStr );
@@ -207,7 +220,12 @@ define(function(require, exports, module) {
             //颜色名字字符串->hex格式字符串
             if ( /^[a-z]+$/i.test( valStr ) ) {
 
-                valStr = Palette.parse( valStr );
+                valStr = StandardColor.EXTEND_STANDARD[ valStr ] || StandardColor.COLOR_STANDARD[ valStr ];
+
+                //非标准颜色
+                if ( !valStr ) {
+                    return null;
+                }
 
             }
 

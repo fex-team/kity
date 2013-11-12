@@ -24,6 +24,8 @@ define(function (require, exports, module) {
             this.node.appendChild(this.resourceNode = svg.createNode('defs'));
 
             this.resources = new Container();
+            this.resourceNode = svg.createNode('defs');
+            this.node.appendChild(this.resourceNode);
         },
 
         createSVGNode: function () {
