@@ -1,31 +1,31 @@
-define(function(require, exports, module) {
+define(function (require, exports, module) {
 
-    var Utils = require( "core/utils" );
+    var Utils = require("core/utils");
 
-    return require('core/class').createClass( 'Polygon', {
+    return require('core/class').createClass('Polygon', {
 
-        mixins: [ require( "graphic/parent" ) ],
-        base: require( "graphic/path" ),
+        mixins: [require("graphic/container")],
+        base: require("graphic/path"),
 
         constructor: function () {
 
             this.callBase();
-            this._children = this.points = [].slice.call( arguments[0] || [], 0 );
+            this._children = this.points = [].slice.call(arguments[0] || [], 0);
             this.update();
 
         },
 
-        addChild: function () {
+        addItem: function () {
 
-            this.callMixin.apply( this, arguments );
+            this.callMixin.apply(this, arguments);
 
             this.update();
 
         },
 
-        removeChild: function () {
+        removeItem: function () {
 
-            this.callMixin.apply( this, arguments );
+            this.callMixin.apply(this, arguments);
 
             this.update();
 
@@ -36,17 +36,19 @@ define(function(require, exports, module) {
             var pathData = [],
                 command = null;
 
-            Utils.each( this._children, function ( point, index ) {
+            Utils.each(this._children, function (point, index) {
 
                 command = index === 0 ? 'M' : 'L';
 
                 pathData.push( command + ' ' + point.x + " " + point.y + " " );
 
-            } );
+            });
 
-            pathData.length && pathData.push( " Z" );
+            if (pathData.length) {
+                pathData.push(" Z");
+            }
 
-            this.setPathData( pathData.join( "" ) );
+            this.setPathData(pathData.join(""));
 
             return this;
 

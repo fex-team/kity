@@ -1,18 +1,18 @@
 var Group = require('graphic/group');
-var Parent = require('graphic')
+var Container = require('graphic/container');
 
 describe("Kity.Group", function () {
     var group;
 
-    beforeEach(function() {
+    beforeEach(function () {
         group = new Group();
     });
 
-	it("should be an instance of Shape", function() {
-		expect(group instanceof Group).toBeTruthy();
-	});
+    it("should be an instance of Shape", function () {
+        expect(group instanceof Group).toBeTruthy();
+    });
 
-	it("should extend parent", function() {
-		expect(group).toImplement(Parent);
-	});
+    it("should extend Container", function () {
+        expect(group).toImplement(Container);
+    });
 });

@@ -1,9 +1,9 @@
 define(function (require, exports, module) {
     var Shape = require('graphic/shape');
-    var Parent = require('graphic/parent');
+    var Container = require('graphic/container');
     return require('core/class').createClass('Text', {
         base: Shape,
-        mixins: [],
+        mixins: [Container],
         constructor: function (content) {
             this.callBase('text');
             if (content !== undefined) {
@@ -24,12 +24,12 @@ define(function (require, exports, module) {
             this.content += content;
             this.node.appendChild(document.createTextNode(content));
         },
-        addChild: function (tspan, pos) {
+        addItem: function (tspan, pos) {
             this.callMixin(tspan, pos);
             this.node.appendChild(tspan.node);
         },
-        removeChild: function (pos) {
-            var tspan = this.getChild(pos);
+        removeItem: function (pos) {
+            var tspan = this.getItem(pos);
             if (tspan) {
                 this.callMixin(pos);
                 this.node.removeChild(tspan.node);
@@ -49,6 +49,8 @@ define(function (require, exports, module) {
         getY: function () {
             return +this.node.getAttribute('y');
         },
-        setPath: function (path) {}
+        setPath: function (path) {
+
+        }
     });
 });

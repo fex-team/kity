@@ -46,48 +46,48 @@
 
 
 
-## Parent ##
+## Container ##
 > 功能拓展
 
 提供一个容器功能
 
-### getChildren() : Array ###
+### getItems() : Array ###
 获得容器中所有的子元素
 
-### getChild(int pos) : object ###
+### getItem(int pos) : object ###
 获得指定位置的子元素
 
-### getFirstChild() : object ###
+### getFirstItem() : object ###
 获得首个子元素
 
-### getLastChild() : object ###
+### getLastItem() : object ###
 根据 CSS Class 获得指定的图形集合
 
-### indexOf(object child) : int ###
+### indexOf(object item) : int ###
 获取指定子元素的位置，如果不存在则返回 -1
 
-### forEachChild(Function fn) : this ###
+### forEachItem(Function fn) : this ###
 迭代每个子元素
 
-### addChild(object child, int pos) : this ###
+### addItem(object item, int pos) : this ###
 添加子元素到指定的位置
 
-### appendChild(object child) : this ###
+### appendItem(object item) : this ###
 追加子元素到指定的位置
 
-### prependChild(object child) : this ###
+### prependItem(object item) : this ###
 添加子元素到最前头的位置
 
-### removeChild(int pos) : this ###
+### removeItem(int pos) : this ###
 删除指定位置的子元素
 
 ### clear() : this ###
 清除容器中所有的子元素
 
-### Child.remove() ###
+### Item.remove() ###
 子元素从容器移除自身
 
-### Child.parent ###
+### Item.container ###
 子元素获得包含自身的容器
 
 
@@ -322,9 +322,9 @@ CSS 样式支持
 
 ## Group
 > 基类 : Shape
-> 实现 : Parent
+> 实现 : Container
  
-将多个图形组合成新的图形，请参照 Parent
+将多个图形组合成新的图形，请参照 Container
 
 ## Group() ##
 构造函数创建一个空的组
@@ -429,7 +429,7 @@ CSS 样式支持
 
 ## Polygon
 > 基类 : Path
-> 实现 : Parent
+> 实现 : Container
 
 表示一个多边形，其子元素表示其顶点序列
 
@@ -471,7 +471,7 @@ CSS 样式支持
 
 ## Curve
 > 基类 : Path
-> 实现 : Parent
+> 实现 : Container
 
 表示一条曲线，其子元素表示其经过的点序列
 
@@ -488,7 +488,7 @@ CSS 样式支持
 
 ## Polyline ##
 > 基类 : Path
-> 实现 : Parent
+> 实现 : Container
 
 表示一条折线，其子元素是其顶点
 
@@ -550,7 +550,7 @@ CSS 样式支持
 
 ## Text ##
 > 基类 : Shape
-> 实现 : Parent
+> 实现 : Container
 
 用于显示文字，其子元素为单独控制样式的 TextSpan
 
@@ -779,7 +779,7 @@ CSS 样式支持
 
 # PatternBrush #
 > 基类 : Brush
-> 实现 : Parent
+> 实现 : Container
 
 表示用图形填充的画刷
 
