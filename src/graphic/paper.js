@@ -13,15 +13,26 @@ define(function (require, exports, module) {
             if (utils.isString(container)) {
                 container = document.getElementById(container);
             }
-            this.node = svg.createNode('svg');
-            this.node.setAttribute( "xmlns", "http://www.w3.org/2000/svg" );
-            this.node.setAttribute( "xmlns:xlink", "http://www.w3.org/1999/xlink" );
-            this.node.paper = this;
             this.container = container;
+
+            this.node = this.createSVGNode();
+            this.node.paper = this;
             container.appendChild(this.node);
 
-            this.defs = svg.createNode('defs');
-            this.node.appendChild(this.defs);
+            this.shapeNode = svg.createNode('g');
+            this.node.appendChild(this.shapeNode);
+
+            this.resourceNode = svg.createNode('defs');
+            this.node.appendChild(this.defsNode);
+
+            this.resources = new Parent();
+        },
+
+        createSVGNode: function () {
+            var node = svg.createNode('svg');
+            node.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+            node.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
+            return node;
         },
 
         getNode: function () {
@@ -80,31 +91,37 @@ define(function (require, exports, module) {
                 pos = this.getChildren().length;
             }
             this.callMixin(shape, pos);
-            this.node.insertBefore(shape.node, this.node.childNodes[pos + 1]);
+            this.shapeNode.insertBefore(shape.node, this.shapeNode.childNodes[pos + 1]);
             return this;
-        },
-
-        getShapeById: function (id) {
-            return this.node.getElementById(id).shape;
         },
 
         removeChild: function (pos) {
             var shape = this.getChild(pos);
             if (shape) {
-                this.node.removeChild(shape.node);
+                this.shapeNode.removeChild(shape.node);
             }
             this.callMixin(pos);
             return this;
         },
 
-        createDef: function (tagName) {
-            var def = svg.createNode(tagName);
-            this.defs.appendChild(def);
-            return def;
+        getShapeById: function (id) {
+            return this.getShapeById.getElementById(id).shape;
         },
 
-        removeDef: function (id) {
-            this.def.removeChild(this.def.getElementById(id));
+        addResource: function (resource) {
+            this.resources.appendChild(resource);
+            if (resource.node) {
+                this.resourceNode.appendChild(resource.node);
+            }
+            return this;
+        },
+
+        removeResource: function (resource) {
+            this.resources.removeChild(resource);
+            if (resource.node) {
+                this.resourceNode.removeChild(resource.node);
+            }
+            return this;
         }
     });
 });

@@ -8,7 +8,10 @@ define(function (require, exports, module) {
             this.callBase('tspan');
         },
         clear: function () {
-            while (this.node.removeChild(0)) {}
+            this.content = '';
+            while (this.node.firstChild) {
+                this.node.removeChild(this.node.firstChild);
+            }
             return this;
         },
         setContent: function (content) {

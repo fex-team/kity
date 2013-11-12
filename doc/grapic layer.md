@@ -569,7 +569,7 @@ CSS 样式支持
 ### appendContent( string content ) : Text
 向文本内追加内容
 
-### setPath(Path path) : ###
+### setPath(string pathData) : ###
 设置文本的排列路径
 
 ### setX(float x) : this ### 

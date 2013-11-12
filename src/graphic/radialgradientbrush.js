@@ -5,15 +5,11 @@ define(function (require, exports, module) {
     return require('core/class').createClass('RadialGradientBrush', {
         base: GradientBrush,
 
-        constructor: function (paper) {
-            this.callBase(paper);
+        constructor: function () {
+            this.callBase('radialGradient');
             this.setCenter(0.5, 0.5);
             this.setFacal(0.5, 0.5);
             this.setRadius(0.5);
-        },
-
-        getType: function () {
-            return 'RadialGradientBrush';
         },
 
         setCenter: function (cx, cy) {
@@ -47,17 +43,16 @@ define(function (require, exports, module) {
         },
 
         // implement
-        getGradientDef: function (paper) {
-            var gradient = paper.createDef('radialGradient');
+        renderNode: function () {
+            this.callBase();
             var c = this.getCenter(),
                 f = this.getFacal(),
                 r = this.getRadius();
-            gradient.setAttribute('cx', c.x);
-            gradient.setAttribute('cy', c.y);
-            gradient.setAttribute('fx', f.x);
-            gradient.setAttribute('fy', f.y);
-            gradient.setAttribute('r', r);
-            return gradient;
+            this.node.setAttribute('cx', c.x);
+            this.node.setAttribute('cy', c.y);
+            this.node.setAttribute('fx', f.x);
+            this.node.setAttribute('fy', f.y);
+            this.node.setAttribute('r', r);
         }
     });
 });

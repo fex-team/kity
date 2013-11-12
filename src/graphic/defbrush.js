@@ -6,26 +6,20 @@ define(function (require, exports, module) {
     return require('core/class').createClass('GradientBrush', {
         base: Brush,
 
-        constructor: function (paper) {
+        constructor: function (nodeType) {
             this.callBase();
-            this.paper = paper;
+            this.node = svg.createNode(nodeType);
         },
 
-        getDef: function (paper) {
+        /* abstract */
+        renderNode: function () {
             throw new Error('abstract method called');
         },
 
         fill: function (path) {
-            var node = path.node;
-            var paper = this.paper;
-            var gradient = this.getDef(paper);
-
-            if (path.brushdef) {
-                paper.removeDef(path.brushdef.id);
-            }
-
-            path.brushdef = gradient;
-            node.setAttribute('fill', 'url(#' + gradient.id + ')');
+            var pathNode = path.node;
+            pathNode.setAttribute('fill', 'url(#' + this.node.id + ')');
+            this.renderNode();
             return this;
         }
     });

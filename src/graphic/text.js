@@ -12,7 +12,9 @@ define(function (require, exports, module) {
         },
         clear: function () {
             this.content = '';
-            while (this.node.removeChild(0)) {}
+            while (this.node.firstChild) {
+                this.node.removeChild(this.node.firstChild);
+            }
         },
         setContent: function (content) {
             this.clear();
@@ -35,15 +37,18 @@ define(function (require, exports, module) {
         },
         setX: function (x) {
             this.node.setAttribute('x', x);
+            return this;
         },
         setY: function (y) {
             this.node.setAttribute('y', y);
+            return this;
         },
         getX: function () {
             return +this.node.getAttribute('x');
         },
         getY: function () {
             return +this.node.getAttribute('y');
-        }
+        },
+        setPath: function (path) {}
     });
 });

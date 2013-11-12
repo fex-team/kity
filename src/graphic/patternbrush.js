@@ -8,8 +8,8 @@ define(function (require, exports, module) {
     var PatternBrush = clazz.createClass('PatternBrush', {
         base: DefBrush,
         mixins: [Parent],
-        constructor: function (paper) {
-            this.callBase(paper);
+        constructor: function () {
+            this.callBase('pattern');
         },
         addChild: function (shape, pos) {
             if (pos === undefined || pos < 0 || pos >= this.getChildren().length) {
@@ -46,22 +46,19 @@ define(function (require, exports, module) {
         getHeight: function () {
             return this.height;
         },
-        getDef: function (paper) {
-            var pattern = paper.createDef('pattern');
-
+        renderNode: function () {
+            var node = this.node;
             this.forEachChild(function (index, shape) {
-                pattern.insertBefore(shape.node, null);
+                node.insertBefore(shape.node, null);
             });
 
             if (this.mode == 'scale') {
-                pattern.setAttribute('patternUnits', 'objectBoundaryBox');
+                node.setAttribute('patternUnits', 'objectBoundaryBox');
             } else {
-                pattern.setAttribute('patternUnits', 'userSpaceOnUse');
+                node.setAttribute('patternUnits', 'userSpaceOnUse');
             }
-            pattern.setAttribute('width', this.getWidth());
-            pattern.setAttribute('height', this.getHeight());
-
-            return pattern;
+            node.setAttribute('width', this.getWidth());
+            node.setAttribute('height', this.getHeight());
         }
     });
 

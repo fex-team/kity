@@ -7,14 +7,10 @@ define(function (require, exports, module) {
     return require('core/class').createClass(className, {
         base: GradientBrush,
 
-        constructor: function (paper) {
-            this.callBase(paper);
+        constructor: function () {
+            this.callBase('linearGradient');
             this.setStartPosition(0, 0);
             this.setEndPosition(1, 0);
-        },
-
-        getType: function () {
-            return 'LinearGradientBrush';
         },
 
         setStartPosition: function (px, py) {
@@ -41,17 +37,16 @@ define(function (require, exports, module) {
             };
         },
 
-        // implement
-        getGradientDef: function (paper) {
-            var gradient = paper.createDef('linearGradient');
+        /* implement */
+        renderNode: function () {
+            this.callBase();
+
             var p1 = this.getStartPosition(),
                 p2 = this.getEndPosition();
-
-            gradient.setAttribute('x1', p1.x);
-            gradient.setAttribute('y1', p1.y);
-            gradient.setAttribute('x2', p2.x);
-            gradient.setAttribute('y2', p2.y);
-            return gradient;
+            this.node.setAttribute('x1', p1.x);
+            this.node.setAttribute('y1', p1.y);
+            this.node.setAttribute('x2', p2.x);
+            this.node.setAttribute('y2', p2.y);
         }
     });
 });

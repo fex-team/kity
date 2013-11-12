@@ -6,8 +6,8 @@ define(function (require, exports, module) {
     return require('core/class').createClass('GradientBrush', {
         base: DefBrush,
 
-        constructor: function (paper) {
-            this.callBase(paper);
+        constructor: function (gradientNodeType) {
+            this.callBase(gradientNodeType);
             this.stops = [];
         },
 
@@ -19,19 +19,14 @@ define(function (require, exports, module) {
             return this;
         },
 
-        getDef: function (paper) {
-            var def = this.getGradientDef(paper);
+        /* implement abstract */
+        renderNode: function () {
             for (var i = 0, l = this.stops.length; i < l; i++) {
                 var gstop = svg.createNode('stop');
                 gstop.setAttribute('offset', this.stops[i].offset);
                 gstop.setAttribute('stop-color', this.stops[i].color);
-                def.appendChild(gstop);
+                this.node.appendChild(gstop);
             }
-            return def;
-        },
-
-        getGradientDef: function (paper) {
-            throw new Error('abstract method call');
         }
     });
 });
