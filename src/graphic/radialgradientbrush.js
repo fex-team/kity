@@ -1,6 +1,6 @@
 define(function (require, exports, module) {
 
-    var GradientBrush = require('gradient/gradientbrush');
+    var GradientBrush = require('graphic/gradientbrush');
 
     return require('core/class').createClass('RadialGradientBrush', {
         base: GradientBrush,
@@ -8,7 +8,7 @@ define(function (require, exports, module) {
         constructor: function () {
             this.callBase('radialGradient');
             this.setCenter(0.5, 0.5);
-            this.setFacal(0.5, 0.5);
+            this.setFocal(0.5, 0.5);
             this.setRadius(0.5);
         },
 
@@ -23,14 +23,14 @@ define(function (require, exports, module) {
             return this.c;
         },
 
-        setFacal: function (fx, fy) {
+        setFocal: function (fx, fy) {
             this.f = {
                 x: fx,
                 y: fy
             };
         },
 
-        getFacal: function () {
+        getFocal: function () {
             return this.f;
         },
 

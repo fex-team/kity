@@ -32,20 +32,22 @@
             var d = path.getDrawer();
             d.moveTo(10, 10).lineTo(100, 100).lineTo(200, 50).close();
 
-            paper.addChild(path);
+            paper.addItem(path);
 
             var pattern = paper.createPatternBrush();
             pattern.setWidth(20).setHeight(20);
 
             var rect = new Path();
             rect.setPathData('M0 0 l 10 0 0 10 -10 0 0 -10 z');
-            pattern.addChild(rect);
+            pattern.addItem(rect);
             rect.rotate(-45);
 
             var linear = new LinearGradientBrush(paper);
             linear.addStop(0, '#ff0000')
             linear.addStop(0.5, '#ffff00')
             linear.addStop(1, '#0000ff');
+
+            paper.addResource(linear);
 
             rect.fill(linear);
             
@@ -55,7 +57,7 @@
             var text = new Text('this is a text');
             text.setX(300).setY(100);
 
-            paper.addChild(text);
+            paper.addItem(text);
         });
         seajs.use('start');
     </script>

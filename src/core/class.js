@@ -46,6 +46,14 @@ define(function (require, exports) {
         return method._method_name_;
     }
 
+    function setMethodDefine(method, proto) {
+        method._method_define_ = proto;
+    }
+
+    function getMethodDefine(method) {
+        return method._method_define_;
+    }
+
     function getInstanceClass(instance) {
         return instance.constructor;
     }
@@ -59,14 +67,8 @@ define(function (require, exports) {
     }
 
     // 获得正在调用的函数所在的类
-    function getCallerClass(caller, instance) {
-        var name = getMethodName(caller),
-            callerClass = getInstanceClass(instance);
-
-        while (callerClass.prototype[name] != caller) {
-            callerClass = getBase(callerClass);
-        }
-        return callerClass;
+    function getCallerClass(caller) {
+        return getMethodDefine(caller).constructor;
     }
 
     // 所有类的基类
@@ -77,40 +79,39 @@ define(function (require, exports) {
     // 提供 base 调用支持
     BaseClass.prototype.base = function (name) {
         var caller = arguments.callee.caller;
-        var method = getBase(getCallerClass(caller, this)).prototype[name];
+        var method = getBase(getCallerClass(caller)).prototype[name];
         return method.apply(this, Array.prototype.slice.call(arguments, 1));
     };
 
     // 直接调用 base 类的同名方法
     BaseClass.prototype.callBase = function () {
         var caller = arguments.callee.caller;
-        var method = getBase(getCallerClass(caller, this)).prototype[getMethodName(caller)];
+        var method = getBase(getCallerClass(caller)).prototype[getMethodName(caller)];
         return method.apply(this, arguments);
     };
 
     BaseClass.prototype.mixin = function (name) {
         var caller = arguments.callee.caller;
-        var method = getMixins(getCallerClass(caller, this))[name];
+        var method = getMixins(getCallerClass(caller))[name];
         return method.apply(this, Array.prototype.slice.call(arguments, 1));
     };
 
     BaseClass.prototype.callMixin = function () {
         var caller = arguments.callee.caller;
-        var method = getMixins(getCallerClass(caller, this))[getMethodName(caller)];
+        var method = getMixins(getCallerClass(caller))[getMethodName(caller)];
         return method.apply(this, arguments);
     };
 
-    function inherit(proto) {
-        var Fn = proto.constructor;
-        var fn = new Fn();
-        // 删除那些在父类构造函数中生成的变量，它们不应该被放在 prototype 上
-        for (var m in fn) {
-            if (!(m in proto)) {
-                delete fn[m];
+    BaseClass.prototype.isInstanceOf = function (targetClass) {
+        var currentClass = this.constructor;
+        while (currentClass) {
+            if (currentClass == targetClass) {
+                return true;
             }
+            currentClass = getBase(currentClass);
         }
-        return fn;
-    }
+        return false;
+    };
 
     // 检查基类是否调用了父类的构造函数
     // 该检查是弱检查，假如调用的代码被注释了，同样能检查成功（这个特性可用于知道建议调用，但是出于某些原因不想调用的情况）
@@ -121,10 +122,13 @@ define(function (require, exports) {
         }
     }
 
-    function extend(target, proto) {
+    function extend(target, proto, originDefined) {
         for (var name in proto) {
             if (proto.hasOwnProperty(name) && name != 'constructor') {
                 setMethodName(target[name] = proto[name], name);
+                if (originDefined) {
+                    setMethodDefine(target[name], target);
+                }
             }
         }
     }
@@ -155,10 +159,11 @@ define(function (require, exports) {
         setBase(thisClass, baseClass);
 
         // 继承父类的方法
-        thisClass.prototype = inherit(baseClass.prototype);
+        extend(thisClass.prototype, baseClass.prototype);
 
         // 修正原型链上的构造函数
         thisClass.prototype.constructor = thisClass;
+        setMethodDefine(thisClass, thisClass.prototype);
 
         // mixins
         if (defines.mixins instanceof Array) {
@@ -178,7 +183,7 @@ define(function (require, exports) {
         delete defines.constructor;
         delete defines.base;
 
-        extend(thisClass.prototype, defines);
+        extend(thisClass.prototype, defines, true);
         return thisClass;
     };
 

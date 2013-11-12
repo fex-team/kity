@@ -2,11 +2,12 @@ define(function (require, exports, module) {
     var createClass = require('core/class').createClass;
     var utils = require('core/utils');
     var svg = require('graphic/svg');
-    var Parent = require('graphic/parent');
+    var Container = require('graphic/container');
+    var ShapeContainer = require('graphic/shapecontainer');
     var EventHandler = require('graphic/eventhandler');
     return createClass('Paper', {
 
-        mixins: [Parent, EventHandler],
+        mixins: [ShapeContainer, EventHandler],
 
         constructor: function (container) {
             this.callBase();
@@ -19,13 +20,10 @@ define(function (require, exports, module) {
             this.node.paper = this;
             container.appendChild(this.node);
 
-            this.shapeNode = svg.createNode('g');
-            this.node.appendChild(this.shapeNode);
+            this.node.appendChild(this.shapeNode = svg.createNode('g'));
+            this.node.appendChild(this.resourceNode = svg.createNode('defs'));
 
-            this.resourceNode = svg.createNode('defs');
-            this.node.appendChild(this.defsNode);
-
-            this.resources = new Parent();
+            this.resources = new Container();
         },
 
         createSVGNode: function () {
@@ -86,30 +84,8 @@ define(function (require, exports, module) {
             return this;
         },
 
-        addChild: function (shape, pos) {
-            if (pos === undefined || pos < 0 || pos >= this.getChildren().length) {
-                pos = this.getChildren().length;
-            }
-            this.callMixin(shape, pos);
-            this.shapeNode.insertBefore(shape.node, this.shapeNode.childNodes[pos + 1]);
-            return this;
-        },
-
-        removeChild: function (pos) {
-            var shape = this.getChild(pos);
-            if (shape) {
-                this.shapeNode.removeChild(shape.node);
-            }
-            this.callMixin(pos);
-            return this;
-        },
-
-        getShapeById: function (id) {
-            return this.getShapeById.getElementById(id).shape;
-        },
-
         addResource: function (resource) {
-            this.resources.appendChild(resource);
+            this.resources.appendItem(resource);
             if (resource.node) {
                 this.resourceNode.appendChild(resource.node);
             }
@@ -117,7 +93,9 @@ define(function (require, exports, module) {
         },
 
         removeResource: function (resource) {
-            this.resources.removeChild(resource);
+            if (resource.remove) {
+                resource.remove();
+            }
             if (resource.node) {
                 this.resourceNode.removeChild(resource.node);
             }

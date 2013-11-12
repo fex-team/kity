@@ -1,33 +1,17 @@
 define(function (require, exports, module) {
     var DefBrush = require('graphic/defbrush');
-    var Parent = require('graphic/parent');
+    var ShapeContainer = require('graphic/shapecontainer');
     var svg = require('graphic/svg');
     var Paper = require('graphic/paper');
     var clazz = require('core/class');
 
     var PatternBrush = clazz.createClass('PatternBrush', {
         base: DefBrush,
-        mixins: [Parent],
+        mixins: [ShapeContainer],
         constructor: function () {
             this.callBase('pattern');
         },
-        addChild: function (shape, pos) {
-            if (pos === undefined || pos < 0 || pos >= this.getChildren().length) {
-                pos = this.getChildren().length;
-            }
-            this.callMixin(shape, pos);
-            if (this.node) {
-                this.node.insertBefore(shape.node, this.node.childNodes[pos]);
-            }
-            return this;
-        },
-        removeChild: function (pos) {
-            var shape = this.getChild(pos);
-            if (shape && this.node) {
-                this.node.removeChild(shape.node);
-            }
-            return this.callMixin(pos);
-        },
+
         setMode: function (mode) {
             // 'repeat' or 'scale'
             this.mode = mode;
@@ -48,9 +32,6 @@ define(function (require, exports, module) {
         },
         renderNode: function () {
             var node = this.node;
-            this.forEachChild(function (index, shape) {
-                node.insertBefore(shape.node, null);
-            });
 
             if (this.mode == 'scale') {
                 node.setAttribute('patternUnits', 'objectBoundaryBox');
@@ -64,7 +45,9 @@ define(function (require, exports, module) {
 
     clazz.extendClass(Paper, {
         createPatternBrush: function () {
-            return new PatternBrush(this);
+            var brush = new PatternBrush();
+            this.addResource(brush);
+            return brush;
         }
     });
 });

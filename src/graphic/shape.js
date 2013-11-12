@@ -36,13 +36,6 @@ define(function (require, exports, module) {
             delete box.y;
             return box;
         },
-        getPaper: function () {
-            var parent = this.parent;
-            while (parent && !(parent instanceof Paper)) {
-                parent = parent.parent;
-            }
-            return parent || null;
-        },
         getTransform: function () {
             return Matrix.parse(this.node.getAttribute("transform"));
         },

@@ -1,16 +1,16 @@
 /*
  * 曲线
  * */
-define(function(require, exports, module) {
+define(function (require, exports, module) {
 
-    return require('core/class').createClass( 'Curve', {
+    return require('core/class').createClass('Curve', {
 
-        base: require( 'core/path' ),
+        base: require('graphic/path'),
 
-        constructor: function() {
+        constructor: function () {
 
-            this.callBase( 'Curve' );
-            this.points = arguments[ 0 ] || [];
+            this.callBase('Curve');
+            this.points = arguments[0] || [];
 
         },
 
@@ -21,7 +21,7 @@ define(function(require, exports, module) {
 
         },
 
-        stroke: function ( pen ) {
+        stroke: function (pen) {
 
 
 
