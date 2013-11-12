@@ -507,13 +507,41 @@ CSS 样式支持
 
 用于显示图片
 
-### Image(string url) : Image ###
+### Image(string url, width, height, x, y) : Image ###
+根据提供的url和宽度、高度、x坐标，y坐标信息初始化一个图片对象
+
+### Image(string url, width, height) : Image ###
+根据提供的url和宽度、高度信息初始化一个图片对象， 此图片的所处位置的x和y坐标都为0
 
 ### setUrl(string url) : this ###
 设置图片的 URL
 
-### getUrl() : string
-获取图片的 URL
+### setWidth( number width ) : this ###
+设置图片宽度
+
+### setHeight( number height ) : this ###
+设置图片高度
+
+### setX( number x ) : this ###
+设置图片位置X坐标
+
+### setY( number y ) : this ###
+设置图片位置Y坐标
+
+### getUrl() : string ###
+获取图片的 URL,如果未设置图标， 则返回null
+
+### getWdith() : number ###
+获取图片的宽度
+
+### getHeight() : number ###
+获取图片的高度
+
+### getX() : number ###
+获取图片的X坐标
+
+### getY() : number ###
+获取图片的Y坐标
 
 
 

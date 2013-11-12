@@ -12,7 +12,8 @@ define(function(require, exports, module) {
         constructor: function () {
 
             this.callBase();
-            this._children = [].slice.call( arguments, 0 );
+            this._children = this.points = [].slice.call( arguments[0] || [], 0 );
+            this.update();
 
         },
 
@@ -25,11 +26,13 @@ define(function(require, exports, module) {
 
                 command = index === 0 ? 'M' : 'L';
 
-                pathData.push( command + ' ' + point.x + ' ' + point.y );
+                pathData.push( command + ' ' + point.x + ',' + point.y + " " );
 
             } );
 
-            this.setPathData( pathData.join( ", " ) );
+            this.setPathData( pathData.join( "" ) );
+
+            return this;
 
         },
 
