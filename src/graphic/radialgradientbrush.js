@@ -1,57 +1,58 @@
-define(function(require, exports, module) {
+define(function (require, exports, module) {
 
     var GradientBrush = require('gradient/gradientbrush');
-    
-    return require('core/class').createClass( 'RadialGradientBrush', {
+
+    return require('core/class').createClass('RadialGradientBrush', {
         base: GradientBrush,
 
-        constructor: function() {
-            this.callBase();
+        constructor: function () {
+            this.callBase('radialGradient');
             this.setCenter(0.5, 0.5);
             this.setFacal(0.5, 0.5);
             this.setRadius(0.5);
         },
 
-        getType: function() {
-            return 'RadialGradientBrush';
+        setCenter: function (cx, cy) {
+            this.c = {
+                x: cx,
+                y: cy
+            };
         },
 
-        setCenter: function(cx, cy) {
-            this.c = {x: cx, y: cy};
-        },
-
-        getCenter: function() {
+        getCenter: function () {
             return this.c;
         },
 
-        setFacal: function(fx, fy) {
-            this.f = {x: fx, y: fy};
+        setFacal: function (fx, fy) {
+            this.f = {
+                x: fx,
+                y: fy
+            };
         },
 
-        getFacal: function() {
+        getFacal: function () {
             return this.f;
         },
 
-        setRadius: function(r) {
+        setRadius: function (r) {
             this.r = r;
         },
 
-        getRadius: function() {
+        getRadius: function () {
             return this.r;
         },
 
         // implement
-        getGradientDef: function( paper ) {
-            var gradient = paper.createDef('radialGradient');
+        renderNode: function () {
+            this.callBase();
             var c = this.getCenter(),
                 f = this.getFacal(),
                 r = this.getRadius();
-            gradient.setAttribute('cx', c.x);
-            gradient.setAttribute('cy', c.y);
-            gradient.setAttribute('fx', f.x);
-            gradient.setAttribute('fy', f.y);
-            gradient.setAttribute('r', r);
-            return gradient;
+            this.node.setAttribute('cx', c.x);
+            this.node.setAttribute('cy', c.y);
+            this.node.setAttribute('fx', f.x);
+            this.node.setAttribute('fy', f.y);
+            this.node.setAttribute('r', r);
         }
     });
 });

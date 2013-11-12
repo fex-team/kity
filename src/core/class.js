@@ -121,6 +121,14 @@ define(function (require, exports) {
         }
     }
 
+    function extend(target, proto) {
+        for (var name in proto) {
+            if (proto.hasOwnProperty(name) && name != 'constructor') {
+                setMethodName(target[name] = proto[name], name);
+            }
+        }
+    }
+
     exports.createClass = function (classname, defines) {
         var thisClass, baseClass;
 
@@ -157,14 +165,8 @@ define(function (require, exports) {
             var mixins = {};
             var i, length = defines.mixins.length;
             for (i = 0; i < length; i++) {
-                var mixin = defines.mixins[i],
-                    proto = mixin.prototype;
-                for (var m in proto) {
-                    // 构造函数不能拷贝
-                    if (proto.hasOwnProperty(m) && m !== 'constructor') {
-                        mixins[m] = thisClass.prototype[m] = proto[m];
-                    }
-                }
+                extend(thisClass.prototype, defines.mixins[i].prototype);
+                extend(mixins, defines.mixins[i].prototype);
             }
             // 保存拓展的方法，改写后还能调用
             setMixins(thisClass, mixins);
@@ -176,12 +178,12 @@ define(function (require, exports) {
         delete defines.constructor;
         delete defines.base;
 
-        for (var name in defines) {
-            if (defines.hasOwnProperty(name)) {
-                setMethodName(thisClass.prototype[name] = defines[name], name);
-            }
-        }
+        extend(thisClass.prototype, defines);
         return thisClass;
+    };
+
+    exports.extendClass = function (targetClass, proto) {
+        extend(targetClass.prototype, proto);
     };
 
 });

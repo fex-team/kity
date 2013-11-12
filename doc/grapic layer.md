@@ -566,11 +566,23 @@ CSS 样式支持
 ### getContent() : string
 获得文本内容
 
-### appendContent( content ) : Text
+### appendContent( string content ) : Text
 向文本内追加内容
 
-### setPath(string pathdata) : ###
+### setPath(string pathData) : ###
 设置文本的排列路径
+
+### setX(float x) : this ### 
+设置文本显示的位置的 x 坐标
+
+### setY(float y) : this ###
+设置文本显示的位置的 y 坐标
+
+### getX() : float ###
+获得文本显示位置的 x 坐标
+
+### getY() : float ###
+获得文本显示位置的 y 坐标
 
 
 
@@ -701,7 +713,10 @@ CSS 样式支持
 表示用线性渐变填充的画刷。线性渐变的方向和大小由两个值决定。起始位置和结束，使用(px, py)来表示，取值0 - 1，表示渐变的开始和结束位置在图形的指定比例处。默认是 (0,0) 和 (1, 0)
 渐变的颜色通过添加 ColorStop 来指定
 
-### LinearGradientBrush() : this ###
+### Paper.createLinearGradientBrush() ###
+从 paper 创建一个线性渐变的画刷
+
+### LinearGradientBrush(Paper paper) : this ###
 初始化线性渐变画刷
 
 ### setStartPosition(float px, float py) ###
@@ -729,6 +744,8 @@ CSS 样式支持
 
 表示用径向渐变填充的画刷。径向渐变用三个值表示。中心位置和半径表示其范围，都用 0 - 1 作为值域。
 焦点表示径向渐变的起始位置。中心位置的默认值为(0.5, 0.5), 焦点位置的默认值为(0.5, 0.5)，半径默认值为0.5。
+
+### Paper.createRadialGradientBrush() : Brush ###
 
 ### RadialGradientBrush() : this ###
 初始化一个径向填充的画刷
@@ -760,20 +777,17 @@ CSS 样式支持
 
 
 
-# ImageBrush #
+# PatternBrush #
 > 基类 : Brush
+> 实现 : Parent
 
-表示用位图填充的画刷
+表示用图形填充的画刷
 
-### ImageBrush([string url]) : this ###
-初始化一个位图画刷，指定位图位置
+### Paper.createPatternBrush() : PatternBrush ###
+从 paper 创建一个 PatternBrush
 
-### setUrl(string url) : this ###
-设置画刷位图的 URL
-
-### getUrl() : string ###
-获取画刷的位图 URL
-
+### PatternBrush(Paper paper) : this ###
+初始化一个图形填充画刷
 
 
 

@@ -18,6 +18,9 @@
             var Paper = require('graphic/paper');
             var Color = require('graphic/color');
             var LinearGradientBrush = require('graphic/lineargradientbrush');
+            var PatternBrush = require('graphic/patternbrush');
+            var Text = require('graphic/text');
+            var TextSpan = require('graphic/textspan');
             var Matrix = require('graphic/matrix');
 
             var paper = new Paper(document.body);
@@ -31,13 +34,28 @@
 
             paper.addChild(path);
 
-            var brush = new LinearGradientBrush();
-            brush.addStop(0, '#ff0000')
-            brush.addStop(0.5, '#ffff00')
-            brush.addStop(1, '#0000ff');
+            var pattern = paper.createPatternBrush();
+            pattern.setWidth(20).setHeight(20);
 
-            path.fill(brush);
+            var rect = new Path();
+            rect.setPathData('M0 0 l 10 0 0 10 -10 0 0 -10 z');
+            pattern.addChild(rect);
+            rect.rotate(-45);
+
+            var linear = new LinearGradientBrush(paper);
+            linear.addStop(0, '#ff0000')
+            linear.addStop(0.5, '#ffff00')
+            linear.addStop(1, '#0000ff');
+
+            rect.fill(linear);
+            
+            path.fill(pattern);
             path.setStyle({ 'stroke-width': '5' }).addClass('stroke-green');
+
+            var text = new Text('this is a text');
+            text.setX(300).setY(100);
+
+            paper.addChild(text);
         });
         seajs.use('start');
     </script>
