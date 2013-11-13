@@ -30,7 +30,7 @@
             var palette = new Palette().pipe(function() {
                 var baseColor = new Color('hsl(0, 0%, 50%)');
                 this.addColor('outside', baseColor.clone().increase('l', 20));
-                this.addColor('dot', baseColor.clone().set('h', 30).set('s', 80));
+                this.addColor('dot', baseColor.clone().set('s', 80).set('h', 200));
             });
 
             paper.addItem(new Circle(0, 0, 450).pipe(function(outside) {
@@ -42,6 +42,10 @@
 
             paper.addItem(new Circle(0, 0, 10).pipe(function(dot) {
                 dot.fill(palette.getColor('dot'));
+            }));
+
+            paper.addItem(new Group().pipe(function(numbers) {
+
             }));
         });
         seajs.use('start');
