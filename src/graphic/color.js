@@ -109,6 +109,12 @@ define(function(require, exports, module) {
 
             },
 
+            clone: function () {
+
+                return new Color( this.toRGBA() );
+
+            },
+
             get: function ( name ) {
 
                 if ( !Color._MAX_VALUE[ name ] ) {
