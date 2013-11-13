@@ -7,25 +7,29 @@ define( function ( require, exports, module ) {
         mixins: [ require( "graphic/container" ) ],
         base: require( "graphic/path" ),
 
-        constructor: function () {
+        constructor: function ( points ) {
 
             this.callBase();
-            this._children = this.points = [].slice.call( arguments[ 0 ] || [], 0 );
+            if( Utils.isArray(points)) {
+                while(points.length) {
+                    this.appendItem(points.shift());
+                }
+            }
             this.update();
 
         },
 
-        addPoint: function () {
+        addItem: function (point, pos) {
 
-            this.callMixin.apply( this, arguments );
+            this.callMixin( point, pos );
 
             this.update();
 
         },
 
-        removePoint: function () {
+        removeItem: function (pos) {
 
-            this.callMixin.apply( this, arguments );
+            this.callMixin(pos);
 
             this.update();
 
@@ -36,7 +40,7 @@ define( function ( require, exports, module ) {
             var pathData = [],
                 command = null;
 
-            Utils.each( this._children, function ( point, index ) {
+            Utils.each( this.getItems(), function ( point, index ) {
 
                 command = index === 0 ? 'M' : 'L';
 

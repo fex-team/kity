@@ -1,13 +1,13 @@
 describe("Kity.Polygon", function () {
 
-    var Polyline = require( 'graphic/Polygon' );
+    var Polygon = require( 'graphic/polygon' );
 
     it("无参构造Polygon", function() {
 
         var polygon = new Polygon();
 
         expect( polygon.getPathData() ).toBe( "" );
-        expect( polygon.getChildren().length ).toBe( 0 );
+        expect( polygon.getItems().length ).toBe( 0 );
         expect( polygon.isClosed() ).toBe( false );
     });
 
@@ -22,7 +22,7 @@ describe("Kity.Polygon", function () {
         } ] );
 
         expect( polygon.getPathData() ).not.toBe( "" );
-        expect( polygon.getChildren().length ).toBe( 2 );
+        expect( polygon.getItems().length ).toBe( 2 );
         expect( polygon.isClosed() ).toBe( true );
 
     });
@@ -31,12 +31,12 @@ describe("Kity.Polygon", function () {
 
         var polygon = new Polygon();
 
-        polygon.addChild( { x: 3, y: 2 } );
+        polygon.addItem( { x: 3, y: 2 } );
         expect( polygon.getPathData() ).not.toBe( "" );
-        expect( polygon.getChildren().length ).toBe( 1 );
-        polygon.removeChild( 0 );
+        expect( polygon.getItems().length ).toBe( 1 );
+        polygon.removeItem( 0 );
         expect( polygon.getPathData() ).toBe( "" );
-        expect( polygon.getChildren().length ).toBe( 0 );
+        expect( polygon.getItems().length ).toBe( 0 );
 
     });
 

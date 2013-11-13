@@ -23,51 +23,68 @@
             var TextSpan = require('graphic/textspan');
             var Matrix = require('graphic/matrix');
             var Pen = require('graphic/pen');
+            var Rect = require('graphic/rect');
 
-            var paper = new Paper(document.body);
-            paper.setWidth(800).setHeight(600);
-            paper.setViewBox(0, 0, 400, 300);
+            var paper = new Paper(document.body).pipe(function() {
+                this.setWidth(900);
+                this.setHeight(600);
+                this.setViewBox(0, 0, 400, 300);
+            });
 
-            var path = window.path = new Path();
-            //path.setPathData('M10 10 L100 100 200 50 z');
-            var d = path.getDrawer();
-            d.moveTo(10, 10).lineTo(100, 100).lineTo(200, 50).close();
+            var path = new Path().pipe(function() {
+                
+                this.getDrawer().pipe(function(d) {
+                    d.moveTo(10, 10);
+                    d.lineTo(100, 100);
+                    d.lineTo(200, 50);
+                    d.close(); 
+                });
+
+                var pattern = new PatternBrush().pipe(function(p) {
+                    p.setWidth(20);
+                    p.setHeight(20);
+                    p.addItem(new Rect(0, 0, 10, 10).pipe(function(r){
+                        r.rotate(-45);
+                        r.fill(new LinearGradientBrush().pipe(function(g) {
+                            g.addStop(0, '#ff0000')
+                            g.addStop(0.5, '#ffff00')
+                            g.addStop(1, new Color('blue'));
+                            paper.addResource(g);
+                        }));
+                    }));
+                });
+
+                paper.addResource(pattern);
+                
+                this.fill(pattern);
+
+                this.setStyle({
+                    'stroke-width' : '5'
+                });
+                this.addClass('stroke-green');
+            });
 
             paper.addItem(path);
 
-            var pattern = paper.createPatternBrush();
-            pattern.setWidth(20).setHeight(20);
-
-            var rect = new Path();
-            rect.setPathData('M0 0 l 10 0 0 10 -10 0 0 -10 z');
-            pattern.addItem(rect);
-            rect.rotate(-45);
-
-            var linear = new LinearGradientBrush(paper);
-            linear.addStop(0, '#ff0000')
-            linear.addStop(0.5, '#ffff00')
-            linear.addStop(1, new Color('blue'));
-
-            paper.addResource(linear);
-
-            rect.fill(linear);
-            
-            path.fill(pattern);
-            path.setStyle({ 'stroke-width': '5' }).addClass('stroke-green');
-
-            var text = new Text('this is a text');
-            text.setX(100).setY(100).setStyle({
-                fill: 'red'
+            var upsidedown = new Path().pipe(function(){
+                this.setPathData('M0 0 C100 0 100 0 100 100 C100 200 100 200 200 200');
+                this.stroke(new Pen().pipe(function() {
+                    this.setWidth(1);
+                    this.setColor(new Color('gray'));
+                    this.setDashArray([2,2]);
+                }));
+                this.rotate(90).translate(100, 200);
             });
-
-            var upsidedown = new Path('M0 0 C100 0 100 0 100 100 C100 200 100 200 200 200');
-            upsidedown.stroke(new Pen());
-            upsidedown.rotate(90).translate(100, 200);
             paper.addItem(upsidedown);
-            text.setPath(upsidedown);
 
-            text.addItem(new TextSpan('Baidu').fill('blue'));
-            text.addItem(new TextSpan('Kity').fill('green'));
+            var text = new Text('this is a text').pipe(function() {
+                this.setX(100).setY(100).setStyle({
+                    fill: 'red'
+                });
+                this.setPath(upsidedown);
+                this.addItem(new TextSpan('Baidu').fill('blue'));
+                this.addItem(new TextSpan('Kity').fill('green'));
+            });
 
             paper.addItem(text);
         });

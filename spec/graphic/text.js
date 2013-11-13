@@ -26,7 +26,7 @@ describe("Kity.Text", function () {
         expect( text.getContent() ).toBe( "hello world!" );
 
         text.appendContent( " nihao" );
-        expect( text.getContent() ).toBe( "hellow world! nihao" );
+        expect( text.getContent() ).toBe( "hello world! nihao" );
 
     });
 

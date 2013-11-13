@@ -5,9 +5,9 @@ describe("Kity.Image", function() {
     var image;
     beforeEach(function() {
         image = new Image();
-    })
+    });
     it("should be an instance of Shape", function() {
-        expect(image instanceof Shape).toBeTruthy();
+        expect(image.isInstanceOf(Shape)).toBeTruthy();
     });
 
     it("用 url 构造", function() {

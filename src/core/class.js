@@ -120,6 +120,13 @@ define( function ( require, exports ) {
         return false;
     };
 
+    BaseClass.prototype.pipe = function(fn) {
+        if(typeof(fn) =='function') {
+            fn.call(this, this);
+        }
+        return this;
+    };
+
     // 检查基类是否调用了父类的构造函数
     // 该检查是弱检查，假如调用的代码被注释了，同样能检查成功（这个特性可用于知道建议调用，但是出于某些原因不想调用的情况）
     function checkBaseConstructorCall( targetClass, classname ) {
@@ -165,8 +172,12 @@ define( function ( require, exports ) {
         // 保存父类的引用
         setBase( thisClass, baseClass );
 
-        // 继承父类的方法
-        extend( thisClass.prototype, baseClass.prototype );
+        thisClass.prototype = new BaseClass();
+
+        if(baseClass != BaseClass) {
+            // 继承父类的方法
+            extend( thisClass.prototype, baseClass.prototype );
+        }
 
         // 修正原型链上的构造函数
         thisClass.prototype.constructor = thisClass;

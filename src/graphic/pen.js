@@ -64,18 +64,19 @@ define( function ( require, exports, module ) {
 
             this.linecap = linecap;
 
+            return this;
         },
 
         getLineJoin: function () {
 
             return this.linejoin;
-
         },
 
         setLineJoin: function ( linejoin ) {
 
             this.linejoin = linejoin;
 
+            return this;
         },
 
         getDashArray: function () {
@@ -106,7 +107,7 @@ define( function ( require, exports, module ) {
                 node.setAttribute( 'stroke-linejoin', this.getLineJoin() );
             }
             if ( this.getDashArray() ) {
-                this.setAttribute( 'stroke-dasharray', this.getDashArray() );
+                node.setAttribute( 'stroke-dasharray', this.getDashArray() );
             }
         }
 

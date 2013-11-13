@@ -7,10 +7,13 @@ define(function (require, exports, module) {
     return require('core/class').createClass(className, {
         base: GradientBrush,
 
-        constructor: function () {
+        constructor: function (builder) {
             this.callBase('linearGradient');
             this.setStartPosition(0, 0);
             this.setEndPosition(1, 0);
+            if(typeof(builder) == 'function') {
+                builder.call(this, this);
+            }
         },
 
         setStartPosition: function (px, py) {

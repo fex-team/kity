@@ -9,11 +9,11 @@ describe("Kity.Curve", function () {
     });
 
     it("should be an instance of Path", function () {
-        expect(curve instanceof Curve).toBeTruthy();
+        expect(curve.isInstanceOf(Curve)).toBeTruthy();
     });
 
     it("should be an instance of Shape", function () {
-        expect(curve instanceof Shape).toBeTruthy();
+        expect(curve.isInstanceOf(Shape)).toBeTruthy();
     });
 
     it("should extend Container", function () {
@@ -22,13 +22,13 @@ describe("Kity.Curve", function () {
 
     describe("addItem(point [, pos])", function () {
         beforeEach(function () {
-            curve.addChild({
+            curve.addItem({
                 x: 10,
                 y: 10
             });
         });
         it("添加点到曲线的关键点集合里", function () {
-            expect(curve.getFirstChild()).toMatchPlain({
+            expect(curve.getFirstItem()).toMatchPlain({
                 x: 10,
                 y: 10
             });
@@ -40,26 +40,26 @@ describe("Kity.Curve", function () {
 
     describe("removeChild(pos)", function () {
         beforeEach(function () {
-            curve.addChild({
+            curve.addItem({
                 x: 10,
                 y: 10
             });
-            curve.addChild({
+            curve.addItem({
                 x: 20,
                 y: 20
             });
-            curve.addChild({
+            curve.addItem({
                 x: 30,
                 y: 30
             });
-            curve.removeChild(1);
+            curve.removeItem(1);
         });
         it("should remove a key point from the curve in given position", function () {
-            expect(curve.getFirstChild()).toMatchPlain({
+            expect(curve.getFirstItem()).toMatchPlain({
                 x: 10,
                 y: 10
             });
-            expect(curve.getLastChild()).toMatchPlain({
+            expect(curve.getLastItem()).toMatchPlain({
                 x: 30,
                 y: 30
             });
@@ -67,4 +67,4 @@ describe("Kity.Curve", function () {
     });
 
 
-})
+});

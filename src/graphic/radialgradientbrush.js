@@ -5,11 +5,14 @@ define(function (require, exports, module) {
     return require('core/class').createClass('RadialGradientBrush', {
         base: GradientBrush,
 
-        constructor: function () {
+        constructor: function (builder) {
             this.callBase('radialGradient');
             this.setCenter(0.5, 0.5);
             this.setFocal(0.5, 0.5);
             this.setRadius(0.5);
+            if(typeof(builder) == 'function') {
+                builder.call(this, this);
+            }
         },
 
         setCenter: function (cx, cy) {

@@ -2,14 +2,15 @@ define(function (require, exports, module) {
     var DefBrush = require('graphic/defbrush');
     var ShapeContainer = require('graphic/shapecontainer');
     var svg = require('graphic/svg');
-    var Paper = require('graphic/paper');
-    var clazz = require('core/class');
 
-    var PatternBrush = clazz.createClass('PatternBrush', {
+    return require('core/class').createClass('PatternBrush', {
         base: DefBrush,
         mixins: [ShapeContainer],
-        constructor: function () {
+        constructor: function (builder) {
             this.callBase('pattern');
+            if(typeof(builder) == 'function') {
+                builder.call(this, this);
+            }
         },
 
         setMode: function (mode) {
@@ -40,14 +41,6 @@ define(function (require, exports, module) {
             }
             node.setAttribute('width', this.getWidth());
             node.setAttribute('height', this.getHeight());
-        }
-    });
-
-    clazz.extendClass(Paper, {
-        createPatternBrush: function () {
-            var brush = new PatternBrush();
-            this.addResource(brush);
-            return brush;
         }
     });
 });

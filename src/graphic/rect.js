@@ -118,8 +118,8 @@ define(function(require, exports, module) {
 
         getPosition: function () {
             return {
-                width: this.width,
-                height: this.height
+                x: this.x,
+                y: this.y
             };
         },
 
