@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>A Kity Clock</title>
+    <script src="../dev-lib/sea.js"></script>
+    <script>
+
+        seajs.config({
+            base: '../src'
+        });
+        define('start', function (require) {
+            var Path = require('graphic/path');
+            var Paper = require('graphic/paper');
+            var Color = require('graphic/color');
+            var LinearGradientBrush = require('graphic/lineargradientbrush');
+            var PatternBrush = require('graphic/patternbrush');
+            var Text = require('graphic/text');
+            var TextSpan = require('graphic/textspan');
+            var Matrix = require('graphic/matrix');
+            var Pen = require('graphic/pen');
+            var Rect = require('graphic/rect');
+            var Circle = require('graphic/circle');
+            var Palette = require('graphic/palette');
+
+            var paper = new Paper(document.body).pipe(function() {
+                this.setWidth(500).setHeight(500);
+                this.setViewBox(-500, -500, 1000, 1000);
+            });
+
+            var palette = new Palette().pipe(function() {
+                var baseColor = new Color('hsl(0, 0%, 50%)');
+                this.addColor('outside', baseColor.clone().increase('l', 20));
+                this.addColor('dot', baseColor.clone().set('h', 30).set('s', 80));
+            });
+
+            paper.addItem(new Circle(0, 0, 450).pipe(function(outside) {
+                outside.stroke(new Pen().pipe(function() {
+                    this.setWidth(5);
+                    this.setColor(palette.getColor('outside'));
+                }));
+            }));
+
+            paper.addItem(new Circle(0, 0, 10).pipe(function(dot) {
+                dot.fill(palette.getColor('dot'));
+            }));
+        });
+        seajs.use('start');
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
