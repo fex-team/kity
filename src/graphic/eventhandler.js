@@ -97,14 +97,19 @@ define( function ( require, exports, module ) {
 
             } );
 
-            return record;
+            return this;
 
         },
 
         removeEventListener: function ( type, handler ) {
 
+            var hanlderList = null;
 
-            var hanlderList = HANDLER_CACHE[ this._EventListenerId ][ type ];
+            try {
+                handlerList = HANDLER_CACHE[ this._EventListenerId ][ type ];
+            } catch ( e ) {
+                return;
+            }
 
             //移除指定索引的监听器
             if ( typeof handler === 'number' ) {
@@ -133,14 +138,16 @@ define( function ( require, exports, module ) {
 
             }
 
+            return this;
+
         },
 
         on: function () {
-            this.addEventListener.apply( this, arguments );
+            return this.addEventListener.apply( this, arguments );
         },
 
         off: function () {
-            this.removeEventListener.apply( this, arguments );
+            return this.removeEventListener.apply( this, arguments );
         }
 
     } );

@@ -138,8 +138,15 @@ define( function ( require, exports, module ) {
 
     }
 
+    curve.on( "click2", function () {
+        alert(3)
+    } );
+
+    paper.on("click2", function () {
+        alert(4)
+    })
+    window.tt = curve;
     curve.stroke( new Pen( new Color( "red" ) ) );
     paper.appendItem( curve );
 
-    window.tt = curve;
 } );

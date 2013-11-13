@@ -1,5 +1,5 @@
 var Paper = require( 'graphic/paper' );
-var Rect = require( 'graphic/Rect' );
+var Rect = require( 'graphic/rect' );
 describe( "Kity.EventHandler", function () {
     var paper, rect;
     beforeEach( function () {
@@ -14,7 +14,9 @@ describe( "Kity.EventHandler", function () {
                 fired = true;
                 expect( e.targetShape ).toBe( rect );
             } );
-            rect.node.dispatchEvent( new MouseEvent( 'click' ) );
+            var event = document.createEvent('HTMLEvents');
+            event.initEvent("click", true, true);
+            rect.node.dispatchEvent( event );
             expect( fired ).toBeTruthy();
         } );
         it( "能冒泡到 Parent 上", function () {
@@ -23,7 +25,9 @@ describe( "Kity.EventHandler", function () {
                 fired = true;
                 expect( e.targetShape ).toBe( rect );
             } );
-            rect.node.dispatchEvent( new MouseEvent( 'click' ) );
+            var event = document.createEvent('HTMLEvents');
+            event.initEvent("click", true, true);
+            rect.node.dispatchEvent( event );
             expect( fired ).toBeTruthy();
         } );
 
@@ -42,7 +46,9 @@ describe( "Kity.EventHandler", function () {
             }
             rect.addEventListener( 'click', listener );
             rect.removeEventListener( 'click', listener );
-            rect.node.dispatchEvent( new MouseEvent( 'click' ) );
+            var event = document.createEvent('HTMLEvents');
+            event.initEvent("click", true, true);
+            rect.node.dispatchEvent( event );
             expect( fired ).toBeFalsy();
         } );
 
@@ -63,7 +69,9 @@ describe( "Kity.EventHandler", function () {
             rect.addEventListener( 'click', listener1 );
             rect.addEventListener( 'click', listener2 );
             rect.removeEventListener( 'click' );
-            rect.node.dispatchEvent( new MouseEvent( 'click' ) );
+            var event = document.createEvent('HTMLEvents');
+            event.initEvent("click", true, true);
+            rect.node.dispatchEvent( event );
             expect( fired1 || fired2 ).toBeFalsy();
         } )
     } );
