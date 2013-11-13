@@ -28,7 +28,7 @@ define(function(require, exports, module) {
 
                 'M ' + ( this.cx + this.rx ) + ' ' + this.cy,
                 ' A ' + this.rx + ' ' + this.ry,
-                ' 0 1 1 ' + ( this.rx ) + ' ' + this.cy,
+                ' 0 1 1 ' + ( this.cx - this.rx ) + ' ' + this.cy,
                 ' A ' + this.rx + ' ' + this.ry,
                 ' 0 1 1 ' + ( this.cx + this.rx ) + ' ' + this.cy,
                 ' Z'

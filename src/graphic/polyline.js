@@ -1,18 +1,18 @@
-define(function (require, exports, module) {
+define( function ( require, exports, module ) {
 
-    var Utils = require("core/utils"),
-        Container = require("graphic/container");
+    var Utils = require( "core/utils" ),
+        Container = require( "graphic/container" );
 
-    return require('core/class').createClass('Polyline', {
+    return require( 'core/class' ).createClass( 'Polyline', {
 
-        base: require('graphic/path'),
+        base: require( 'graphic/path' ),
 
-        mixins: [Container],
+        mixins: [ Container ],
 
         constructor: function () {
 
             this.callBase();
-            this._children = this.points = [].slice.call(arguments[0] || [], 0);
+            this._children = this.points = [].slice.call( arguments[ 0 ] || [], 0 );
             this.update();
 
         },
@@ -22,15 +22,15 @@ define(function (require, exports, module) {
             var pathData = [],
                 command = null;
 
-            Utils.each(this._children, function (point, index) {
+            Utils.each( this._children, function ( point, index ) {
 
                 command = index === 0 ? 'M' : 'L';
 
-                pathData.push(command + ' ' + point.x + ',' + point.y + " ");
+                pathData.push( command + ' ' + point.x + ' ' + point.y + " " );
 
-            });
+            } );
 
-            this.setPathData(pathData.join(""));
+            this.setPathData( pathData.join( "" ) );
 
             return this;
 
@@ -38,7 +38,7 @@ define(function (require, exports, module) {
 
         addItem: function () {
 
-            this.callMixin.apply(this, arguments);
+            this.callMixin.apply( this, arguments );
 
             this.update();
 
@@ -46,11 +46,11 @@ define(function (require, exports, module) {
 
         removeItem: function () {
 
-            this.callMixin.apply(this, arguments);
+            this.callMixin.apply( this, arguments );
 
             this.update();
 
         }
 
-    });
-});
+    } );
+} );

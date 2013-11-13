@@ -1,7 +1,5 @@
 define(function(require, exports, module) {
 
-    var Utils = require( 'core/utils' );
-
     return require('core/class').createClass( 'Circle', {
 
         base: require( 'graphic/ellipse' ),
