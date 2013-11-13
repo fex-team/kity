@@ -59,9 +59,9 @@ define(function (require, exports, module) {
             //如果是闭合状态， 则进行闭合处理
             if ( this.close ) {
 
-                pathData.push( ' C ' + panLines[ i ].points[ 1 ].x + " " + panLines[ i ].points[ 1 ].y + ", ");
-                pathData.push( panLines[ i + 1 ].points[ 0 ].x + " " + panLines[ i + 1 ].points[ 0 ].y + ", " );
-                pathData.push( points[ i + 1 ].x + " " + points[ i + 1 ].y );
+                pathData.push( ' C ' + panLines[ len - 1 ].points[ 1 ].x + " " + panLines[ len - 1 ].points[ 1 ].y + ", ");
+                pathData.push( panLines[ 0 ].points[ 0 ].x + " " + panLines[ 0 ].points[ 0 ].y + ", " );
+                pathData.push( points[ 0 ].x + " " + points[ 0 ].y );
 
             }
 

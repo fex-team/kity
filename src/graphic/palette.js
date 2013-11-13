@@ -56,7 +56,7 @@ define( function ( require, exports, module ) {
             if ( typeof value === "string" ) {
                 this.color[ name ] = new Color( value ).toRGBA();
             } else {
-                this.color[ name ] = value;
+                this.color[ name ] = value.toRGBA();
             }
 
             return value;
@@ -117,7 +117,7 @@ define( function ( require, exports, module ) {
             if ( typeof value === "string" ) {
                 StandardColor.EXTEND_STANDARD[ name ] = new Color( value ).toRGBA();
             } else {
-                StandardColor.EXTEND_STANDARD[ name ] = value;
+                StandardColor.EXTEND_STANDARD[ name ] = value.toRGBA();
             }
 
             return value;
