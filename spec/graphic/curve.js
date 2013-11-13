@@ -22,7 +22,7 @@ describe("Kity.Curve", function () {
 
     describe("addItem(point [, pos])", function () {
         beforeEach(function () {
-            curve.addChild({
+            curve.addItem({
                 x: 10,
                 y: 10
             });
@@ -40,26 +40,26 @@ describe("Kity.Curve", function () {
 
     describe("removeChild(pos)", function () {
         beforeEach(function () {
-            curve.addChild({
+            curve.addItem({
                 x: 10,
                 y: 10
             });
-            curve.addChild({
+            curve.addItem({
                 x: 20,
                 y: 20
             });
-            curve.addChild({
+            curve.addItem({
                 x: 30,
                 y: 30
             });
             curve.removeChild(1);
         });
         it("should remove a key point from the curve in given position", function () {
-            expect(curve.getFirstChild()).toMatchPlain({
+            expect(curve.getFirstItem()).toMatchPlain({
                 x: 10,
                 y: 10
             });
-            expect(curve.getLastChild()).toMatchPlain({
+            expect(curve.getFirstItem()).toMatchPlain({
                 x: 30,
                 y: 30
             });
@@ -67,4 +67,4 @@ describe("Kity.Curve", function () {
     });
 
 
-})
+});
