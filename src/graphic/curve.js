@@ -83,7 +83,7 @@ define(function (require, exports, module) {
 
             while ( points.hasOwnProperty( i + "," + j ) ) {
 
-                
+
 
             }
 
