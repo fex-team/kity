@@ -1,5 +1,5 @@
 var Paper = require( 'graphic/paper' );
-var Rect = require( 'graphic/Rect' );
+var Rect = require( 'graphic/rect' );
 describe( "Kity.EventHandler", function () {
     var paper, rect;
     beforeEach( function () {
