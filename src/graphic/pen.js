@@ -64,18 +64,19 @@ define( function ( require, exports, module ) {
 
             this.linecap = linecap;
 
+            return this;
         },
 
         getLineJoin: function () {
 
             return this.linejoin;
-
         },
 
         setLineJoin: function ( linejoin ) {
 
             this.linejoin = linejoin;
 
+            return this;
         },
 
         getDashArray: function () {

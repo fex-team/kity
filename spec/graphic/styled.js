@@ -1,10 +1,10 @@
-describe("Kity.Styled", function () {
-
+describe( "Kity.Styled", function () {
+    var Rect = require( 'graphic/rect' );
     var Styled = require( "graphic/styled" );
 
-    it("className测试", function() {
+    it( "className测试", function () {
 
-        var styled = new Styled();
+        var styled = new Rect( 0, 0, 100, 100 );
 
         styled.addClass( "test" );
 
@@ -14,6 +14,6 @@ describe("Kity.Styled", function () {
         expect( styled.hasClass( "test" ) ).toBe( false );
 
 
-    });
+    } );
 
-});
+} );

@@ -24,11 +24,11 @@ describe("Kity.Pen", function() {
     });
 
     it('设置端点样式', function() {
-        expect(pen.setCapStyle('round').getCapStyle()).toBe('round');
+        expect(pen.setLineCap('round').getLineCap()).toBe('round');
     });
 
     it('设置转折点样式', function() {
-        expect(pen.setJoinStyle('round').getJoinStyle()).toBe('round');
+        expect(pen.setLineJoin('round').getLineJoin()).toBe('round');
     });
 
     it('默认 dasharray 为 null', function() {
@@ -36,6 +36,6 @@ describe("Kity.Pen", function() {
     });
 
     it('设置 dasharray', function() {
-        expect(pen.setDashArray([3,4]).getDashArray().join(',').toBe('3,4'));
+        expect(pen.setDashArray([3,4]).getDashArray().join(',')).toBe('3,4');
     });
 });

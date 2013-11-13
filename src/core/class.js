@@ -165,8 +165,12 @@ define( function ( require, exports ) {
         // 保存父类的引用
         setBase( thisClass, baseClass );
 
-        // 继承父类的方法
-        extend( thisClass.prototype, baseClass.prototype );
+        thisClass.prototype = new BaseClass();
+
+        if(baseClass != BaseClass) {
+            // 继承父类的方法
+            extend( thisClass.prototype, baseClass.prototype );
+        }
 
         // 修正原型链上的构造函数
         thisClass.prototype.constructor = thisClass;
