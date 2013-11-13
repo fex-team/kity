@@ -24,7 +24,9 @@ define( function ( require, exports, module ) {
 
                 Utils.each( HANDLER_CACHE[ eid ][ type ], function ( fn, index ) {
 
-                    return fn.call( obj, e );
+                    if ( fn ) {
+                        return fn.call( obj, e );
+                    }
 
                 } );
 
@@ -103,7 +105,7 @@ define( function ( require, exports, module ) {
 
         removeEventListener: function ( type, handler ) {
 
-            var hanlderList = null;
+            var handlerList = null;
 
             try {
                 handlerList = HANDLER_CACHE[ this._EventListenerId ][ type ];
@@ -115,15 +117,15 @@ define( function ( require, exports, module ) {
             if ( typeof handler === 'number' ) {
 
                 handler = Math.floor( handler );
-                delete hanlderList[ handler ];
+                delete handlerList[ handler ];
 
                 //移除指定的监听器
             } else if ( typeof handler === 'function' ) {
 
-                Utils.each( hanlderList, function ( fn, index ) {
+                Utils.each( handlerList, function ( fn, index ) {
 
                     if ( fn === handler ) {
-                        delete hanlderList[ index ];
+                        delete handlerList[ index ];
                         return false;
                     }
 
