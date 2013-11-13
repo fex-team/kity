@@ -76,18 +76,20 @@ define( function ( require, exports, module ) {
             return this.mergeTransform( new Matrix().addSkew( sx, sy ) );
         },
         stroke: function ( pen ) {
-            if ( utils.isString( pen ) ) {
-                this.node.setAttribute( 'stroke', pen );
-            } else if ( pen && pen.stroke ) {
+            if ( pen && pen.stroke ) {
                 pen.stroke( this );
+            } else {
+                // 字符串或重写了 toString 的对象
+                this.node.setAttribute( 'stroke', pen );
             }
             return this;
         },
         fill: function ( brush ) {
-            if ( utils.isString( brush ) ) {
-                this.node.setAttribute( 'fill', brush );
-            } else if ( brush && brush.fill ) {
+            if ( brush && brush.fill ) {
                 brush.fill( this );
+            } else {
+                // 字符串或重写了 toString 的对象
+                this.node.setAttribute( 'fill', brush );
             }
             return this;
         }

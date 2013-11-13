@@ -107,7 +107,7 @@ define( function ( require, exports, module ) {
                 node.setAttribute( 'stroke-linejoin', this.getLineJoin() );
             }
             if ( this.getDashArray() ) {
-                this.setAttribute( 'stroke-dasharray', this.getDashArray() );
+                node.setAttribute( 'stroke-dasharray', this.getDashArray() );
             }
         }
 
