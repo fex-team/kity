@@ -11,7 +11,7 @@ define(function (require, exports, module) {
          * @param points 点集合
          * @returns 通过点构成的曲线的pathData
          */
-        pointToPathData: function ( points ) {
+        pointToPathData: function ( points, isClose ) {
 
             switch ( points.length ) {
 
@@ -22,7 +22,7 @@ define(function (require, exports, module) {
                 case 2:
                     return "M " + points[ 0 ].x + " " + points[ 0 ].y + " L " + points[ 1 ].x + " " + points[ 1 ].y;
                 default:
-                    return CurveUtil.getCurvePath( points );
+                    return CurveUtil.getCurvePath( points, isClose );
 
             }
 
@@ -33,10 +33,10 @@ define(function (require, exports, module) {
          * @param points 点的集合， 集合中的点的数量必须大于2
          * @return pathData字符串
          */
-        getCurvePath: function ( points ) {
+        getCurvePath: function ( points, isClose ) {
 
             //计算原始点的中点坐标
-            var centerPoints = CurveUtil.getCenterPoints( points),
+            var centerPoints = CurveUtil.getCenterPoints( points ),
 
                 //注意：计算中点连线的中点坐标， 得出平移线
                 panLines = CurveUtil.getPanLine( points.length, centerPoints ),
@@ -57,9 +57,9 @@ define(function (require, exports, module) {
             }
 
             //如果是闭合状态， 则进行闭合处理
-            if ( this.close ) {
+            if ( isClose ) {
 
-                pathData.push( ' C ' + panLines[ len - 1 ].points[ 1 ].x + " " + panLines[ len - 1 ].points[ 1 ].y + ", ");
+                pathData.push( ' C ' + panLines[ len ].points[ 1 ].x + " " + panLines[ len ].points[ 1 ].y + ", ");
                 pathData.push( panLines[ 0 ].points[ 0 ].x + " " + panLines[ 0 ].points[ 0 ].y + ", " );
                 pathData.push( points[ 0 ].x + " " + points[ 0 ].y );
 
@@ -207,12 +207,12 @@ define(function (require, exports, module) {
 
         mixins: [ require( "graphic/container" ) ],
 
-        constructor: function () {
+        constructor: function ( points, isColse ) {
 
             this.callBase();
-            this.points = [].slice.call( arguments[0] || [], 0 );
+            this.points = [].slice.call( points || [], 0 );
             //闭合状态
-            this.close = false;
+            this._closeState = !!isColse;
 
             this.update();
 
@@ -220,7 +220,7 @@ define(function (require, exports, module) {
 
         update: function () {
 
-            var pathData = CurveUtil.pointToPathData( this.points.slice( 0 ) );
+            var pathData = CurveUtil.pointToPathData( this.points.slice( 0 ), this._closeState );
 
             this.setPathData( pathData );
 
@@ -230,15 +230,22 @@ define(function (require, exports, module) {
 
         close: function () {
 
-            this.close = true;
+            this._closeState = true;
 
+            return this.update();
+
+        },
+
+        open: function () {
+
+            this._closeState = false;
             return this.update();
 
         },
 
         isClose: function () {
 
-            return this.close || false;
+            return this._closeState || false;
 
         }
 

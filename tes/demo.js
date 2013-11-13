@@ -124,7 +124,7 @@ define( function ( require, exports, module ) {
 //    paper.addItem( circle );
 
     //曲线
-    var points = [ {x: 30, y: 120}, { x: 530, y: 183 }, { x: 100, y: 250 } ],
+    var points = [ {x: 130, y: 120}, { x: 530, y: 183 }, { x: 100, y: 250 } ],
         curve = new Curve( points ),
         paper = new Paper( document.body );
 
@@ -141,4 +141,5 @@ define( function ( require, exports, module ) {
     curve.stroke( new Pen( new Color( "red" ) ) );
     paper.appendItem( curve );
 
+    window.tt = curve;
 } );
