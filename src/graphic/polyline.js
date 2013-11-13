@@ -1,13 +1,12 @@
 define(function (require, exports, module) {
 
-    var Utils = require("core/utils"),
-        Container = require("graphic/container");
+    var Utils = require("core/utils");
 
     return require('core/class').createClass('Polyline', {
 
         base: require('graphic/path'),
 
-        mixins: [Container],
+        mixins: [ require("graphic/pointcontainer") ],
 
         constructor: function () {
 
@@ -36,7 +35,7 @@ define(function (require, exports, module) {
 
         },
 
-        addItem: function () {
+        addPoint: function () {
 
             this.callMixin.apply(this, arguments);
 
@@ -44,7 +43,7 @@ define(function (require, exports, module) {
 
         },
 
-        removeItem: function () {
+        removePoint: function () {
 
             this.callMixin.apply(this, arguments);
 

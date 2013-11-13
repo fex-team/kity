@@ -16,7 +16,8 @@ define( function ( require, exports, module ) {
         Image = require( "graphic/image" ),
         Polygon = require( "graphic/polygon" ),
         Palette = require( "graphic/palette" ),
-        Polyline = require( "graphic/polyline" );
+        Polyline = require( "graphic/polyline"),
+        Curve = require( "graphic/curve" );
 
 //    var paper = new Paper( document.body ),
 //        rect = new Rect( 0, 0, 100, 50 );
@@ -110,17 +111,22 @@ define( function ( require, exports, module ) {
 //        paper = new Paper( document.body );
 //
 ////    polygon.appendChild( { x: 32, y: 40 } );
-//    paper.addChild( polyline );
+//    paper.addItem( polyline );
 //    polyline.stroke( new Pen( new Color( "#ff0000" ) ) );
-//    window.tt = polyline;
 
     //圆
-    var circle = new Circle( 50, 50, 30 ),
+//    var circle = new Circle( 50, 50, 30 ),
+//        paper = new Paper( document.body );
+//
+//    circle.stroke( new Pen( new Color( "red" ) ) );
+////    polygon.appendChild( { x: 32, y: 40 } );
+//    paper.addItem( circle );
+
+    //曲线
+    var curve = new Curve( [{x: 1, y: 20}, { x: 30, y: 183 }, { x: 100, y: 50 }] ),
         paper = new Paper( document.body );
 
-    circle.stroke( new Pen( new Color( "red" ) ) );
-//    polygon.appendChild( { x: 32, y: 40 } );
-    paper.addChild( circle );
-
+    curve.stroke( new Pen( new Color( "red" ) ) );
+    paper.appendItem( curve );
 
 } );
