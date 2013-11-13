@@ -15,7 +15,7 @@ define( function ( require, exports, module ) {
 
         },
 
-        addItem: function () {
+        addPoint: function () {
 
             this.callMixin.apply( this, arguments );
 
@@ -23,7 +23,7 @@ define( function ( require, exports, module ) {
 
         },
 
-        removeItem: function () {
+        removePoint: function () {
 
             this.callMixin.apply( this, arguments );
 
