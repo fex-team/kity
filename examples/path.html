@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+'<!DOCTYPE html>
 <html>
 <head>
     <title>Path Example</title>
@@ -22,6 +22,7 @@
             var Text = require('graphic/text');
             var TextSpan = require('graphic/textspan');
             var Matrix = require('graphic/matrix');
+            var Pen = require('graphic/pen');
 
             var paper = new Paper(document.body);
             paper.setWidth(800).setHeight(600);
@@ -45,7 +46,7 @@
             var linear = new LinearGradientBrush(paper);
             linear.addStop(0, '#ff0000')
             linear.addStop(0.5, '#ffff00')
-            linear.addStop(1, '#0000ff');
+            linear.addStop(1, new Color('blue'));
 
             paper.addResource(linear);
 
@@ -55,7 +56,18 @@
             path.setStyle({ 'stroke-width': '5' }).addClass('stroke-green');
 
             var text = new Text('this is a text');
-            text.setX(300).setY(100);
+            text.setX(100).setY(100).setStyle({
+                fill: 'red'
+            });
+
+            var upsidedown = new Path('M0 0 C100 0 100 0 100 100 C100 200 100 200 200 200');
+            upsidedown.stroke(new Pen());
+            upsidedown.rotate(90).translate(100, 200);
+            paper.addItem(upsidedown);
+            text.setPath(upsidedown);
+
+            text.addItem(new TextSpan('Baidu').fill('blue'));
+            text.addItem(new TextSpan('Kity').fill('green'));
 
             paper.addItem(text);
         });

@@ -4,12 +4,12 @@
 
 define( function ( require, exprots, module ) {
 
-    return require('core/class').createClass( 'EventHandler', {
+    return require( 'core/class' ).createClass( 'EventHandler', {
 
-        constructor: function ( shape, event ) {
+        constructor: function ( event ) {
 
             this.originEvent = event;
-            this.targetShape = shape;
+            this.targetShape = event.target.shape || event.target.paper;
 
         },
 
