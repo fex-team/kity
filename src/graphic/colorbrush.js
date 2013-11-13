@@ -1,32 +1,32 @@
-define(function(require, exports, module) {
+define( function ( require, exports, module ) {
 
-    var Color = require('graphic/color');
-    var Brush = require('graphic/brush');
-    
-    return require('core/class').createClass( 'ColorBrush', {
+    var Color = require( 'graphic/color' );
+    var Brush = require( 'graphic/brush' );
+
+    var ColorBrush = require( 'core/class' ).createClass( 'ColorBrush', {
         base: Brush,
 
-        constructor: function( color ) {
+        constructor: function ( color ) {
             this.callBase();
-            color = color || new Color();
-            this.setColor(new Color());
+            this.setColor( color || new Color() );
         },
 
-        getType: function() {
+        getType: function () {
             return 'ColorBrush';
         },
 
-        setColor: function( color ) {
+        setColor: function ( color ) {
             this.color = color;
         },
 
-        getColor: function() {
+        getColor: function () {
             return this.color;
         },
 
-        fill: function( path ) {
+        fill: function ( path ) {
             var node = path.node;
-            node.setAttribute('fill', this.getColor());
+            node.setAttribute( 'fill', this.getColor() );
         }
-    });
-});
+    } );
+    return ColorBrush;
+} );

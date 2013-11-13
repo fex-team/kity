@@ -1,28 +1,28 @@
-define(function(require, exports, module) {
+define( function ( require, exports, module ) {
 
     var HANDLER_CACHE = {},
-        LISTENER_CACHE = {};
+        LISTENER_CACHE = {},
         ShapeEvent = require( "graphic/shapeevent" ),
         Utils = require( "core/utils" );
 
-    function listen ( obj, type, handler ) {
+    function listen( obj, type, handler ) {
 
         var handlerList = null;
-
-        if ( !HANDLER_CACHE[ this._EventListenerId ] ) {
-            HANDLER_CACHE[ this._EventListenerId ] = {};
+        var eid = this._EventListenerId;
+        if ( !HANDLER_CACHE[ eid ] ) {
+            HANDLER_CACHE[ eid ] = {};
         }
 
-        if ( !HANDLER_CACHE[ this._EventListenerId ][ type ] ) {
+        if ( !HANDLER_CACHE[ eid ][ type ] ) {
 
-            HANDLER_CACHE[ this._EventListenerId ][ type ] = [];
+            HANDLER_CACHE[ eid ][ type ] = [];
 
             //监听器
-            LISTENER_CACHE[ this._EventListenerId ] = function ( e ) {
+            LISTENER_CACHE[ eid ] = function ( e ) {
 
                 e = new ShapeEvent( e || window.event );
 
-                Utils.each( HANDLER_CACHE[ this._EventListenerId ][ type ], function ( fn, index ) {
+                Utils.each( HANDLER_CACHE[ eid ][ type ], function ( fn, index ) {
 
                     return fn.call( obj, e );
 
@@ -32,11 +32,11 @@ define(function(require, exports, module) {
             };
 
             //绑定事件
-            bindEvent( obj, type, LISTENER_CACHE[ this._EventListenerId ] );
+            bindEvent( obj, type, LISTENER_CACHE[ eid ] );
 
         }
 
-        handlerList = HANDLER_CACHE[ this._EventListenerId ][ type ];
+        handlerList = HANDLER_CACHE[ eid ][ type ];
 
         handlerList.push( handler );
 
@@ -44,7 +44,7 @@ define(function(require, exports, module) {
 
     }
 
-    function bindEvent ( obj, type, handler ) {
+    function bindEvent( obj, type, handler ) {
 
         if ( obj.addEventListener ) {
 
@@ -58,7 +58,7 @@ define(function(require, exports, module) {
 
     }
 
-    function deleteEvent ( obj, type, handler ) {
+    function deleteEvent( obj, type, handler ) {
 
         if ( obj.removeEventListener ) {
 
@@ -71,13 +71,13 @@ define(function(require, exports, module) {
         }
 
     }
-    
-    return require('core/class').createClass( 'EventHandler', {
 
-        constructor: function() {
+    return require( 'core/class' ).createClass( 'EventHandler', {
+
+        constructor: function () {
 
             //当前对象的事件处理器ID
-            this._EventListenerId = + new Date();
+            this._EventListenerId = +new Date();
 
         },
 
@@ -89,9 +89,11 @@ define(function(require, exports, module) {
                 type = type.replace( /^\s+|\s+$/g, '' ).split( /\s+/ );
             }
 
+            var shape = this;
+            var node = this.node;
             Utils.each( type, function ( currentType ) {
 
-                record[ currentType ] = listen( this, currentType, handler );
+                record[ currentType ] = listen.call( shape, node, currentType, handler );
 
             } );
 
@@ -101,39 +103,34 @@ define(function(require, exports, module) {
 
         removeEventListener: function ( type, handler ) {
 
-            try {
 
-                var hanlderList = HANDLER_CACHE[ this._EventListenerId ][ type ];
+            var hanlderList = HANDLER_CACHE[ this._EventListenerId ][ type ];
 
-                //移除指定索引的监听器
-                if ( typeof handler === 'number' ) {
+            //移除指定索引的监听器
+            if ( typeof handler === 'number' ) {
 
-                    handler = Math.floor( handler );
-                    delete hanlderList[ handler ];
+                handler = Math.floor( handler );
+                delete hanlderList[ handler ];
 
                 //移除指定的监听器
-                } else if ( typeof handler === 'function' ) {
+            } else if ( typeof handler === 'function' ) {
 
-                    Utils.each( hanlderList, function ( fn, index ) {
+                Utils.each( hanlderList, function ( fn, index ) {
 
-                        if ( fn === handler ) {
-                            delete hanlderList[ index ];
-                            return false;
-                        }
+                    if ( fn === handler ) {
+                        delete hanlderList[ index ];
+                        return false;
+                    }
 
-                    } );
+                } );
 
                 //删除所有监听器
-                } else if ( handler === undefined ) {
+            } else if ( handler === undefined ) {
 
-                    HANDLER_CACHE[ this._EventListenerId ][ type ] = [];
+                HANDLER_CACHE[ this._EventListenerId ][ type ] = [];
 
-                    deleteEvent( this, type, LISTENER_CACHE[ this._EventListenerId ] );
+                deleteEvent( this.node, type, LISTENER_CACHE[ this._EventListenerId ] );
 
-                }
-
-            } catch ( e ) {
-                //do nothing
             }
 
         },
@@ -146,6 +143,6 @@ define(function(require, exports, module) {
             this.removeEventListener.apply( this, arguments );
         }
 
-    });
+    } );
 
-});
+} );

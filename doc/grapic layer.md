@@ -569,9 +569,6 @@ CSS 样式支持
 ### appendContent( string content ) : Text
 向文本内追加内容
 
-### setPath(string pathData) : ###
-设置文本的排列路径
-
 ### setX(float x) : this ### 
 设置文本显示的位置的 x 坐标
 
@@ -584,6 +581,8 @@ CSS 样式支持
 ### getY() : float ###
 获得文本显示位置的 y 坐标
 
+### *setPath(string pathData) : ###
+设置文本的排列路径
 
 
 

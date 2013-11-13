@@ -1,17 +1,17 @@
-define(function(require, exports, module) {
+define( function ( require, exports, module ) {
 
     var Color = require( "graphic/color" );
 
-    return require('core/class').createClass( 'Pen', {
+    return require( 'core/class' ).createClass( 'Pen', {
 
-        constructor: function( color, width ) {
+        constructor: function ( color, width ) {
 
             this.color = color || new Color();
             this.width = width || 1;
             this.linecap = null;
             this.linejoin = null;
             this.dashArray = null;
-            this.opacity = this.color.get('a');
+            this.opacity = this.color.get( 'a' );
 
         },
 
@@ -90,8 +90,26 @@ define(function(require, exports, module) {
 
             return this;
 
+        },
+
+        stroke: function ( shape ) {
+            var node = shape.node;
+            node.setAttribute( 'stroke', this.getColor() );
+            node.setAttribute( 'stroke-width', this.getWidth() );
+            if ( this.getOpacity() < 1 ) {
+                node.setAttribute( 'stroke-opacity', this.getOpacity() );
+            }
+            if ( this.getLineCap() ) {
+                node.setAttribute( 'stroke-linecap', this.getLineCap() );
+            }
+            if ( this.getLineJoin() ) {
+                node.setAttribute( 'stroke-linejoin', this.getLineJoin() );
+            }
+            if ( this.getDashArray() ) {
+                this.setAttribute( 'stroke-dasharray', this.getDashArray() );
+            }
         }
 
-    });
+    } );
 
-});
+} );
