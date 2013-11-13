@@ -48,24 +48,22 @@ define(function (require, exports, module) {
 
             pathData.push( 'M ' + points[ 0 ].x + " " + points[ 0 ].y );
 
-            //注意： 首尾两个端点需要单独处理
-            for ( var i = 1, len = points.length - 1; i < len ; i++ ) {
+            for ( var i = 0, len = points.length - 1; i < len ; i++ ) {
 
-                pathData.push( ' C ' + panLines[ i ].points[ 0 ].x + " " + panLines[ i ].points[ 0 ].y + ", ");
-                pathData.push( panLines[ i ].points[ 1 ].x + " " + panLines[ i ].points[ 1 ].y + ", " );
+                pathData.push( ' C ' + panLines[ i ].points[ 1 ].x + " " + panLines[ i ].points[ 1 ].y + ", ");
+                pathData.push( panLines[ i + 1 ].points[ 0 ].x + " " + panLines[ i + 1 ].points[ 0 ].y + ", " );
                 pathData.push( points[ i + 1 ].x + " " + points[ i + 1 ].y );
 
             }
 
-//            pathData.push( 'M ' + points[ 0 ].x + " " + points[ 0 ].y );
-//
-//            for ( var i = 0, len = points.length - 1; i < len ; i++ ) {
-//
-//                pathData.push( ' C ' + panLines[ i ].points[ 1 ].x + " " + panLines[ i ].points[ 1 ].y + ", ");
-//                pathData.push( panLines[ i + 1 ].points[ 0 ].x + " " + panLines[ i + 1 ].points[ 0 ].y + ", " );
-//                pathData.push( points[ i + 1 ].x + " " + points[ i + 1 ].y );
-//
-//            }
+            //如果是闭合状态， 则进行闭合处理
+            if ( this.close ) {
+
+                pathData.push( ' C ' + panLines[ i ].points[ 1 ].x + " " + panLines[ i ].points[ 1 ].y + ", ");
+                pathData.push( panLines[ i + 1 ].points[ 0 ].x + " " + panLines[ i + 1 ].points[ 0 ].y + ", " );
+                pathData.push( points[ i + 1 ].x + " " + points[ i + 1 ].y );
+
+            }
 
             return pathData.join( "" );
 
@@ -213,6 +211,8 @@ define(function (require, exports, module) {
 
             this.callBase();
             this.points = [].slice.call( arguments[0] || [], 0 );
+            //闭合状态
+            this.close = false;
 
             this.update();
 
@@ -223,6 +223,22 @@ define(function (require, exports, module) {
             var pathData = CurveUtil.pointToPathData( this.points.slice( 0 ) );
 
             this.setPathData( pathData );
+
+            return this;
+
+        },
+
+        close: function () {
+
+            this.close = true;
+
+            return this.update();
+
+        },
+
+        isClose: function () {
+
+            return this.close || false;
 
         }
 
