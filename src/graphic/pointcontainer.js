@@ -10,7 +10,6 @@ define( function ( require, exports, module ) {
         base: require( "graphic/container" ),
 
         constructor: function (  ) {
-            this.points = this.items = [];
             this.callBase();
         },
 
@@ -20,9 +19,13 @@ define( function ( require, exports, module ) {
 
         },
 
+        getPoints: function() {
+            return this.getItems();
+        },
+
         appendPoint: function ( point ) {
 
-            return this.appendItem( point );
+            return this.addPoint( point );
 
         },
 

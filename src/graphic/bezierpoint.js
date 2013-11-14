@@ -53,7 +53,7 @@ define( function ( require, exports, module ) {
 
     return require( "core/class" ).createClass( 'BezierPoint', {
 
-        constructor: function ( x, y ) {
+        constructor: function ( x, y, isSmooth ) {
 
             //顶点
             this.point = {
@@ -65,7 +65,7 @@ define( function ( require, exports, module ) {
             this.forward = null;
             this.backward = null;
             //是否平滑
-            this.smooth = false;
+            this.smooth = isSmooth === undefined ? true : !!isSmooth;
 
         },
 

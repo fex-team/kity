@@ -83,13 +83,19 @@ define( function ( require, exports, module ) {
 
         constructor: function ( points ) {
 
-            this.points = points || [];
-
-            if ( this.points.length > 0 && !BezierUtil.validate( this.points ) ) {
-                throw new Error( "添加到贝塞尔曲线上的点必须有控制点" );
-            }
+            var _self = this;
 
             this.callBase();
+
+            points = points || [];
+
+            Utils.each( points, function ( point ) {
+                _self.appendPoint( point );
+            } );
+
+            if ( points.length > 0 && !BezierUtil.validate( points ) ) {
+                throw new Error( "添加到贝塞尔曲线上的点必须有控制点" );
+            }
 
             this.update();
 
@@ -97,12 +103,14 @@ define( function ( require, exports, module ) {
 
         update: function () {
 
+
             var drawer = null,
+                points = this.getPoints(),
                 //把控制点转化为绝对坐标
-                absolutePoints = BezierUtil.parseToAbsolute( this.points );
+                absolutePoints = BezierUtil.parseToAbsolute( points );
 
             //单独的一个点不画任何图形
-            if ( this.points.length < 2 ) {
+            if ( points.length < 2 ) {
                 return;
             }
 
@@ -111,7 +119,6 @@ define( function ( require, exports, module ) {
             //重绘需要clear掉
             drawer.clear();
 
-            debugger;
             drawer.moveTo( absolutePoints[ 0 ].point.x, absolutePoints[ 0 ].point.y );
 
             for ( var i = 1, point, forward, backward, len = absolutePoints.length - 1; i <= len; i++ ) {
@@ -128,7 +135,7 @@ define( function ( require, exports, module ) {
 
         },
 
-        addItem: function ( point, pos ) {
+        addPoint: function ( point, pos ) {
 
             if ( !BezierUtil.validate( point ) ) {
                 throw new Error( '添加到贝塞尔曲线上的点必须有控制点' );

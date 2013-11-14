@@ -498,7 +498,10 @@ CSS 样式支持
 > 基类 : Class
 
 ### BezierPoint( number x, number y ) : BezierPoint ###
-构造函数， 根据提供的坐标初始化一个贝塞尔曲线上的点， 该点还未设置控制点坐标，不能把未设置控制点的BezierPoint添加到bezier曲线上。
+构造函数， 根据提供的坐标初始化一个贝塞尔曲线上的点，该点初始是平滑的。 该点还未设置控制点坐标，不能把未设置控制点的BezierPoint添加到bezier曲线上。
+
+### BezierPoint( number x, number y, boolean isSmooth ) : BezierPoint ###
+构造函数， 根据提供的坐标初始化一个贝塞尔曲线上的点，可以根据参数isSmooth决定是否平滑。 该点还未设置控制点坐标，不能把未设置控制点的BezierPoint添加到bezier曲线上。
 
 ### setForward( number x, number y ) : this ###
 设置前置控制点位置，如果当前点BezierPoint对象是平滑的， 则对前置点的改变会引起后置点的变化， 如果不平滑， 则不会引起这种变化。
