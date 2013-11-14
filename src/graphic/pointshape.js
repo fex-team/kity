@@ -10,7 +10,7 @@ define( function ( require, exports, module ) {
 
         base: require( 'graphic/path' ),
 
-        mixins: [ require("graphic/container") ],
+        mixins: [ require("graphic/pointcontainer") ],
 
         constructor: function ( points, closeable ) {
 
@@ -19,13 +19,17 @@ define( function ( require, exports, module ) {
             //是否可闭合
             this.closeable = !!closeable;
 
-            if( Utils.isArray(points)) {
-                while(points.length) {
-                    this.appendItem(points.shift());
-                }
-            }
+            if ( points ) {
 
-            this.update();
+                if( Utils.isArray(points)) {
+                    while(points.length) {
+                        this.appendItem(points.shift());
+                    }
+                }
+
+                this.update();
+
+            }
 
         },
 
@@ -47,18 +51,15 @@ define( function ( require, exports, module ) {
 
         update: function () {
 
-            var drawer = null,
-                points = null;
-
-            if ( !this.getItems().length ) {
-                return this;
-            }
-
-            drawer = this.getDrawer();
-
-            points = this.getItems();
+            var drawer = this.getDrawer(),
+                points = this.getItems();
 
             drawer.clear();
+
+            if ( !points.length ) {
+                drawer.moveTo( 0, 0 );
+                return this;
+            }
 
             drawer.moveTo( points[0].x, points[0].y );
 

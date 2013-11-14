@@ -213,16 +213,20 @@ define(function (require, exports, module) {
 
             this.callBase();
 
-            Utils.each( points, function ( point ) {
+            if ( points ) {
 
-                _self.addItem( point );
+                Utils.each( points, function ( point ) {
 
-            } );
+                    _self.addItem( point );
 
-            //闭合状态
-            this.closeState = !!isColse;
+                } );
 
-            this.update();
+                //闭合状态
+                this.closeState = !!isColse;
+
+                this.update();
+
+            }
 
         },
 
