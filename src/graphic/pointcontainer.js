@@ -9,7 +9,7 @@ define( function ( require, exports, module ) {
 
         base: require( "graphic/container" ),
 
-        constructor: function (  ) {
+        constructor: function () {
             this.callBase();
         },
 

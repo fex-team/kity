@@ -205,14 +205,22 @@ define(function (require, exports, module) {
 
         base: require('graphic/path'),
 
-        mixins: [ require( "graphic/container" ) ],
+        mixins: [ require( "graphic/pointcontainer" ) ],
 
         constructor: function ( points, isColse ) {
 
+            var _self = this;
+
             this.callBase();
-            this.points = [].slice.call( points || [], 0 );
+
+            Utils.each( points, function ( point ) {
+
+                _self.addItem( point );
+
+            } );
+
             //闭合状态
-            this._closeState = !!isColse;
+            this.closeState = !!isColse;
 
             this.update();
 
@@ -220,7 +228,7 @@ define(function (require, exports, module) {
 
         update: function () {
 
-            var pathData = CurveUtil.pointToPathData( this.points.slice( 0 ), this._closeState );
+            var pathData = CurveUtil.pointToPathData( this.getItems().slice( 0 ), this.closeState );
 
             this.setPathData( pathData );
 
@@ -230,22 +238,21 @@ define(function (require, exports, module) {
 
         close: function () {
 
-            this._closeState = true;
-
+            this.closeState = true;
             return this.update();
 
         },
 
         open: function () {
 
-            this._closeState = false;
+            this.closeState = false;
             return this.update();
 
         },
 
         isClose: function () {
 
-            return this._closeState || false;
+            return this.closeState || false;
 
         }
 

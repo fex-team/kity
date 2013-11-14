@@ -20,7 +20,6 @@ define(function(require, exports, module) {
 
         setRadius: function ( radius ) {
             this.rx = this.ry = this.radius = radius;
-
         }
 
     });
