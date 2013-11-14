@@ -13,7 +13,7 @@ describe( "Kity.Rect", function () {
         if ( !paper ) {
             paper = new Paper( document.body.appendChild( document.createElement( 'div' ) ) );
         }
-        paper.addItem( rect.fill( new ColorBrush( color.increase( 'h', 90 ) ) ) );
+        paper.addItem( rect.fill( new ColorBrush( color.inc( 'h', 90 ) ) ) );
     } );
 
     it( "给定初始位置和宽高构造Rect", function () {

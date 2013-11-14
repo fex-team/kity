@@ -130,6 +130,14 @@ define(function(require, exports, module) {
             return this.update();
         },
 
+        getWidth: function () {
+            return this.width;
+        },
+
+        getHeight: function () {
+            return this.height;
+        },
+
         getPositionX: function () {
             return this.x;
         },
