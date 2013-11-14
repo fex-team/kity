@@ -158,7 +158,6 @@
             });
 
             var msPointer = new Pointer( 10, 2, 80, 0, new Color('gray'));
-            var mmPointer = new Pointer( 4, 1, 40, 0, new Color('gray'));
             var msMeter = new Group().pipe(function() {
                 this.addItem(new Circle(0, 0, 90).pipe(function() {
                     this.stroke(new Pen().pipe(function(pen) {
@@ -172,6 +171,7 @@
                 this.translate(0, 250);
             });
 
+            var mmPointer = new Pointer( 4, 1, 40, 0, new Color('gray'));
             var mmMeter = new Group().pipe(function() {
                 this.addItem(new Circle(0, 0, 50).pipe(function() {
                     this.stroke(new Pen().pipe(function(pen) {
@@ -215,7 +215,11 @@
         seajs.use('start');
     </script>
     <style>
-        
+        body, div, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
     </style>
 </head>
 <body>
