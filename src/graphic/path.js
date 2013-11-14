@@ -7,9 +7,14 @@ define( function ( require, exports, module ) {
     var PathDrawer = createClass( 'PathDrawer', {
         constructor: function ( path ) {
             this.path = path;
+            this.__clear = false;
         },
         appendData: function ( data ) {
             var originData = this.path.getPathData();
+            if ( this.__clear ) {
+                originData = '';
+                this.__clear = false;
+            }
             if ( originData ) {
                 this.path.setPathData( originData + ' ' + data.join( ' ' ) );
             } else {
@@ -51,7 +56,7 @@ define( function ( require, exports, module ) {
             return this.appendData( [ 'z' ] );
         },
         clear: function() {
-            this.path.setPathData('');
+            this.__clear = true;
             return this;
         }
     } );
@@ -89,8 +94,6 @@ define( function ( require, exports, module ) {
         setPathData: function ( data ) {
             if ( data ) {
                 this.node.setAttribute( 'd', data );
-            } else {
-                this.node.removeAttribute( 'd' );
             }
         },
         getPathData: function () {
