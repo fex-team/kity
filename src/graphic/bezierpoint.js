@@ -73,6 +73,9 @@ define( function ( require, exports, module ) {
 
             this.point.x = x;
             this.point.y = y;
+
+            this.update();
+
             return this;
 
         },
@@ -87,6 +90,8 @@ define( function ( require, exports, module ) {
             //更新后置点
             this.smooth && BezierPointUtil.updateBackwardPoint( this );
 
+            this.update();
+
             return this;
 
         },
@@ -100,6 +105,8 @@ define( function ( require, exports, module ) {
 
             //更新前置点
             this.smooth && BezierPointUtil.updateForwardPoint( this );
+
+            this.update();
 
             return this;
 
@@ -129,6 +136,16 @@ define( function ( require, exports, module ) {
 
         isSmooth: function () {
             return this.smooth;
+        },
+
+        update: function () {
+
+            if ( !this.container ) {
+                return this;
+            }
+
+            this.container.update();
+
         }
 
     } );
