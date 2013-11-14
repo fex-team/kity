@@ -31,17 +31,16 @@
             });
 
             var palette = new Palette().pipe(function() {
-                var baseColor = new Color('hsl(0, 0%, 50%)');
-                this.addColor('outside', baseColor.clone().decrease('l', 20));
-                this.addColor('inside', baseColor.clone().increase('l', 20));
-                this.addColor('big-ruler', baseColor.clone().decrease('l', 40));
-                this.addColor('small-ruler', baseColor.clone().decrease('l', 20));
-                this.addColor('h-pointer', baseColor.clone().decrease('l', 50));
-                this.addColor('m-pointer', baseColor.clone().decrease('l', 20));
-                this.addColor('s-pointer', baseColor.clone().set('s', 75).set('h', 0));
-                this.addColor('dot', baseColor.clone().set('s', 75).set('h', 0));
-                this.addColor('frame-light', new Color('white').decrease('l', 5));
-                this.addColor('frame-dark', new Color('gray').decrease('l', 10));
+                var gray = new Color('gray');
+                this.add('outside', gray.dec('l', 20));
+                this.add('inside', gray.inc('l', 20));
+                this.add('big-ruler', gray.dec('l', 40));
+                this.add('small-ruler', gray.dec('l', 20));
+                this.add('h-pointer', gray.dec('l', 50));
+                this.add('m-pointer', gray.dec('l', 20));
+                this.add('s-pointer', new Color('hsl(0, 75, 50)'));
+                this.add('frame-light', new Color('white').dec('l', 5));
+                this.add('frame-dark', gray.dec('l', 10));
             });
 
             function p2c(d, a, isRad) {

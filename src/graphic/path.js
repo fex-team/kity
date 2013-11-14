@@ -51,31 +51,9 @@ define( function ( require, exports, module ) {
             return this.appendData( [ 'z' ] );
         },
         clear: function() {
-            this.path.setPathData('');
+            this.path.setPathData(null);
             return this;
         }
-    } );
-    var PathUtils = {};
-
-    Utils.extend( PathUtils, {
-
-        //向给定的图形添加给定的属性
-        dumpAttributes: function ( shape, attrs ) {
-
-            var node = shape.node;
-
-            Utils.each( attrs, function ( val, key ) {
-
-                if ( val ) {
-                    node.setAttribute( key, val );
-                } else {
-                    node.removeAttribute( key );
-                }
-
-            } );
-
-        }
-
     } );
 
     return createClass( 'Path', {
