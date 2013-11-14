@@ -1,29 +1,25 @@
 # Kity Graphic : Get Started
 
-本文档内容：
+本文档简单介绍 Kity Graphic 中的概念和使用
 
-* 
-
-## Paper 的使用 ##
+## 使用 Paper ##
 
 Paper 是所有图形和资源的跟容器，所有图形和资源（资源的概念请参照“Resources”）由 Paper 集中管理。
 
-### 初始化 Paper ###
+### 初始化 Paper
 
 Kity 中所有的对象都是通过使用 new 运算符创建的，有一些类型要求你在创建的时候传递必须的参数到构造函数中。用下面的代码可以创建一个 Paper，并且会在指定的容器中渲染：
 
-```javascript
-var paper = new Paper('container');
+	var paper = new Paper('container');
 
-// 或者直接传 Dom 对象：
-var paper = new Paper(document.body);
-```
+	// 或者直接传 Dom 对象：
+	var paper = new Paper(document.body);
 
 如果需要，你也可以重新获取容器：
 
 	var container = paper.getContainer();
     
-### 设置宽高和视野 ###
+### 设置宽高和视野
 
 宽高和事业是对 Paper 最基本的设置。
 
@@ -53,3 +49,26 @@ var paper = new Paper(document.body);
 		}
 	*/
 	var vbox = paper.getViewBox();
+	
+### 管理图形
+
+Paper 是一个容器（`Container`），可以向其添加和移除图形：
+	
+	var rect = new Rect(0, 0, 10, 10);
+	paper.addItem( rect );
+	// 还支持：appendItem()、prependItem()、addItem(shape, pos) 接口 
+	
+	// 通过以下方式移除已经添加的图形：
+	paper.removeItem( paper.indexOf(rect) );
+	
+	// 或者更简单的：
+	rect.remove();
+
+要获得当前 Paper 上所有的图形，可以使用 `paper.getItems()` 接口。要获得指定位置的图形，可以使用 `paper.getItem(index)` 接口：
+
+	var rect = paper.getItems(0);
+	var circle = paper.getItem(1);
+
+
+
+

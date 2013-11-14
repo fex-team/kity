@@ -49,6 +49,10 @@ define( function ( require, exports, module ) {
         },
         close: function () {
             return this.appendData( [ 'z' ] );
+        },
+        clear: function() {
+            this.path.setPathData('');
+            return this;
         }
     } );
     var PathUtils = {};
