@@ -49,7 +49,7 @@ define(function (require, exports, module) {
         renderNode: function () {
             this.callBase();
             var c = this.getCenter(),
-                f = this.getFacal(),
+                f = this.getFocal(),
                 r = this.getRadius();
             this.node.setAttribute('cx', c.x);
             this.node.setAttribute('cy', c.y);

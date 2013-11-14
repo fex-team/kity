@@ -13,6 +13,7 @@
             var Paper = require('graphic/paper');
             var Color = require('graphic/color');
             var LinearGradientBrush = require('graphic/lineargradientbrush');
+            var RadialGradientBrush = require('graphic/radialgradientbrush');
             var PatternBrush = require('graphic/patternbrush');
             var Text = require('graphic/text');
             var TextSpan = require('graphic/textspan');
@@ -21,37 +22,203 @@
             var Rect = require('graphic/rect');
             var Circle = require('graphic/circle');
             var Palette = require('graphic/palette');
+            var Group = require('graphic/group');
+            var Clazz = require('core/class');
 
-            var paper = new Paper(document.body).pipe(function() {
-                this.setWidth(500).setHeight(500);
-                this.setViewBox(-500, -500, 1000, 1000);
+            var paper = new Paper('clock').pipe(function() {
+                this.setWidth('100%').setHeight('100%');
+                this.setViewBox(-600, -600, 1200, 1200);
             });
 
             var palette = new Palette().pipe(function() {
                 var baseColor = new Color('hsl(0, 0%, 50%)');
-                this.addColor('outside', baseColor.clone().increase('l', 20));
-                this.addColor('dot', baseColor.clone().set('s', 80).set('h', 200));
+                this.addColor('outside', baseColor.clone().decrease('l', 20));
+                this.addColor('inside', baseColor.clone().increase('l', 20));
+                this.addColor('big-ruler', baseColor.clone().decrease('l', 40));
+                this.addColor('small-ruler', baseColor.clone().decrease('l', 20));
+                this.addColor('h-pointer', baseColor.clone().decrease('l', 50));
+                this.addColor('m-pointer', baseColor.clone().decrease('l', 20));
+                this.addColor('s-pointer', baseColor.clone().set('s', 75).set('h', 0));
+                this.addColor('dot', baseColor.clone().set('s', 75).set('h', 0));
+                this.addColor('frame-light', new Color('white').decrease('l', 5));
+                this.addColor('frame-dark', new Color('gray').decrease('l', 10));
             });
 
-            paper.addItem(new Circle(0, 0, 450).pipe(function(outside) {
-                outside.stroke(new Pen().pipe(function() {
-                    this.setWidth(5);
-                    this.setColor(palette.getColor('outside'));
+            function p2c(d, a, isRad) {
+                if(!isRad) {
+                    a = a * Math.PI / 180;
+                }
+                return [d * Math.cos(a), d * Math.sin(a)];
+            }
+
+            paper.addItem(new Circle(0, 0, 500).pipe(function(){
+                this.fill(new LinearGradientBrush().pipe(function() {
+                    this.addStop(0, palette.getColor('frame-dark'));
+                    this.addStop(0.4, palette.getColor('frame-light'));
+                    this.addStop(0.6, palette.getColor('frame-light'));
+                    this.addStop(1, palette.getColor('frame-dark'));
+                    paper.addResource(this);
+                }));
+                this.stroke(new Pen().pipe(function(pen) {
+                    pen.setWidth(1);
+                    pen.setColor(palette.getColor('outside'));
+                }));
+                this.rotate(30);
+            }));
+
+            paper.addItem(new Circle(0, 0, 465).pipe(function(){
+                this.fill(new LinearGradientBrush().pipe(function() {
+                    this.addStop(0, palette.getColor('frame-light'));
+                    this.addStop(0.4, palette.getColor('frame-dark'));
+                    this.addStop(0.6, palette.getColor('frame-dark'));
+                    this.addStop(1, palette.getColor('frame-light'));
+                    paper.addResource(this);
+                }));
+                this.rotate(30);
+            }));
+
+            // 表盘
+            paper.addItem(new Circle(0, 0, 450).pipe(function() {
+                this.stroke(new Pen().pipe(function(pen) {
+                    pen.setWidth(8);
+                    pen.setColor(palette.getColor('inside'));
+                }));
+                this.fill(new RadialGradientBrush().pipe(function(brush){
+                    paper.addResource(brush);
+                    brush.setFocal(0.8, 0.2);
+                    brush.setRadius(0.6);
+                    brush.addStop(0, new Color('white'));
+                    brush.addStop(1, new Color('hsl(0, 0, 80)'));
                 }));
             }));
 
+            // 刻度
+            paper.addItem(new Group().pipe(function() {
+                var minutes = 60, stepDeg = 360 / minutes;
+                var deg = 90, distance = 390, step = 0;
+                while(step < minutes) {
+                    var rect;
+                    if(!(step % 5)) {
+                        rect = new Rect(390, -5, 50, 10).fill(palette.getColor('big-ruler'));
+                    } else {
+                        rect = new Rect(410, -3, 25, 6).fill(palette.getColor('small-ruler'));
+                    }
+                    this.addItem(rect.rotate(deg));
+                    deg += stepDeg;
+                    step ++;
+                }
+            }));
+
+            paper.addItem(new Text().pipe(function() {
+                this.addItem(new TextSpan('Hello ').fill(new Color('blue').set('s', 40)));
+                this.addItem(new TextSpan(' Kity').fill(new Color('red').set('s', 40)));
+                this.setPath(new Path().pipe(function() {
+                    var radius = 280;
+                    var start = p2c(radius, -120), end = p2c(radius, -60);
+                    var d = this.getDrawer();
+                    d.moveTo(start).carcTo(radius, end[0], end[1], 0, 1);
+                    paper.addResource(this);
+                }));
+                this.setAnchor('middle');
+                this.setStyle({
+                    'font-size': '30px'
+                });
+            }));
+
+            var Pointer = Clazz.createClass('Pointer', {
+                base: Path,
+                constructor: function( headWidth, tailWidth, length, offset, color ) {
+                    this.callBase();
+                    this.draw( headWidth, tailWidth, length, offset );
+                    this.fill( color );
+                },
+                draw: function( headWidth, tailWidth, length, offset ) {                    
+                    var d = this.getDrawer(),
+                        x1 = -offset,         y1 = -headWidth / 2, 
+                        x2 = length - offset, y2 = -tailWidth / 2;
+                    d.moveTo( x1,  y1 );
+                    d.lineTo( x2,  y2 );
+                    d.lineTo( x2, -y2 );
+                    d.lineTo( x1, -y1 );
+                    d.close();
+                }
+            })
+
+            var hPointer, mPointer, sPointer, pointers;
+
+            hPointer = new Pointer( 30, 15, 300, 50, palette.getColor('h-pointer') );
+            mPointer = new Pointer( 20, 10, 400, 80, palette.getColor('m-pointer') );
+            sPointer = new Pointer( 10, 5, 450, 90, palette.getColor('s-pointer') );
+
+            pointers = new Group().pipe(function(){
+                this.rotate(90);
+                this.addItem(hPointer);
+                this.addItem(mPointer);
+                this.addItem(sPointer); 
+            });
+
+            var msPointer = new Pointer( 10, 2, 80, 0, new Color('gray'));
+            var mmPointer = new Pointer( 4, 1, 40, 0, new Color('gray'));
+            var msMeter = new Group().pipe(function() {
+                this.addItem(new Circle(0, 0, 90).pipe(function() {
+                    this.stroke(new Pen().pipe(function(pen) {
+                        pen.setWidth(5);
+                        pen.setColor(palette.getColor('inside'));
+                    }));
+                }));
+                this.addItem(msPointer);
+                this.addItem(new Circle(0, 0, 8).fill(new Color('gray')));
+                this.rotate(90);
+                this.translate(0, 250);
+            });
+
+            var mmMeter = new Group().pipe(function() {
+                this.addItem(new Circle(0, 0, 50).pipe(function() {
+                    this.stroke(new Pen().pipe(function(pen) {
+                        pen.setWidth(3);
+                        pen.setColor(palette.getColor('inside'));
+                    }));
+                }));
+                this.addItem(mmPointer);
+                this.addItem(new Circle(0, 0, 6).fill(new Color('gray')));
+                this.rotate(90);
+                this.translate.apply(this, p2c(250, 50));
+            });
+
+            paper.addItem(msMeter);
+            paper.addItem(mmMeter);
+            paper.addItem(pointers);
+
+            // 中间那个点
             paper.addItem(new Circle(0, 0, 10).pipe(function(dot) {
                 dot.fill(palette.getColor('dot'));
             }));
 
-            paper.addItem(new Group().pipe(function(numbers) {
-
-            }));
+            function updatePointers() {
+                var time = new Date(), 
+                    h = time.getHours(), 
+                    m = time.getMinutes(), 
+                    s = time.getSeconds(),
+                    ms = time % 1000,
+                    mm = time % 500;
+                m += s / 60;
+                h += m / 60;
+                sPointer.setTransform(new Matrix().addRotate(-s * 6));
+                mPointer.setTransform(new Matrix().addRotate(-m * 6));
+                hPointer.setTransform(new Matrix().addRotate(-h * 30));
+                msPointer.setTransform(new Matrix().addRotate(-ms * 360 / 1000));
+                mmPointer.setTransform(new Matrix().addRotate(-mm * 360 / 500));
+                requestAnimationFrame(updatePointers);
+            }
+            updatePointers();
         });
         seajs.use('start');
     </script>
+    <style>
+        
+    </style>
 </head>
 <body>
-    
+    <div id="clock" style="width: 100%; height: 100%; position: absolute;"></div>
 </body>
 </html>
