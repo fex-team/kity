@@ -29,6 +29,18 @@ define( function ( require, exports, module ) {
         lineBy: function ( dx, dy ) {
             return this.appendData( [ 'l', dx, dy ] );
         },
+        arcTo: function( rx, ry, xr, laf, sf, x, y ) {
+            return this.appendData( ['A', rx, ry, xr, laf, sf, x, y] );
+        },
+        arcBy: function( rx, ry, xr, laf, sf, dx, dy) {
+            return this.appendData( ['a', rx, ry, xr, laf, sf, dx, dy] );
+        },
+        carcTo: function( r, x, y, laf, sf ) {
+            return this.arcTo( r, r, 0, laf || 0, sf || 0, x, y );
+        },
+        carcBy: function( r, dx, dy, laf, sf ) {
+            return this.arcBy( r, r, 0, laf || 0, sf || 0, dx, dy );
+        },
         besierTo: function ( x1, y1, x2, y2, x, y ) {
             return this.appendData( [ 'C', x1, y1, x2, y2, x, y ] );
         },
@@ -37,6 +49,10 @@ define( function ( require, exports, module ) {
         },
         close: function () {
             return this.appendData( [ 'z' ] );
+        },
+        clear: function() {
+            this.path.setPathData('');
+            return this;
         }
     } );
     var PathUtils = {};

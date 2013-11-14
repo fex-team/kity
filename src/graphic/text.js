@@ -34,6 +34,23 @@ define( function ( require, exports, module ) {
             return +this.node.getAttribute( 'y' );
         },
 
+        setAnchor: function( anchor ) {
+            this.node.setAttribute('text-anchor', anchor);
+
+            // text path
+            if(this.shapeNode != this.node) {
+                this.shapeNode.setAttribute('startOffset', {
+                    'start': '0',
+                    'middle': '50%',
+                    'end': '100%'
+                }[anchor]);
+            }
+        },
+
+        getAnchor: function() {
+            return this.node.getAttribute('text-anchor') || 'start';
+        },
+
         setPath: function ( path ) {
             var textpath = this.shapeNode;
             if ( this.shapeNode == this.node ) {
