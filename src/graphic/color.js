@@ -90,22 +90,23 @@ define(function(require, exports, module) {
 
             },
 
-            increase: function ( name, value ) {
+            inc: function ( name, value ) {
 
                 //设置的值非法
                 if ( !Color._MAX_VALUE[ name ] ) {
                     throw new Error( 'Color set(): Illegal parameter' );
                 }
 
-                this.set( name, this.get( name ) + value );
+                var color = this.clone();
+                color.set( name, this.get( name ) + value )
 
-                return this;
+                return color;
 
             },
 
-            decrease: function ( name, value ) {
+            dec: function ( name, value ) {
 
-                return this.increase( name, -value );
+                return this.inc( name, -value );
 
             },
 

@@ -111,6 +111,7 @@ define( function ( require, exports, module ) {
             //重绘需要clear掉
             drawer.clear();
 
+            debugger;
             drawer.moveTo( absolutePoints[ 0 ].point.x, absolutePoints[ 0 ].point.y );
 
             for ( var i = 1, point, forward, backward, len = absolutePoints.length - 1; i <= len; i++ ) {

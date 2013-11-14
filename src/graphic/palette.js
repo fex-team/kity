@@ -22,7 +22,7 @@ define( function ( require, exports, module ) {
          * @param name 需要获取的颜色名称
          * @return 对应颜色名称的color对象， 如果未找到对应的名称， 则返回null
          */
-        getColor: function ( name ) {
+        get: function ( name ) {
 
             var colorValue = this.color[ name ] || StandardColor.EXTEND_STANDARD[ name ] || StandardColor.COLOR_STANDARD[ name ] || "";
 
@@ -51,7 +51,7 @@ define( function ( require, exports, module ) {
          * @param value 新添加的颜色名称所对应的值， 可以是一个合法的颜色字符串或者是一个color对象
          * @return 新添加的颜色的值
          */
-        addColor: function ( name, value ) {
+        add: function ( name, value ) {
 
             if ( typeof value === "string" ) {
                 this.color[ name ] = new Color( value ).toRGBA();
@@ -68,7 +68,7 @@ define( function ( require, exports, module ) {
          * @param name 需要删除的颜色名称
          * @return 删除是否成功的bool值
          */
-        removeColor: function ( name ) {
+        remove: function ( name ) {
 
             if ( this.color.hasOwnProperty( name ) ) {
                 delete this.color[ name ];
