@@ -13,25 +13,19 @@ define( function ( require, exports, module ) {
             this.callBase();
         },
 
-        addPoint: function ( point, pos ) {
+        addItem: function ( point, pos ) {
 
-            return this.addItem( point, pos );
+            this.callBase( point, pos );
 
-        },
-
-        getPoints: function() {
-            return this.getItems();
-        },
-
-        appendPoint: function ( point ) {
-
-            return this.addPoint( point );
+            this.update();
 
         },
 
-        removePoint: function ( pos ) {
+        removeItem: function ( pos ) {
 
-            return this.removeItem( pos );
+            this.callBase( pos );
+
+            this.update();
 
         }
 

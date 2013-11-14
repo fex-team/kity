@@ -90,7 +90,7 @@ define( function ( require, exports, module ) {
             points = points || [];
 
             Utils.each( points, function ( point ) {
-                _self.appendPoint( point );
+                _self.appendItem( point );
             } );
 
             if ( points.length > 0 && !BezierUtil.validate( points ) ) {
@@ -105,7 +105,7 @@ define( function ( require, exports, module ) {
 
 
             var drawer = null,
-                points = this.getPoints(),
+                points = this.getItems(),
                 //把控制点转化为绝对坐标
                 absolutePoints = BezierUtil.parseToAbsolute( points );
 
@@ -135,7 +135,7 @@ define( function ( require, exports, module ) {
 
         },
 
-        addPoint: function ( point, pos ) {
+        addItem: function ( point, pos ) {
 
             if ( !BezierUtil.validate( point ) ) {
                 throw new Error( '添加到贝塞尔曲线上的点必须有控制点' );
