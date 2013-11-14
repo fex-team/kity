@@ -482,7 +482,35 @@ CSS 样式支持
 快捷构造函数，给定曲线经过的点
 
 
+## Bezier（贝塞尔曲线） ##
+> 基类 : Path
+> 实现 : PointContainer
 
+### Bezier() : Bezier ###
+构造函数，初始化一个空的贝塞尔曲线
+
+### Bezier( Array bezierPoints ) : Bezier ###
+构造函数，初始化一个含有给定点集合的贝塞尔曲线
+
+
+
+## BezierPoint（贝塞尔上的点） ##
+> 基类 : Class
+
+### BezierPoint( number x, number y ) : BezierPoint ###
+构造函数， 根据提供的坐标初始化一个贝塞尔曲线上的点， 该点还未设置控制点坐标，不能把未设置控制点的BezierPoint添加到bezier曲线上。
+
+### setForward( number x, number y ) : this ###
+设置前置控制点位置，如果当前点BezierPoint对象是平滑的， 则对前置点的改变会引起后置点的变化， 如果不平滑， 则不会引起这种变化。
+
+### setBackward( number x, number y ) : this ###
+设置后置控制点位置，如果当前点BezierPoint对象是平滑的， 则对后置点的改变会引起前置点的变化， 如果不平滑， 则不会引起这种变化。
+
+### setSmooth( boolean isSmooth ) : this ###
+设置当前BezierPoint对象是否平滑， 更改平滑的BezierPoint对象的控制点，会引起另一个控制点的变化， 反之，则不会引起变化。
+
+### setPoint( number x, number y ) : this ###
+更改当前BezierPoint对象的顶点坐标， 该方法会同时移动当前BezierPoint对象的控制点位置。
 
 
 
@@ -925,3 +953,4 @@ CSS 样式支持
 
 ### mergeMatrix(Matrix another) : Matrix ###
 合并另一个转换矩阵，返回合并后的矩阵
+
