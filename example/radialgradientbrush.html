@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ViewBox Example</title>
+    <script src="../dev-lib/sea.js"></script>
+    <script>
+        seajs.config({
+            base: '../src'
+        });
+        define('start', function (require) {
+            var Paper = require('graphic/paper');
+            var Rect = require('graphic/rect');
+            var RadialGradientBrush = require('graphic/radialgradientbrush');
+
+            var paper = new Paper(document.body);
+
+            paper.setWidth(400).setHeight(300);
+
+            var rect = new Rect(10, 10, 200, 100);
+            rect.fill(new RadialGradientBrush().pipe( function() {
+                this.setCenter(0.5, 0.5);
+                this.setRadius(0.8);
+                this.setFocal(0.8, 0.2);
+                this.addStop(0, 'white');
+                this.addStop(1, 'gray');
+                paper.addResource(this);
+            }));
+            paper.addItem(rect);
+        });
+        seajs.use('start');
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

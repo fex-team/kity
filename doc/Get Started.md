@@ -376,7 +376,7 @@ Besier 用于绘制贝塞尔曲线。贝塞尔曲线由一系列的转换点构�
 	// 或者直接使用字符串：
 	rect.fill( 'red' );
 	
-### 线性渐变填充 - 使用 LinearGradientBrush
+### 使用 LinearGradientBrush 进行线性渐变填充
 
 线性渐变使用 LinearGradientBrush 进行填充：
 
@@ -385,34 +385,165 @@ Besier 用于绘制贝塞尔曲线。贝塞尔曲线由一系列的转换点构�
 		this.addStop(1, 'blue');
 		this.setStartPosition(0, 0);
 		this.setEndPosition(1, 1);
+		paper.addResource(this);
 	}));
+
+![线性渐变](images/linear.png)
 
 `setStartPosition()` 和 `setEndPosition` 决定了填充的方向和范围。其中 (0,0) 代表图形的左上角，(1, 1) 代表图形的右下角
 
 `addStop()`添加关键颜色到具体位置，其中 0 表示渐变开始的位置，1 表示渐变结束的位置
 
-### 径向渐变填充 - 使用 RadialGradientBrush
+*NOTE:* LinearGradientBrush 属于资源，需要添加到 Paper 上才能生效  
+
+### 使用 RadialGradientBrush 进行径向渐变填充
 
 进项渐变使用 RadialGradientBrush 进行填充：
 
 	rect.fill(new RadialGradientBrush().pipe( function() {
-		
+		this.setCenter(0.5, 0.5);
+		this.setRadius(0.8);
+		this.setFocal(0.8, 0.2);
+		this.addStop(0, 'white');
+		this.addStop(1, 'gray');
+		paper.addResource(this);
 	}));
 
+![径向渐变](images/radial.png)
+
+`addStop()` 的概念用法和用法与 LinearGradientBrush 是一致的。
+
+颜色会从中心点（`Center`）向边缘扩散。中心点可以通过`setCenter()` 方法设置，默认是 (0.5, 0.5) 。
+
+`setRadius()` 方法设置渐变的半径，默认是 0.5，正好到达图形边缘（最近边缘）。可以设置为大于 0.5。
+
+*NOTE:* RadialGradientBrush 属于资源，需要添加到 Paper 上才能生效  
+
+### 使用 PatternBrush 进行图形填充
+
+PatternBrush 是最灵活的画笔，它可以用图形填充图形。
+
+	rect.fill(new PatternBrush().pipe( function() {
+		var colors = ['red', 'blue', 'yelow', 'green'];
+		this.setWidth(40);
+		this.setHeight(40);
+		this.addItem( new Circle(10, 10, 5).fill(colors.shift()) );
+		this.addItem( new Circle(30, 10, 5).fill(colors.shift()) );
+		this.addItem( new Circle(10, 30, 5).fill(colors.shift()) );
+		this.addItem( new Circle(30, 30, 5).fill(colors.shift()) );
+		paper.addResource(this);
+	}));
+
+![图形填充](images/pattern.png)
+
+`addItem()` 方法向 `PatternBrush` 添加任意的图形。事实上，PatternBrush 是一个图形的 `Container`，具有 `Container` 的方法。
+
+`setHeight()` 和 `setWidth()` 方法设置每一个填充块的大小
+
+*NOTE:* PatternBrush 属于资源，需要添加到 Paper 上才能生效  
+
+## 描边图形
+
+Pen 用于描绘图形的轮廓：
+
+	path.stroke(new Pen().pipe(function() {
+		this.setWidth(5);
+		this.setDashArray([10, 5]);
+		this.setLineCap('butt');
+		this.setLineJoin('round');
+		this.setColor('green');
+	}));
+
+![描边](images/pen.png)
+
+`setWidth()` 设置画笔的粗细，默认为 1
+
+`setDasArray()` 设置画笔的段长和间隙长，不断循环。默认为 null，绘制实线
+
+`setLineCap()` 设置端点的样式，取值有：butt、round、suqare
+
+`setLineJoin()` 设置转折点的样式，取值有：miter、round、bevel
+
+关于 line-join 和 line-cap 的效果可以参考[SVG标准](http://www.w3.org/TR/SVG/painting.html#StrokeProperties)
+
+
+## 文字
+
+正在编写...
+
+### 基本使用
+
+正在编写...
+
+### 使用文本块控制样式
+
+正在编写...
+
+### 使用文本路径排列文字
+
+正在编写...
 
 
 
+## 颜色
+
+正在编写...
+
+### 支持的格式
+
+正在编写...
+
+### 颜色分量设置
+
+正在编写...
+
+### 使用调色板
+
+正在编写...
+
+
+## 使用 CSS 样式表
+
+正在编写...
+
+
+## 变换矩阵
+
+正在编写...
+
+### 平移图形
+
+正在编写...
+
+### 旋转图形
+
+正在编写...
+
+### 缩放图形
+
+正在编写...
+
+### 拉伸图形
+
+正在编写...
+
+### 其他变换
+
+正在编写...
 
 
 
+## 事件
 
+正在编写...
 
+### 绑定到图形上
 
+正在编写...
 
+### 绑定到 Paper 上
 
-
-
-
+正在编写...
 
 
 
