@@ -317,15 +317,87 @@ Curve 用于绘制曲线，该曲线经过用户指定的点集。如果曲线�
 
 Besier 用于绘制贝塞尔曲线。贝塞尔曲线由一系列的转换点构成，每个转换点包含一个顶点坐标以及两个控制点坐标。其中顶点坐标是绝对坐标，控制点坐标是相对顶点的坐标。如果转换点是设置为光滑的，那么两个控制点是会相互影响的，否则将相对独立。
 
+	var besier = new Besier().pipe(function() {
+		this.addItem(new BesierPoint(30, 30).setForward(100, 0));
+		this.addItem(new BesierPoint(100, 50).setForward(30, -30));
+		this.addItem(new BesierPoint(200, 0).setForward(-100, 0));
+	});
 
+贝塞尔曲线是贝塞尔转换点（BesierPoint）的集合，BesierPoint 本身关注四个属性：顶点位置、前向控制点位置、背向控制点位置、是否光滑。
 
+	var p1 = besier.getItem(0);
+	var p2 = beiser.getItem(1);
+	var p3 = besier.getItem(2);
+	
+	// 重新设置 p2 顶点的位置，注意，控制点的坐标是相对顶点位置的，
+	// 所以 p2.getForward() 和 p2.getBackward() 的值不变
+	p2.setPoint(400, 400)
+	
+	// 设置前向控制点会影响到下一段曲线的形状（p2 -> p3），
+	// 如果 p2 是光滑的，则会同时影响上一段曲线的形状（p1 -> p2）
+	p2.setFoward(100, 0);
 
+	// 设置背向控制点会影响到上一段曲线的形状（p1 -> p2）
+	// 如果 p2 是光滑的，则会同时影响下一段曲线的形状（p2 -> p3）
+	p2.setBackward(30, -30);
+	
+	// 如果 p2 是光滑的（默认），那么对前向控制点和背向控制点的改变将会
+	// 影响对方，以保证两个控制点和顶点是在一条直线上的，如果设置为 false
+	// 则两个控制点可以相互独立
+	p2.setSmooth(true);
 
+## 使用 Group 来建立图形分组
 
+对图形分组可以把这些图形进行一个整体的设置：
 
+	var flower = new Group().pipe(function() { 
+		for(var i = 0; i < 12; i++) {
+			this.addItem(new Rect(10, 0, 100, 10).rotate( 30 * i ));
+		}
+		this.scale(2).translate(100, 100);
+	});
+	
+	paper.addItem( flower );
 
+组本身也是一个图形（由其子元素组合），所以也可以被添加到组里。
 
+	var group = new Group();
+	group.addItem( flower );
 
+## 填充图形
+
+默认添加到 Paper 上的图形是不具有视觉呈现的，需要对其进行填充或描边。
+
+### 纯色填充 - 使用 Color
+
+要用一个颜色进行填充，可以：
+
+	rect.fill( new Color('red') );
+	// 或者直接使用字符串：
+	rect.fill( 'red' );
+	
+### 线性渐变填充 - 使用 LinearGradientBrush
+
+线性渐变使用 LinearGradientBrush 进行填充：
+
+	rect.fill(new LinearGradientBrush().pipe( function() {
+		this.addStop(0, 'red');
+		this.addStop(1, 'blue');
+		this.setStartPosition(0, 0);
+		this.setEndPosition(1, 1);
+	}));
+
+`setStartPosition()` 和 `setEndPosition` 决定了填充的方向和范围。其中 (0,0) 代表图形的左上角，(1, 1) 代表图形的右下角
+
+`addStop()`添加关键颜色到具体位置，其中 0 表示渐变开始的位置，1 表示渐变结束的位置
+
+### 径向渐变填充 - 使用 RadialGradientBrush
+
+进项渐变使用 RadialGradientBrush 进行填充：
+
+	rect.fill(new RadialGradientBrush().pipe( function() {
+		
+	}));
 
 
 

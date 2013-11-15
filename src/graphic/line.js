@@ -8,49 +8,65 @@ define(function(require, exports, module) {
 
             this.callBase();
 
-            this.x1 = x1;
-            this.x2 = x2;
-            this.y1 = y1;
-            this.y2 = y2;
+            this.point1 = {
+                x: x1,
+                y: y1
+            };
+
+            this.point2 = {
+                x: x2,
+                y: y2
+            };
 
             this.update();
 
         },
 
         setPoint1: function ( x, y ) {
-            this.x1 = x;
-            this.y1 = y;
-            return this;
+
+            this.point1.x = x;
+            this.point1.y = y;
+
+            return this.update();
+
         },
 
         setPoint2: function ( x, y ) {
-            this.x2 = x;
-            this.y2 = y;
-            return this;
+
+            this.point2.x = x;
+            this.point2.y = y;
+
+            return this.update();
+
         },
 
         getPoint1: function () {
+
             return {
-                x: this.x1,
-                y: this.y1
+                x: this.point1.x,
+                y: this.point1.y
             };
+
         },
 
         getPoint2: function () {
+
             return {
-                x: this.x2,
-                y: this.y2
+                x: this.point2.x,
+                y: this.point2.y
             };
+
         },
 
         update: function () {
 
-            var pathData = [
-                'M ' + this.x1 + ' ' + this.y1,
-                ' L ' + this.x2 + ' ' + this.y2
-            ];
+            var drawer = this.getDrawer();
 
-            this.setPathData( pathData.join( "" ) );
+            drawer.clear();
+            drawer.moveTo( this.point1.x, this.point1.y );
+            drawer.lineTo( this.point2.x, this.point2.y );
+
+            return this;
 
         }
 

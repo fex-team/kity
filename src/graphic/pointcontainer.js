@@ -7,25 +7,25 @@ define( function ( require, exports, module ) {
 
     return require( "core/class" ).createClass( 'PointContainer', {
 
-        constructor: function (  ) {
-            this.points = this.items = [];
+        base: require( "graphic/container" ),
+
+        constructor: function () {
+            this.callBase();
         },
 
-        addPoint: function ( point, pos ) {
+        addItem: function ( point, pos ) {
 
-            return this.addItem( point, pos );
+            this.callBase( point, pos );
 
-        },
-
-        appendPoint: function ( point ) {
-
-            return this.appendItem( point );
+            this.update();
 
         },
 
-        removePoint: function ( pos ) {
+        removeItem: function ( pos ) {
 
-            return this.removeItem( pos );
+            this.callBase( pos );
+
+            this.update();
 
         }
 

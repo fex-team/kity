@@ -23,7 +23,6 @@ describe("Kity.Polygon", function () {
 
         expect( polygon.getPathData() ).not.toBe( "" );
         expect( polygon.getItems().length ).toBe( 2 );
-        expect( polygon.isClosed() ).toBe( true );
 
     });
 
@@ -35,7 +34,7 @@ describe("Kity.Polygon", function () {
         expect( polygon.getPathData() ).not.toBe( "" );
         expect( polygon.getItems().length ).toBe( 1 );
         polygon.removeItem( 0 );
-        expect( polygon.getPathData() ).toBe( "" );
+        expect( polygon.getPathData() ).toBe( "M 0 0" );
         expect( polygon.getItems().length ).toBe( 0 );
 
     });
