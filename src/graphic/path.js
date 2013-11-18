@@ -71,12 +71,17 @@ define( function ( require, exports, module ) {
             this.node.setAttribute( 'stroke', svg.defaults.stroke );
         },
         setPathData: function ( data ) {
-            if ( data ) {
-                this.node.setAttribute( 'd', data );
-            }
+            this.pathdata = data;
+            var path = this;
+
+            // lazy dump data attribute
+            clearTimeout(this.lazyDumpId);
+            this.lazyDumpId = setTimeout(function() {
+                path.node.setAttribute('d', data);
+            });
         },
         getPathData: function () {
-            return this.node.getAttribute( 'd' ) || '';
+            return this.pathdata;
         },
         getDrawer: function () {
             return new PathDrawer( this );

@@ -15,6 +15,13 @@ define( function ( require, exports, module ) {
             this.node.shape = this;
             this.callMixin();
         },
+        getId: function() {
+            return this.node.id;
+        },
+        setId: function(id) {
+            this.node.id = id;
+            return this;
+        },
         getNode: function () {
             return this.node;
         },
