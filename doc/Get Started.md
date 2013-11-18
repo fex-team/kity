@@ -20,46 +20,50 @@ Kity Graphic 使用 OOP 的编程和接口风格，通过创建对象和在对�
 
 下面是不使用 `pipe` 函数绘制一个用渐变填充、虚线描边并且旋转了30度的矩形的代码。
 
-	var paper = new Paper(document.body);
-	var rect = new Rect(0, 0, 10, 10);
-	var brush = new LinearGradientBrush();
-	
-	brush.addStop(0, new Color('red'));
-	brush.addStop(0.5, new Color('yellow'));
-	brush.addStop(1, new Color('blue'));
-	paper.addResource( this );
-	rect.fill( brush );
-	
-	var pen = new Pen();
-	pen.setDashArray([2, 2]);
-	pen.setWidth(1);
-	pen.setColor('gray');
-	rect.stroke( pen );
-	
-	rect.rotate(30);
+```javascript
+var paper = new Paper(document.body);
+var rect = new Rect(0, 0, 10, 10);
+var brush = new LinearGradientBrush();
+
+brush.addStop(0, new Color('red'));
+brush.addStop(0.5, new Color('yellow'));
+brush.addStop(1, new Color('blue'));
+paper.addResource( this );
+rect.fill( brush );
+
+var pen = new Pen();
+pen.setDashArray([2, 2]);
+pen.setWidth(1);
+pen.setColor('gray');
+rect.stroke( pen );
+
+rect.rotate(30);
+```
 	
 这个代码看起来还行，不过对比一下使用 `pipe` 函数的版本：
 
-	var paper = new Paper(document.body);
-	
-	paper.addShape(new Rect(0, 0, 10, 10).pipe( function() {
-	
-		this.fill(new LinearGradientBrush.pipe( function( brush ) {
-			brush.addStop(0, new Color('red'));
-			brush.addStop(0.5, new Color('blue'));
-			brush.addStop(1, new Color('yellow'));
-			paper.addResource(brush);
-		}));
-		
-		this.stroke(new Pen().pipe( function( pen ) {
-			pen.setDashArray([2, 2]);
-			pen.setWidth(1);
-			pen.setColor('gray');
-		}));
-		
-		this.rotate(30);
-		
+```javascript
+var paper = new Paper(document.body);
+
+paper.addShape(new Rect(0, 0, 10, 10).pipe( function() {
+
+	this.fill(new LinearGradientBrush.pipe( function( brush ) {
+		brush.addStop(0, new Color('red'));
+		brush.addStop(0.5, new Color('blue'));
+		brush.addStop(1, new Color('yellow'));
+		paper.addResource(brush);
 	}));
+	
+	this.stroke(new Pen().pipe( function( pen ) {
+		pen.setDashArray([2, 2]);
+		pen.setWidth(1);
+		pen.setColor('gray');
+	}));
+	
+	this.rotate(30);
+	
+}));
+```
 	
 恰当地使用 `pipe` 函数，可以提高代码的可读性和美观性。
 
@@ -72,14 +76,18 @@ Paper 是所有图形和资源的跟容器，所有图形和资源（资源的�
 
 Kity 中所有的对象都是通过使用 new 运算符创建的，有一些类型要求你在创建的时候传递必须的参数到构造函数中。用下面的代码可以创建一个 Paper，并且会在指定的容器中渲染：
 
-	var paper = new Paper('container');
+```javascript
+var paper = new Paper('container');
 
-	// 或者直接传 Dom 对象：
-	var paper = new Paper(document.body);
+// 或者直接传 Dom 对象：
+var paper = new Paper(document.body);
+```
 
 如果需要，你也可以重新获取容器：
 
-	var container = paper.getContainer();
+```javascript
+var container = paper.getContainer();
+```
     
 ### 设置宽高和视野
 
@@ -87,9 +95,11 @@ Kity 中所有的对象都是通过使用 new 运算符创建的，有一些类�
 
 宽高指的是 Paper 在浏览器中渲染的大小，可以使用像素或百分比作为单位：
 
-	paper.setWidth(800).setHeight(600);
-	// 或使用百分比：
-	paper.setWidth('100%').setHeight('100%');
+```javascript
+paper.setWidth(800).setHeight(600);
+// 或使用百分比：
+paper.setWidth('100%').setHeight('100%');
+```
 
 视野定义了 Paper 下图形的坐标系统。由四个值来定义：( x, y, width, height )。其中 x 和 y 确定 Paper 左上角的点再坐标系里的坐标，而 width 和 height 就表示 Paper 显示的坐标范围。
 
@@ -97,45 +107,53 @@ Kity 中所有的对象都是通过使用 new 运算符创建的，有一些类�
 
 上面两个矩形的大小都是 60 * 40，左上角坐标都是 (10, 10)，但是因为 Paper 的 ViewBox 不一样，导致了其呈现不一样。设置 Paper 的 ViewBox 使用 setViewBox 接口：
 
-	paper.setViewBox(0, 0, 400, 300);
+```javascript
+paper.setViewBox(0, 0, 400, 300);
+```
 
 如果需要，也可以获得 Paper 当前的 ViewBox：
-	
-	/*
-		vbox is like: 
-		{
-			x: 0,
-			y: 0,
-			width: 400,
-			height: 300
-		}
-	*/
-	var vbox = paper.getViewBox();
+
+```javascript	
+/*
+	vbox is like: 
+	{
+		x: 0,
+		y: 0,
+		width: 400,
+		height: 300
+	}
+*/
+var vbox = paper.getViewBox();
+```
 	
 ### 图形管理
 
 Paper 是一个图形容器（`ShapeContainer`），可以向其添加和移除图形：
-	
-	// 添加单个图形
-	paper.addShape( new Rect(0, 0, 10, 10) );
-	
-	// 添加多个图形
-	paper.addShapes( [
-		new Circle(100, 100, 10),
-		new Circle(200, 200, 10)
-	] );
-	
-	// 通过以下方式移除已经添加的图形：
-	paper.removeShape( rect );
-	
-	// 或者更简单的：
-	rect.remove();
+
+```js	
+// 添加单个图形
+paper.addShape( new Rect(0, 0, 10, 10) );
+
+// 添加多个图形
+paper.addShapes( [
+	new Circle(100, 100, 10),
+	new Circle(200, 200, 10)
+] );
+
+// 通过以下方式移除已经添加的图形：
+paper.removeShape( rect );
+
+// 或者更简单的：
+rect.remove();
+```
 
 要获得当前 Paper 上所有的图形，可以使用 `paper.getShapes()` 接口。
-	
-	paper.clear(); // clear all items
-	paper.addShape( rect );
-	paper.addShape( circle );
+
+```js
+paper.clear(); // clear all items
+paper.addShape( rect );
+paper.addShape( circle );
+```
 	
 	
 假如自己设置了图形的 id，那么可以根据 id 获得图形：
@@ -303,7 +321,7 @@ Polyline 用于绘制折线，通过添加关键点到折线上，可以形成�
 
 Polyline 是关键点的集合，支持所有的 `PointContainer` 操作。`PointContainer` 的点是有序的，点的顺序会影响到图形的形状。
 	
-	```javascript
+```javascript
 	// clear 方法可以清除点集
 	polyline.clear();
 	
@@ -324,7 +342,7 @@ Polyline 是关键点的集合，支持所有的 `PointContainer` 操作。`Poin
 	
 	// 插入指定的点到第2个点的位置
 	polyline.addPoint(new Point(20, 20), 1);
-	```
+```
 
 ### Polygon
 
