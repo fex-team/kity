@@ -53,6 +53,15 @@ define(function (require, exports, module) {
             }
             return this;
         },
+        addItems: function(items) {
+            for(var i = 0, l = items.length; i < l; i++) {
+                this.addItem(items[i]);
+            }
+            return this;
+        },
+        setItems: function(items) {
+            return this.clear().addItems(items);
+        },
         appendItem: function (item) {
             return this.addItem(item);
         },
@@ -60,6 +69,10 @@ define(function (require, exports, module) {
             return this.addItem(item, 0);
         },
         removeItem: function (pos) {
+            if( typeof(pos) !== 'number' ) {
+                return this.removeItem(this.indexOf(pos));
+            }
+
             var items = this.getItems(),
                 length = items.length,
                 item = items[pos],

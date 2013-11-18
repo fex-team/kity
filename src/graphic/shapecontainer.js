@@ -3,22 +3,26 @@ define(function (require, exports, module) {
     return require('core/class').createClass('ShapeContainer', {
         base: Container,
 
-        addItem: function (shape, pos) {
+        addShape: function (shape, pos) {
             if (pos === undefined || pos < 0 || pos >= this.getItems().length) {
                 pos = this.getItems().length;
             }
-            this.callBase(shape, pos);
+            this.addItem(shape, pos);
             this.getShapeNode().insertBefore(shape.node, this.getShapeNode().childNodes[pos + 1]);
             return this;
         },
 
-        removeItem: function (pos) {
+        removeShape: function (pos) {
             var shape = this.getItem(pos);
             if (shape) {
                 this.getShapeNode().removeChild(shape.node);
+                this.removeItem(pos);
             }
-            this.callBase(pos);
             return this;
+        },
+
+        getShape: function(pos) {
+            return this.getItem(pos);
         },
 
         getShapeById: function (id) {
