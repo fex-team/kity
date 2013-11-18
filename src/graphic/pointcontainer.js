@@ -13,19 +13,63 @@ define( function ( require, exports, module ) {
             this.callBase();
         },
 
-        addItem: function ( point, pos ) {
+        addPoint: function ( point, pos ) {
 
-            this.callBase( point, pos );
-
-            this.update();
+            return this.addItem.apply( this, arguments );
 
         },
 
-        removeItem: function ( pos ) {
+        prependPoint: function () {
 
-            this.callBase( pos );
+            return this.prependItem.apply( this, arguments );
 
-            this.update();
+        },
+
+        appendPoint: function () {
+
+            return this.appendItem.apply( this, arguments );
+
+        },
+
+        removePoint: function ( pos ) {
+
+            return this.removeItem.apply( this, arguments );
+
+        },
+
+        addPoints: function () {
+
+            return this.addItems.apply( this, arguments );
+
+        },
+
+        setPoints: function () {
+
+            return this.setItems.apply( this, arguments );
+
+        },
+
+        getPoint: function () {
+
+            return this.getItem.apply( this, arguments );
+
+        },
+
+        getPoints: function () {
+
+            return this.getItems.apply( this, arguments );
+
+        },
+
+        getFirstPoint: function () {
+
+            return this.getFirstItem.apply( this, arguments );
+
+        },
+
+        getLastPoint: function () {
+
+            return this.getLastItem.apply( this, arguments );
 
         }
 

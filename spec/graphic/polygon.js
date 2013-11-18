@@ -1,13 +1,14 @@
 describe("Kity.Polygon", function () {
 
-    var Polygon = require( 'graphic/polygon' );
+    var Polygon = require( 'graphic/polygon' ),
+        Point = require( 'graphic/point' );
 
     it("无参构造Polygon", function() {
 
         var polygon = new Polygon();
 
-        expect( polygon.getPathData() ).toBe( "" );
-        expect( polygon.getItems().length ).toBe( 0 );
+        expect( polygon.getPathData() ).toBe( "M 0 0" );
+        expect( polygon.getPoints().length ).toBe( 0 );
         expect( polygon.isClosed() ).toBe( false );
     });
 
@@ -30,7 +31,7 @@ describe("Kity.Polygon", function () {
 
         var polygon = new Polygon();
 
-        polygon.addItem( { x: 3, y: 2 } );
+        polygon.addPoint( { x: 3, y: 2 } );
         expect( polygon.getPathData() ).not.toBe( "" );
         expect( polygon.getItems().length ).toBe( 1 );
         polygon.removeItem( 0 );

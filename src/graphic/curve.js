@@ -11,19 +11,17 @@ define(function (require, exports, module) {
          * @param points 曲线上的点的集合， 集合中的点的数量必须大于2
          * @return 平移线数组
          */
-        getCurvePanLines: function ( points, k ) {
+        getCurvePanLines: function ( points, smoothFactor ) {
 
             //计算原始点的中点坐标
             var centerPoints = CurveUtil.getCenterPoints( points ),
 
                 //注意：计算中点连线的中点坐标， 得出平移线
-                panLines = CurveUtil.getPanLine( points.length, centerPoints ),
+                panLines = CurveUtil.getPanLine( points.length, centerPoints );
 
-                pathData = [];
 
             //平移线移动到顶点
-            return CurveUtil.getMovedPanLines( points, panLines, k );
-
+            return CurveUtil.getMovedPanLines( points, panLines, smoothFactor );
         },
 
         /*
@@ -44,8 +42,8 @@ define(function (require, exports, module) {
 
                 //计算中点坐标
                 centerPoints[ key ] = {
-                    x: ( points[ i ].x + points[ j ].x ) / 2,
-                    y: ( points[ i ].y + points[ j ].y ) / 2
+                    x: ( points[ i ].getX() + points[ j ].getX() ) / 2,
+                    y: ( points[ i ].getY() + points[ j ].getY() ) / 2
                 };
 
 
@@ -115,7 +113,7 @@ define(function (require, exports, module) {
          * @param points 顶点集合
          * @param panLines 平移线集合
          */
-        getMovedPanLines: function ( points, panLines, k ) {
+        getMovedPanLines: function ( points, panLines, smoothFactor ) {
 
             var result = {};
 
@@ -128,30 +126,29 @@ define(function (require, exports, module) {
 
                     //移动距离
                     distance = {
-                        x: center.x - point.x,
-                        y: center.y - point.y
+                        x: center.x - point.getX(),
+                        y: center.y - point.getY()
                     };
 
                 var currentResult = result[ index ] = {
                     points: [],
                     center: {
-                        x: point.x,
-                        y: point.y
+                        x: point.getX(),
+                        y: point.getY()
                     }
                 };
 
                 Utils.each( currentPanLine.points, function ( controlPoint, index ) {
-
                     var moved = {
                         x: controlPoint.x - distance.x,
                         y: controlPoint.y - distance.y
                     };
-                    var dx = moved.x - point.x;
-                    var dy = moved.y - point.y;
-                    moved.x = point.x + k * dx;
-                    moved.y = point.y + k * dy;
+                    var vertex = currentResult.center;
+                    var dx = moved.x - vertex.x;
+                    var dy = moved.y - vertex.y;
+                    moved.x = vertex.x + smoothFactor * dx;
+                    moved.y = vertex.y + smoothFactor * dy;
                     currentResult.points.push( moved );
-
                 } );
 
             } );
@@ -170,30 +167,45 @@ define(function (require, exports, module) {
 
         constructor: function ( points, isColse ) {
 
-            var _self = this;
-
             this.callBase();
 
             if ( points ) {
 
-                Utils.each( points, function ( point ) {
-
-                    _self.addItem( point );
-
-                } );
-
-                //闭合状态
                 this.closeState = !!isColse;
+                this.changeable = true;
+                this.smoothFactor = 1;
 
-                this.update();
-
+                this.setPoints( points );
             }
+
+        },
+
+        //当点集合发生变化时采取的动作
+        onContainerChanged: function () {
+
+            if ( this.changeable ) {
+                this.update();
+            }
+
+        },
+
+        setSmoothFactor: function ( factor ) {
+
+            this.smoothFactor = factor < 0 ? 0 : factor;
+            this.update();
+            return this;
+
+        },
+
+        getSmoothFactor: function () {
+
+            return this.smoothFactor;
 
         },
 
         update: function () {
 
-            var points = this.getItems(),
+            var points = this.getPoints(),
                 withControlPoints = null,
                 drawer = this.getDrawer(),
                 curPoint = null,
@@ -204,13 +216,11 @@ define(function (require, exports, module) {
 
             if ( points.length === 0 ) {
 
-                drawer.moveTo( 0, 0 );
-
                 return this;
 
             } else {
 
-                drawer.moveTo( points[0].x, points[0].y );
+                drawer.moveTo( points[0].getX(), points[0].getY() );
 
             }
 
@@ -222,7 +232,7 @@ define(function (require, exports, module) {
 
             if ( points.length === 2 ) {
 
-                drawer.lineTo( points[1].x, points[1].y );
+                drawer.lineTo( points[1].getX(), points[1].getY() );
 
                 return this;
 
@@ -284,17 +294,8 @@ define(function (require, exports, module) {
 
         isClose: function () {
 
-            return this.closeState || false;
+            return !!this.closeState;
 
-        },
-
-        getSmoothFactor: function() {
-            return this.smoothFactor;
-        },
-
-        setSmoothFactor: function(value) {
-            this.smoothFactor = value;
-            return this;
         }
 
     });

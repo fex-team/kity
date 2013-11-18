@@ -10,12 +10,9 @@ define( function ( require, exports, module ) {
 
             var point = bezierPoint.point,
                 backward = bezierPoint.backward,
-                forward = BezierPointUtil.updateControlPoint( point.x, point.y, backward.x, backward.y );
+                forward = BezierPointUtil.updateControlPoint( point.getX(), point.getY(), backward.getX(), backward.getY() );
 
-            bezierPoint.forward = {
-                x: forward.x,
-                y: forward.y
-            };
+            bezierPoint.forward.setPoint( forward.x, forward.y );
 
         },
 
@@ -23,12 +20,9 @@ define( function ( require, exports, module ) {
 
             var point = bezierPoint.point,
                 forward = bezierPoint.forward,
-                backward = BezierPointUtil.updateControlPoint( point.x, point.y, forward.x, forward.y );
+                backward = BezierPointUtil.updateControlPoint( point.getX(), point.getY(), forward.getX(), forward.getY() );
 
-            bezierPoint.backward = {
-                x: backward.x,
-                y: backward.y
-            };
+            bezierPoint.backward.setPoint( backward.x, backward.y );
 
         },
 
@@ -49,21 +43,21 @@ define( function ( require, exports, module ) {
 
         }
 
-    };
+        },
+        ShapePoint = require( 'graphic/shapepoint' );
 
     return require( "core/class" ).createClass( 'BezierPoint', {
 
         constructor: function ( x, y, isSmooth ) {
 
             //顶点
-            this.point = {
-                x: x,
-                y: y
-            };
+            this.point = new ShapePoint( x, y );
 
             //控制点
-            this.forward = null;
-            this.backward = null;
+            this.forward = new ShapePoint( x, y );
+
+            this.backward = new ShapePoint( x, y );
+
             //是否平滑
             this.smooth = isSmooth === undefined ? true : !!isSmooth;
 
@@ -71,8 +65,7 @@ define( function ( require, exports, module ) {
 
         setPoint: function ( x, y ) {
 
-            this.point.x = x;
-            this.point.y = y;
+            this.point.setPoint( x, y );
 
             this.update();
 
@@ -82,10 +75,7 @@ define( function ( require, exports, module ) {
 
         setForward: function ( x, y ) {
 
-            !this.forward && ( this.forward = {} );
-
-            this.forward.x = x;
-            this.forward.y = y;
+            this.forward.setPoint( x, y );
 
             //更新后置点
             this.smooth && BezierPointUtil.updateBackwardPoint( this );
@@ -98,10 +88,7 @@ define( function ( require, exports, module ) {
 
         setBackward: function ( x, y ) {
 
-            !this.backward && ( this.backward = {} );
-
-            this.backward.x = x;
-            this.backward.y = y;
+            this.backward.setPoint( x, y );
 
             //更新前置点
             this.smooth && BezierPointUtil.updateForwardPoint( this );
@@ -122,16 +109,29 @@ define( function ( require, exports, module ) {
 
         getPoint: function () {
 
-            return this.point;
+            return {
+                x: this.point.getX(),
+                y: this.point.getY()
+            };
 
         },
 
         getForward: function () {
-            return this.forward;
+
+            return {
+                x: this.forward.getX(),
+                y: this.forward.getY()
+            };
+
         },
 
         getBackward: function () {
-            return this.backward;
+
+            return {
+                x: this.backward.getX(),
+                y: this.backward.getY()
+            };
+
         },
 
         isSmooth: function () {
