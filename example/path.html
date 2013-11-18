@@ -43,7 +43,7 @@
                 var pattern = new PatternBrush().pipe(function(p) {
                     p.setWidth(20);
                     p.setHeight(20);
-                    p.addItem(new Rect(0, 0, 10, 10).pipe(function(r){
+                    p.addShape(new Rect(0, 0, 10, 10).pipe(function(r){
                         r.rotate(-45);
                         r.fill(new LinearGradientBrush().pipe(function(g) {
                             g.addStop(0, '#ff0000')
@@ -64,7 +64,7 @@
                 this.addClass('stroke-green');
             });
 
-            paper.addItem(path);
+            paper.addShape(path);
 
             var upsidedown = new Path().pipe(function(){
                 this.setPathData('M0 0 C100 0 100 0 100 100 C100 200 100 200 200 200');
@@ -75,18 +75,18 @@
                 }));
                 this.rotate(90).translate(100, 200);
             });
-            paper.addItem(upsidedown);
+            paper.addShape(upsidedown);
 
             var text = new Text('this is a text').pipe(function() {
                 this.setX(100).setY(100).setStyle({
                     fill: 'red'
                 });
                 this.setPath(upsidedown);
-                this.addItem(new TextSpan('Baidu').fill('blue'));
-                this.addItem(new TextSpan('Kity').fill('green'));
+                this.addSpan(new TextSpan('Baidu').fill('blue'));
+                this.addSpan(new TextSpan('Kity').fill('green'));
             });
 
-            paper.addItem(text);
+            paper.addShape(text);
         });
         seajs.use('start');
     </script>

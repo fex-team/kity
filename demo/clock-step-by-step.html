@@ -50,79 +50,89 @@
                 return [d * Math.cos(a), d * Math.sin(a)];
             }
 
-            paper.addShape(new Circle(0, 0, 500).pipe(function(){
-                this.fill(new LinearGradientBrush().pipe(function() {
-                    this.addStop(0, palette.get('frame-dark'));
-                    this.addStop(0.4, palette.get('frame-light'));
-                    this.addStop(0.6, palette.get('frame-light'));
-                    this.addStop(1, palette.get('frame-dark'));
-                    paper.addResource(this);
-                }));
-                this.stroke(new Pen().pipe(function(pen) {
-                    pen.setWidth(1);
-                    pen.setColor(palette.get('outside'));
-                }));
-                this.rotate(30);
-            }));
+            function step1() {
+                paper.addItem(new Circle(0, 0, 500).pipe(function(){
+                    this.fill(new LinearGradientBrush().pipe(function() {
+                        this.addStop(0, palette.get('frame-dark'));
+                        this.addStop(0.4, palette.get('frame-light'));
+                        this.addStop(0.6, palette.get('frame-light'));
+                        this.addStop(1, palette.get('frame-dark'));
+                        paper.addResource(this);
+                    }));
+                    this.stroke(new Pen().pipe(function(pen) {
+                        pen.setWidth(1);
+                        pen.setColor(palette.get('outside'));
+                    }));
+                    this.rotate(30);
+                }));   
+            }
 
-            paper.addShape(new Circle(0, 0, 465).pipe(function(){
-                this.fill(new LinearGradientBrush().pipe(function() {
-                    this.addStop(0, palette.get('frame-light'));
-                    this.addStop(0.4, palette.get('frame-dark'));
-                    this.addStop(0.6, palette.get('frame-dark'));
-                    this.addStop(1, palette.get('frame-light'));
-                    paper.addResource(this);
+            function step2() {
+                paper.addItem(new Circle(0, 0, 465).pipe(function(){
+                    this.fill(new LinearGradientBrush().pipe(function() {
+                        this.addStop(0, palette.get('frame-light'));
+                        this.addStop(0.4, palette.get('frame-dark'));
+                        this.addStop(0.6, palette.get('frame-dark'));
+                        this.addStop(1, palette.get('frame-light'));
+                        paper.addResource(this);
+                    }));
+                    this.rotate(30);
                 }));
-                this.rotate(30);
-            }));
+            }
 
-            // 表盘
-            paper.addShape(new Circle(0, 0, 450).pipe(function() {
-                this.stroke(new Pen().pipe(function(pen) {
-                    pen.setWidth(8);
-                    pen.setColor(palette.get('inside'));
-                }));
-                this.fill(new RadialGradientBrush().pipe(function(brush){
-                    paper.addResource(brush);
-                    brush.setFocal(0.8, 0.2);
-                    brush.setRadius(0.6);
-                    brush.addStop(0, new Color('white'));
-                    brush.addStop(1, new Color('hsl(0, 0, 80)'));
-                }));
-            }));
+            function step3() {
+                // 表盘
+                paper.addItem(new Circle(0, 0, 450).pipe(function() {
+                    this.stroke(new Pen().pipe(function(pen) {
+                        pen.setWidth(8);
+                        pen.setColor(palette.get('inside'));
+                    }));
+                    this.fill(new RadialGradientBrush().pipe(function(brush){
+                        paper.addResource(brush);
+                        brush.setFocal(0.8, 0.2);
+                        brush.setRadius(0.6);
+                        brush.addStop(0, new Color('white'));
+                        brush.addStop(1, new Color('hsl(0, 0, 80)'));
+                    }));
+                }));   
+            }
 
-            // 刻度
-            paper.addShape(new Group().pipe(function() {
-                var minutes = 60, stepDeg = 360 / minutes;
-                var deg = 90, distance = 390, step = 0;
-                while(step < minutes) {
-                    var rect;
-                    if(!(step % 5)) {
-                        rect = new Rect(390, -5, 50, 10).fill(palette.get('big-ruler'));
-                    } else {
-                        rect = new Rect(410, -3, 25, 6).fill(palette.get('small-ruler'));
+            function step4() {
+                // 刻度
+                paper.addItem(new Group().pipe(function() {
+                    var minutes = 60, stepDeg = 360 / minutes;
+                    var deg = 90, distance = 390, step = 0;
+                    while(step < minutes) {
+                        var rect;
+                        if(!(step % 5)) {
+                            rect = new Rect(390, -5, 50, 10).fill(palette.get('big-ruler'));
+                        } else {
+                            rect = new Rect(410, -3, 25, 6).fill(palette.get('small-ruler'));
+                        }
+                        this.addItem(rect.rotate(deg));
+                        deg += stepDeg;
+                        step ++;
                     }
-                    this.addShape(rect.rotate(deg));
-                    deg += stepDeg;
-                    step ++;
-                }
-            }));
-
-            paper.addShape(new Text().pipe(function() {
-                this.addSpan(new TextSpan('Hello ').fill(new Color('blue').set('s', 40)));
-                this.addSpan(new TextSpan(' Kity').fill(new Color('red').set('s', 40)));
-                this.setPath(new Path().pipe(function() {
-                    var radius = 280;
-                    var start = p2c(radius, -120), end = p2c(radius, -60);
-                    var d = this.getDrawer();
-                    d.moveTo(start).carcTo(radius, end[0], end[1], 0, 1);
-                    paper.addResource(this);
                 }));
-                this.setAnchor('middle');
-                this.setStyle({
-                    'font-size': '30px'
-                });
-            }));
+            }
+
+            function step5() {
+                paper.addItem(new Text().pipe(function() {
+                    this.addItem(new TextSpan('Hello ').fill(new Color('blue').set('s', 40)));
+                    this.addItem(new TextSpan(' Kity').fill(new Color('red').set('s', 40)));
+                    this.setPath(new Path().pipe(function() {
+                        var radius = 280;
+                        var start = p2c(radius, -120), end = p2c(radius, -60);
+                        var d = this.getDrawer();
+                        d.moveTo(start[0], start[1]).carcTo(radius, end[0], end[1], 0, 1);
+                        paper.addResource(this);
+                    }));
+                    this.setAnchor('middle');
+                    this.setStyle({
+                        'font-size': '30px'
+                    });
+                }));   
+            }
 
             var Pointer = Clazz.createClass('Pointer', {
                 base: Path,
@@ -151,42 +161,47 @@
 
             pointers = new Group().pipe(function(){
                 this.rotate(90);
-                this.addShape(hPointer);
-                this.addShape(mPointer);
-                this.addShape(sPointer); 
+                this.addItem(hPointer);
+                this.addItem(mPointer);
+                this.addItem(sPointer);
             });
 
             var msPointer = new Pointer( 10, 2, 80, 0, new Color('gray'));
             var msMeter = new Group().pipe(function() {
-                this.addShape(new Circle(0, 0, 90).pipe(function() {
+                this.addItem(new Circle(0, 0, 90).pipe(function() {
                     this.stroke(new Pen().pipe(function(pen) {
                         pen.setWidth(5);
                         pen.setColor(palette.get('inside'));
                     }));
                 }));
-                this.addShape(msPointer);
-                this.addShape(new Circle(0, 0, 8).fill(new Color('gray')));
+                this.addItem(msPointer);
+                this.addItem(new Circle(0, 0, 8).fill(new Color('gray')));
                 this.rotate(90);
                 this.translate(0, 250);
             });
 
             var mmPointer = new Pointer( 4, 1, 40, 0, new Color('gray'));
             var mmMeter = new Group().pipe(function() {
-                this.addShape(new Circle(0, 0, 50).pipe(function() {
+                this.addItem(new Circle(0, 0, 50).pipe(function() {
                     this.stroke(new Pen().pipe(function(pen) {
                         pen.setWidth(3);
                         pen.setColor(palette.get('inside'));
                     }));
                 }));
-                this.addShape(mmPointer);
-                this.addShape(new Circle(0, 0, 6).fill(new Color('gray')));
+                this.addItem(mmPointer);
+                this.addItem(new Circle(0, 0, 6).fill(new Color('gray')));
                 this.rotate(90);
                 this.translate.apply(this, p2c(250, 50));
             });
 
-            paper.addShape(msMeter);
-            paper.addShape(mmMeter);
-            paper.addShape(pointers);
+            function step6() {
+                paper.addItem(msMeter);   
+                paper.addItem(mmMeter);
+            }
+
+            function step7() {
+                paper.addItem(pointers);   
+            }
 
             function updatePointers() {
                 var time = new Date(), 
@@ -204,7 +219,15 @@
                 mmPointer.setTransform(new Matrix().addRotate(-mm * 360 / 500));
                 requestAnimationFrame(updatePointers);
             }
-            updatePointers();
+            function step8() {
+                updatePointers();   
+            }
+
+            var steps = [step1, step2, step3, step4, step5, step6, step7, step8];
+
+            window.next = function() {
+                steps.shift()();
+            };
         });
         seajs.use('start');
     </script>

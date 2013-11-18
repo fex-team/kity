@@ -43,7 +43,7 @@ define( function ( require, exports, module ) {
         },
 
         getWidth: function () {
-            return this.node.getAttribute( 'width' );
+            return +this.node.getAttribute( 'width' );
         },
 
         setWidth: function ( width ) {
@@ -52,7 +52,7 @@ define( function ( require, exports, module ) {
         },
 
         getHeight: function () {
-            return this.node.getAttribute( 'height' );
+            return +this.node.getAttribute( 'height' );
         },
 
         setHeight: function ( height ) {

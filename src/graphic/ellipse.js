@@ -43,7 +43,7 @@ define(function(require, exports, module) {
             return {
                 x: this.rx,
                 y: this.ry
-            }
+            };
         },
 
         getRadiusX: function () {

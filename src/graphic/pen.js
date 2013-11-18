@@ -20,7 +20,9 @@ define( function ( require, exports, module ) {
         },
 
         setColor: function ( color ) {
-
+            if(typeof(color) == 'string') {
+                color = new Color(color);
+            }
             this.color = color;
             this.opacity = this.color.get( 'a' );
 

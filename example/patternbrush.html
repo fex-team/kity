@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PatternBrush Example</title>
+    <script src="../dev-lib/sea.js"></script>
+    <script>
+        seajs.config({
+            base: '../src'
+        });
+        define('start', function (require) {
+            var Paper = require('graphic/paper');
+            var Rect = require('graphic/rect');
+            var Circle = require('graphic/circle');
+            var PatternBrush = require('graphic/patternbrush');
+
+            var paper = new Paper(document.body);
+
+            paper.setWidth(400).setHeight(300);
+
+            var rect = new Rect(0, 0, 200, 100);
+            rect.fill(new PatternBrush().pipe( function() {
+                var colors = ['red', 'blue', 'yellow', 'green'];
+                this.setWidth(40);
+                this.setHeight(40);
+                this.addShapes([
+                    new Circle(10, 10, 5).fill(colors.shift()),
+                    new Circle(30, 10, 5).fill(colors.shift()),
+                    new Circle(10, 30, 5).fill(colors.shift()),
+                    new Circle(30, 30, 5).fill(colors.shift())
+                ]);
+                paper.addResource(this);
+            }));
+            paper.addShape(rect);
+        });
+        seajs.use('start');
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

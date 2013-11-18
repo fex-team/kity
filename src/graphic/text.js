@@ -51,6 +51,10 @@ define( function ( require, exports, module ) {
             return this.node.getAttribute('text-anchor') || 'start';
         },
 
+        addSpan: function(span) {
+            this.addShape(span);
+        },
+
         setPath: function ( path ) {
             var textpath = this.shapeNode;
             if ( this.shapeNode == this.node ) {

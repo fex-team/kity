@@ -1,0 +1,35 @@
+'<!DOCTYPE html>
+<html>
+<head>
+    <title>LinearGradientBrush Example</title>
+    <script src="../dev-lib/sea.js"></script>
+    <script>
+        seajs.config({
+            base: '../src'
+        });
+        define('start', function (require) {
+            var Paper = require('graphic/paper');
+            var Rect = require('graphic/rect');
+            var LinearGradientBrush = require('graphic/lineargradientbrush');
+
+            var paper = new Paper(document.body);
+
+            paper.setWidth(400).setHeight(300);
+
+            var rect = new Rect(10, 10, 200, 100);
+            rect.fill(new LinearGradientBrush().pipe( function() {
+                this.addStop(0, 'red');
+                this.addStop(1, 'blue');
+                this.setStartPosition(0, 0);
+                this.setEndPosition(1, 1);
+                paper.addResource(this);
+            }));
+            paper.addShape(rect);
+        });
+        seajs.use('start');
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
