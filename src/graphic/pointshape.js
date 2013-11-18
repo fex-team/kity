@@ -19,33 +19,19 @@ define( function ( require, exports, module ) {
             //是否可闭合
             this.closeable = !!closeable;
 
-            if ( points ) {
+            this.setPoints( points );
 
-                if( Utils.isArray(points)) {
-                    while(points.length) {
-                        this.appendItem(points.shift());
-                    }
-                }
+            this.changeable = true;
+            this.update();
 
+        },
+
+        //当点集合发生变化时采取的动作
+        onContainerChanged: function () {
+
+            if ( this.changeable ) {
                 this.update();
-
             }
-
-        },
-
-        addItem: function (point, pos) {
-
-            this.callMixin( point, pos );
-
-            this.update();
-
-        },
-
-        removeItem: function (pos) {
-
-            this.callMixin(pos);
-
-            this.update();
 
         },
 
@@ -57,17 +43,16 @@ define( function ( require, exports, module ) {
             drawer.clear();
 
             if ( !points.length ) {
-                drawer.moveTo( 0, 0 );
                 return this;
             }
 
-            drawer.moveTo( points[0].x, points[0].y );
+            drawer.moveTo( points[0].getX(), points[0].getY() );
 
             for ( var i = 1, point, len = points.length; i < len; i++ ) {
 
                 point = points[ i ];
 
-                drawer.lineTo( point.x, point.y );
+                drawer.lineTo( point.getX(), point.getY() );
 
             }
 

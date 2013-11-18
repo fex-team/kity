@@ -57,6 +57,7 @@ define( function ( require, exports, module ) {
         },
         clear: function() {
             this.__clear = true;
+            this.path.setPathData( 'M 0 0' );
             return this;
         }
     } );
