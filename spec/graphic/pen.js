@@ -1,8 +1,12 @@
+getRequires(['graphic/pen','graphic/color']);
 describe("Kity.Pen", function() {
-    var Pen = require('graphic/pen');
-    var Color = require('graphic/color');
+    var Pen , Color ;
     var pen;
     beforeEach(function() {
+        if(Pen==undefined){
+            Pen = src[0];
+            Color = src[1];
+        }
         pen = new Pen(Color.parse('#123'), 1);
     });
 

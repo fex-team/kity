@@ -1,7 +1,9 @@
+getRequires(["graphic/text"]);
 describe("Kity.Text", function () {
-
-    var Text = require( "graphic/text" );
-
+    var Text;
+    beforeEach(function() {
+        if(Text==undefined)Text = src[0];
+    });
     it("无参数构造", function() {
 
         var text = new Text();

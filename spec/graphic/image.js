@@ -1,9 +1,10 @@
-var Image = require('graphic/image');
-var Shape = require('graphic/shape');
+getRequires(['graphic/image','graphic/shape']);
 
 describe("Kity.Image", function() {
+    var Image ,Shape;
     var image;
     beforeEach(function() {
+        Image = src[0],Shape = src[1];
         image = new Image(300, 400);
     });
     it("should be an instance of Shape", function() {

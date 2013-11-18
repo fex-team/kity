@@ -1,10 +1,15 @@
+getRequires(["graphic/radialgradientbrush"]);
 describe("Kity.RadialGradientBrush", function () {
-
-    var RadialGradientBrush = require("graphic/radialgradientbrush");
+    var RadialGradientBrush ;
+    beforeEach(function() {
+        if(RadialGradientBrush==undefined)RadialGradientBrush = src[0];
+    });
 
     describe("构造验证", function () {
-
-        var radialBrush = new RadialGradientBrush();
+        var radialBrush;
+        beforeEach(function() {
+            if(radialBrush==undefined)radialBrush = new RadialGradientBrush();
+        });
 
         it("默认中心位置验证", function () {
 

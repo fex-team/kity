@@ -1,6 +1,10 @@
-describe("createClass", function () {
-    var createClass = require('core/class').createClass;
+getRequires(["core/class"]);
 
+describe("createClass", function () {
+    var createClass;
+    beforeEach(function () {
+        if(createClass==undefined)createClass = src[0].createClass;
+    });
     describe("define class Dog", function () {
         var dog, Dog;
         beforeEach(function () {
@@ -92,39 +96,40 @@ describe("createClass", function () {
     });
 
     describe("mixin to Animal and Dog", function () {
-        var Animal, Dog, Walkable, Tailer, dog;
-        Walkable = createClass("Walkable", {
-            walk: function (name) {
-                name = name || 'walkable';
-                return "the " + name + " walk";
-            }
-        });
-        Tailer = createClass("Tailer", {
-            tail: function (length) {
-                return "i have a tail with length " + length;
-            }
-        });
-        Animal = createClass("Animal", {
-            mixins: [Walkable],
-            walk: function () {
-                return this.callMixin() + ' as an Animal';
-            }
-        });
-        Dog = createClass("Dog", {
-            base: Animal,
-            mixins: [Walkable, Tailer],
-            walk: function () {
-                return this.callBase() + ' and a Dog';
-            },
-            dogWalk: function () {
-                return this.mixin('walk', 'dummy') + ' as a Dog';
-            },
-            tail: function () {
-                return this.callMixin(12) + ' of a Dog';
-            }
-        });
-        dog = new Dog();
+
         it("正确地使用callBase和callMixin", function () {
+            var Animal, Dog, Walkable, Tailer, dog;
+            Walkable = createClass("Walkable", {
+                walk: function (name) {
+                    name = name || 'walkable';
+                    return "the " + name + " walk";
+                }
+            });
+            Tailer = createClass("Tailer", {
+                tail: function (length) {
+                    return "i have a tail with length " + length;
+                }
+            });
+            Animal = createClass("Animal", {
+                mixins: [Walkable],
+                walk: function () {
+                    return this.callMixin() + ' as an Animal';
+                }
+            });
+            Dog = createClass("Dog", {
+                base: Animal,
+                mixins: [Walkable, Tailer],
+                walk: function () {
+                    return this.callBase() + ' and a Dog';
+                },
+                dogWalk: function () {
+                    return this.mixin('walk', 'dummy') + ' as a Dog';
+                },
+                tail: function () {
+                    return this.callMixin(12) + ' of a Dog';
+                }
+            });
+            dog = new Dog();
             expect(dog.walk()).toBe("the walkable walk as an Animal and a Dog");
             expect(dog.dogWalk()).toBe("the dummy walk as a Dog");
             expect(dog.tail()).toBe("i have a tail with length 12 of a Dog");

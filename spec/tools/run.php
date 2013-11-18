@@ -15,7 +15,7 @@ if ( !array_key_exists( 'quirk' , $_GET ) ) {
 require_once "caseSource.php";
 $c = new Kiss( $_GET[ 'case' ] );
 $title = $c->name;
-//$cov = array_key_exists( 'cov' , $_GET );
+$cov = array_key_exists( 'cov' , $_GET );
 ?>
 <html>
 <head>
@@ -26,7 +26,7 @@ $title = $c->name;
     <script type="text/javascript" src="lib/jasmine-1.3.0/jasmine.js"></script>
     <script type="text/javascript" src="lib/jasmine-1.3.0/jasmine-html.js"></script>
     <script type="text/javascript" src="js/ext_jasmine.js"></script>
-    <?php $c->print_js(); ?>
+    <?php $c->print_js($cov); ?>
 
 </head>
 <script type="text/javascript">

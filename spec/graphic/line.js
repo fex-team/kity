@@ -1,11 +1,11 @@
-var Paper = require( 'graphic/paper' );
-var Shape = require( 'graphic/shape' );
-var Path = require( 'graphic/path' );
-var Line = require( 'graphic/line' );
+getRequires(['graphic/paper','graphic/shape' ,'graphic/path','graphic/line']);
+
 describe( "Kity.Line", function () {
+    var Paper , Shape , Path,Line ;
     var paper, container, line;
 
     beforeEach( function () {
+        Paper = src[0] , Shape =src[1] , Path = src[2],Line = src[3];
         container = document.createElement( 'div' );
         document.body.appendChild( container );
         paper = new Paper( container );

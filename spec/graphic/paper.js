@@ -1,10 +1,11 @@
-var EventHandler = require("graphic/eventhandler");
-var ShapeContainer = require("graphic/shapecontainer");
-var Paper = require("graphic/paper");
+getRequires(["graphic/eventhandler","graphic/shapecontainer","graphic/paper"])
+
 describe("Kity.Paper", function () {
+    var EventHandler , ShapeContainer , Paper  ;
     var container, paper, node;
 
     beforeEach(function () {
+        EventHandler =src[0], ShapeContainer =src[1], Paper =src[2] ;
         container = document.createElement("div");
         paper = new Paper(container);
         document.body.appendChild(container);

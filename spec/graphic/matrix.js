@@ -1,7 +1,9 @@
-var Matrix = require('graphic/matrix');
+getRequires(['graphic/matrix']);
 define("Kity.Matrix", function () {
+    var Matrix;
     var matrix;
     beforeEach(function() {
+        Matrix = src[0];
         matrix = new Matrix();
     });
 

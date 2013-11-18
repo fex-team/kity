@@ -1,7 +1,10 @@
+getRequires([ 'graphic/polygon']);
 describe("Kity.Polygon", function () {
 
-    var Polygon = require( 'graphic/polygon' );
-
+    var Polygon ;
+    beforeEach(function() {
+        if(Polygon==undefined)Polygon = src[0];
+    });
     it("无参构造Polygon", function() {
 
         var polygon = new Polygon();

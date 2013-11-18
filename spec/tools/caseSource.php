@@ -29,12 +29,18 @@ class Kiss
         $this->name = $name;
         $this->case_id = 'id_case_' . join( '_' , explode( '.' , $name ) );
     }
-    public function print_js(  )
+    public function print_js(  $cov)
     {
 
+        if($cov){
+            $basePath =  '../../spec/coverage';
+        }
+        else{
+            $basePath =  '../../src';
+        }
         print "<script type='text/javascript' src='./lib/seajs-2.1.1/sea-debug.js' ></script>\n";
         print "<script>seajs.config( {
-            base: '../../src'
+            base:'".$basePath."'
         } );
         </script>\n";
         /*load ua*/
@@ -94,7 +100,7 @@ class Kiss
         }
         return substr( $this->name , 0 , $len ) == $matcher;
     }
-    public static function listcase( $matcher = "*" )
+    public static function listcase( $matcher = "*" ,$cov)
     {
 
         require_once 'fileHelper.php';
@@ -110,7 +116,13 @@ class Kiss
             if ( $c->match( $matcher ) ) {
                 $newName = explode( '\\.' , $name );
                 $newName = $newName[ count( $newName ) - 1 ];
-                print( "<a href=\"run.php?case=$name\" id=\"$c->case_id\"  target=\"_blank\" title=\"$name\" onclick=\"run('$name');return false;\">". $newName . "</a>" );
+
+                if($cov){
+                    $covMsg = "&cov=true";
+                }else{
+                    $covMsg="";
+                }
+                print( "<a href=\"run.php?case=$name".$covMsg."\" id=\"$c->case_id\"  target=\"_blank\" title=\"$name\" onclick=\"run('$name');return false;\">". $newName . "</a>" );
             }
         }
     }

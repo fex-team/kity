@@ -1,6 +1,10 @@
+getRequires(["graphic/path"]);
 describe("Kity.Path", function () {
 
-    var Path = require("graphic/path");
+    var Path ;
+    beforeEach(function() {
+        if(Path==undefined)Path = src[0];
+    });
 
     it("无参构造Path", function () {
 

@@ -15,13 +15,18 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
 //todo 顺序
-        './src/core/kity.js',
-        './src/core/define.js',
-        './src/core/utils.js',
-        './src/graphic/*.js',
+        './spec/tools/lib/seajs-2.1.1/sea-debug.js',
+        './src/core/config.js',
+        './src/core/class.js',
+//        './src/core/kity.js',
+//        './src/core/define.js',
+//        './src/core/utils.js',
+//        './src/graphic/*.js',
         './spec/tools/js/UserAction.js',
-        './spec/core/*.js',
-        './spec/graphic/*.js'
+        './spec/tools/js/karmaHelper.js',
+        './spec/SpecHelper.js',
+//        './spec/core/*.js',
+        './spec/core/class.js'
 //        './spec/_examples.js'//这是各种断言和用例编写方法的例子,真的写用例时把这个注了
 //        ,'./spec_examples/src/Song.js'
 //        ,'./spec/_examples/src/Player.js'

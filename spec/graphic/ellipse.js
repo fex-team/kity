@@ -1,10 +1,10 @@
-var Ellipse = require("graphic/ellipse");
-var Path = require("graphic/path");
-var Shape = require("graphic/shape");
+getRequires(["graphic/ellipse","graphic/path","graphic/shape"]);
 
 describe("Kity.Ellipse", function () {
+    var Ellipse,Path,Shape;
 	var ellipse;
 	beforeEach(function() {
+        Ellipse = src[0],Path=src[1],Shape=src[2];
 		var ellipse = new Ellipse();
 	});
 
@@ -19,8 +19,8 @@ describe("Kity.Ellipse", function () {
 	describe("Ellipse(radiusX, radiusY)", function() {
 		it("should create an ellipse with initial size", function() {
 			ellipse = new Ellipse(100, 50);
-			expect(ellipse.getRadiusX()).toBe(100));
-			expect(ellipse.getRadiusY()).toBe(50));
+			expect(ellipse.getRadiusX()).toBe(100);
+			expect(ellipse.getRadiusY()).toBe(50);
 			expect(ellipse.getCenterX()).toBe(0);
 			expect(ellipse.getCenterY()).toBe(0);			
 		});
@@ -29,8 +29,8 @@ describe("Kity.Ellipse", function () {
 	describe("Ellipse(radiusY, radiusY, x, y)", function() {
 		it("should create an ellipse with initial size and center", function() {
 			ellipse = new Ellipse(100, 50, 200, 200);
-			expect(ellipse.getRadiusX()).toBe(100));
-			expect(ellipse.getRadiusY()).toBe(50));
+			expect(ellipse.getRadiusX()).toBe(100);
+			expect(ellipse.getRadiusY()).toBe(50);
 			expect(ellipse.getCenterX()).toBe(0);
 			expect(ellipse.getCenterY()).toBe(0);	
 		});
