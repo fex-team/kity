@@ -4,47 +4,7 @@
 
 define( function ( require, exports, module ) {
 
-    var BezierPointUtil = {
-
-        updateForwardPoint: function ( bezierPoint ) {
-
-            var point = bezierPoint.point,
-                backward = bezierPoint.backward,
-                forward = BezierPointUtil.updateControlPoint( point.getX(), point.getY(), backward.getX(), backward.getY() );
-
-            bezierPoint.forward.setPoint( forward.x, forward.y );
-
-        },
-
-        updateBackwardPoint: function ( bezierPoint ) {
-
-            var point = bezierPoint.point,
-                forward = bezierPoint.forward,
-                backward = BezierPointUtil.updateControlPoint( point.getX(), point.getY(), forward.getX(), forward.getY() );
-
-            bezierPoint.backward.setPoint( backward.x, backward.y );
-
-        },
-
-        /*
-         * 根据传递进来的顶点坐标和控制点坐标， 计算另一个控制点坐标
-         * @param x 顶点X坐标
-         * @param y 顶点Y坐标
-         * @param cx 控制点X坐标
-         * @param cy 控制点Y坐标
-         * @return 另一个控制点坐标的PlainObject对象
-         */
-        updateControlPoint: function ( x, y, cx, cy ) {
-
-            return {
-                x: 2*x - cx,
-                y: 2*y - cy
-            };
-
-        }
-
-        },
-        ShapePoint = require( 'graphic/shapepoint' );
+    var ShapePoint = require( 'graphic/shapepoint' );
 
     return require( "core/class" ).createClass( 'BezierPoint', {
 
@@ -78,7 +38,9 @@ define( function ( require, exports, module ) {
             this.forward.setPoint( x, y );
 
             //更新后置点
-            this.smooth && BezierPointUtil.updateBackwardPoint( this );
+            if(this.smooth) {
+                this.backward.setPoint( -x, -y );
+            }
 
             this.update();
 
@@ -91,7 +53,9 @@ define( function ( require, exports, module ) {
             this.backward.setPoint( x, y );
 
             //更新前置点
-            this.smooth && BezierPointUtil.updateForwardPoint( this );
+            if(this.smooth) {
+                this.forward.setPoint( -x, -y );
+            }
 
             this.update();
 

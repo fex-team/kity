@@ -18,10 +18,7 @@ define( function ( require, exports, module ) {
              */
             parseToAbsolute: function ( points ) {
 
-                var result = [],
-                    isArray = points.length;
-
-                !isArray && ( points =  [ points ] );
+                var result = [];
 
                 Utils.each( points, function ( bezierPoint ) {
 
@@ -36,8 +33,8 @@ define( function ( require, exports, module ) {
                             y: vertex.y
                         },
                         forward: {
-                            x: vertex.x + forwardControlPoint.y,
-                            y: vertex.x + forwardControlPoint.y
+                            x: vertex.x + forwardControlPoint.x,
+                            y: vertex.y + forwardControlPoint.y
                         },
                         backward: {
                             x: vertex.x + backwardControlPoint.x,
@@ -47,7 +44,7 @@ define( function ( require, exports, module ) {
 
                 } );
 
-                return isArray ? result : result[ 0 ];
+                return result;
 
             }
 
@@ -65,10 +62,8 @@ define( function ( require, exports, module ) {
 
             points = points || [];
 
-            this.setPoints( points );
-
             this.changeable = true;
-            this.update();
+            this.setPoints( points );
 
         },
 
@@ -85,14 +80,16 @@ define( function ( require, exports, module ) {
 
 
             var drawer = null,
-                points = this.getItems(),
+                points = this.getPoints(),
                 //把控制点转化为绝对坐标
-                absolutePoints = BezierUtil.parseToAbsolute( points );
+                absolutePoints = null;
 
             //单独的一个点不画任何图形
             if ( points.length < 2 ) {
                 return;
             }
+
+            absolutePoints = BezierUtil.parseToAbsolute( points );
 
             drawer = this.getDrawer();
 

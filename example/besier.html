@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Besier Example</title>
+    <script src="../dev-lib/sea.js"></script>
+    <script>
+        seajs.config({
+            base: '../src'
+        });
+        define('start', function (require) {
+            var Paper = require('graphic/paper');
+            var Bezier = require('graphic/bezier');
+            var BezierPoint = require('graphic/bezierpoint');
+            var Rect = require('graphic/rect');
+            var Group = require('graphic/group');
+            var Pen = require('graphic/pen');
+            var Text = require('graphic/text');
+
+            var BezierViewer = require('core/class').createClass({
+                base: Group,
+                constructor: function(bezier) {
+                    this.callBase();
+                    this.addShape(bezier);
+                    bezier.stroke('black');
+                }
+            });
+
+            var paper = new Paper(document.body);
+
+            paper.setWidth(600).setHeight(400);
+            paper.addShape(new BezierViewer(new Bezier().addPoints([
+                new BezierPoint(300, 150, false).setForward(50, -100).setBackward(-50, -100),
+                new BezierPoint(450, 150).setForward(0, 100),
+                new BezierPoint(300, 350, false).setForward(-100, -20).setBackward(100, -20),
+                new BezierPoint(150, 150).setForward(0, -100),
+                new BezierPoint(300, 150, false).setForward(50, -100).setBackward(-50, -100)
+            ])));
+        });
+        seajs.use('start');
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
