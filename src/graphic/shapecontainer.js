@@ -4,8 +4,8 @@ define(function (require, exports, module) {
     return require('core/class').createClass('ShapeContainer', {
         base: Container,
 
-        /* protected */
-        onItemChanged: function(type, shapes) {
+        /* protected override */
+        onContainerChanged: function(type, shapes) {
             switch(type) {
                 case 'add':
                     this.onAddShapes( shapes );
@@ -20,7 +20,7 @@ define(function (require, exports, module) {
         onAddShapes: function(shapes) {
             var parent = this.getShapeNode();
             for(var i = 0; i < shapes.length; i++) {
-                parent.appendChild(shapes.node);
+                parent.appendChild(shapes[i].node);
             }
         },
 
@@ -28,13 +28,13 @@ define(function (require, exports, module) {
         onRemoveShapes: function(shapes) {
             var parent = this.getShapeNode();
             for(var i = 0; i < shapes.length; i++) {
-                parent.removeChild(shapes.node);
+                parent.removeChild(shapes[i].node);
             }
         },
 
         /* public */
         addShape: function (shape) {
-            return this.appendItem(shape);
+            return this.addItem(shape);
         },
 
         /* public */
