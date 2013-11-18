@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>ViewBox Example</title>
+    <title>PatternBrush Example</title>
     <script src="../dev-lib/sea.js"></script>
     <script>
         seajs.config({
@@ -22,13 +22,15 @@
                 var colors = ['red', 'blue', 'yellow', 'green'];
                 this.setWidth(40);
                 this.setHeight(40);
-                this.addItem( new Circle(10, 10, 5).fill(colors.shift()) );
-                this.addItem( new Circle(30, 10, 5).fill(colors.shift()) );
-                this.addItem( new Circle(10, 30, 5).fill(colors.shift()) );
-                this.addItem( new Circle(30, 30, 5).fill(colors.shift()) );
+                this.addShapes([
+                    new Circle(10, 10, 5).fill(colors.shift()),
+                    new Circle(30, 10, 5).fill(colors.shift()),
+                    new Circle(10, 30, 5).fill(colors.shift()),
+                    new Circle(30, 30, 5).fill(colors.shift())
+                ]);
                 paper.addResource(this);
             }));
-            paper.addItem(rect);
+            paper.addShape(rect);
         });
         seajs.use('start');
     </script>

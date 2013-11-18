@@ -4,7 +4,7 @@ var Shape = require('graphic/shape');
 describe("Kity.Image", function() {
     var image;
     beforeEach(function() {
-        image = new Image();
+        image = new Image(300, 400);
     });
     it("should be an instance of Shape", function() {
         expect(image.isInstanceOf(Shape)).toBeTruthy();

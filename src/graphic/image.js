@@ -8,8 +8,8 @@ define(function(require, exports, module) {
 
             this.callBase( 'image' );
             this.url = url;
-            this.width = width;
-            this.height = height;
+            this.width = width || 0;
+            this.height = height || 0;
             this.x = x || 0;
             this.y = y || 0;
 

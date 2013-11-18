@@ -60,7 +60,7 @@ define(function (require, exports, module) {
             for(var i = 0, l = items.length; i < l; i++) {
                 this.addItem(items[i], -1, true);
             }
-            this.onContainerChanged('add', [items]);
+            this.onContainerChanged('add', items);
             return this;
         },
         setItems: function(items) {
