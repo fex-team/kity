@@ -39,7 +39,7 @@ rect.stroke( pen );
 
 rect.rotate(30);
 ```
-	
+    
 这个代码看起来还行，不过对比一下使用 `pipe` 函数的版本：
 
 ```js
@@ -47,24 +47,24 @@ var paper = new Paper(document.body);
 
 paper.addShape(new Rect(0, 0, 10, 10).pipe( function() {
 
-	this.fill(new LinearGradientBrush.pipe( function( brush ) {
-		brush.addStop(0, new Color('red'));
-		brush.addStop(0.5, new Color('blue'));
-		brush.addStop(1, new Color('yellow'));
-		paper.addResource(brush);
-	}));
-	
-	this.stroke(new Pen().pipe( function( pen ) {
-		pen.setDashArray([2, 2]);
-		pen.setWidth(1);
-		pen.setColor('gray');
-	}));
-	
-	this.rotate(30);
-	
+    this.fill(new LinearGradientBrush.pipe( function( brush ) {
+        brush.addStop(0, new Color('red'));
+        brush.addStop(0.5, new Color('blue'));
+        brush.addStop(1, new Color('yellow'));
+        paper.addResource(brush);
+    }));
+    
+    this.stroke(new Pen().pipe( function( pen ) {
+        pen.setDashArray([2, 2]);
+        pen.setWidth(1);
+        pen.setColor('gray');
+    }));
+    
+    this.rotate(30);
+    
 }));
 ```
-	
+    
 恰当地使用 `pipe` 函数，可以提高代码的可读性和美观性。
 
 
@@ -115,17 +115,17 @@ paper.setViewBox(0, 0, 400, 300);
 
 ```js
 /*
-	vbox is like: 
-	{
-		x: 0,
-		y: 0,
-		width: 400,
-		height: 300
-	}
+    vbox is like: 
+    {
+        x: 0,
+        y: 0,
+        width: 400,
+        height: 300
+    }
 */
 var vbox = paper.getViewBox();
 ```
-	
+    
 ### 图形管理
 
 Paper 是一个图形容器（`ShapeContainer`），可以向其添加和移除图形：
@@ -136,8 +136,8 @@ paper.addShape( new Rect(0, 0, 10, 10) );
 
 // 添加多个图形
 paper.addShapes( [
-	new Circle(100, 100, 10),
-	new Circle(200, 200, 10)
+    new Circle(100, 100, 10),
+    new Circle(200, 200, 10)
 ] );
 
 // 通过以下方式移除已经添加的图形：
@@ -154,7 +154,7 @@ paper.clear(); // clear all items
 paper.addShape( rect );
 paper.addShape( circle );
 ```
-	
+    
 所有的图形在创建的时候就会自动生成一个唯一的 id，用户也可以去使用自己设置的 id。
 假如自己设置了图形的 id，那么可以根据 id 获得图形：
 
@@ -163,33 +163,33 @@ rect.setId('my-rect');
 paper.addShape(rect);
 assert( paper.getShapeById('my-rect') === rect ) // true
 ```
-	
+    
 `ShapeContainer` 在 Kity 中都有统一的接口：
-	
-	.addShape()
-	.addShapes()
-	.getShapes()
-	.removeShape()
-	.getShapeById()
-	.clear()
-	
+    
+    .addShape()
+    .addShapes()
+    .getShapes()
+    .removeShape()
+    .getShapeById()
+    .clear()
+    
 被添加到容器中的元素，会有一个 container 字段指向其容器的引用，比如添加到 Paper 中的图形：
-	
-	paper.addShape( rect );
-	assert( rect.container === paper ); //true
-	
-	rect.remove();
-	assert( rect.container === paper ); //false
-	assert( rect.remove === undefined ); //true
-	
+    
+    paper.addShape( rect );
+    assert( rect.container === paper ); //true
+    
+    rect.remove();
+    assert( rect.container === paper ); //false
+    assert( rect.remove === undefined ); //true
+    
 ### 资源管理
 
 在使用 Kity Graphic 的过程中，有一些需要使用的资源，需要加到 Paper 上，才会产生效果。比如 `LinearGradientBrush`、`RadialGradientBrush`、`PatternBrush` 等。往 Paper 添加和移除资源使用以下接口：
 
 ```js
 var brush = new LinearGradientBrush().pipe(function() {
-	this.addStop(0, new Color('red'));
-	this.addStop(1, new Color('blue'));
+    this.addStop(0, new Color('red'));
+    this.addStop(1, new Color('blue'));
 });
 paper.addResource( brush );
 rect.fill( brush );
@@ -197,7 +197,7 @@ rect.fill( brush );
 // 资源被移除后，矩形的填充会失效
 paper.removeResource( brush );
 ```
-	
+    
 ## 创建图形
 
 Kity Graphic 内置了 `Path`、`Rect`、`Ellipse`、`Circle`、`Polyline`、`Polygon`、`Curve`、`Besier` 等基本几何图形。
@@ -209,24 +209,24 @@ Path 是 Kity 中最强大的工具，可以绘制任意图形。其他的几何
 ```js
 var triangle = new Path('M 0 0 L 100 100 100 200 Z');
 ```
-	
+    
 也可以直接访问这个 Path Data：
 
 ```js
 triangle.setPathData('M 0 0 L 100 100 0 100 Z');
 console.log(triangle.getPathData());
 ```
-	
+    
 当然，如果不喜欢拼凑字符串，或者怕拼凑出错的用户，可以选择使用 PathDrawer 来绘制路径：
 
 ```js
 var triangle2 = new Path();
 var d = triangle2.getDrawer();
 d.pipe(function() {
-	this.moveTo(0, 0);
-	this.lineTo(100, 100);
-	this.lineTo(50, 173);
-	this.close();
+    this.moveTo(0, 0);
+    this.lineTo(100, 100);
+    this.lineTo(50, 173);
+    this.close();
 });
 console.log(triangle2.getPathData()); // 'M 0 0 L 100 100 L 50 173 Z'
 ```
@@ -261,7 +261,7 @@ console.log( rect.getY() ); // 20
 console.log( rect.getWidth() ); // 100
 console.log( rect.getHeight() ); // 200
 ```
-	
+    
 你可以随时更改矩形的位置和宽高：
 
 ```js
@@ -294,12 +294,12 @@ console.log( ellipse.getCenter() ); // {x: 0, y: 0}
 console.log( ellipse.getRadiusX() ); // 200
 console.log( ellipse.getRadiusY() ); // 150
 ```
-	
+    
 可以随时更改椭圆圆心位置以及半径：
 
 ```js
 ellipse.setCenterX(100).setCenterY(200);
-ellipse.setRadiusX(30).setRadiusY(40);	
+ellipse.setRadiusX(30).setRadiusY(40);  
 // or
 ellipse.setCenter(100, 200);
 ellipse.setRadius(30, 40);
@@ -328,33 +328,33 @@ circle.setCenterX(100).setCenterY(200);
 // 修改半径
 circle.setRadius(60);
 ```
-	
+    
 ### Polyline
 
 Polyline 用于绘制折线，通过添加顶点到折线上，可以形成经过这些点的折线
 
 ```js
 var polyline = new Polyline().pipe(function() {
-	this.addPoint( new ShapePoint(10, 10) );
-	this.addPoint( new ShapePoint(22, 33) );
-	this.addPoint( new ShapePoint(32, 12) );
+    this.addPoint( new ShapePoint(10, 10) );
+    this.addPoint( new ShapePoint(22, 33) );
+    this.addPoint( new ShapePoint(32, 12) );
 });
 
 // 偷懒写法：
 var polyline = new Polyline().pipe(function() {
-	this.addPoint(10, 10);
-	this.addPoint(22, 33);
-	this.addPoint(32, 12);
+    this.addPoint(10, 10);
+    this.addPoint(22, 33);
+    this.addPoint(32, 12);
 });
 ```
-	
+    
 也可以在创建时直接指定顶点：
 
 ```js
 var polyline = new Polyline([
-	new ShapePoint(10, 10),
-	new ShapePoint(22, 33),
-	new ShapePoint(32, 12)
+    new ShapePoint(10, 10),
+    new ShapePoint(22, 33),
+    new ShapePoint(32, 12)
 ]);
 ```
 
@@ -366,16 +366,16 @@ polyline.getPoint(1).setX(10).setY(20);
 ```
 
 对于折线中顶点的处理提供了强大的功能：
-	
+    
 ```js
 // clear 方法可以清除点集
 polyline.clear();
 
 // 可以批量添加点集
 polyline.addPoints([
-	new ShapePoint(0, 0),
-	new ShapePoint(10, 10),
-	new ShapePoint(20, 20)
+    new ShapePoint(0, 0),
+    new ShapePoint(10, 10),
+    new ShapePoint(20, 20)
 ]);
 
 // 获得第1个点
@@ -402,13 +402,13 @@ Curve 是聪明的曲线，该曲线经过用户指定的点集，并且智能�
 
 ```js
 var curve = new Curve().pipe(function() {
-	this.addPoint( new ShapePoint(10, 10) );
-	this.addPoint( new ShapePoint(24, 33) );
-	this.addPoint( new ShapePoint(63, 22) );
-	this.setSmoothFactor( 2 );
+    this.addPoint( new ShapePoint(10, 10) );
+    this.addPoint( new ShapePoint(24, 33) );
+    this.addPoint( new ShapePoint(63, 22) );
+    this.setSmoothFactor( 2 );
 });
 ```
-	
+
 `setSmoothFactor()` 设置转折点处的平滑程度，值越大越平滑，为 0 的时候绘制成折线，默认值为 1。
 
 ![smoothFactor（图中 k 值）对曲线的影响](images/curve.png)
@@ -419,52 +419,52 @@ Besier 用于绘制贝塞尔曲线。贝塞尔曲线由一系列的转换点构�
 
 ```js
 var besier = new Besier().pipe(function() {
-	this.addPoint(new BesierPoint(30, 30).setForward(100, 0));
-	this.addPoint(new BesierPoint(100, 50).setForward(30, -30));
-	this.addPoint(new BesierPoint(200, 0).setForward(-100, 0));
+    this.addPoint(new BesierPoint(30, 30).setForward(100, 0));
+    this.addPoint(new BesierPoint(100, 50).setForward(30, -30));
+    this.addPoint(new BesierPoint(200, 0).setForward(-100, 0));
 });
 ```
 
 贝塞尔曲线是贝塞尔转换点（BesierPoint）的集合，BesierPoint 本身关注四个属性：顶点位置、前向控制点位置、背向控制点位置、是否平滑。
 
-	var p1 = besier.getItem(0);
-	var p2 = beiser.getItem(1);
-	var p3 = besier.getItem(2);
-	
-	// 重新设置 p2 顶点的位置，注意，控制点的坐标是相对顶点位置的，
-	// 所以 p2.getForward() 和 p2.getBackward() 的值不变
-	p2.setPoint(400, 400)
-	
-	// 设置前向控制点会影响到下一段曲线的形状（p2 -> p3），
-	// 如果 p2 是平滑的，则会同时影响上一段曲线的形状（p1 -> p2）
-	p2.setFoward(100, 0);
+    var p1 = besier.getItem(0);
+    var p2 = beiser.getItem(1);
+    var p3 = besier.getItem(2);
+    
+    // 重新设置 p2 顶点的位置，注意，控制点的坐标是相对顶点位置的，
+    // 所以 p2.getForward() 和 p2.getBackward() 的值不变
+    p2.setPoint(400, 400)
+    
+    // 设置前向控制点会影响到下一段曲线的形状（p2 -> p3），
+    // 如果 p2 是平滑的，则会同时影响上一段曲线的形状（p1 -> p2）
+    p2.setFoward(100, 0);
 
-	// 设置背向控制点会影响到上一段曲线的形状（p1 -> p2）
-	// 如果 p2 是平滑的，则会同时影响下一段曲线的形状（p2 -> p3）
-	p2.setBackward(30, -30);
-	
-	// 如果 p2 是平滑的（默认），那么对前向控制点和背向控制点的改变将会
-	// 影响对方，以保证两个控制点和顶点是在一条直线上的，如果设置为 false
-	// 则两个控制点可以相互独立
-	p2.setSmooth(true);
+    // 设置背向控制点会影响到上一段曲线的形状（p1 -> p2）
+    // 如果 p2 是平滑的，则会同时影响下一段曲线的形状（p2 -> p3）
+    p2.setBackward(30, -30);
+    
+    // 如果 p2 是平滑的（默认），那么对前向控制点和背向控制点的改变将会
+    // 影响对方，以保证两个控制点和顶点是在一条直线上的，如果设置为 false
+    // 则两个控制点可以相互独立
+    p2.setSmooth(true);
 
 ## 使用 Group 来建立图形分组
 
 对图形分组可以把这些图形进行一个整体的设置：
 
-	var flower = new Group().pipe(function() { 
-		for(var i = 0; i < 12; i++) {
-			this.addItem(new Rect(10, 0, 100, 10).rotate( 30 * i ));
-		}
-		this.scale(2).translate(100, 100);
-	});
-	
-	paper.addItem( flower );
+    var flower = new Group().pipe(function() { 
+        for(var i = 0; i < 12; i++) {
+            this.addItem(new Rect(10, 0, 100, 10).rotate( 30 * i ));
+        }
+        this.scale(2).translate(100, 100);
+    });
+    
+    paper.addItem( flower );
 
 组本身也是一个图形（由其子元素组合），所以也可以被添加到组里。
 
-	var group = new Group();
-	group.addItem( flower );
+    var group = new Group();
+    group.addItem( flower );
 
 ## 填充图形
 
@@ -474,21 +474,21 @@ var besier = new Besier().pipe(function() {
 
 要用一个颜色进行填充，可以：
 
-	rect.fill( new Color('red') );
-	// 或者直接使用字符串：
-	rect.fill( 'red' );
-	
+    rect.fill( new Color('red') );
+    // 或者直接使用字符串：
+    rect.fill( 'red' );
+    
 ### 使用 LinearGradientBrush 进行线性渐变填充
 
 线性渐变使用 LinearGradientBrush 进行填充：
 
-	rect.fill(new LinearGradientBrush().pipe( function() {
-		this.addStop(0, 'red');
-		this.addStop(1, 'blue');
-		this.setStartPosition(0, 0);
-		this.setEndPosition(1, 1);
-		paper.addResource(this);
-	}));
+    rect.fill(new LinearGradientBrush().pipe( function() {
+        this.addStop(0, 'red');
+        this.addStop(1, 'blue');
+        this.setStartPosition(0, 0);
+        this.setEndPosition(1, 1);
+        paper.addResource(this);
+    }));
 
 ![线性渐变](images/linear.png)
 
@@ -502,14 +502,14 @@ var besier = new Besier().pipe(function() {
 
 进项渐变使用 RadialGradientBrush 进行填充：
 
-	rect.fill(new RadialGradientBrush().pipe( function() {
-		this.setCenter(0.5, 0.5);
-		this.setRadius(0.8);
-		this.setFocal(0.8, 0.2);
-		this.addStop(0, 'white');
-		this.addStop(1, 'gray');
-		paper.addResource(this);
-	}));
+    rect.fill(new RadialGradientBrush().pipe( function() {
+        this.setCenter(0.5, 0.5);
+        this.setRadius(0.8);
+        this.setFocal(0.8, 0.2);
+        this.addStop(0, 'white');
+        this.addStop(1, 'gray');
+        paper.addResource(this);
+    }));
 
 ![径向渐变](images/radial.png)
 
@@ -525,16 +525,16 @@ var besier = new Besier().pipe(function() {
 
 PatternBrush 是最灵活的画笔，它可以用图形填充图形。
 
-	rect.fill(new PatternBrush().pipe( function() {
-		var colors = ['red', 'blue', 'yelow', 'green'];
-		this.setWidth(40);
-		this.setHeight(40);
-		this.addItem( new Circle(10, 10, 5).fill(colors.shift()) );
-		this.addItem( new Circle(30, 10, 5).fill(colors.shift()) );
-		this.addItem( new Circle(10, 30, 5).fill(colors.shift()) );
-		this.addItem( new Circle(30, 30, 5).fill(colors.shift()) );
-		paper.addResource(this);
-	}));
+    rect.fill(new PatternBrush().pipe( function() {
+        var colors = ['red', 'blue', 'yelow', 'green'];
+        this.setWidth(40);
+        this.setHeight(40);
+        this.addItem( new Circle(10, 10, 5).fill(colors.shift()) );
+        this.addItem( new Circle(30, 10, 5).fill(colors.shift()) );
+        this.addItem( new Circle(10, 30, 5).fill(colors.shift()) );
+        this.addItem( new Circle(30, 30, 5).fill(colors.shift()) );
+        paper.addResource(this);
+    }));
 
 ![图形填充](images/pattern.png)
 
@@ -548,13 +548,13 @@ PatternBrush 是最灵活的画笔，它可以用图形填充图形。
 
 Pen 用于描绘图形的轮廓：
 
-	path.stroke(new Pen().pipe(function() {
-		this.setWidth(5);
-		this.setDashArray([10, 5]);
-		this.setLineCap('butt');
-		this.setLineJoin('round');
-		this.setColor('green');
-	}));
+    path.stroke(new Pen().pipe(function() {
+        this.setWidth(5);
+        this.setDashArray([10, 5]);
+        this.setLineCap('butt');
+        this.setLineJoin('round');
+        this.setColor('green');
+    }));
 
 ![描边](images/pen.png)
 
