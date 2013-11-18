@@ -11,7 +11,7 @@ define(function (require, exports, module) {
          * @param points 曲线上的点的集合， 集合中的点的数量必须大于2
          * @return 平移线数组
          */
-        getCurvePanLines: function ( points ) {
+        getCurvePanLines: function ( points, smoothFactor ) {
 
             //计算原始点的中点坐标
             var centerPoints = CurveUtil.getCenterPoints( points ),
@@ -21,7 +21,7 @@ define(function (require, exports, module) {
 
 
             //平移线移动到顶点
-            return CurveUtil.getMovedPanLines( points, panLines );
+            return CurveUtil.getMovedPanLines( points, panLines, smoothFactor );
 
         },
 
@@ -114,7 +114,7 @@ define(function (require, exports, module) {
          * @param points 顶点集合
          * @param panLines 平移线集合
          */
-        getMovedPanLines: function ( points, panLines ) {
+        getMovedPanLines: function ( points, panLines, smoothFactor ) {
 
             var result = {};
 
@@ -142,8 +142,8 @@ define(function (require, exports, module) {
                 Utils.each( currentPanLine.points, function ( controlPoint, index ) {
 
                     currentResult.points.push( {
-                        x: controlPoint.x - distance.x,
-                        y: controlPoint.y - distance.y
+                        x: Math.floor( ( controlPoint.x - distance.x ) * smoothFactor ),
+                        y: Math.floor( ( controlPoint.y - distance.y ) * smoothFactor )
                     } );
 
                 } );
@@ -175,6 +175,7 @@ define(function (require, exports, module) {
                 //闭合状态
                 this.closeState = !!isColse;
                 this.changeable = true;
+                this.smoothFactor = 1;
 
                 this.update();
 
@@ -188,6 +189,20 @@ define(function (require, exports, module) {
             if ( this.changeable ) {
                 this.update();
             }
+
+        },
+
+        setSmoothFactor: function ( factor ) {
+
+            this.smoothFactor = factor < 0 ? 0 : factor;
+
+            return this;
+
+        },
+
+        getSmoothFactor: function () {
+
+            return this.smoothFactor;
 
         },
 
@@ -227,7 +242,7 @@ define(function (require, exports, module) {
             }
 
             //获取已转换过后的带控制点的所有点
-            withControlPoints = CurveUtil.getCurvePanLines( points );
+            withControlPoints = CurveUtil.getCurvePanLines( points, this.smoothFactor );
 
             for ( var i = 1, len = points.length; i < len; i++ ) {
 
