@@ -11,7 +11,7 @@ define(function (require, exports, module) {
          * @param points 曲线上的点的集合， 集合中的点的数量必须大于2
          * @return 平移线数组
          */
-        getCurvePanLines: function ( points ) {
+        getCurvePanLines: function ( points, k ) {
 
             //计算原始点的中点坐标
             var centerPoints = CurveUtil.getCenterPoints( points ),
@@ -22,7 +22,7 @@ define(function (require, exports, module) {
                 pathData = [];
 
             //平移线移动到顶点
-            return CurveUtil.getMovedPanLines( points, panLines );
+            return CurveUtil.getMovedPanLines( points, panLines, k );
 
         },
 
@@ -99,7 +99,7 @@ define(function (require, exports, module) {
                         x: ( point1.x + point2.x ) / 2,
                         y: ( point1.y + point2.y ) / 2
                     }
-                }
+                };
 
                 //还原i值
                 i = ( pointIndex + length - 1 ) % length;
@@ -115,7 +115,7 @@ define(function (require, exports, module) {
          * @param points 顶点集合
          * @param panLines 平移线集合
          */
-        getMovedPanLines: function ( points, panLines ) {
+        getMovedPanLines: function ( points, panLines, k ) {
 
             var result = {};
 
@@ -142,10 +142,15 @@ define(function (require, exports, module) {
 
                 Utils.each( currentPanLine.points, function ( controlPoint, index ) {
 
-                    currentResult.points.push( {
+                    var moved = {
                         x: controlPoint.x - distance.x,
                         y: controlPoint.y - distance.y
-                    } );
+                    };
+                    var dx = moved.x - point.x;
+                    var dy = moved.y - point.y;
+                    moved.x = point.x + k * dx;
+                    moved.y = point.y + k * dy;
+                    currentResult.points.push( moved );
 
                 } );
 
@@ -224,7 +229,7 @@ define(function (require, exports, module) {
             }
 
             //获取已转换过后的带控制点的所有点
-            withControlPoints = CurveUtil.getCurvePanLines( points );
+            withControlPoints = CurveUtil.getCurvePanLines( points, this.getSmoothFactor() );
 
             for ( var i = 1, len = points.length; i < len; i++ ) {
 
@@ -232,10 +237,17 @@ define(function (require, exports, module) {
                 curPoint = withControlPoints[ i ].center;
 
                 //当前控制点
-                curControlPoint = withControlPoints[ i ].points[ 0 ];
+                if(this.closeState || i != len - 1) {
+                    curControlPoint = withControlPoints[ i ].points[ 0 ];
+                } else {
+                    curControlPoint = withControlPoints[ i ].center;
+                }
 
-                //前一个点的控制点
-                prevControlPoint = withControlPoints[ i -1 ].points[ 1 ];
+                if( this.closeState || i != 1) {
+                    prevControlPoint = withControlPoints[ i - 1 ].points[ 1 ];
+                } else {
+                    prevControlPoint = withControlPoints[ i - 1 ].center;
+                }
 
                 drawer.besierTo( prevControlPoint.x, prevControlPoint.y, curControlPoint.x, curControlPoint.y, curPoint.x, curPoint.y );
 
@@ -274,6 +286,15 @@ define(function (require, exports, module) {
 
             return this.closeState || false;
 
+        },
+
+        getSmoothFactor: function() {
+            return this.smoothFactor;
+        },
+
+        setSmoothFactor: function(value) {
+            this.smoothFactor = value;
+            return this;
         }
 
     });

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pen Example</title>
+    <script src="../dev-lib/sea.js"></script>
+    <script>
+        seajs.config({
+            base: '../src'
+        });
+        define('start', function (require) {
+            var Paper = require('graphic/paper');
+            var Curve = require('graphic/curve');
+            var Rect = require('graphic/rect');
+            var Group = require('graphic/group');
+            var Pen = require('graphic/pen');
+            var Text = require('graphic/text');
+
+            var paper = new Paper(document.body);
+
+            paper.setWidth(600).setHeight(400);
+
+            var Curve2 = require('core/class').createClass({
+                base: Group,
+                constructor: function(x, y, s) {
+                    this.callBase();
+                    var points = [ 
+                        { x: 15, y: 100 }, 
+                        { x: 105, y: 10 }, 
+                        { x: 195, y: 190 }, 
+                        { x: 285, y: 100 }
+                    ];
+                    var curve = new Curve().stroke('black').setSmoothFactor(s);
+                    this.addShape(curve);
+                    for(var i = 0; i < points.length; i++) {
+                        var p = points[i];
+                        curve.addItem( p );
+                        this.addShape(new Rect(p.x - 3, p.y - 3, 6, 6).fill('red'));
+                    }
+                    this.addShape(new Text('k = ' + s).setX(180).setY(50).fill('blue'));
+                    this.scale(0.8).translate(x, y);
+                }
+            });
+
+            paper.addShapes([
+                new Curve2(0, 0, 0),
+                new Curve2(300, 0, 0.5),
+                new Curve2(0, 200, 1),
+                new Curve2(300, 200, 5)
+            ]);
+        });
+        seajs.use('start');
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

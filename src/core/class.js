@@ -150,6 +150,11 @@ define( function ( require, exports ) {
     exports.createClass = function ( classname, defines ) {
         var thisClass, baseClass;
 
+        if(arguments.length === 1) {
+            defines = classname;
+            classname = 'AnonymousClass';
+        }
+
         baseClass = defines.base || BaseClass;
 
         if ( defines.hasOwnProperty( 'constructor' ) ) {
