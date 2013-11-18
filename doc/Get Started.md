@@ -42,7 +42,7 @@ Kity Graphic 使用 OOP 的编程和接口风格，通过创建对象和在对�
 
 	var paper = new Paper(document.body);
 	
-	paper.addItem(new Rect(0, 0, 10, 10).pipe( function() {
+	paper.addShape(new Rect(0, 0, 10, 10).pipe( function() {
 	
 		this.fill(new LinearGradientBrush.pipe( function( brush ) {
 			brush.addStop(0, new Color('red'));
@@ -114,51 +114,50 @@ Kity 中所有的对象都是通过使用 new 运算符创建的，有一些类�
 	
 ### 图形管理
 
-Paper 是一个容器（`Container`），可以向其添加和移除图形：
+Paper 是一个图形容器（`ShapeContainer`），可以向其添加和移除图形：
 	
-	var rect = new Rect(0, 0, 10, 10);
-	paper.addItem( rect );
-	// 还支持：appendItem()、prependItem()、addItem(shape, pos) 接口 
+	// 添加单个图形
+	paper.addShape( new Rect(0, 0, 10, 10) );
+	
+	// 添加多个图形
+	paper.addShapes( [
+		new Circle(100, 100, 10),
+		new Circle(200, 200, 10)
+	] );
 	
 	// 通过以下方式移除已经添加的图形：
-	paper.removeItem( paper.indexOf(rect) );
+	paper.removeShape( rect );
 	
 	// 或者更简单的：
 	rect.remove();
 
-要获得当前 Paper 上所有的图形，可以使用 `paper.getItems()` 接口。要获得指定位置的图形，可以使用 `paper.getItem(index)` 接口：
+要获得当前 Paper 上所有的图形，可以使用 `paper.getShapes()` 接口。
 	
 	paper.clear(); // clear all items
-	paper.addItem( rect );
-	paper.addItem( circle );
+	paper.addShape( rect );
+	paper.addShape( circle );
 	
-	assert( rect === paper.getItem(0) ); // true
-	assert( circle === paper.getItem(1) ); // true
 	
 假如自己设置了图形的 id，那么可以根据 id 获得图形：
 
 > 所有的图形在创建的时候就会自动生成一个唯一的 id，用户也可以去使用自己设置的 id
 
 	rect.setId('my-rect');
-	paper.addItem(rect);
+	paper.addShape(rect);
 	assert( paper.getShapeById('my-rect') === rect ) // true
 	
-> 对于所有的 `Container` 在 Kity 中都有统一的接口：
+> `ShapeContainer` 在 Kity 中都有统一的接口：
 	
-	.addItem( item, index )
-	.appendItem( item )
-	.prependItem( item )
-	.getItem( index )
-	.getItems()
-	.getFirstItem()
-	.getLastItem()
-	.eachItem( fn(index, item) )
-	.removeItem( index )
+	.addShape()
+	.addShapes()
+	.getShapes()
+	.removeShape()
+	.getShapeById()
 	.clear()
 	
 > 被添加到容器中的元素，会有一个 container 字段指向其容器的引用，比如添加到 Paper 中的图形：
 	
-	paper.addItem( rect );
+	paper.addShape( rect );
 	assert( rect.container === paper ); //true
 	
 	rect.remove();
@@ -289,12 +288,43 @@ Circle 用于绘制一个圆形：
 Polyline 用于绘制折线，通过添加关键点到折线上，可以形成经过这些点的折线
 
 	var polyline = new Polyline().pipe(function() {
-		this.addItem( {x: 10, y: 10 } );
-		this.addItem( {x: 24, y: 33 } );
-		this.addItem( {x: 63, y: 22 } );
+		this.addPoint( new Point(10, 10) );
+		this.addPoint( new Point(22, 33) );
+		this.addPoint( new Point(32, 12) );
 	});
+	
+也可以在创建时直接指定关键点：
 
-Polyline 是关键点的集合，支持所有的 `container` 操作
+	var polyline = new Polyline([
+		new Point(10, 10),
+		new Point(22, 33),
+		new Point(32, 12)
+	]);
+
+Polyline 是关键点的集合，支持所有的 `PointContainer` 操作。`PointContainer` 的点是有序的，点的顺序会影响到图形的形状。
+	
+	```javascript
+	// clear 方法可以清除点集
+	polyline.clear();
+	
+	// 可以批量添加点集
+	polyline.addPoints([
+		new Point(0, 0),
+		new Point(10, 10),
+		new Point(20, 20)
+	]);
+	
+	assert( polyline.getPoint(0).toString() === '0, 0' ) // true
+	assert( polyline.getFirstPoint().toString() === '0, 0' ) // true
+	assert( polyline.getPoint(2).toString() === '20, 20') // true
+	assert( polyline.getLastPoint().toString() === '20, 20' ) // true
+	
+	// 获得第2个点
+	polyline.getPoint(1);
+	
+	// 插入指定的点到第2个点的位置
+	polyline.addPoint(new Point(20, 20), 1);
+	```
 
 ### Polygon
 
@@ -305,9 +335,9 @@ Polygon 用于绘制多边形，其使用方法和 Polyline 完全一致，只�
 Curve 用于绘制曲线，该曲线经过用户指定的点集。如果曲线闭合，则形成一个平滑的包围形状。
 
 	var curve = new Curve().pipe(function() {
-		this.addItem( {x: 10, y: 10 } );
-		this.addItem( {x: 24, y: 33 } );
-		this.addItem( {x: 63, y: 22 } );
+		this.addPoint( 10, 10 );
+		this.addPoint( 24, 33 );
+		this.addPoint( 63, 22 );
 		this.setSmoothScale(50);
 	});
 	
@@ -318,9 +348,9 @@ Curve 用于绘制曲线，该曲线经过用户指定的点集。如果曲线�
 Besier 用于绘制贝塞尔曲线。贝塞尔曲线由一系列的转换点构成，每个转换点包含一个顶点坐标以及两个控制点坐标。其中顶点坐标是绝对坐标，控制点坐标是相对顶点的坐标。如果转换点是设置为光滑的，那么两个控制点是会相互影响的，否则将相对独立。
 
 	var besier = new Besier().pipe(function() {
-		this.addItem(new BesierPoint(30, 30).setForward(100, 0));
-		this.addItem(new BesierPoint(100, 50).setForward(30, -30));
-		this.addItem(new BesierPoint(200, 0).setForward(-100, 0));
+		this.addBesierPoint(new BesierPoint(30, 30).setForward(100, 0));
+		this.addBesierPoint(new BesierPoint(100, 50).setForward(30, -30));
+		this.addBesierPoint(new BesierPoint(200, 0).setForward(-100, 0));
 	});
 
 贝塞尔曲线是贝塞尔转换点（BesierPoint）的集合，BesierPoint 本身关注四个属性：顶点位置、前向控制点位置、背向控制点位置、是否光滑。
