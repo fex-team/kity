@@ -4,6 +4,7 @@ define(function (require, exports, module) {
     return require('core/class').createClass('ShapeContainer', {
         base: Container,
 
+        /* protected */
         onItemChanged: function(type, shapes) {
             switch(type) {
                 case 'add':
@@ -15,6 +16,7 @@ define(function (require, exports, module) {
             }
         },
 
+        /* private */
         onAddShapes: function(shapes) {
             var parent = this.getShapeNode();
             for(var i = 0; i < shapes.length; i++) {
@@ -22,6 +24,7 @@ define(function (require, exports, module) {
             }
         },
 
+        /* private */
         onRemoveShapes: function(shapes) {
             var parent = this.getShapeNode();
             for(var i = 0; i < shapes.length; i++) {
@@ -29,26 +32,27 @@ define(function (require, exports, module) {
             }
         },
 
+        /* public */
         addShape: function (shape) {
             return this.appendItem(shape);
         },
 
+        /* public */
         addShapes: function(shapes) {
             return this.addItems(shapes);
         },
 
+        /* public */
         removeShape: function (pos) {
             return this.removeItem(pos);
         },
 
-        getShape: function(pos) {
-            return this.getItem(pos);
-        },
-
+        /* public */
         getShapeById: function (id) {
             return this.getShapeNode().getElementById(id).shape;
         },
 
+        /* protected */
         getShapeNode: function () {
             return this.shapeNode || this.node; // 最佳可能
         }
