@@ -138,6 +138,7 @@ define(function (require, exports, module) {
                     }
                 };
 
+                //计算控制点到顶点的距离， 并且应用平滑系数到距离上
                 Utils.each( currentPanLine.points, function ( controlPoint, index ) {
                     var moved = {
                         x: controlPoint.x - distance.x,
@@ -169,14 +170,13 @@ define(function (require, exports, module) {
 
             this.callBase();
 
-            if ( points ) {
+            this.setPoints( points );
 
-                this.closeState = !!isColse;
-                this.changeable = true;
-                this.smoothFactor = 1;
+            this.closeState = !!isColse;
+            this.changeable = true;
+            this.smoothFactor = 1;
 
-                this.setPoints( points );
-            }
+            this.update();
 
         },
 
@@ -250,12 +250,14 @@ define(function (require, exports, module) {
                 if(this.closeState || i != len - 1) {
                     curControlPoint = withControlPoints[ i ].points[ 0 ];
                 } else {
+                    //非闭合状态下最后一个点的处理
                     curControlPoint = withControlPoints[ i ].center;
                 }
 
                 if( this.closeState || i != 1) {
                     prevControlPoint = withControlPoints[ i - 1 ].points[ 1 ];
                 } else {
+                    //非闭合状态下第一个点的处理
                     prevControlPoint = withControlPoints[ i - 1 ].center;
                 }
 
