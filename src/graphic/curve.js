@@ -17,9 +17,8 @@ define(function (require, exports, module) {
             var centerPoints = CurveUtil.getCenterPoints( points ),
 
                 //注意：计算中点连线的中点坐标， 得出平移线
-                panLines = CurveUtil.getPanLine( points.length, centerPoints ),
+                panLines = CurveUtil.getPanLine( points.length, centerPoints );
 
-                pathData = [];
 
             //平移线移动到顶点
             return CurveUtil.getMovedPanLines( points, panLines );
@@ -44,8 +43,8 @@ define(function (require, exports, module) {
 
                 //计算中点坐标
                 centerPoints[ key ] = {
-                    x: ( points[ i ].x + points[ j ].x ) / 2,
-                    y: ( points[ i ].y + points[ j ].y ) / 2
+                    x: ( points[ i ].getX() + points[ j ].getX() ) / 2,
+                    y: ( points[ i ].getY() + points[ j ].getY() ) / 2
                 };
 
 
@@ -128,15 +127,15 @@ define(function (require, exports, module) {
 
                     //移动距离
                     distance = {
-                        x: center.x - point.x,
-                        y: center.y - point.y
+                        x: center.x - point.getX(),
+                        y: center.y - point.getY()
                     };
 
                 var currentResult = result[ index ] = {
                     points: [],
                     center: {
-                        x: point.x,
-                        y: point.y
+                        x: point.getX(),
+                        y: point.getY()
                     }
                 };
 
@@ -171,14 +170,11 @@ define(function (require, exports, module) {
 
             if ( points ) {
 
-                Utils.each( points, function ( point ) {
-
-                    _self.addItem( point );
-
-                } );
+                this.setPoints( points );
 
                 //闭合状态
                 this.closeState = !!isColse;
+                this.changeable = true;
 
                 this.update();
 
@@ -186,9 +182,18 @@ define(function (require, exports, module) {
 
         },
 
+        //当点集合发生变化时采取的动作
+        onContainerChanged: function () {
+
+            if ( this.changeable ) {
+                this.update();
+            }
+
+        },
+
         update: function () {
 
-            var points = this.getItems(),
+            var points = this.getPoints(),
                 withControlPoints = null,
                 drawer = this.getDrawer(),
                 curPoint = null,
@@ -198,8 +203,6 @@ define(function (require, exports, module) {
             drawer.clear();
 
             if ( points.length === 0 ) {
-
-                drawer.moveTo( 0, 0 );
 
                 return this;
 
@@ -217,7 +220,7 @@ define(function (require, exports, module) {
 
             if ( points.length === 2 ) {
 
-                drawer.lineTo( points[1].x, points[1].y );
+                drawer.lineTo( points[1].getX(), points[1].getY() );
 
                 return this;
 
@@ -272,7 +275,7 @@ define(function (require, exports, module) {
 
         isClose: function () {
 
-            return this.closeState || false;
+            return !!this.closeState;
 
         }
 
