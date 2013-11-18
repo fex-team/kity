@@ -47,6 +47,10 @@ define(function (require, exports, module) {
             return this.removeItem(pos);
         },
 
+        getShapes: function() {
+            return this.getItems();
+        },
+
         /* public */
         getShapeById: function (id) {
             return this.getShapeNode().getElementById(id).shape;
