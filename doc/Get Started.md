@@ -20,7 +20,7 @@ Kity Graphic 使用 OOP 的编程和接口风格，通过创建对象和在对�
 
 下面是不使用 `pipe` 函数绘制一个用渐变填充、虚线描边并且旋转了30度的矩形的代码。
 
-```javascript
+```js
 var paper = new Paper(document.body);
 var rect = new Rect(0, 0, 10, 10);
 var brush = new LinearGradientBrush();
@@ -42,7 +42,7 @@ rect.rotate(30);
 	
 这个代码看起来还行，不过对比一下使用 `pipe` 函数的版本：
 
-```javascript
+```js
 var paper = new Paper(document.body);
 
 paper.addShape(new Rect(0, 0, 10, 10).pipe( function() {
@@ -76,7 +76,7 @@ Paper 是所有图形和资源的跟容器，所有图形和资源（资源的�
 
 Kity 中所有的对象都是通过使用 new 运算符创建的，有一些类型要求你在创建的时候传递必须的参数到构造函数中。用下面的代码可以创建一个 Paper，并且会在指定的容器中渲染：
 
-```javascript
+```js
 var paper = new Paper('container');
 
 // 或者直接传 Dom 对象：
@@ -85,17 +85,17 @@ var paper = new Paper(document.body);
 
 如果需要，你也可以重新获取容器：
 
-```javascript
+```js
 var container = paper.getContainer();
 ```
     
 ### 设置宽高和视野
 
-宽高和事业是对 Paper 最基本的设置。
+宽高和视野是对 Paper 最基本的设置。
 
 宽高指的是 Paper 在浏览器中渲染的大小，可以使用像素或百分比作为单位：
 
-```javascript
+```js
 paper.setWidth(800).setHeight(600);
 // 或使用百分比：
 paper.setWidth('100%').setHeight('100%');
@@ -107,13 +107,13 @@ paper.setWidth('100%').setHeight('100%');
 
 上面两个矩形的大小都是 60 * 40，左上角坐标都是 (10, 10)，但是因为 Paper 的 ViewBox 不一样，导致了其呈现不一样。设置 Paper 的 ViewBox 使用 setViewBox 接口：
 
-```javascript
+```js
 paper.setViewBox(0, 0, 400, 300);
 ```
 
 如果需要，也可以获得 Paper 当前的 ViewBox：
 
-```javascript	
+```js
 /*
 	vbox is like: 
 	{
@@ -130,7 +130,7 @@ var vbox = paper.getViewBox();
 
 Paper 是一个图形容器（`ShapeContainer`），可以向其添加和移除图形：
 
-```js	
+```js
 // 添加单个图形
 paper.addShape( new Rect(0, 0, 10, 10) );
 
@@ -155,16 +155,16 @@ paper.addShape( rect );
 paper.addShape( circle );
 ```
 	
-	
+所有的图形在创建的时候就会自动生成一个唯一的 id，用户也可以去使用自己设置的 id。
 假如自己设置了图形的 id，那么可以根据 id 获得图形：
 
-> 所有的图形在创建的时候就会自动生成一个唯一的 id，用户也可以去使用自己设置的 id
-
-	rect.setId('my-rect');
-	paper.addShape(rect);
-	assert( paper.getShapeById('my-rect') === rect ) // true
+```js
+rect.setId('my-rect');
+paper.addShape(rect);
+assert( paper.getShapeById('my-rect') === rect ) // true
+```
 	
-> `ShapeContainer` 在 Kity 中都有统一的接口：
+`ShapeContainer` 在 Kity 中都有统一的接口：
 	
 	.addShape()
 	.addShapes()
@@ -173,7 +173,7 @@ paper.addShape( circle );
 	.getShapeById()
 	.clear()
 	
-> 被添加到容器中的元素，会有一个 container 字段指向其容器的引用，比如添加到 Paper 中的图形：
+被添加到容器中的元素，会有一个 container 字段指向其容器的引用，比如添加到 Paper 中的图形：
 	
 	paper.addShape( rect );
 	assert( rect.container === paper ); //true
@@ -184,57 +184,69 @@ paper.addShape( circle );
 	
 ### 资源管理
 
-在使用 Kity Graphic 的过程中，有一些需要使用的资源，需要加到 Paper 上，才会产生效果。比如 LinearGradientBrush、RadialGradientBrush、PatternBrush 等。往 Paper 添加和移除资源使用以下接口：
+在使用 Kity Graphic 的过程中，有一些需要使用的资源，需要加到 Paper 上，才会产生效果。比如 `LinearGradientBrush`、`RadialGradientBrush`、`PatternBrush` 等。往 Paper 添加和移除资源使用以下接口：
 
-	var brush = new LinearGradientBrush().pipe(function() {
-		this.addStop(0, new Color('red'));
-		this.addStop(1, new Color('blue'));
-	});
-	paper.addResource( brush );
-	rect.fill( brush );
-	
-	// 资源被移除后，矩形的填充会失效
-	paper.removeResource( brush );
+```js
+var brush = new LinearGradientBrush().pipe(function() {
+	this.addStop(0, new Color('red'));
+	this.addStop(1, new Color('blue'));
+});
+paper.addResource( brush );
+rect.fill( brush );
+
+// 资源被移除后，矩形的填充会失效
+paper.removeResource( brush );
+```
 	
 ## 创建图形
 
-Kity Graphic 内置了 Path、Rect、Ellipse、Circle、Polyline、Polygon、Curve、Besier 等基本几何图形。
+Kity Graphic 内置了 `Path`、`Rect`、`Ellipse`、`Circle`、`Polyline`、`Polygon`、`Curve`、`Besier` 等基本几何图形。
 
 ### Path
 
 Path 是 Kity 中最强大的工具，可以绘制任意图形。其他的几何图形都是继承 Path 而来。Path 能识别 SVG 中定义的 [Path Data](http://www.w3.org/TR/SVG/paths.html#PathData) 字符串格式。可以通过这样一个字符串构造 Path：
 
-	var triangle = new Path('M 0 0 L 100 100 100 200 Z');
+```js
+var triangle = new Path('M 0 0 L 100 100 100 200 Z');
+```
 	
 也可以直接访问这个 Path Data：
 
-	triangle.setPathData('M 0 0 L 100 100 0 100 Z');
-	console.log(triangle.getPathData());
+```js
+triangle.setPathData('M 0 0 L 100 100 0 100 Z');
+console.log(triangle.getPathData());
+```
 	
 当然，如果不喜欢拼凑字符串，或者怕拼凑出错的用户，可以选择使用 PathDrawer 来绘制路径：
 
-	var triangle2 = new Path().getDrawer().pipe(function() {
-		this.moveTo(0, 0);
-		this.lineTo(100, 100);
-		this.lineTo(50, 173);
-		this.close();		
-	});
-	console.log(triangle2.getPathData()); // 'M 0 0 L 100 100 L 50 173 Z'
-	
+```js
+var triangle2 = new Path();
+var d = triangle2.getDrawer();
+d.pipe(function() {
+	this.moveTo(0, 0);
+	this.lineTo(100, 100);
+	this.lineTo(50, 173);
+	this.close();
+});
+console.log(triangle2.getPathData()); // 'M 0 0 L 100 100 L 50 173 Z'
+```
+
 `path.getDrawer()` 返回的是一个 PathDrawer 实例，它与具体的 Path 绑定。PathDrawer 的方法包括：
 
-	d.moveTo(x, y)
-	d.moveBy(dx, dy)
-	d.lineTo(x, y)
-	d.lineBy(dx, dy)
-	d.arcTo(rx, ry, xr, laf, sf, x, y )
-	d.arcBy(rx, ry, xr, laf, sf, dx, dy )
-	d.carcTo(r, x, y, laf, sf)
-	d.carcBy(r, dx, dy, laf, sf)
-	d.besierTo(x1, y1, x2, y2, x, y)
-	d.besierBy(dx1, dy1, dx2, dy2, dx, dy)
-	d.close()
-	d.clear()
+```js
+d.moveTo(x, y)
+d.moveBy(dx, dy)
+d.lineTo(x, y)
+d.lineBy(dx, dy)
+d.arcTo(rx, ry, xr, laf, sf, x, y )
+d.arcBy(rx, ry, xr, laf, sf, dx, dy )
+d.carcTo(r, x, y, laf, sf)
+d.carcBy(r, dx, dy, laf, sf)
+d.besierTo(x1, y1, x2, y2, x, y)
+d.besierBy(dx1, dy1, dx2, dy2, dx, dy)
+d.close()
+d.clear()
+```
 
 其中 `carcTo` 为 `arcTo` 的快捷操作，用于绘制圆弧
 
@@ -242,106 +254,142 @@ Path 是 Kity 中最强大的工具，可以绘制任意图形。其他的几何
 
 Rect 是使用非常广泛的图形。Rect 的参数非常简单：
 
-	var rect = new Rect(10, 20, 100, 200);
-	console.log( rect.getX() ); // 10
-	console.log( rect.getY() ); // 20
-	console.log( rect.getWidth() ); // 100
-	console.log( rect.getHeight() ); // 200
+```js
+var rect = new Rect(10, 20, 100, 200);
+console.log( rect.getX() ); // 10
+console.log( rect.getY() ); // 20
+console.log( rect.getWidth() ); // 100
+console.log( rect.getHeight() ); // 200
+```
 	
 你可以随时更改矩形的位置和宽高：
-	
-	rect.setX(20).setY(10);
-	rect.setWidth(100).setHeight(200);
-	// or
-	rest.setPosition(20, 10)
-	rect.setSize(100, 200);
+
+```js
+rect.setX(20).setY(10);
+rect.setWidth(100).setHeight(200);
+// or
+rest.setPosition(20, 10)
+rect.setSize(100, 200);
+```
 
 Kity 的矩形支持圆角：
 
-	var rect = new Rect(10, 20, 100, 200, 5);
-	console.log( rect.getRadius() ); // 5
+```js
+var rect = new Rect(10, 20, 100, 200, 5);
+console.log( rect.getRadius() ); // 5
+```
 
 圆角也可以随时修改
 
 ### Ellipse
 
 Ellipse 用于绘制一个椭圆：
-	
-	// 圆心：(0, 0)
-	// x 轴半径：200
-	// y 轴半径：100
-	var ellipse = new Ellipse(0, 0, 200, 150);
-	console.log( ellipse.getCenter() ); // {x: 0, y: 0}
-	console.log( ellipse.getRadiusX() ); // 200
-	console.log( ellipse.getRadiusY() ); // 150
+
+```js
+// 圆心：(0, 0)
+// x 轴半径：200
+// y 轴半径：100
+var ellipse = new Ellipse(0, 0, 200, 150);
+console.log( ellipse.getCenter() ); // {x: 0, y: 0}
+console.log( ellipse.getRadiusX() ); // 200
+console.log( ellipse.getRadiusY() ); // 150
+```
 	
 可以随时更改椭圆圆心位置以及半径：
-	
-	ellipse.setCenterX(100).setCenterY(200);
-	ellipse.setRadiusX(30).setRadiusY(40);	
-	// or
-	ellipse.setCenter(100, 200);
-	ellipse.setRadius(30, 40);
+
+```js
+ellipse.setCenterX(100).setCenterY(200);
+ellipse.setRadiusX(30).setRadiusY(40);	
+// or
+ellipse.setCenter(100, 200);
+ellipse.setRadius(30, 40);
+```
 
 ### Circle
 
 Circle 用于绘制一个圆形：
 
-	// 圆心：(200, 300)
-	// 半径：50
-	var circle = new Circle(200, 300, 50);
-	console.log( circle.getCenter() ); // {x: 200, y: 300}
-	console.log( circle.getRadius() ); // 50 
+```js
+// 圆心：(200, 300)
+// 半径：50
+var circle = new Circle(200, 300, 50);
+console.log( circle.getCenter() ); // {x: 200, y: 300}
+console.log( circle.getRadius() ); // 50 
+```
 
 可以随时更改圆形的圆心及半径
 
-	circle.setCenter(100, 200);
-	// or
-	circle.setCenterX(100).setCenterY(200);
-	
-	circle.setRadius(60);
+```js
+// 修改圆心
+circle.setCenter(100, 200);
+// or
+circle.setCenterX(100).setCenterY(200);
+
+// 修改半径
+circle.setRadius(60);
+```
 	
 ### Polyline
 
-Polyline 用于绘制折线，通过添加关键点到折线上，可以形成经过这些点的折线
+Polyline 用于绘制折线，通过添加顶点到折线上，可以形成经过这些点的折线
 
-	var polyline = new Polyline().pipe(function() {
-		this.addPoint( new Point(10, 10) );
-		this.addPoint( new Point(22, 33) );
-		this.addPoint( new Point(32, 12) );
-	});
-	
-也可以在创建时直接指定关键点：
+```js
+var polyline = new Polyline().pipe(function() {
+	this.addPoint( new ShapePoint(10, 10) );
+	this.addPoint( new ShapePoint(22, 33) );
+	this.addPoint( new ShapePoint(32, 12) );
+});
 
-	var polyline = new Polyline([
-		new Point(10, 10),
-		new Point(22, 33),
-		new Point(32, 12)
-	]);
+// 偷懒写法：
+var polyline = new Polyline().pipe(function() {
+	this.addPoint(10, 10);
+	this.addPoint(22, 33);
+	this.addPoint(32, 12);
+});
+```
+	
+也可以在创建时直接指定顶点：
 
-Polyline 是关键点的集合，支持所有的 `PointContainer` 操作。`PointContainer` 的点是有序的，点的顺序会影响到图形的形状。
+```js
+var polyline = new Polyline([
+	new ShapePoint(10, 10),
+	new ShapePoint(22, 33),
+	new ShapePoint(32, 12)
+]);
+```
+
+对顶点的改变是可以直接影响图形外观的：
+
+```js
+// 让折线第二个顶点的位置设置为（10, 20）
+polyline.getPoint(1).setX(10).setY(20);
+```
+
+对于折线中顶点的处理提供了强大的功能：
 	
-```javascript
-	// clear 方法可以清除点集
-	polyline.clear();
-	
-	// 可以批量添加点集
-	polyline.addPoints([
-		new Point(0, 0),
-		new Point(10, 10),
-		new Point(20, 20)
-	]);
-	
-	assert( polyline.getPoint(0).toString() === '0, 0' ) // true
-	assert( polyline.getFirstPoint().toString() === '0, 0' ) // true
-	assert( polyline.getPoint(2).toString() === '20, 20') // true
-	assert( polyline.getLastPoint().toString() === '20, 20' ) // true
-	
-	// 获得第2个点
-	polyline.getPoint(1);
-	
-	// 插入指定的点到第2个点的位置
-	polyline.addPoint(new Point(20, 20), 1);
+```js
+// clear 方法可以清除点集
+polyline.clear();
+
+// 可以批量添加点集
+polyline.addPoints([
+	new ShapePoint(0, 0),
+	new ShapePoint(10, 10),
+	new ShapePoint(20, 20)
+]);
+
+// 获得第1个点
+polyline.getPoint(0);
+polyline.getFirstPoint();
+
+// 获得第2个点
+polyline.getPoint(1);
+
+// 获得最后一个点
+polyline.getLastPoint();
+
+// 插入指定的点到第2个点的位置
+polyline.addPoint(new ShapePoint(20, 20), 1);
 ```
 
 ### Polygon
@@ -350,28 +398,32 @@ Polygon 用于绘制多边形，其使用方法和 Polyline 完全一致，只�
 
 ### Curve
 
-Curve 用于绘制曲线，该曲线经过用户指定的点集。如果曲线闭合，则形成一个平滑的包围形状。
+Curve 是聪明的曲线，该曲线经过用户指定的点集，并且智能地使用曲线连接。如果曲线闭合，则形成一个平滑的包围形状。
 
-	var curve = new Curve().pipe(function() {
-		this.addPoint( 10, 10 );
-		this.addPoint( 24, 33 );
-		this.addPoint( 63, 22 );
-		this.setSmoothScale(50);
-	});
+```js
+var curve = new Curve().pipe(function() {
+	this.addPoint( new ShapePoint(10, 10) );
+	this.addPoint( new ShapePoint(24, 33) );
+	this.addPoint( new ShapePoint(63, 22) );
+	this.setSmoothFactor( 2 );
+});
+```
 	
-`setSmoothScale()` 设置转折点处的光滑程度，值越大越光滑，为 0 的时候绘制成折线。
+`setSmoothFactor()` 设置转折点处的平滑程度，值越大越平滑，为 0 的时候绘制成折线，默认值为 1。
 
 ### Besier
 
-Besier 用于绘制贝塞尔曲线。贝塞尔曲线由一系列的转换点构成，每个转换点包含一个顶点坐标以及两个控制点坐标。其中顶点坐标是绝对坐标，控制点坐标是相对顶点的坐标。如果转换点是设置为光滑的，那么两个控制点是会相互影响的，否则将相对独立。
+Besier 用于绘制贝塞尔曲线。贝塞尔曲线由一系列的转换点构成，每个转换点包含一个顶点坐标以及两个控制点坐标。其中顶点坐标是绝对坐标，控制点坐标是相对顶点的坐标。如果转换点是设置为平滑的，那么两个控制点是会相互影响的，否则将相对独立。
 
-	var besier = new Besier().pipe(function() {
-		this.addBesierPoint(new BesierPoint(30, 30).setForward(100, 0));
-		this.addBesierPoint(new BesierPoint(100, 50).setForward(30, -30));
-		this.addBesierPoint(new BesierPoint(200, 0).setForward(-100, 0));
-	});
+```js
+var besier = new Besier().pipe(function() {
+	this.addPoint(new BesierPoint(30, 30).setForward(100, 0));
+	this.addPoint(new BesierPoint(100, 50).setForward(30, -30));
+	this.addPoint(new BesierPoint(200, 0).setForward(-100, 0));
+});
+```
 
-贝塞尔曲线是贝塞尔转换点（BesierPoint）的集合，BesierPoint 本身关注四个属性：顶点位置、前向控制点位置、背向控制点位置、是否光滑。
+贝塞尔曲线是贝塞尔转换点（BesierPoint）的集合，BesierPoint 本身关注四个属性：顶点位置、前向控制点位置、背向控制点位置、是否平滑。
 
 	var p1 = besier.getItem(0);
 	var p2 = beiser.getItem(1);
@@ -382,14 +434,14 @@ Besier 用于绘制贝塞尔曲线。贝塞尔曲线由一系列的转换点构�
 	p2.setPoint(400, 400)
 	
 	// 设置前向控制点会影响到下一段曲线的形状（p2 -> p3），
-	// 如果 p2 是光滑的，则会同时影响上一段曲线的形状（p1 -> p2）
+	// 如果 p2 是平滑的，则会同时影响上一段曲线的形状（p1 -> p2）
 	p2.setFoward(100, 0);
 
 	// 设置背向控制点会影响到上一段曲线的形状（p1 -> p2）
-	// 如果 p2 是光滑的，则会同时影响下一段曲线的形状（p2 -> p3）
+	// 如果 p2 是平滑的，则会同时影响下一段曲线的形状（p2 -> p3）
 	p2.setBackward(30, -30);
 	
-	// 如果 p2 是光滑的（默认），那么对前向控制点和背向控制点的改变将会
+	// 如果 p2 是平滑的（默认），那么对前向控制点和背向控制点的改变将会
 	// 影响对方，以保证两个控制点和顶点是在一条直线上的，如果设置为 false
 	// 则两个控制点可以相互独立
 	p2.setSmooth(true);
