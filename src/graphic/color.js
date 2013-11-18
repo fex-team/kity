@@ -15,7 +15,7 @@ define(function(require, exports, module) {
                 //parse构造
                 if ( typeof arguments[ 0 ] === 'string' ) {
 
-                    colorValue = Color.parseToValue( arguments[ 0 ] );
+                    colorValue = ColorUtils.parseToValue( arguments[ 0 ] );
 
                     //解析失败
                     if ( colorValue === null ) {
@@ -65,7 +65,7 @@ define(function(require, exports, module) {
                 //hsl分量
                 if ( "hsl".indexOf( name ) !== -1 ) {
 
-                    values = ColorUtils.rgbValueToHSLValue( {
+                    values = ColorUtils.rgbValueToHslValue( {
                         r: this._color.r,
                         g: this._color.g,
                         b: this._color.b
@@ -92,13 +92,13 @@ define(function(require, exports, module) {
 
             inc: function ( name, value ) {
 
-                //设置的值非法
-                if ( !Color._MAX_VALUE[ name ] ) {
-                    throw new Error( 'Color set(): Illegal parameter' );
-                }
+                value = this.get( name ) + value;
+
+                value = Math.min( Color._MAX_VALUE[ name ], value );
+                value = Math.max( Color._MIN_VALUE[ name ], value );
 
                 var color = this.clone();
-                color.set( name, this.get( name ) + value )
+                color.set( name, value )
 
                 return color;
 
@@ -125,7 +125,7 @@ define(function(require, exports, module) {
                 //饱和度
                 if ( "hsl".indexOf( name ) !== -1 ) {
 
-                    return ( ColorUtils.rgbValueToHSLValue( {
+                    return ( ColorUtils.rgbValueToHslValue( {
                         r: this._color.r,
                         g: this._color.g,
                         b: this._color.b
@@ -138,31 +138,29 @@ define(function(require, exports, module) {
             },
 
             toRGB: function () {
-                return ColorUtils.rgbValueToRGBString( this._color );
+                return ColorUtils.toString( this._color, 'rgb' );
             },
 
             toRGBA: function () {
-                return ColorUtils.rgbaValueToRGBAString( this._color );
+                return ColorUtils.toString( this._color, 'rgba' );
             },
 
             toHEX: function () {
-                return ColorUtils.rgbValueToHEXString( this._color );
+                return ColorUtils.toString( this._color, 'hex' );
             },
 
             toHSL: function () {
-                var hslValue = ColorUtils.rgbValueToHSLValue( this._color );
-
-                return ColorUtils.hslValueToHSLString( hslValue );
+                var hslValue = ColorUtils.rgbValueToHslValue( this._color );
+                return ColorUtils.toString( hslValue, 'hsl' );
             },
 
             toHSLA: function () {
-                var hslValue = ColorUtils.rgbValueToHSLValue( this._color );
+                var hslValue = ColorUtils.rgbValueToHslValue( this._color );
                 hslValue.a = this._color.a;
-                return ColorUtils.hslaValueToHSLAString( hslValue );
-
+                return ColorUtils.toString( hslValue, 'hsla' );
             },
 
-            //默认实现是调用toRGBA
+            //默认实现是调用toRGB或者toRGBA
             toString: function () {
 
                 if ( this._color.a === 1 ) {
@@ -174,7 +172,6 @@ define(function(require, exports, module) {
             }
 
         } );
-
 
     //Color 静态方法
     Utils.extend( Color, {
@@ -201,173 +198,25 @@ define(function(require, exports, module) {
             a: 0
         },
 
-        /*
-         * 检测给定的颜色字符串是否是合法的hex格式字符串
-         */
-        isHex: function ( color ) {
-
-            return /^#([a-f0-9]{3}|[a-f0-9]{6})$/i.test( color );
-
-        },
+        //分量常量
+        R: 'r',
+        G: 'g',
+        B: 'b',
+        H: 'h',
+        S: 's',
+        L: 'l',
+        A: 'a',
 
         parse: function ( valStr ) {
 
-            var rgbValue = Color.parseToValue( valStr );
+            var rgbValue = ColorUtils.parseToValue( valStr );
+
+            //解析失败， 返回一个默认color实例
+            if ( rgbValue === null ) {
+                return new Color();
+            }
 
             return new Color( rgbValue.r, rgbValue.g, rgbValue.b, rgbValue.a );
-
-        },
-
-        parseToValue: function ( valStr ) {
-
-            var rgbValue = {},
-                hasAlpha = false,
-                keys = [ 'r', 'g', 'b' ];
-
-            //颜色名字字符串->hex格式字符串
-            if ( /^[a-z]+$/i.test( valStr ) ) {
-
-                valStr = StandardColor.EXTEND_STANDARD[ valStr ] || StandardColor.COLOR_STANDARD[ valStr ];
-
-                //非标准颜色
-                if ( !valStr ) {
-                    return null;
-                }
-
-            }
-
-            /* 颜色转换 */
-
-            //hex格式
-            if ( /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test( valStr ) ) {
-
-                valStr = RegExp.$1.split( "" );
-
-                Utils.each( keys, function ( key, index ) {
-
-                    if ( valStr.length === 3 ) {
-
-                        rgbValue[ key ] = ColorUtils.toNumber( valStr[ index ] + valStr[ index ] );
-
-                    } else {
-
-                        rgbValue[ key ] = ColorUtils.toNumber( valStr[ index*2 ] + valStr[ index*2+1 ] );
-
-                    }
-
-                } );
-
-                rgbValue.a = 1;
-
-                //rgb或者rgba格式
-            } else if ( /^(rgba?)/i.test( valStr ) ) {
-
-                hasAlpha = RegExp.$1.length === 4;
-
-                valStr = valStr.replace( /^rgba?/i, '' ).replace( /\s+/g, '').replace( /[^0-9,.]/g, '').split( "," )
-
-                Utils.each( keys, function ( key, index ) {
-
-                    rgbValue[ key ] = valStr[ index ] | 0;
-
-                } );
-
-                rgbValue.a = hasAlpha ? parseFloat( valStr[ 3 ] ) : 1;
-
-                //hsl格式
-            } else if ( /^(hsla?)/i.test( valStr ) ) {
-
-                hasAlpha = RegExp.$1.length === 4;
-
-                valStr = valStr.replace( /^hsla?/i, '' ).replace( /\s+/g, '').replace( /[^0-9,.]/g, '').split( "," );
-
-                //记录hsl值
-                rgbValue.h = valStr[ 0 ] | 0;
-                rgbValue.s = valStr[ 1 ] | 0;
-                rgbValue.l = valStr[ 2 ] | 0;
-
-                //hsl值转换为rgb值
-                rgbValue = ColorUtils.hslValueToRGBValue( rgbValue );
-
-                rgbValue.a = hasAlpha ? parseFloat( valStr[ 3 ] ) : 1;
-
-                //其他格式非法
-            } else {
-                return null;
-            }
-
-            return ColorUtils.overflowFormat( rgbValue );
-
-        },
-
-        /*
-         * 十六进制格式转化为rgb表示
-         * 如果传递的字符串不可解析， 则返回null， 否则返回一个PlainObject， 其key包含： r, g, b
-         * */
-        hexToRGB: function ( hexValue ) {
-
-            var value = Color.hexToRGBValue( hexValue ),
-                vals = [];
-
-            if ( value === null ) {
-                return null;
-            }
-
-            vals = [ value.r, value.g, value.b ];
-
-            return 'rgb('+ vals.join( ", " ) +')';
-
-        },
-        hexToRGBValue: function ( hexValue ) {
-
-            var result = {},
-                value = [],
-                KEY_MAP = [ 'r', 'g', 'b' ];
-
-            if ( /^#/.test( hexValue ) ) {
-
-                if ( /^#([a-f0-9]{3})$/i.test( hexValue ) ) {
-
-                    Utils.each( RegExp.$1.split( "" ), function ( ele, index ) {
-
-                        value[ index*2 ] = ele;
-                        value[ index*2 + 1 ] = ele;
-
-                    } );
-
-                } else if ( /^#([a-f0-9]{6})$/i.test( arguments[ 0 ] ) ) {
-
-                    value = RegExp.$1.split( "" );
-
-                } else {
-
-                    return null;
-
-                }
-
-                for ( var i = 0, len = KEY_MAP.length; i < len; i++ ) {
-
-                    result[ KEY_MAP[ i ] ] = ColorUtils.toNumber( value[ i*2 ] + value[ i*2+1 ] );
-
-                }
-
-                return result;
-
-            }
-
-            return null;
-
-        },
-        hexToHSL: function ( hexValue ) {
-
-            var value = Color.hexToHSLValue( hexValue );
-
-            return 'hsl('+ value.h +', '+ value.s +'%, '+ value.l +'%)';
-
-        },
-        hexToHSLValue: function ( hexValue ) {
-
-            return ColorUtils.rgbValueToHSLValue( Color.hexToRGBValue( hexValue ) );
 
         }
 
@@ -376,8 +225,199 @@ define(function(require, exports, module) {
     //内部工具对象
     Utils.extend( ColorUtils, {
 
+        parseToValue: function ( valStr ) {
+
+            var rgbaValue = {};
+
+            /* 优先检测在调色板中是否有对应的颜色 */
+            valStr = StandardColor.EXTEND_STANDARD[ valStr ] || StandardColor.COLOR_STANDARD[ valStr ] || valStr;
+
+            /* 颜色转换 */
+
+            //hex格式
+            if ( /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test( valStr ) ) {
+
+                rgbaValue = ColorUtils.hexToValue( valStr );
+
+                //rgb或者rgba格式
+            } else if ( /^(rgba?)/i.test( valStr ) ) {
+
+                rgbaValue = ColorUtils.rgbaToValue( valStr );
+
+                //hsl格式
+            } else if ( /^(hsla?)/i.test( valStr ) ) {
+
+                rgbaValue = ColorUtils.hslaToValue( valStr );
+
+                //其他格式非法
+            } else {
+
+                return null;
+
+            }
+
+            return ColorUtils.overflowFormat( rgbaValue );
+
+        },
+
+        hexToValue: function ( hexStr ) {
+
+            var result = {},
+                keys = [ 'r', 'g', 'b' ];
+
+            if ( /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test( hexStr ) ) {
+
+                hexStr = RegExp.$1.split( "" );
+
+                Utils.each( keys, function ( key, index ) {
+
+                    if ( hexStr.length === 3 ) {
+
+                        result[ key ] = ColorUtils.toNumber( hexStr[ index ] + hexStr[ index ] );
+
+                    } else {
+
+                        result[ key ] = ColorUtils.toNumber( hexStr[ index*2 ] + hexStr[ index*2+1 ] );
+
+                    }
+
+                } );
+
+                result.a = 1;
+
+                return result;
+
+            }
+
+            return null;
+
+        },
+
+        rgbaToValue: function ( rgbaStr ) {
+
+            var result = {},
+                hasAlpha = false,
+                keys = [ 'r', 'g', 'b' ];
+
+            if ( /^(rgba?)/i.test( rgbaStr ) ) {
+
+                hasAlpha = RegExp.$1.length === 4;
+
+                rgbaStr = rgbaStr.replace( /^rgba?/i, '' ).replace( /\s+/g, '').replace( /[^0-9,.]/g, '').split( "," );
+
+                Utils.each( keys, function ( key, index ) {
+
+                    result[ key ] = rgbaStr[ index ] | 0;
+
+                } );
+
+                result.a = hasAlpha ? parseFloat( rgbaStr[ 3 ] ) : 1;
+
+                return result;
+
+            }
+
+            return null;
+
+        },
+
+        hslaToValue: function ( hslaStr ) {
+
+            var result = {},
+                hasAlpha = false;
+
+
+            if ( /^(hsla?)/i.test( hslaStr ) ) {
+
+                hasAlpha = RegExp.$1.length === 4;
+
+                hslaStr = hslaStr.replace( /^hsla?/i, '' ).replace( /\s+/g, '').replace( /[^0-9,.]/g, '').split( "," );
+
+                //记录hsl值
+                result.h = hslaStr[ 0 ] | 0;
+                result.s = hslaStr[ 1 ] | 0;
+                result.l = hslaStr[ 2 ] | 0;
+
+                //hsl值转换为rgb值
+                result = ColorUtils.hslValueToRGBValue( result );
+
+                result.a = hasAlpha ? parseFloat( hslaStr[ 3 ] ) : 1;
+
+                return result;
+
+            }
+
+            return null;
+
+        },
+
+        //hsl值对象转换为rgb值对象
+        hslValueToRGBValue: function ( hslValue ) {
+
+            var q = null,
+                p = null,
+                result = {};
+
+            hslValue = Utils.extend( {}, hslValue );
+
+            hslValue.h = hslValue.h / 360;
+            hslValue.s = hslValue.s / 100;
+            hslValue.l = hslValue.l / 100;
+
+            //分量计算
+            if ( hslValue.s === 0 ) {
+
+                result.r = result.g = result.b = hslValue.l;
+
+            } else {
+
+                if ( hslValue.l < 0.5 ) {
+
+                    q = hslValue.l * ( 1 + hslValue.s );
+
+                } else {
+
+                    q = hslValue.l + hslValue.s - hslValue.l * hslValue.s;
+
+                }
+
+                p = 2 * hslValue.l - q;
+
+                result.r = trans( p, q, hslValue.h + ( 1 / 3 ) );
+                result.g = trans( p, q, hslValue.h );
+                result.b = trans( p, q, hslValue.h - ( 1 / 3 ) );
+
+            }
+
+            result.r = Math.min( Math.round( result.r * 255 ), 255 );
+            result.g = Math.min( Math.round( result.g * 255 ), 255 );
+            result.b = Math.min( Math.round( result.b * 255 ), 255 );
+
+            return result;
+
+            function trans ( v1, v2, vH ) {
+
+                if ( vH < 0 ) {
+                    vH += 1;
+                } else if ( vH > 1 ) {
+                    vH -= 1;
+                }
+
+                if ( 6 * vH < 1 ) {
+                    return v1 + ( v2 - v1 ) * 6 * vH;
+                } else if ( 2 * vH < 1 ) {
+                    return v2;
+                } else if ( 3 * vH < 2 ) {
+                    return v1 + ( v2 - v1 ) * ( ( 2 / 3 - vH ) * 6 );
+                }
+
+                return v1;
+            }
+
+        },
+
         //rgb值对象转换为hsl值对象
-        rgbValueToHSLValue: function ( rgbValue ) {
+        rgbValueToHslValue: function ( rgbValue ) {
 
             var max = null,
                 min = null,
@@ -447,117 +487,51 @@ define(function(require, exports, module) {
 
         },
 
-        //hsl值对象转换为rgb值对象
-        hslValueToRGBValue: function ( hslValue ) {
+        toString: function ( colorValue, type ) {
 
-            var q = null,
-                p = null,
-                result = {};
+            var vals = [],
+                colorValue = Utils.extend( {}, colorValue );
 
-            hslValue = Utils.extend( {}, hslValue );
+            if ( type.indexOf( 'hsl' ) !== -1 ) {
 
-            hslValue.h = hslValue.h / 360;
-            hslValue.s = hslValue.s / 100;
-            hslValue.l = hslValue.l / 100;
+                colorValue.s += '%';
+                colorValue.l += '%';
 
-            //分量计算
-            if ( hslValue.s === 0 ) {
+            }
 
-                result.r = result.g = result.b = hslValue.l;
+            if ( type !== 'hex' ) {
+
+                Utils.each( type.split( "" ), function ( key ) {
+
+                    vals.push( colorValue[ key ] );
+
+                } );
+
+                return ( type+'(' + vals.join( ', ' ) + ')' ).toLowerCase();
 
             } else {
 
-                if ( hslValue.l < 0.5 ) {
+                vals.push( ColorUtils.toHexValue( +colorValue.r ) );
+                vals.push( ColorUtils.toHexValue( +colorValue.g ) );
+                vals.push( ColorUtils.toHexValue( +colorValue.b ) );
 
-                    q = hslValue.l * ( 1 + hslValue.s );
-
-                } else {
-
-                    q = hslValue.l + hslValue.s - hslValue.l * hslValue.s;
-
-                }
-
-                p = 2 * hslValue.l - q;
-
-                result.r = trans( p, q, hslValue.h + ( 1 / 3 ) );
-                result.g = trans( p, q, hslValue.h );
-                result.b = trans( p, q, hslValue.h - ( 1 / 3 ) );
+                return ( '#' + vals.join( '' ) ).toLowerCase();
 
             }
-
-            result.r = Math.min( Math.round( result.r * 255 ), 255 );
-            result.g = Math.min( Math.round( result.g * 255 ), 255 );
-            result.b = Math.min( Math.round( result.b * 255 ), 255 );
-
-            return result;
-
-            function trans ( v1, v2, vH ) {
-
-                if ( vH < 0 ) {
-                    vH += 1;
-                } else if ( vH > 1 ) {
-                    vH -= 1;
-                }
-
-                if ( 6 * vH < 1 ) {
-                    return v1 + ( v2 - v1 ) * 6 * vH;
-                } else if ( 2 * vH < 1 ) {
-                    return v2;
-                } else if ( 3 * vH < 2 ) {
-                    return v1 + ( v2 - v1 ) * ( ( 2 / 3 - vH ) * 6 );
-                }
-
-                return v1;
-            }
-
-        },
-
-        //rgb值对象转换为RGB字符串
-        rgbValueToRGBString: function ( rgbValue ) {
-
-            var vals = [ rgbValue.r, rgbValue.g, rgbValue.b ];
-
-            return 'rgb('+ vals.join( ", " ) +')';
-
-        },
-
-        //rgba值对象转换为RGBA字符串
-        rgbaValueToRGBAString: function ( rgbaValue ) {
-
-            var vals = [ rgbaValue.r, rgbaValue.g, rgbaValue.b, rgbaValue.a ];
-
-            return 'rgba('+ vals.join( ", " ) +')';
-
-        },
-
-        //rgb值对象转换为HEX字符串
-        rgbValueToHEXString: function ( rgbValue ) {
-
-            var res = ( rgbValue.r | 0 ).toString( 16 );
-
-            res += ( rgbValue.g | 0 ).toString( 16 );
-            res += ( rgbValue.b | 0 ).toString( 16 );
-
-            return "#" + res.toUpperCase();
-
-        },
-
-        //hsl值对象转换为HSL字符串
-        hslValueToHSLString: function ( hslValue ) {
-
-            return 'hsl('+ hslValue.h +', '+ hslValue.s +'%, '+ hslValue.l +'%)';
-
-        },
-
-        hslaValueToHSLAString: function ( hslaValue ) {
-
-            return 'hsla('+ hslaValue.h +', '+ hslaValue.s +'%, '+ hslaValue.l +'%, '+ hslaValue.a +')';
 
         },
 
         //16进制的2个数字转化为10进制， 如果转化失败， 返回0
         toNumber: function ( value ) {
             return Number( '0x'+value ) | 0;
+        },
+
+        toHexValue: function ( value ) {
+
+            var result = value.toString( 16 );
+
+            return result.length === 1 ? '0' + result : result;
+
         },
 
         //溢出控制

@@ -7,33 +7,11 @@ define(function (require, exports, module) {
         CurveUtil = {
 
         /*
-         * 根据点集合返回曲线pathData
-         * @param points 点集合
-         * @returns 通过点构成的曲线的pathData
+         * 获取由两个以上的点组成的曲线的平移线
+         * @param points 曲线上的点的集合， 集合中的点的数量必须大于2
+         * @return 平移线数组
          */
-        pointToPathData: function ( points, isClose ) {
-
-            switch ( points.length ) {
-
-                case 0:
-                    return "";
-                case 1:
-                    return "M " + points[ 0 ].x + " " + points[ 0 ].y;
-                case 2:
-                    return "M " + points[ 0 ].x + " " + points[ 0 ].y + " L " + points[ 1 ].x + " " + points[ 1 ].y;
-                default:
-                    return CurveUtil.getCurvePath( points, isClose );
-
-            }
-
-        },
-
-        /*
-         * 获取由两个以上的点组成的曲线的pathData
-         * @param points 点的集合， 集合中的点的数量必须大于2
-         * @return pathData字符串
-         */
-        getCurvePath: function ( points, isClose ) {
+        getCurvePanLines: function ( points ) {
 
             //计算原始点的中点坐标
             var centerPoints = CurveUtil.getCenterPoints( points ),
@@ -43,30 +21,8 @@ define(function (require, exports, module) {
 
                 pathData = [];
 
-            //获取平移线移动到顶点后的位置
-            panLines = CurveUtil.getMovedPanLines( points, panLines );
-
-            pathData.push( 'M ' + points[ 0 ].x + " " + points[ 0 ].y );
-
-            for ( var i = 0, len = points.length - 1; i < len ; i++ ) {
-
-                pathData.push( ' C ' + panLines[ i ].points[ 1 ].x + " " + panLines[ i ].points[ 1 ].y + ", ");
-                pathData.push( panLines[ i + 1 ].points[ 0 ].x + " " + panLines[ i + 1 ].points[ 0 ].y + ", " );
-                pathData.push( points[ i + 1 ].x + " " + points[ i + 1 ].y );
-
-            }
-
-            //如果是闭合状态， 则进行闭合处理
-            if ( isClose ) {
-
-                pathData.push( ' C ' + panLines[ len ].points[ 1 ].x + " " + panLines[ len ].points[ 1 ].y + ", ");
-                pathData.push( panLines[ 0 ].points[ 0 ].x + " " + panLines[ 0 ].points[ 0 ].y + ", " );
-                pathData.push( points[ 0 ].x + " " + points[ 0 ].y );
-
-            }
-
-            return pathData.join( "" );
-
+            //平移线移动到顶点
+            return CurveUtil.getMovedPanLines( points, panLines );
 
         },
 
@@ -232,9 +188,69 @@ define(function (require, exports, module) {
 
         update: function () {
 
-            var pathData = CurveUtil.pointToPathData( this.getItems().slice( 0 ), this.closeState );
+            var points = this.getItems(),
+                withControlPoints = null,
+                drawer = this.getDrawer(),
+                curPoint = null,
+                curControlPoint = null,
+                prevControlPoint = null;
 
-            this.setPathData( pathData );
+            drawer.clear();
+
+            if ( points.length === 0 ) {
+
+                drawer.moveTo( 0, 0 );
+
+                return this;
+
+            } else {
+
+                drawer.moveTo( points[0].x, points[0].y );
+
+            }
+
+            if ( points.length === 1 ) {
+
+                return this;
+
+            }
+
+            if ( points.length === 2 ) {
+
+                drawer.lineTo( points[1].x, points[1].y );
+
+                return this;
+
+            }
+
+            //获取已转换过后的带控制点的所有点
+            withControlPoints = CurveUtil.getCurvePanLines( points );
+
+            for ( var i = 1, len = points.length; i < len; i++ ) {
+
+                //当前顶点
+                curPoint = withControlPoints[ i ].center;
+
+                //当前控制点
+                curControlPoint = withControlPoints[ i ].points[ 0 ];
+
+                //前一个点的控制点
+                prevControlPoint = withControlPoints[ i -1 ].points[ 1 ];
+
+                drawer.besierTo( prevControlPoint.x, prevControlPoint.y, curControlPoint.x, curControlPoint.y, curPoint.x, curPoint.y );
+
+            }
+
+            //处理闭合
+            if ( this.closeState ) {
+
+                curPoint = withControlPoints[ 0 ].center;
+                curControlPoint = withControlPoints[ 0 ].points[ 0 ];
+                prevControlPoint = withControlPoints[ points.length - 1 ].points[ 1 ];
+
+                drawer.besierTo( prevControlPoint.x, prevControlPoint.y, curControlPoint.x, curControlPoint.y, curPoint.x, curPoint.y );
+
+            }
 
             return this;
 
