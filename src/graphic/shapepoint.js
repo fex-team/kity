@@ -1,0 +1,58 @@
+/*
+ * 图形上的点抽象
+ */
+
+define( function ( require, exports, module ) {
+
+    return require( 'core/class' ).createClass( 'ShapePoint', {
+
+        base: require( 'graphic/point' ),
+
+        constructor: function ( px, py ) {
+
+            this.callBase( px, py );
+
+        },
+
+        setX: function ( x ) {
+
+            this.callBase( x );
+
+            this.update();
+
+            return this;
+
+        },
+
+        setY: function ( y ) {
+
+            this.callBase( y );
+
+            this.update();
+
+            return this;
+        },
+
+        setPoint: function ( x, y ) {
+
+            this.callBase( x, y );
+
+            this.update();
+
+            return this;
+        },
+
+        update: function () {
+
+            //还未添加到容器上
+            if ( !this.container ) {
+                return this;
+            }
+
+            this.container.update();
+
+        }
+
+    } );
+
+} );

@@ -7,39 +7,39 @@ define( function ( require, exports, module ) {
     return require( 'core/class' ).createClass( 'Point', {
 
         constructor: function ( x, y ) {
-            this.x = x;
-            this.y = y;
+            this.px = x;
+            this.py = y;
         },
 
         setPoint: function ( x, y ) {
-            this.x = x;
-            this.y = y;
+            this.px = x;
+            this.py = y;
             return this;
         },
 
         getPoint: function () {
             return {
-                x: this.x,
-                y: this.y
+                x: this.px,
+                y: this.py
             };
         },
 
         setX: function ( x ) {
-            this.x = x;
+            this.px = x;
             return this;
         },
 
         getX: function () {
-            return this.x;
+            return this.px;
         },
 
         setY: function ( y ) {
-            this.y = y;
+            this.py = y;
             return this;
         },
 
         getY: function () {
-            return this.y;
+            return this.py;
         }
 
     } );

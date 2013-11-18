@@ -19,7 +19,7 @@ define( function ( require, exports, module ) {
             //是否可闭合
             this.closeable = !!closeable;
 
-            this.setPoints( points );
+            this.setPoints( points || [] );
 
             this.changeable = true;
             this.update();
@@ -38,7 +38,7 @@ define( function ( require, exports, module ) {
         update: function () {
 
             var drawer = this.getDrawer(),
-                points = this.getItems();
+                points = this.getPoints();
 
             drawer.clear();
 

@@ -223,7 +223,7 @@ define(function (require, exports, module) {
 
             } else {
 
-                drawer.moveTo( points[0].x, points[0].y );
+                drawer.moveTo( points[0].getX(), points[0].getY() );
 
             }
 
