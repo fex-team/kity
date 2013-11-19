@@ -24,6 +24,7 @@ define( function ( require, exports, module ) {
             this.node.appendChild( this.shapeNode = svg.createNode( 'g' ) );
 
             this.resources = new Container();
+            this.setWidth('100%').setHeight('100%');
             this.callMixin();
         },
 
