@@ -16,16 +16,6 @@ define( function ( require, exports, module ) {
             }
         },
 
-        setFontSize: function( value ) {
-            this.fontsize = value;
-            this.node.setAttribute('font-size', value);
-            return this;
-        },
-
-        getFontSize: function() {
-            return this.fontsize;
-        },
-
         setX: function ( x ) {
             this.node.setAttribute( 'x', x );
             return this;
@@ -76,6 +66,7 @@ define( function ( require, exports, module ) {
                 this.node.appendChild( textpath );
             }
             textpath.setAttributeNS( svg.xlink, "xlink:href", '#' + path.node.id );
+            this.setAnchor(this.getAnchor());
             return this;
         }
     } );

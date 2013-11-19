@@ -599,42 +599,68 @@ path.stroke(new Pen().pipe(function() {
 paper.addShape(new Text("hello, kity").setX(50).setY(50));
 ```
 
+### 使用文本块控制样式
+
 可以通过添加不同的 TextSpan 控制样式
 
 ```js
 paper.addShape(new Text().pipe(function() {
-    this.addSpan(new TextSpan('hello').fill('red'));
-    this.addSpan(new TextSpan('kity').fill('blue'));
+    this.addSpan(new TextSpan('hello ').fill('red'));
+    this.addSpan(new TextSpan(' kity').fill('blue'));
+    this.setX(300);
+    this.setY(200);
+    this.setAnchor('middle');
+    this.setFontSize(36);
 }));
 ```
-
-
-
-### 基本使用
-
-正在编写...
-
-### 使用文本块控制样式
-
-正在编写...
+![TextSpan 使用](images/text.png)
 
 ### 使用文本路径排列文字
 
-正在编写...
+给 Text 指定一个 Path，可以让文本按照 Path 排列
 
+```js
+text.setPath(new Path().pipe(function(){
+    var d = this.getDrawer();
+    d.moveTo(150, 200);
+    d.carcTo(200, 450, 200);
+    this.stroke('green');
+    paper.addShape(this);
+}));
+```
+![TextPath 的使用](images/textpath.png)
 
 
 ## 颜色
 
-正在编写...
-
 ### 支持的格式
 
-正在编写...
+Kity 的颜色支持 RGBA / HSLA 两种。RGBA 使用 RGB 三个分量（红、绿、蓝）来决定颜色值，用 A 分量表示透明度。HSLA 使用 HSL 三个分量（色相、饱和度、亮度）来决定颜色值。RGBA 更符合设备表示颜色的习惯，而 HSLA 更符合人类表示颜色的习惯。
 
-### 颜色分量设置
+对于 RGBA 还支持 HEX 的表示方式，不过该表示方式会丢失透明度信息。
 
-正在编写...
+### 颜色分量
+
+对于 RGBA、HSLA 的分量是可以独立设置的。
+
+```js
+// 设置 RGB 分量
+var red = new Color();
+red.set(Color.R, 255);
+red.set(Color.G, 0);
+red.set(Color.B, 0);
+
+// 设置 HSL 分量
+var blue = new Color();
+blue.set(Color.H, 240);
+blue.set(Color.S, 100);
+blue.set(Color.L, 60);
+
+// 设置 A 分量
+blue.set(Color.A, 0.5);
+```
+
+
 
 ### 使用调色板
 

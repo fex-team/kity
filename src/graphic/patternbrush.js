@@ -8,6 +8,7 @@ define(function (require, exports, module) {
         mixins: [ShapeContainer],
         constructor: function () {
             this.callBase('pattern');
+            this.node.setAttribute('patternUnits', 'userSpaceOnUse');
         },
         setX: function(x) {
             this.x = x;
@@ -34,10 +35,6 @@ define(function (require, exports, module) {
         },
         getHeight: function () {
             return this.height;
-        },
-        renderNode: function () {
-            var node = this.node;
-            node.setAttribute('patternUnits', 'userSpaceOnUse');
         }
     });
 });

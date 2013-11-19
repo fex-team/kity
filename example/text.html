@@ -11,25 +11,26 @@
             var Paper = require('graphic/paper');
             var Text = require('graphic/text');
             var TextSpan = require('graphic/textspan');
-            var Ellipse = require('graphic/ellipse');
-            var Color = require('graphic/color');
+            var Path = require('graphic/path');
 
             var paper = new Paper(document.body);
 
             paper.setWidth(600).setHeight(400);
 
-            var flower = new Group().pipe(function() { 
-                for(var i = 0; i < 12; i++) {
-                    var color = new Color();
-                    color.set('h', 30 * i);
-                    color.set('s', 80);
-                    color.set('l', 50);
-                    color.set('a', .5);
-                    this.addShape(new Ellipse(50, 0, 80, 15).rotate( 30 * i ).fill(color));
-                }
-                this.scale(1.5).translate(300, 200);
-            });
-            paper.addShape(flower);
+            paper.addShape(new Text().pipe(function() {
+                this.addSpan(new TextSpan('hello ').fill('red'));
+                this.addSpan(new TextSpan(' kity').fill('blue'));
+                this.setAnchor('middle');
+                this.setFontSize(36);
+
+                this.setPath(new Path().pipe(function(){
+                    var d = this.getDrawer();
+                    d.moveTo(150, 200);
+                    d.carcTo(200, 450, 200);
+                    this.stroke('green');
+                    paper.addShape(this);
+                }));
+            }));
         });
         seajs.use('start');
     </script>
