@@ -46,10 +46,10 @@ define( function ( require, exports, module ) {
         carcBy: function( r, dx, dy, laf, sf ) {
             return this.arcBy( r, r, 0, laf || 0, sf || 0, dx, dy );
         },
-        besierTo: function ( x1, y1, x2, y2, x, y ) {
+        bezierTo: function ( x1, y1, x2, y2, x, y ) {
             return this.appendData( [ 'C', x1, y1, x2, y2, x, y ] );
         },
-        besierBy: function ( dx1, dy1, dx2, dy2, dx, dy ) {
+        bezierBy: function ( dx1, dy1, dx2, dy2, dx, dy ) {
             return this.appendData( [ 'c', dx1, dy1, dx2, dy2, dx, dy ] );
         },
         close: function () {

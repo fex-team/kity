@@ -13,10 +13,11 @@ define( function ( require, exports, module ) {
             //顶点
             this.point = new ShapePoint( x, y );
 
+            /* 注意： 控制点是相对于顶点的坐标 */
             //控制点
-            this.forward = new ShapePoint( x, y );
+            this.forward = new ShapePoint( 0, 0 );
 
-            this.backward = new ShapePoint( x, y );
+            this.backward = new ShapePoint( 0, 0 );
 
             //是否平滑
             this.smooth = isSmooth === undefined ? true : !!isSmooth;
