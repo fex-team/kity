@@ -14,6 +14,7 @@
             var Rect = require('graphic/rect');
             var Group = require('graphic/group');
             var Pen = require('graphic/pen');
+            var Color = require('graphic/color');
             var Text = require('graphic/text');
 
             var BezierViewer = require('core/class').createClass({
@@ -21,7 +22,9 @@
                 constructor: function(bezier) {
                     this.callBase();
                     this.addShape(bezier);
-                    bezier.stroke('black');
+                    bezier.fill(new Color('red').set('a', .2));
+                    var points = bezier.getPoints();
+                    
                 }
             });
 
