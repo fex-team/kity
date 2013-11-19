@@ -193,6 +193,31 @@ define(function(require, exports, module) {
 
             return new Color( rgbValue.r, rgbValue.g, rgbValue.b, rgbValue.a );
 
+        },
+
+        createHSL: function ( h, s, l ) {
+            return Color.createHSLA( h, s, l, 1 );
+        },
+
+        createHSLA: function ( h, s, l, a ) {
+
+            var colorValue = null;
+
+            s += '%';
+            l += '%';
+
+            colorValue = [ 'hsla(' + h, s, l + ')' ];
+
+            return Color.parse( colorValue.join( ', ' ) );
+
+        },
+
+        createRGB: function ( r, g, b ) {
+            return Color.createRGBA( r, g, b, 1 );
+        },
+
+        createRGBA: function ( r, g, b, a ) {
+            return new Color( r, g, b, a );
         }
 
     } );
