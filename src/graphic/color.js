@@ -258,6 +258,9 @@ define(function(require, exports, module) {
 
                 } );
 
+                //转换出hsl值
+                result = Utils.extend( result, ColorUtils.rgbValueToHslValue( result ) );
+
                 result.a = 1;
 
                 return result;
@@ -286,6 +289,9 @@ define(function(require, exports, module) {
 
                 } );
 
+                //转换出hsl值
+                result = Utils.extend( result, ColorUtils.rgbValueToHslValue( result ) );
+
                 result.a = hasAlpha ? parseFloat( rgbaStr[ 3 ] ) : 1;
 
                 return result;
@@ -312,6 +318,9 @@ define(function(require, exports, module) {
                 result.h = hslaStr[ 0 ] | 0;
                 result.s = hslaStr[ 1 ] | 0;
                 result.l = hslaStr[ 2 ] | 0;
+
+                //转换出rgb值
+                result = Utils.extend( result, ColorUtils.hslValueToRGBValue( result ) );
 
                 //hsl值转换为rgb值
                 result = ColorUtils.hslValueToRGBValue( result );
