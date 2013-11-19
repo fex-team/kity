@@ -270,10 +270,10 @@ CSS 样式支持
 ### lineBy(dx, dy) : this ###
 从当前位置绘制一条直线到指定的位置（相对位置）
 
-### besierTo(x1, y1, x2, y2, x, y) : this ###
+### bezierTo(x1, y1, x2, y2, x, y) : this ###
 绘制贝塞尔曲线
 
-### besierBy(dx1, dy1, dx2, dy2, dx, dy) : this ###
+### bezierBy(dx1, dy1, dx2, dy2, dx, dy) : this ###
 绘制贝塞尔曲线（相对位置）
 
 ### close() : this ###

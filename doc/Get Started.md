@@ -200,7 +200,7 @@ paper.removeResource( brush );
     
 ## 创建图形
 
-Kity Graphic 内置了 `Path`、`Rect`、`Ellipse`、`Circle`、`Polyline`、`Polygon`、`Curve`、`Besier` 等基本几何图形。
+Kity Graphic 内置了 `Path`、`Rect`、`Ellipse`、`Circle`、`Polyline`、`Polygon`、`Curve`、`Bezier` 等基本几何图形。
 
 ### Path
 
@@ -242,8 +242,8 @@ d.arcTo(rx, ry, xr, laf, sf, x, y )
 d.arcBy(rx, ry, xr, laf, sf, dx, dy )
 d.carcTo(r, x, y, laf, sf)
 d.carcBy(r, dx, dy, laf, sf)
-d.besierTo(x1, y1, x2, y2, x, y)
-d.besierBy(dx1, dy1, dx2, dy2, dx, dy)
+d.bezierTo(x1, y1, x2, y2, x, y)
+d.bezierBy(dx1, dy1, dx2, dy2, dx, dy)
 d.close()
 d.clear()
 ```
@@ -413,23 +413,23 @@ var curve = new Curve().pipe(function() {
 
 ![smoothFactor（图中 k 值）对曲线的影响](images/curve.png)
 
-### Besier
+### Bezier
 
-Besier 用于绘制贝塞尔曲线。贝塞尔曲线由一系列的转换点构成，每个转换点包含一个顶点坐标以及两个控制点坐标。其中顶点坐标是绝对坐标，控制点坐标是相对顶点的坐标。如果转换点是设置为平滑的，那么两个控制点是会相互影响的，否则将相对独立。
+Bezier 用于绘制贝塞尔曲线。贝塞尔曲线由一系列的转换点构成，每个转换点包含一个顶点坐标以及两个控制点坐标。其中顶点坐标是绝对坐标，控制点坐标是相对顶点的坐标。如果转换点是设置为平滑的，那么两个控制点是会相互影响的，否则将相对独立。
 
 ```js
-var besier = new Besier().pipe(function() {
-    this.addPoint(new BesierPoint(30, 30).setForward(100, 0));
-    this.addPoint(new BesierPoint(100, 50).setForward(30, -30));
-    this.addPoint(new BesierPoint(200, 0).setForward(-100, 0));
+var bezier = new Bezier().pipe(function() {
+    this.addPoint(new BezierPoint(30, 30).setForward(100, 0));
+    this.addPoint(new BezierPoint(100, 50).setForward(30, -30));
+    this.addPoint(new BezierPoint(200, 0).setForward(-100, 0));
 });
 ```
 
-贝塞尔曲线是贝塞尔转换点（BesierPoint）的集合，BesierPoint 本身关注四个属性：顶点位置、前向控制点位置、背向控制点位置、是否平滑。
+贝塞尔曲线是贝塞尔转换点（BezierPoint）的集合，BezierPoint 本身关注四个属性：顶点位置、前向控制点位置、背向控制点位置、是否平滑。
 
-    var p1 = besier.getItem(0);
-    var p2 = beiser.getItem(1);
-    var p3 = besier.getItem(2);
+    var p1 = bezier.getItem(0);
+    var p2 = bezier.getItem(1);
+    var p3 = bezier.getItem(2);
     
     // 重新设置 p2 顶点的位置，注意，控制点的坐标是相对顶点位置的，
     // 所以 p2.getForward() 和 p2.getBackward() 的值不变
