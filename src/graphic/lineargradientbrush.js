@@ -17,39 +17,29 @@ define(function (require, exports, module) {
         },
 
         setStartPosition: function (px, py) {
-            this.sp = [px, py];
+            this.node.setAttribute('x1', px);
+            this.node.setAttribute('y1', py);
             return this;
         },
 
         setEndPosition: function (px, py) {
-            this.ep = [px, py];
+            this.node.setAttribute('x2', px);
+            this.node.setAttribute('y2', py);
             return this;
         },
 
         getStartPosition: function () {
             return {
-                x: this.sp[0],
-                y: this.sp[1]
+                x: +this.node.getAttribute('x1'),
+                y: +this.node.getAttribute('y1')
             };
         },
 
         getEndPosition: function () {
             return {
-                x: this.ep[0],
-                y: this.ep[1]
+                x: +this.node.getAttribute('x2'),
+                y: +this.node.getAttribute('y2')
             };
-        },
-
-        /* implement */
-        renderNode: function () {
-            this.callBase();
-
-            var p1 = this.getStartPosition(),
-                p2 = this.getEndPosition();
-            this.node.setAttribute('x1', p1.x);
-            this.node.setAttribute('y1', p1.y);
-            this.node.setAttribute('x2', p2.x);
-            this.node.setAttribute('y2', p2.y);
         }
     });
 });

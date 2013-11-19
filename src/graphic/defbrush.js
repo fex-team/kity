@@ -11,15 +11,9 @@ define(function (require, exports, module) {
             this.node = svg.createNode(nodeType);
         },
 
-        /* abstract */
-        renderNode: function () {
-            throw new Error('abstract method called');
-        },
-
         fill: function (path) {
             var pathNode = path.node;
             pathNode.setAttribute('fill', 'url(#' + this.node.id + ')');
-            this.renderNode();
             return this;
         }
     });

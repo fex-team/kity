@@ -13,6 +13,10 @@ define(function (require, exports, module) {
             return this.node.classList.contains(name);
         },
         setStyle: function (styles) {
+            if(arguments.length == 2) {
+                this.node.style[arguments[0]] = arguments[1];
+                return this;
+            }
             for (var name in styles) {
                 if (styles.hasOwnProperty(name)) {
                     this.node.style[name] = styles[name];

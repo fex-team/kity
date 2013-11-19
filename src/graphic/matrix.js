@@ -39,6 +39,13 @@ define(function (require, exports, module) {
         return new Matrix();
     };
 
+    Matrix.transformPoint = function(x, y, m) {
+        return {
+            x: m.a * x + m.c * y + m.e,
+            y: m.b * x + m.d * y + m.f
+        };
+    };
+
     return require('core/class').createClass('Matrix', {
         constructor: Matrix,
 

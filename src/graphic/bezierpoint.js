@@ -76,15 +76,6 @@ define( function ( require, exports, module ) {
             q.setPoint(v.x + vq.x, v.y + vq.y);
         },
 
-        getVertex: function() {
-            return {
-                x: this.getPoint().x,
-                y: this.getPoint().y,
-                f: this.getForward(),
-                b: this.getBackward()
-            };
-        },
-
         setSmooth: function ( isSmooth ) {
 
             this.smooth = !!isSmooth;
