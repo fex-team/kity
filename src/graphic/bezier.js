@@ -108,7 +108,7 @@ define( function ( require, exports, module ) {
                 backward = absolutePoints[ i ].backward;
                 forward = absolutePoints[ i - 1 ].forward;
 
-                drawer.besierTo( forward.x, forward.y, backward.x, backward.y, point.x, point.y );
+                drawer.bezierTo( forward.x, forward.y, backward.x, backward.y, point.x, point.y );
 
             }
 

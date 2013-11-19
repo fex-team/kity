@@ -261,7 +261,7 @@ define(function (require, exports, module) {
                     prevControlPoint = withControlPoints[ i - 1 ].center;
                 }
 
-                drawer.besierTo( prevControlPoint.x, prevControlPoint.y, curControlPoint.x, curControlPoint.y, curPoint.x, curPoint.y );
+                drawer.bezierTo( prevControlPoint.x, prevControlPoint.y, curControlPoint.x, curControlPoint.y, curPoint.x, curPoint.y );
 
             }
 
@@ -272,7 +272,7 @@ define(function (require, exports, module) {
                 curControlPoint = withControlPoints[ 0 ].points[ 0 ];
                 prevControlPoint = withControlPoints[ points.length - 1 ].points[ 1 ];
 
-                drawer.besierTo( prevControlPoint.x, prevControlPoint.y, curControlPoint.x, curControlPoint.y, curPoint.x, curPoint.y );
+                drawer.bezierTo( prevControlPoint.x, prevControlPoint.y, curControlPoint.x, curControlPoint.y, curPoint.x, curPoint.y );
 
             }
 
