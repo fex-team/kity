@@ -4,6 +4,8 @@
 
 define( function ( require, exprots, module ) {
 
+    var Matrix = require( "graphic/matrix" );
+
     return require( 'core/class' ).createClass( 'EventHandler', {
 
         constructor: function ( event ) {
@@ -30,6 +32,21 @@ define( function ( require, exprots, module ) {
                 return true;
 
             }
+
+        },
+
+        //当前鼠标事件在用户坐标系中点击的点的坐标位置
+        getPosition: function () {
+
+            var clientX = this.originEvent.clientX,
+                clientY = this.originEvent.clientY,
+                //转换过后的点
+                transPoint = Matrix.transformPoint( clientX, clientY, this.targetShape.node.getScreenCTM().inverse() );
+
+            return {
+                x: transPoint.x,
+                y: transPoint.y
+            };
 
         },
 

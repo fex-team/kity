@@ -7,6 +7,17 @@ html, body {
     height: 100%;
     margin: 0;
     padding: 0;
-    background: #fff;
+    background: #eee;
 }
 
+#kityContainer {
+    width: 900px;
+    height: 450px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -450px;
+    margin-top: -225px;
+    border: 1px solid #c2c2c2;
+    background: #fff;
+}
