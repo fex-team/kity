@@ -5,6 +5,7 @@
 define( function ( require, exports, module ) {
 
     var ShapePoint = require( 'graphic/shapepoint' );
+    var Vector = require( 'graphic/vector' );
 
     return require( "core/class" ).createClass( 'BezierPoint', {
 
@@ -13,14 +14,12 @@ define( function ( require, exports, module ) {
             //顶点
             this.point = new ShapePoint( x, y );
 
-            /* 注意： 控制点是相对于顶点的坐标 */
             //控制点
-            this.forward = new ShapePoint( 0, 0 );
-
-            this.backward = new ShapePoint( 0, 0 );
+            this.forward = new ShapePoint( x, y );
+            this.backward = new ShapePoint( x, y );
 
             //是否平滑
-            this.smooth = isSmooth === undefined ? true : !!isSmooth;
+            this.setSmooth( (isSmooth === undefined) || isSmooth);
 
         },
 
@@ -38,13 +37,13 @@ define( function ( require, exports, module ) {
 
             this.forward.setPoint( x, y );
 
+            this.fset = true;
+
             //更新后置点
             if(this.smooth) {
-                this.backward.setPoint( -x, -y );
+                this.updateAnother(this.forward, this.backward);
             }
-
             this.update();
-
             return this;
 
         },
@@ -53,15 +52,37 @@ define( function ( require, exports, module ) {
 
             this.backward.setPoint( x, y );
 
+            this.bset = true;
+
             //更新前置点
             if(this.smooth) {
-                this.forward.setPoint( -x, -y );
+                this.updateAnother(this.backward, this.forward);
             }
 
             this.update();
-
             return this;
 
+        },
+
+        sameLength: function() {
+            return !this.bset || !this.fset;
+        },
+
+        updateAnother: function(p, q) {
+            var v = this.getPoint(),
+                pv = Vector.fromPoints(p.getPoint(), v),
+                vq = Vector.fromPoints(v, q.getPoint());
+            vq = Vector.normalize(pv, this.sameLength() ? pv.length() : vq.length());
+            q.setPoint(v.x + vq.x, v.y + vq.y);
+        },
+
+        getVertex: function() {
+            return {
+                x: this.getPoint().x,
+                y: this.getPoint().y,
+                f: this.getForward(),
+                b: this.getBackward()
+            };
         },
 
         setSmooth: function ( isSmooth ) {

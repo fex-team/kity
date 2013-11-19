@@ -24,6 +24,9 @@ define(function(require, exports, module) {
                             r: 0,
                             g: 0,
                             b: 0,
+                            h: 0,
+                            s: 0,
+                            l: 0,
                             a: 1
                         };
 
@@ -40,6 +43,9 @@ define(function(require, exports, module) {
                     };
 
                     colorValue = ColorUtils.overflowFormat( colorValue );
+
+                    //获取hsl分量
+                    colorValue = Utils.extend( colorValue, ColorUtils.rgbValueToHslValue( colorValue ) );
 
                 }
 
@@ -60,31 +66,17 @@ define(function(require, exports, module) {
                     value = Math.floor( value );
                 }
 
-                value = Math.min( Color._MAX_VALUE[name], value );
+                this._color[ name ] = Math.max( Color._MIN_VALUE[ name ], Math.min( Color._MAX_VALUE[name], value ) );
 
-                //hsl分量
-                if ( "hsl".indexOf( name ) !== -1 ) {
+                if ( 'rgb'.indexOf( name ) !== -1 ) {
 
-                    values = ColorUtils.rgbValueToHslValue( {
-                        r: this._color.r,
-                        g: this._color.g,
-                        b: this._color.b
-                    } );
+                    this._color = Utils.extend( this._color, ColorUtils.rgbValueToHslValue( this._color ) );
 
-                    //更新hsl分量
-                    values[ name ] = value;
+                } else if ( 'hsl'.indexOf( name ) !== -1 ) {
 
-                    //转回rgb
-                    values = ColorUtils.hslValueToRGBValue( values );
-
-                    //更新rgb分量
-                    Utils.extend( this._color, values );
-
-                    return this;
+                    this._color = Utils.extend( this._color, ColorUtils.hslValueToRGBValue( this._color ) );
 
                 }
-
-                this._color[ name ] = Math.max( Color._MIN_VALUE[ name ], Math.min( Color._MAX_VALUE[name], value ) );
 
                 return this;
 
@@ -97,10 +89,7 @@ define(function(require, exports, module) {
                 value = Math.min( Color._MAX_VALUE[ name ], value );
                 value = Math.max( Color._MIN_VALUE[ name ], value );
 
-                var color = this.clone();
-                color.set( name, value )
-
-                return color;
+                return this.clone().set( name, value );
 
             },
 
@@ -122,17 +111,6 @@ define(function(require, exports, module) {
                     return null;
                 }
 
-                //饱和度
-                if ( "hsl".indexOf( name ) !== -1 ) {
-
-                    return ( ColorUtils.rgbValueToHslValue( {
-                        r: this._color.r,
-                        g: this._color.g,
-                        b: this._color.b
-                    } ) )[ name ];
-
-                }
-
                 return this._color[ name ];
 
             },
@@ -150,14 +128,11 @@ define(function(require, exports, module) {
             },
 
             toHSL: function () {
-                var hslValue = ColorUtils.rgbValueToHslValue( this._color );
-                return ColorUtils.toString( hslValue, 'hsl' );
+                return ColorUtils.toString( this._color, 'hsl' );
             },
 
             toHSLA: function () {
-                var hslValue = ColorUtils.rgbValueToHslValue( this._color );
-                hslValue.a = this._color.a;
-                return ColorUtils.toString( hslValue, 'hsla' );
+                return ColorUtils.toString( this._color, 'hsla' );
             },
 
             //默认实现是调用toRGB或者toRGBA

@@ -15,6 +15,8 @@
             var Group = require('graphic/group');
             var Pen = require('graphic/pen');
             var Color = require('graphic/color');
+            var Path = require('graphic/path');
+            var Rect = require('graphic/rect');
             var Text = require('graphic/text');
 
             var BezierViewer = require('core/class').createClass({
@@ -22,22 +24,47 @@
                 constructor: function(bezier) {
                     this.callBase();
                     this.addShape(bezier);
-                    bezier.fill(new Color('red').set('a', .2));
-                    var points = bezier.getPoints();
-                    
+                    this.bezier = bezier.fill(new Color('red').set('a', .2));
+                    this.update();
+                },
+                update: function() {
+                    var points = this.bezier.getPoints();
+                    if(this.group) {
+                        this.group.remove();
+                    }
+                    this.addShape(this.group = new Group().pipe(function() {
+                        for(var i = 0; i < points.length; i++) {
+                            var p = points[i], f, b;
+                            f = p.getForward();
+                            b = p.getBackward();
+                            p = p.getPoint();
+                            this.addShape(new Path().pipe(function() {
+                                var d = this.getDrawer()
+                                d.moveTo(b.x, b.y);
+                                d.lineTo(p.x, p.y);
+                                d.lineTo(f.x, f.y);
+                                this.stroke('red');
+                            }));
+                            this.addShape(new Rect(b.x - 3, b.y - 3, 6, 6).stroke('red').fill('white'));
+                            this.addShape(new Rect(f.x - 3, f.y - 3, 6, 6).stroke('red').fill('white'));
+                            this.addShape(new Rect(p.x - 3, p.y - 3, 6, 6).fill('red'));
+                        }
+                    }));
                 }
             });
 
             var paper = new Paper(document.body);
 
             paper.setWidth(600).setHeight(400);
-            paper.addShape(new BezierViewer(new Bezier().addPoints([
-                new BezierPoint(300, 150, false).setForward(50, -100).setBackward(-50, -100),
-                new BezierPoint(450, 150).setForward(0, 100),
-                new BezierPoint(300, 350, false).setForward(-100, -20).setBackward(100, -20),
-                new BezierPoint(150, 150).setForward(0, -100),
-                new BezierPoint(300, 150, false).setForward(50, -100).setBackward(-50, -100)
-            ])));
+            var bezier = new Bezier().addPoints([
+                new BezierPoint(300, 150, false).setForward(350, 50).setBackward(250, 50),
+                new BezierPoint(450, 150).setForward(470, 200),
+                new BezierPoint(300, 350, false).setForward(200, 300).setBackward(400, 300),
+                new BezierPoint(150, 150).setBackward(130, 200),
+                new BezierPoint(300, 150, false).setForward(350, 50).setBackward(250, 50)
+            ]);
+            paper.addShape(window.v = new BezierViewer(bezier));
+            window.p = bezier.getPoint(1);
         });
         seajs.use('start');
     </script>

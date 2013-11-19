@@ -19,9 +19,13 @@ define( function ( require, exports, module ) {
 
     function init () {
 
-        paper = new Paper( document.body );
-
-        initPaperBackground();
+        var tt = new Color();
+        debugger;
+//        paper = new Paper( document.body );
+//
+//        paper.setViewBox(0, 0, 100, 100);
+//
+//        initPaperBackground();
 
     }
 
@@ -31,7 +35,7 @@ define( function ( require, exports, module ) {
 
         var brush = new PatternBrush(),
             rect = null,
-            group = new Group();
+            group = new Rect(0, 0, 100, 100);
 
         brush.setWidth( 10 ).setHeight( 10 );
 
@@ -46,6 +50,8 @@ define( function ( require, exports, module ) {
         }
 
         group.fill( brush );
+//        group.node.setAttribute( "width", "100%" );
+//        group.node.setAttribute( "height", "100%" );
         paper.addResource( brush );
         paper.addShape( group );
 
