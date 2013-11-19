@@ -26,6 +26,16 @@ define( function ( require, exports, module ) {
 
 		appendContent: function ( content ) {
 			this.shapeNode.textContent += content;
-		}
+		},
+
+        setFontSize: function( value ) {
+            this.fontsize = value;
+            this.node.setAttribute('font-size', value);
+            return this;
+        },
+
+        getFontSize: function() {
+            return this.fontsize;
+        },
 	} );
 } );
