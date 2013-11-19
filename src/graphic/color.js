@@ -206,7 +206,7 @@ define(function(require, exports, module) {
             s += '%';
             l += '%';
 
-            colorValue = [ 'hsla(' + h, s, l + ')' ];
+            colorValue = [ 'hsla(' + h, s, l, a + ')' ];
 
             return Color.parse( colorValue.join( ', ' ) );
 
