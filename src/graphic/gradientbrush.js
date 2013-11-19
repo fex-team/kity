@@ -12,21 +12,11 @@ define(function (require, exports, module) {
         },
 
         addStop: function (offset, color) {
-            this.stops.push({
-                offset: offset,
-                color: color
-            });
+            var gstop = svg.createNode('stop');
+            gstop.setAttribute('offset', offset);
+            gstop.setAttribute('stop-color', color);
+            this.node.appendChild(gstop);
             return this;
-        },
-
-        /* implement abstract */
-        renderNode: function () {
-            for (var i = 0, l = this.stops.length; i < l; i++) {
-                var gstop = svg.createNode('stop');
-                gstop.setAttribute('offset', this.stops[i].offset);
-                gstop.setAttribute('stop-color', this.stops[i].color);
-                this.node.appendChild(gstop);
-            }
         }
     });
 });

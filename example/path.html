@@ -78,10 +78,12 @@
             paper.addShape(upsidedown);
 
             var text = new Text('this is a text').pipe(function() {
-                this.setX(100).setY(100).setStyle({
+                this.setStyle({
                     fill: 'red'
                 });
+                this.setFontSize(18);
                 this.setPath(upsidedown);
+                this.setAnchor('middle');
                 this.addSpan(new TextSpan('Baidu').fill('blue'));
                 this.addSpan(new TextSpan('Kity').fill('green'));
             });

@@ -16,6 +16,16 @@ define( function ( require, exports, module ) {
             }
         },
 
+        setFontSize: function( value ) {
+            this.fontsize = value;
+            this.node.setAttribute('font-size', value);
+            return this;
+        },
+
+        getFontSize: function() {
+            return this.fontsize;
+        },
+
         setX: function ( x ) {
             this.node.setAttribute( 'x', x );
             return this;

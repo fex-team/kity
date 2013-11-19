@@ -418,53 +418,65 @@ var curve = new Curve().pipe(function() {
 Bezier 用于绘制贝塞尔曲线。贝塞尔曲线由一系列的转换点构成，每个转换点包含一个顶点坐标以及两个控制点坐标。其中顶点坐标是绝对坐标，控制点坐标是相对顶点的坐标。如果转换点是设置为平滑的，那么两个控制点是会相互影响的，否则将相对独立。
 
 ```js
-var bezier = new Bezier().pipe(function() {
-    this.addPoint(new BezierPoint(30, 30).setForward(100, 0));
-    this.addPoint(new BezierPoint(100, 50).setForward(30, -30));
-    this.addPoint(new BezierPoint(200, 0).setForward(-100, 0));
-});
+var bezier = new Bezier().addPoints([
+    new BezierPoint(300, 150, false).setForward(350, 50).setBackward(250, 50),
+    new BezierPoint(450, 150).setForward(470, 200),
+    new BezierPoint(300, 350, false).setForward(200, 300).setBackward(400, 300),
+    new BezierPoint(150, 150).setBackward(130, 200),
+    new BezierPoint(300, 150, false).setForward(350, 50).setBackward(250, 50)
+]);
 ```
+
+![贝塞尔曲线](images/bezier.png)
 
 贝塞尔曲线是贝塞尔转换点（BezierPoint）的集合，BezierPoint 本身关注四个属性：顶点位置、前向控制点位置、背向控制点位置、是否平滑。
 
-    var p1 = bezier.getItem(0);
-    var p2 = bezier.getItem(1);
-    var p3 = bezier.getItem(2);
-    
-    // 重新设置 p2 顶点的位置，注意，控制点的坐标是相对顶点位置的，
-    // 所以 p2.getForward() 和 p2.getBackward() 的值不变
-    p2.setPoint(400, 400)
-    
-    // 设置前向控制点会影响到下一段曲线的形状（p2 -> p3），
-    // 如果 p2 是平滑的，则会同时影响上一段曲线的形状（p1 -> p2）
-    p2.setFoward(100, 0);
+```js
+var p1 = bezier.getPoint(0);
+var p2 = bezier.getPoint(1);
+var p3 = bezier.getPoint(2);
 
-    // 设置背向控制点会影响到上一段曲线的形状（p1 -> p2）
-    // 如果 p2 是平滑的，则会同时影响下一段曲线的形状（p2 -> p3）
-    p2.setBackward(30, -30);
-    
-    // 如果 p2 是平滑的（默认），那么对前向控制点和背向控制点的改变将会
-    // 影响对方，以保证两个控制点和顶点是在一条直线上的，如果设置为 false
-    // 则两个控制点可以相互独立
-    p2.setSmooth(true);
+// 重新设置 p2 顶点的位置
+p2.setPoint(400, 400)
+
+// 设置前向控制点会影响到下一段曲线的形状（p2 -> p3），
+// 如果 p2 是平滑的，则会同时影响上一段曲线的形状（p1 -> p2）
+p2.setFoward(500, 500);
+
+// 设置背向控制点会影响到上一段曲线的形状（p1 -> p2）
+// 如果 p2 是平滑的，则会同时影响下一段曲线的形状（p2 -> p3）
+p2.setBackward(300, -300);
+
+// 如果 p2 是平滑的（默认），那么对前向控制点和背向控制点的改变将会
+// 影响对方，以保证两个控制点和顶点是在一条直线上的，如果设置为 false
+// 则两个控制点可以相互独立
+p2.setSmooth(true);
+```
 
 ## 使用 Group 来建立图形分组
 
 对图形分组可以把这些图形进行一个整体的设置：
 
-    var flower = new Group().pipe(function() { 
-        for(var i = 0; i < 12; i++) {
-            this.addItem(new Rect(10, 0, 100, 10).rotate( 30 * i ));
-        }
-        this.scale(2).translate(100, 100);
-    });
-    
-    paper.addItem( flower );
+```js
+var flower = new Group().pipe(function() { 
+    for(var i = 0; i < 12; i++) {
+        var color = new Color();
+        color.set('l', 50);
+        color.set('s', 80);
+        color.set('h', 30 * i);
+        color.set('a', .5);
+        this.addShape(new Ellipse(50, 0, 80, 15).rotate( 30 * i ).fill(color));
+    }
+    this.scale(1.5).translate(300, 200);
+});
+```
+
+![使用 Group 来绘制花](images/flower.png)
 
 组本身也是一个图形（由其子元素组合），所以也可以被添加到组里。
 
     var group = new Group();
-    group.addItem( flower );
+    group.addShape( flower );
 
 ## 填充图形
 
@@ -474,21 +486,25 @@ var bezier = new Bezier().pipe(function() {
 
 要用一个颜色进行填充，可以：
 
-    rect.fill( new Color('red') );
-    // 或者直接使用字符串：
-    rect.fill( 'red' );
+```js
+rect.fill( new Color('red') );
+// 或者直接使用字符串：
+rect.fill( 'red' );
+```
     
 ### 使用 LinearGradientBrush 进行线性渐变填充
 
 线性渐变使用 LinearGradientBrush 进行填充：
 
-    rect.fill(new LinearGradientBrush().pipe( function() {
-        this.addStop(0, 'red');
-        this.addStop(1, 'blue');
-        this.setStartPosition(0, 0);
-        this.setEndPosition(1, 1);
-        paper.addResource(this);
-    }));
+```js
+rect.fill(new LinearGradientBrush().pipe( function() {
+    this.addStop(0, 'red');
+    this.addStop(1, 'blue');
+    this.setStartPosition(0, 0);
+    this.setEndPosition(1, 1);
+    paper.addResource(this);
+}));
+```
 
 ![线性渐变](images/linear.png)
 
@@ -502,14 +518,16 @@ var bezier = new Bezier().pipe(function() {
 
 进项渐变使用 RadialGradientBrush 进行填充：
 
-    rect.fill(new RadialGradientBrush().pipe( function() {
-        this.setCenter(0.5, 0.5);
-        this.setRadius(0.8);
-        this.setFocal(0.8, 0.2);
-        this.addStop(0, 'white');
-        this.addStop(1, 'gray');
-        paper.addResource(this);
-    }));
+```js
+rect.fill(new RadialGradientBrush().pipe( function() {
+    this.setCenter(0.5, 0.5);
+    this.setRadius(0.8);
+    this.setFocal(0.8, 0.2);
+    this.addStop(0, 'white');
+    this.addStop(1, 'gray');
+    paper.addResource(this);
+}));
+```
 
 ![径向渐变](images/radial.png)
 
@@ -525,16 +543,18 @@ var bezier = new Bezier().pipe(function() {
 
 PatternBrush 是最灵活的画笔，它可以用图形填充图形。
 
-    rect.fill(new PatternBrush().pipe( function() {
-        var colors = ['red', 'blue', 'yelow', 'green'];
-        this.setWidth(40);
-        this.setHeight(40);
-        this.addItem( new Circle(10, 10, 5).fill(colors.shift()) );
-        this.addItem( new Circle(30, 10, 5).fill(colors.shift()) );
-        this.addItem( new Circle(10, 30, 5).fill(colors.shift()) );
-        this.addItem( new Circle(30, 30, 5).fill(colors.shift()) );
-        paper.addResource(this);
-    }));
+```js
+rect.fill(new PatternBrush().pipe( function() {
+    var colors = ['red', 'blue', 'yelow', 'green'];
+    this.setWidth(40);
+    this.setHeight(40);
+    this.addItem( new Circle(10, 10, 5).fill(colors.shift()) );
+    this.addItem( new Circle(30, 10, 5).fill(colors.shift()) );
+    this.addItem( new Circle(10, 30, 5).fill(colors.shift()) );
+    this.addItem( new Circle(30, 30, 5).fill(colors.shift()) );
+    paper.addResource(this);
+}));
+```
 
 ![图形填充](images/pattern.png)
 
@@ -548,13 +568,15 @@ PatternBrush 是最灵活的画笔，它可以用图形填充图形。
 
 Pen 用于描绘图形的轮廓：
 
-    path.stroke(new Pen().pipe(function() {
-        this.setWidth(5);
-        this.setDashArray([10, 5]);
-        this.setLineCap('butt');
-        this.setLineJoin('round');
-        this.setColor('green');
-    }));
+```js
+path.stroke(new Pen().pipe(function() {
+    this.setWidth(5);
+    this.setDashArray([10, 5]);
+    this.setLineCap('butt');
+    this.setLineJoin('round');
+    this.setColor('green');
+}));
+```
 
 ![描边](images/pen.png)
 
@@ -571,7 +593,22 @@ Pen 用于描绘图形的轮廓：
 
 ## 文字
 
-正在编写...
+可以添加文字到 Paper 上：
+
+```js
+paper.addShape(new Text("hello, kity").setX(50).setY(50));
+```
+
+可以通过添加不同的 TextSpan 控制样式
+
+```js
+paper.addShape(new Text().pipe(function() {
+    this.addSpan(new TextSpan('hello').fill('red'));
+    this.addSpan(new TextSpan('kity').fill('blue'));
+}));
+```
+
+
 
 ### 基本使用
 

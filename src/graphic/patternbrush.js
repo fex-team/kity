@@ -6,23 +6,27 @@ define(function (require, exports, module) {
     return require('core/class').createClass('PatternBrush', {
         base: DefBrush,
         mixins: [ShapeContainer],
-        constructor: function (builder) {
+        constructor: function () {
             this.callBase('pattern');
-            if(typeof(builder) == 'function') {
-                builder.call(this, this);
-            }
         },
-
-        setMode: function (mode) {
-            // 'repeat' or 'scale'
-            this.mode = mode;
+        setX: function(x) {
+            this.x = x;
+            this.node.setAttribute('x', x);
+            return this;
+        },
+        setY: function(y) {
+            this.y = y;
+            this.node.setAttribute('y', y);
+            return this;
         },
         setWidth: function (width) {
             this.width = width;
+            this.node.setAttribute('width', width);
             return this;
         },
         setHeight: function (height) {
             this.height = height;
+            this.node.setAttribute('height', height);
             return this;
         },
         getWidth: function () {
@@ -33,14 +37,7 @@ define(function (require, exports, module) {
         },
         renderNode: function () {
             var node = this.node;
-
-            if (this.mode == 'scale') {
-                node.setAttribute('patternUnits', 'objectBoundaryBox');
-            } else {
-                node.setAttribute('patternUnits', 'userSpaceOnUse');
-            }
-            node.setAttribute('width', this.getWidth());
-            node.setAttribute('height', this.getHeight());
+            node.setAttribute('patternUnits', 'userSpaceOnUse');
         }
     });
 });

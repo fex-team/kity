@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bezier Example</title>
+    <script src="../dev-lib/sea.js"></script>
+    <script>
+        seajs.config({
+            base: '../src'
+        });
+        define('start', function (require) {
+            var Paper = require('graphic/paper');
+            var Group = require('graphic/group');
+            var Ellipse = require('graphic/ellipse');
+            var Color = require('graphic/color');
+
+            var paper = new Paper(document.body);
+
+            paper.setWidth(600).setHeight(400);
+
+            var flower = new Group().pipe(function() { 
+                for(var i = 0; i < 12; i++) {
+                    var color = new Color();
+                    color.set('h', 30 * i);
+                    color.set('s', 80);
+                    color.set('l', 50);
+                    color.set('a', .5);
+                    this.addShape(new Ellipse(50, 0, 80, 15).rotate( 30 * i ).fill(color));
+                }
+                this.scale(1.5).translate(300, 200);
+            });
+            paper.addShape(flower);
+        });
+        seajs.use('start');
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

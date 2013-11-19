@@ -16,46 +16,38 @@ define(function (require, exports, module) {
         },
 
         setCenter: function (cx, cy) {
-            this.c = {
-                x: cx,
-                y: cy
-            };
+            this.node.setAttribute('cx', cx);
+            this.node.setAttribute('cy', cy);
+            return this;
         },
 
         getCenter: function () {
-            return this.c;
-        },
-
-        setFocal: function (fx, fy) {
-            this.f = {
-                x: fx,
-                y: fy
+            return {
+                x: +this.node.getAttribute('cx'),
+                y: +this.node.getAttribute('cy')
             };
         },
 
+        setFocal: function (fx, fy) {
+            this.node.setAttribute('fx', fx);
+            this.node.setAttribute('fy', fy);
+            return this;
+        },
+
         getFocal: function () {
-            return this.f;
+            return {
+                x: +this.node.getAttribute('fx'),
+                y: +this.node.getAttribute('fy')
+            };
         },
 
         setRadius: function (r) {
-            this.r = r;
+            this.node.setAttribute('r', r);
+            return this;
         },
 
         getRadius: function () {
-            return this.r;
-        },
-
-        // implement
-        renderNode: function () {
-            this.callBase();
-            var c = this.getCenter(),
-                f = this.getFocal(),
-                r = this.getRadius();
-            this.node.setAttribute('cx', c.x);
-            this.node.setAttribute('cy', c.y);
-            this.node.setAttribute('fx', f.x);
-            this.node.setAttribute('fy', f.y);
-            this.node.setAttribute('r', r);
+            return +this.node.getAttribute('r');
         }
     });
 });
