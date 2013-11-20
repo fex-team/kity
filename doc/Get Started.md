@@ -822,35 +822,91 @@ rect.skew(0, 30); // y 方向倾斜
     X' = aX + cY + e
     Y' = bX + dY + f
 
+比如要对图形以直线 `y = x` 为轴进行镜像，那么转换的时候应该是：
 
+    X' = Y
+    Y' = X
+
+对应的参数应该是 a = 0, b = 1, c = 1, d = 0, e = 0, f = 0。
+
+```js
+var triangle = new Path('M0 0 L 150 0 0 50 Z');
+triangle.setTransform(new Matrix(0, 1, 1, 0, 0, 0));
+```
+
+![自定义变换](images/matrix.png)
 
 ### BoundaryBox
 
+BoundaryBox 是图形的最小包含矩形。可以理解为图形的边界。
 
-注意，图形经过所有的变换之后，并不影响其原来的 BoundaryBox。
+使用 `getBoundaryBox()` 方法获取图形的包围矩形。
 
 ```js
+var rect = new Rect(0, 0, 200, 300);
+
 console.log( rect.getBoundaryBox() ); 
 // { x: 0, y: 0, width: 200, height: 300 }
 ```
 
+### RenderBox
+
+图形经过所有的变换之后，并不影响其原来的 BoundaryBox。经过变换之后的图形，需要使用 `getRenderBox()` 方法来获取图形的真正边界。
+
+```js
+var rect = new Rect(0, 0, 200, 300);
+
+console.log( rect.getBoundaryBox() ); 
+// { x: 0, y: 0, width: 200, height: 300 }
+
+console.log( rect.getRenderBox() );
+// { x: 0, y: 0, width: 200, height: 300 }
+
+rect.translate(100, 100);
+
+console.log( rect.getBoundaryBox() );
+// { x: 0, y: 0, width: 200, height: 300 }
+
+console.log( rect.getRenderBox() );
+// { x: 100, y: 100, width: 200, height: 300 }
+```
 
 
 ## 事件
 
-正在编写...
+Kity 的对象支持事件绑定。
 
 ### 绑定到图形上
 
-正在编写...
+```js
+rect.on('click', function(e) {
+    // e.targetShape === rect
+    alert('you click my rect!!');
+});
+```
 
 ### 绑定到 Paper 上
 
-正在编写...
+```js
+paper.on('click', function(e) {
+    alert('you click ' + e.targetShape.getId());
+});
+```
 
+### 使用坐标
+
+使用 `e.getPosition()` 获得鼠标位置在用户坐标系统中的坐标
+
+```js
+paper.on('click', function(e) {
+    var p = e.getPosition();
+    var circle = new Circle( p.x, p.y, 3, 3 );
+    paper.addShape(circle);
+});
+```
 
 
 
 
 ----
-> 文档结束
+文档结束

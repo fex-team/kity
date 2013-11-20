@@ -12,6 +12,7 @@
             var Rect = require('graphic/rect');
             var Path = require('graphic/path');
             var Pen = require('graphic/pen');
+            var Matrix = require('graphic/matrix');
 
             var paper = new Paper(document.body);
             paper.setViewBox(-300, -200, 600, 400);
@@ -25,12 +26,13 @@
                 this.stroke('gray');
             }));
 
-            r = new Rect(0, 0, 100, 100).stroke(new Pen().pipe(function() {
+            r = new Path('M0 0 L 150 0 0 50 Z').stroke(new Pen().pipe(function() {
                 this.setColor('hsl(0, 60%, 50%)');
                 this.setWidth(1);
                 this.setDashArray([5, 5]);
             })).fill('hsla(0, 50%, 80%, .5)');
-            t = new Rect(0, 0, 100, 100).stroke('red').fill('hsla(0, 50%, 80%, .5)').skew(0, 30);
+
+            t = new Path('M0 0 L 150 0 0 50 Z').stroke('red').fill('hsla(0, 50%, 80%, .5)').setTransform(new Matrix(0, 1, 1, 0, 0, 0));
             paper.addShape(r);
             paper.addShape(t);
         });
