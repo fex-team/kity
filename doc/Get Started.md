@@ -736,23 +736,103 @@ rect.setStyle({
 
 ### 平移图形
 
-正在编写...
+对于任意图形，使用 `translate` 方法可以产生平移效果：
+
+```js
+var rect = new Rect(0, 0, 200, 100);
+rect.translate(30, 30);
+```
+
+![平移](images/translate.png)
 
 ### 旋转图形
 
-正在编写...
+使用 `rotate` 方法，可以让图形进行旋转
+
+```js
+var rect = new Rect(0, 0, 200, 100);
+rect.rotate(30);
+```
+![旋转 30 度](images/rotate.png)
+
+上面这个旋转是以坐标原点（0, 0) 为锚点的，如果想要以指定的锚点进行旋转，可以指定锚点的坐标：
+
+```js
+var rect = new Rect(0, 0, 200, 100);
+rect.rotate(30, 100, 50);
+```
+
+![指定锚点进行旋转](images/anchorrotate.png)
 
 ### 缩放图形
 
-正在编写...
+使用 `scale` 方法对图形进行缩放：
 
-### 拉伸图形
+```js
+var rect = new Rect(0, 0, 100, 100);
+rect.scale(1.5);
+```
 
-正在编写...
+![等比缩放](images/scale.png)
+
+你也可以在 x 轴和 y 轴上进行不同比例的缩放：
+
+```js
+var rect = new Rect(0, 0, 100, 100);
+rect.scale(1.5, 0.5);
+```
+
+![不等比缩放](images/scale2.png)
+
+默认缩放也是以坐标原点为锚点的，可以指定锚点进行缩放：
+
+```js
+var rect = new Rect(0, 0, 100, 100);
+rect.scale(1.5, 50, 50);
+```
+
+![指定锚点缩放](images/scale3.png)
+
+### 拉伸倾斜
+
+使用 `skew` 可以对图形进行倾斜。
+
+```js
+var rect = new Rect(0, 0, 100, 100);
+rect.skew(30);
+```
+
+![两个方向倾斜](images/skew.png)
+
+你可以单独在 x 方向 或 y 方向倾斜：
+
+```js
+var rect = new Rect(0, 0, 100, 100);
+rect.skew(30, 0); // x 方向倾斜
+rect.skew(0, 30); // y 方向倾斜
+```
+
+![x 方向倾斜](images/skew1.png) ![y 方向倾斜](images/skew2.png)
+
 
 ### 其他变换
 
-正在编写...
+如果会使用 matrix，可以使用更灵活的变换。matrix 的 6 个参数 a, b, c, d, e, f 在变换的时候作为参数，变换是线性的：
+
+    X' = aX + cY + e
+    Y' = bX + dY + f
+
+
+
+### BoundaryBox
+
+
+注意，图形经过所有的变换之后，并不影响其原来的 BoundaryBox。
+
+```js
+console.log( rect.getBoundaryBox() ); 
+// { x: 0, y: 0, width: 200, height: 300 }
+```
 
 
 
