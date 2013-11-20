@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Transform Example</title>
+    <script src="../dev-lib/sea.js"></script>
+    <script>
+        seajs.config({
+            base: '../src'
+        });
+        define('start', function (require) {
+            var Paper = require('graphic/paper');
+            var Rect = require('graphic/rect');
+            var Path = require('graphic/path');
+            var Pen = require('graphic/pen');
+
+            var paper = new Paper(document.body);
+            paper.setViewBox(-300, -200, 600, 400);
+
+            paper.setWidth(600).setHeight(400);
+
+            paper.addShape(new Path().pipe(function() {
+                var d = this.getDrawer();
+                d.moveTo(-300, 0).lineTo(300, 0);
+                d.moveTo(0, -200).lineTo(0, 200);
+                this.stroke('gray');
+            }));
+
+            r = new Rect(0, 0, 100, 100).stroke(new Pen().pipe(function() {
+                this.setColor('hsl(0, 60%, 50%)');
+                this.setWidth(1);
+                this.setDashArray([5, 5]);
+            })).fill('hsla(0, 50%, 80%, .5)');
+            t = new Rect(0, 0, 100, 100).stroke('red').fill('hsla(0, 50%, 80%, .5)').skew(0, 30);
+            paper.addShape(r);
+            paper.addShape(t);
+        });
+        seajs.use('start');
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
