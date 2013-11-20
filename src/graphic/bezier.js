@@ -52,7 +52,7 @@ define( function ( require, exports, module ) {
                 backward = points[ i ].getBackward();
                 forward = points[ i - 1 ].getForward();
 
-                drawer.bezierTo( forward.x, forward.y, backward.x, backward.y, vertix.x, vertix.y );
+                drawer.bezierTo( forward.x, forward.y, backward.x, backward.y, point.x, point.y );
 
             }
 
