@@ -3,6 +3,7 @@ define( function ( require, exports, module ) {
     var createClass = require( 'core/class' ).createClass;
     var Shape = require( 'graphic/shape' );
     var svg = require( 'graphic/svg' );
+    var config = require( 'core/config' );
 
     var PathDrawer = createClass( 'PathDrawer', {
         constructor: function ( path ) {
@@ -66,19 +67,30 @@ define( function ( require, exports, module ) {
         base: Shape,
         constructor: function ( data ) {
             this.callBase( 'path' );
-            this.setPathData( data );
+            if(data) {
+                this.setPathData( data );
+            }
             this.node.setAttribute( 'fill', svg.defaults.fill );
             this.node.setAttribute( 'stroke', svg.defaults.stroke );
         },
         setPathData: function ( data ) {
+            if(!data) {
+                return;
+            }
+
             this.pathdata = data;
             var path = this;
 
-            // lazy dump data attribute
-            clearTimeout(this.lazyDumpId);
-            this.lazyDumpId = setTimeout(function() {
+            if(config.debug) {
                 path.node.setAttribute('d', data);
-            });
+            } else {
+                // lazy dump data attribute
+                clearTimeout(this.lazyDumpId);
+                this.lazyDumpId = setTimeout(function() {
+                    path.node.setAttribute('d', data);
+                });
+            }
+            return this;
         },
         getPathData: function () {
             return this.pathdata;

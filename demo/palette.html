@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Color Ring</title>
+    <script src="../dev-lib/sea.js"></script>
+    <script>
+
+        seajs.config({
+            base: '../src'
+        });
+        define('start', function (require) {
+            var Path = require('graphic/path');
+            var Paper = require('graphic/paper');
+            var Color = require('graphic/color');
+            var PatternBrush = require('graphic/patternbrush');
+            var Text = require('graphic/text');
+            var TextSpan = require('graphic/textspan');
+            var Matrix = require('graphic/matrix');
+            var Pen = require('graphic/pen');
+            var Rect = require('graphic/rect');
+            var Circle = require('graphic/circle');
+            var Palette = require('graphic/palette');
+            var Group = require('graphic/group');
+            var Clazz = require('core/class');
+
+            var paper = new Paper(document.body);
+
+            var viewWidth = 1500, viewHeight = 1000;
+            paper.setViewBox(-750, -500, viewWidth, viewHeight);
+
+            function p2c(d, a) {
+                a = a * Math.PI / 180;
+                return {
+                    x: d * Math.cos(a),
+                    y: d * Math.sin(a)
+                };
+            }
+
+            var Pie = Clazz.createClass({
+                base: Path,
+                constructor: function( r, R, a1, a2 ) {
+                    this.callBase();
+                    this.draw(r, R, a1, a2);
+                    this.center = p2c( r + (R - r) / 2, a1 + (a2 - a1) / 2 );
+                },
+                draw: function(r, R, a1, a2) {
+                    var d = this.getDrawer();
+                    var p1 = p2c(r, a1),
+                        p2 = p2c(R, a1),
+                        p3 = p2c(R, a2),
+                        p4 = p2c(r, a2);
+                    d.moveTo(p1.x, p1.y);
+                    d.lineTo(p2.x, p2.y);
+                    d.carcTo(R, p3.x, p3.y, 0, 1);
+                    d.lineTo(p4.x, p4.y);
+                    d.carcTo(r, p1.x, p1.y);
+                    d.close();
+                }
+            });
+
+            var RingPalette = Clazz.createClass({
+                base: Group,
+                constructor: function( s ) {
+                    this.callBase();
+                    this.s = s;
+                    this.innerRadius = 50;
+                    this.outerRadius = 400;
+                    this.radiusStep = 30;
+                    this.angleStep = 10;
+                    this.generate();
+                    this.bind();
+                },
+                generate: function() {
+                    var s = this.s;
+                    this.pies = new Group();
+                    this.addShape(this.pies);
+                    for(var r = this.innerRadius; r < this.outerRadius; r += this.radiusStep) {
+                        this.generateTrack( r );
+                    }
+                    this.circle = new Circle( 0, 0, this.innerRadius );
+                    this.circle.stroke('white');
+                    this.circle.setStyle('cursor', 'move');
+                    this.addShape(this.circle);
+                },
+                generateTrack: function( r ) {
+                    var rs = this.radiusStep;
+                    var hs = this.angleStep;
+                    var s = this.s;
+                    var l;
+
+                    for(var h = 0; h < 360; h += hs ) {
+                        var pie = new Pie(r, r + rs, h, h + hs);
+                        l = this.getLightness( r );
+                        pie.color = Color.createHSL(h, s, l);
+                        pie.fill( pie.color );
+                        pie.stroke('white');
+                        this.pies.addShape(pie);
+                    }
+                },
+                getLightness: function( r ) {
+                    var min = 10, max = 90;
+                    var rMin = this.innerRadius, rMax = this.outerRadius;
+                    return min + (r - rMin) / (rMax - rMin) * (max - min);
+                },
+                bind: function() {
+                    var ring = this;
+                    var zIndex = 100;
+                    this.on('mouseover', function( e ) {
+                        var pie = e.targetShape;
+                        if( pie && pie.isInstanceOf( Pie ) ) {
+                            var color = pie.color;
+                            if( color ) {
+                                ring.circle.fill(color);
+                            }
+                            pie.scale(2, pie.center.x, pie.center.y);
+                            ring.pies.removeShape(pie).addShape(pie);
+                        }
+                    });
+                    this.on('mouseout', function( e ) {
+                        var pie = e.targetShape;
+                        if( pie && pie.isInstanceOf( Pie ) ) {
+                            pie.resetTransform();
+                        }
+                    });
+                    this.bindDragging();
+                },
+                updateSaturation: function(s) {
+                    this.s = s;
+                    this.pies.eachItem(function(index, pie) {
+                        pie.fill(pie.color.set('s', s));
+                    });
+                },
+                bindDragging: function() {
+                    var pan = this.pan = {
+                        min: -450,
+                        max: 450
+                    };
+                    pan.length = pan.max - pan.min;
+                    pan.value = pan.min + this.s * pan.length / 100;
+                    this.updatePosition(pan.value);
+
+                    var startX, isDragging;
+                    var ring = this;
+                    this.on('mousedown', function( e ) {
+                        if(e.targetShape != ring.circle) {
+                            return;
+                        }
+                        startX = e.getPosition().x;
+                        isDragging = true;
+                    });
+                    this.on('mousemove', function( e ) {
+                        if(isDragging) {
+                            var nowX = e.getPosition().x,
+                                dx = nowX - startX;
+                            console.log(dx);
+                            value = pan.value + dx;
+                            value = Math.min(value, pan.max);
+                            value = Math.max(value, pan.min);
+                            pan.value = value;
+                            ring.s = 100 * (pan.value - pan.min) / pan.length;
+                            ring.updateSaturation(ring.s);
+                            ring.updatePosition(value);   
+                        }
+                    });
+                    this.on('mouseup', function() {
+                        isDragging = false;
+                    });
+                },
+                updatePosition: function( x ) {
+                    this.setTransform(new Matrix().addRotate(-this.angleStep / 2).addTranslate(x, 0));
+                }
+            });
+            
+            var ring = new RingPalette(80);
+            paper.addShape(ring);
+
+        });
+        seajs.use('start');
+    </script>
+    <style>
+        body, div, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+</body>
+</html>
