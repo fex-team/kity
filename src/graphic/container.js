@@ -87,9 +87,9 @@ define(function (require, exports, module) {
             }
 
             if (pos === 0) {
-                items.pop();
-            } else if (pos == length - 1) {
                 items.shift();
+            } else if (pos == length - 1) {
+                items.pop();
             } else {
                 before = items.slice(0, pos);
                 after = items.slice(pos + 1);

@@ -7,8 +7,10 @@ define( function ( require, exports, module ) {
 
     function listen( obj, type, handler ) {
 
-        var handlerList = null;
-        var eid = this._EventListenerId;
+        var handlerList = null,
+            shape = this,
+            eid = this._EventListenerId;
+
         if ( !HANDLER_CACHE[ eid ] ) {
             HANDLER_CACHE[ eid ] = {};
         }
@@ -25,7 +27,7 @@ define( function ( require, exports, module ) {
                 Utils.each( HANDLER_CACHE[ eid ][ type ], function ( fn, index ) {
 
                     if ( fn ) {
-                        return fn.call( obj, e );
+                        return fn.call( shape, e );
                     }
 
                 } );
@@ -79,7 +81,7 @@ define( function ( require, exports, module ) {
         constructor: function () {
 
             //当前对象的事件处理器ID
-            this._EventListenerId = +new Date();
+            this._EventListenerId = +new Date()+''+Math.floor( Math.random() * 10000 );
 
         },
 

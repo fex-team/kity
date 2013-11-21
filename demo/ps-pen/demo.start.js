@@ -14,6 +14,7 @@ define( function ( require, exports, module ) {
     var paper = null,
         //zoom倍数
         ZOOM = 100,
+        controller = null,
         Controller = require( "./demo.controller" );
 
     function init () {
@@ -23,7 +24,30 @@ define( function ( require, exports, module ) {
 
         initPaperBackground();
 
-        new Controller().takeover( paper );
+        controller = new Controller();
+        controller.takeover( paper );
+
+        initButtonEvent();
+
+    }
+
+    // 启动按钮的控制事件
+    function initButtonEvent () {
+
+        $( "#penBtn" ).on( "click", function () {
+
+            controller.enableDraw();
+            controller.disableModify();
+
+        } );
+
+
+        $( "#modifyBtn" ).on( "click", function () {
+
+            controller.disableDraw();
+            controller.enableModify();
+
+        } );
 
     }
 

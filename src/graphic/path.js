@@ -74,6 +74,10 @@ define( function ( require, exports, module ) {
             this.pathdata = data;
             var path = this;
 
+            if ( !data ) {
+                return this;
+            }
+
             // lazy dump data attribute
             clearTimeout(this.lazyDumpId);
             this.lazyDumpId = setTimeout(function() {

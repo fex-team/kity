@@ -21,6 +21,17 @@ define( function ( require, exports, module ) {
         this.bezierPoints = null;
         this.pointGroup = null;
 
+        this.drawState = false;
+
+        // 记录当前是否处于更新状态
+        this.modifyState = false;
+
+        // 记录更新状态的持久信息
+        this._modifyStatus = null;
+
+        // 允许重新拖动编辑的
+        this.editable = false;
+
     }
 
     Utils.extend( Controller.prototype, {
@@ -31,6 +42,43 @@ define( function ( require, exports, module ) {
 
             initListener( this );
 
+        },
+
+        enableDraw: function () {
+            this.drawState = true;
+        },
+
+        disableDraw: function () {
+            this.drawState = false;
+        },
+
+        enableModify: function () {
+            this.modifyState = true;
+        },
+
+        disableModify: function () {
+            this.modifyState = false;
+        },
+
+        // 设置更新状态
+        setModifyStatus: function ( status ) {
+            this._modifyStatus = status;
+        },
+
+        clearModifySatus: function () {
+            this._modifyStatus = null;
+        },
+
+        getModifyStatus: function () {
+            return this._modifyStatus;
+        },
+
+        enableEdit: function () {
+            this.editable = true;
+        },
+
+        disableEdit: function () {
+            this.editable = false;
         },
 
         setBezier: function ( bezier ) {
@@ -91,19 +139,28 @@ define( function ( require, exports, module ) {
             // 记录是否需要更新曲线
             isUpdateable = false,
             paper = controller.paper,
-            currentBezier = null;
+            currentBezier = null,
+            currentPointGroup = null;
 
         paper.on( "mousedown", function ( e ) {
 
             var point = null;
 
+            if ( !controller.drawState ) {
+                return;
+            }
+
             // 切换监听状态
             if ( !isBegin ) {
                 isBegin = true;
                 currentBezier = createBezier( paper );
+                currentPointGroup = createPointGroup( paper );
+
+                listenPointGroup( currentPointGroup, controller );
+
                 //设置当前controller处理的贝塞尔曲线
                 controller.setBezier( currentBezier );
-                controller.setPointGroup( createPointGroup( paper ) );
+                controller.setPointGroup( currentPointGroup );
             }
 
             isUpdateable = false;
@@ -115,11 +172,17 @@ define( function ( require, exports, module ) {
 
         } );
 
-        // 更新控制点
+        // 绘制时 更新控制点
         paper.on( "mousemove", function ( e ) {
 
             var point = null,
                 bezierPoint = null;
+
+            e.preventDefault();
+
+            if ( !controller.drawState ) {
+                return;
+            }
 
             if ( !isBegin || isUpdateable ) {
                 return;
@@ -128,12 +191,64 @@ define( function ( require, exports, module ) {
             point = e.getPosition();
 
             currentBezier.getLastPoint().setForward( point.x, point.y );
+            currentPointGroup.getLastPoint().setForward( point.x, point.y );
+
+        } );
+
+        // 编辑时拖动更新
+        paper.on( "mousemove", function ( e ) {
+
+            var mousePoint = null,
+                currentPoint = null,
+                pointIndex = -1;
+
+            e.preventDefault();
+
+            // 不可编辑
+            if ( !controller.editable ) {
+                return;
+            }
+
+            mousePoint = e.getPosition();
+            pointIndex = controller._modifyStatus.pointIndex;
+            currentPoint = currentPointGroup.getPointsByIndex( pointIndex );
+
+            switch ( controller._modifyStatus.pointType ) {
+
+                case PointGroup.TYPE_FORWARD:
+                    currentPoint.setForward( mousePoint.x, mousePoint.y );
+                    currentBezier.getPoint( pointIndex ).setForward( mousePoint.x, mousePoint.y );
+                    break;
+
+                case PointGroup.TYPE_BACKWARD:
+                    currentPoint.setBackward( mousePoint.x, mousePoint.y );
+                    currentBezier.getPoint( pointIndex ).setBackward( mousePoint.x, mousePoint.y );
+                    break;
+
+                case PointGroup.TYPE_VERTEX:
+                    currentPoint.setPoint( mousePoint.x, mousePoint.y );
+                    currentBezier.getPoint( pointIndex ).setPoint( mousePoint.x, mousePoint.y );
+                    console.log(currentBezier.getPoint( pointIndex ).getForward().x)
+                    break;
+
+            }
+
 
         } );
 
         paper.on( "mouseup", function () {
 
-            isUpdateable = isBegin;
+            if ( controller.drawState ) {
+
+                isUpdateable = isBegin;
+
+            } else if ( controller.modifyState ) {
+
+                controller.disableEdit();
+                // 清空状态
+                controller.clearModifySatus();
+
+            }
 
         } );
 
@@ -160,6 +275,7 @@ define( function ( require, exports, module ) {
     function createBezier ( paper ) {
 
         var bezier = new Bezier();
+
         bezier.stroke( new Pen( new Color( "black" ) ).setWidth( 100 ) );
         paper.addShape( bezier );
 
@@ -174,6 +290,30 @@ define( function ( require, exports, module ) {
         paper.addShape( pointGroup );
 
         return pointGroup;
+
+    }
+
+    // 监听点上的事件
+    function listenPointGroup ( pointGroup, controller ) {
+
+        pointGroup.on( "pointmousedown", function ( e ) {
+
+            // 非modify状态， 不处理
+            if ( !controller.modifyState ) {
+                return;
+            }
+
+            // 运行更新
+            controller.enableEdit();
+
+            controller.setModifyStatus( {
+                pointType: e.targetPointType,
+                point: e.targetPoint,
+                pointIndex: e.targetPointIndex
+            } );
+
+
+        } );
 
     }
 

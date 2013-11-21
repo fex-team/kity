@@ -10,8 +10,8 @@ html, body {
     background: #eee;
 }
 
-#kityContainer {
-    width: 900px;
+.box {
+    width: 960px;
     height: 450px;
     position: absolute;
     top: 50%;
@@ -19,5 +19,23 @@ html, body {
     margin-left: -450px;
     margin-top: -225px;
     border: 1px solid #c2c2c2;
+}
+
+.sidebar {
+    width: 60px;
+    height: 100%;
+    float: left;
+    background: #2d2d2d;
+}
+
+.canvas-area {
+    width: 900px;
+    height: 100%;
+    margin-left: 60px;
+}
+
+.kity-container {
+    width: 900px;
+    height: 450px;
     background: #fff;
 }

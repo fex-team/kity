@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="demo.css">
     <script src="../../dev-lib/sea-debug.js"></script>
-    <script src="../../dev-lib/jquery-1.10.2.min.js"></script>
+    <script src="../../dev-lib/jquery-1.10.2.js"></script>
     <script>
 
         seajs.config({
@@ -17,6 +17,14 @@
     </script>
 </head>
 <body>
-    <div id="kityContainer"></div>
+    <div class="box">
+        <div class="sidebar">
+            <button id="penBtn" type="button">笔</button>
+            <button id="modifyBtn" type="button">选</button>
+        </div>
+        <div class="canvas-area">
+            <div id="kityContainer" class="kity-container"></div>
+        </div>
+    </div>
 </body>
 </html>
