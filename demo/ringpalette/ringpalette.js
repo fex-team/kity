@@ -31,7 +31,7 @@ define(function(require, exports, module) {
         },
         generateCircle: function() {
             this.circle = new Circle( 0, 0, this.innerRadius );
-            this.circle.stroke('black');
+            this.circle.stroke(new Pen('white', 5));
             this.circle.setStyle('cursor', 'move');
             this.addShape(this.circle);
         },
