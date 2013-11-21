@@ -150,6 +150,19 @@ define( function ( require, exports, module ) {
 
         off: function () {
             return this.removeEventListener.apply( this, arguments );
+        },
+
+        trigger: function ( type, param ) {
+
+            var evt = new CustomEvent( type, {
+                bubbles: true,
+                cancelable: true
+            } );
+
+            evt.__kity_param = param;
+
+            this.node.dispatchEvent( evt );
+
         }
 
     } );
