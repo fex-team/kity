@@ -610,7 +610,7 @@ paper.addShape(new Text().pipe(function() {
     this.setX(300);
     this.setY(200);
     this.setAnchor('middle');
-    this.setFontSize(36);
+    this.setSize(36);
 }));
 ```
 ![TextSpan 使用](images/text.png)

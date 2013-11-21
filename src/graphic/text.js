@@ -35,6 +35,9 @@ define( function ( require, exports, module ) {
         },
 
         setAnchor: function( anchor ) {
+            if(anchor == 'center') {
+                anchor = 'middle';
+            }
             this.node.setAttribute('text-anchor', anchor);
 
             // text path
@@ -45,6 +48,7 @@ define( function ( require, exports, module ) {
                     'end': '100%'
                 }[anchor]);
             }
+            return this;
         },
 
         getAnchor: function() {
@@ -53,6 +57,7 @@ define( function ( require, exports, module ) {
 
         addSpan: function(span) {
             this.addShape(span);
+            return this;
         },
 
         setPath: function ( path ) {
