@@ -53,6 +53,27 @@ define( function ( require, exports, module ) {
 
         },
 
+        moveVertex: function ( x, y ) {
+
+            var oldForward = this.forward.getPoint(),
+                oldBackward = this.backward.getPoint(),
+                oldVertex = this.point.getPoint(),
+
+                //移动距离
+                distance = {
+                    left: x - oldVertex.x,
+                    top: y - oldVertex.y
+                };
+
+            // 更新
+            this.forward.setPoint( oldForward.x + distance.left, oldForward.y + distance.top );
+            this.backward.setPoint( oldBackward.x + distance.left, oldBackward.y + distance.top );
+            this.point.setPoint( x, y );
+
+            this.update();
+
+        },
+
         setForward: function ( x, y ) {
 
             this.forward.setPoint( x, y );
