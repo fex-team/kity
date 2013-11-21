@@ -40,6 +40,12 @@ define( function (require, exports, module) {
     Vector.fromPoints = function( p1, p2 ) {
         return new Vector(p2.x - p1.x, p2.y - p1.y);
     };
+    Vector.fromPolar = function( d, a, isRad ) {
+        if(isRad !== true) {
+            a = a * Math.PI / 180;
+        }
+        return new Vector( d * Math.cos(a), d * Math.sin(a) );
+    };
     return require('core/class').createClass('Vector', {
         constructor: Vector,
         length: function() {
