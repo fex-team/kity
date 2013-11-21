@@ -148,7 +148,7 @@
             sPointer = new Pointer( 10, 5, 450, 90, palette.get('s-pointer') );
 
             pointers = new Group().pipe(function(){
-                this.rotate(90);
+                this.rotate(-90);
                 this.addShape(hPointer);
                 this.addShape(mPointer);
                 this.addShape(sPointer); 
@@ -164,7 +164,7 @@
                 }));
                 this.addShape(msPointer);
                 this.addShape(new Circle(0, 0, 8).fill(new Color('gray')));
-                this.rotate(90);
+                this.rotate(-90);
                 this.translate(0, 250);
             });
 
@@ -195,11 +195,11 @@
                     mm = time % 500;
                 m += s / 60;
                 h += m / 60;
-                sPointer.setTransform(new Matrix().addRotate(-s * 6));
-                mPointer.setTransform(new Matrix().addRotate(-m * 6));
-                hPointer.setTransform(new Matrix().addRotate(-h * 30));
-                msPointer.setTransform(new Matrix().addRotate(-ms * 360 / 1000));
-                mmPointer.setTransform(new Matrix().addRotate(-mm * 360 / 500));
+                sPointer.setTransform(new Matrix().addRotate(s * 6));
+                mPointer.setTransform(new Matrix().addRotate(m * 6));
+                hPointer.setTransform(new Matrix().addRotate(h * 30));
+                msPointer.setTransform(new Matrix().addRotate(ms * 360 / 1000));
+                mmPointer.setTransform(new Matrix().addRotate(mm * 360 / 500));
                 requestAnimationFrame(updatePointers);
             }
             updatePointers();

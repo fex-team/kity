@@ -610,7 +610,7 @@ paper.addShape(new Text().pipe(function() {
     this.setX(300);
     this.setY(200);
     this.setAnchor('middle');
-    this.setFontSize(36);
+    this.setSize(36);
 }));
 ```
 ![TextSpan 使用](images/text.png)
@@ -639,6 +639,33 @@ Kity 的颜色支持 RGBA / HSLA 两种。RGBA 使用 RGB 三个分量（红、�
 
 对于 RGBA 还支持 HEX 的表示方式，不过该表示方式会丢失透明度信息。
 
+### 使用颜色
+
+Color 对象有好多种创建方式
+
+```js
+
+// 创建 RGB 颜色
+c2 = Color.createRGB(255, 0, 0);
+c3 = Color.createRGBA(255, 0, 0, 0.5);
+
+// 创建 HSL 颜色
+c4 = Color.createHSL(180, 50, 80);
+c5 = Color.createHSLA(180, 50, 80, 0.6);
+
+// 使用能识别的颜色字符串创建
+c6 = Color.parse('#ff0000');
+c7 = Color.parse('#666');
+c8 = Color.parse('rgb(255,255,0)');
+c9 = Color.parse('rgba(255, 128, 0, .4)');
+c10 = Color.parse('hsl(240, 80%, 50%)');
+c11 = Color.parse('hsla(240, 80, 50, .5)'); // % 可以省略
+
+// 使用熟知颜色名创建
+c12 = Color.parse('blue');
+c13 = Color.parse('green');
+```
+
 ### 颜色分量
 
 对于 RGBA、HSLA 的分量是可以独立设置的。
@@ -660,59 +687,226 @@ blue.set(Color.L, 60);
 blue.set(Color.A, 0.5);
 ```
 
+你还可以通过改变某个分量的值，获得一个新的颜色。
 
+```js
+var red = Color.parse('red');
+var lightred = red.inc(Color.L, 20);
+var darkred = red.dec(Color.L, 20);
+```
 
 ### 使用调色板
 
-正在编写...
+调色板提供一个使用颜色的思路，Kity 不提倡直接把颜色值写在代码里，而是使用调色板定义颜色值，然后在需要的地方引用。
+
+```js
+var myPalette = new Palette();
+myPalette.add('niceblue', Color.createHSL(240, 30, 60));
+
+rect.fill(myPalette.get('niceblue'));
+```
 
 
 ## 使用 CSS 样式表
 
-正在编写...
+可以把图形加入 CSS 的 ClassName，通过样式表来控制图形样式。
+
+```js
+// .blue {
+//     fill: 'blue';
+// }
+rect.addClass('blue');
+```
+
+也可以直接设置样式
+
+```js
+// 效果和 rect.fill('blue') 是一样的
+rect.setStyle('fill', 'blue');
+rect.setStyle({
+    'stroke': 'red',
+    'stroke-width': 1
+});
+```
 
 
 ## 变换矩阵
 
-正在编写...
+可以在所有的图形上应用变换矩阵，实现图形的平移、旋转、缩放、拉伸等。
 
 ### 平移图形
 
-正在编写...
+对于任意图形，使用 `translate` 方法可以产生平移效果：
+
+```js
+var rect = new Rect(0, 0, 200, 100);
+rect.translate(30, 30);
+```
+
+![平移](images/translate.png)
 
 ### 旋转图形
 
-正在编写...
+使用 `rotate` 方法，可以让图形进行旋转
+
+```js
+var rect = new Rect(0, 0, 200, 100);
+rect.rotate(30);
+```
+![旋转 30 度](images/rotate.png)
+
+上面这个旋转是以坐标原点（0, 0) 为锚点的，如果想要以指定的锚点进行旋转，可以指定锚点的坐标：
+
+```js
+var rect = new Rect(0, 0, 200, 100);
+rect.rotate(30, 100, 50);
+```
+
+![指定锚点进行旋转](images/anchorrotate.png)
 
 ### 缩放图形
 
-正在编写...
+使用 `scale` 方法对图形进行缩放：
 
-### 拉伸图形
+```js
+var rect = new Rect(0, 0, 100, 100);
+rect.scale(1.5);
+```
 
-正在编写...
+![等比缩放](images/scale.png)
+
+你也可以在 x 轴和 y 轴上进行不同比例的缩放：
+
+```js
+var rect = new Rect(0, 0, 100, 100);
+rect.scale(1.5, 0.5);
+```
+
+![不等比缩放](images/scale2.png)
+
+默认缩放也是以坐标原点为锚点的，可以指定锚点进行缩放：
+
+```js
+var rect = new Rect(0, 0, 100, 100);
+rect.scale(1.5, 50, 50);
+```
+
+![指定锚点缩放](images/scale3.png)
+
+### 拉伸倾斜
+
+使用 `skew` 可以对图形进行倾斜。
+
+```js
+var rect = new Rect(0, 0, 100, 100);
+rect.skew(30);
+```
+
+![两个方向倾斜](images/skew.png)
+
+你可以单独在 x 方向 或 y 方向倾斜：
+
+```js
+var rect = new Rect(0, 0, 100, 100);
+rect.skew(30, 0); // x 方向倾斜
+rect.skew(0, 30); // y 方向倾斜
+```
+
+![x 方向倾斜](images/skew1.png) ![y 方向倾斜](images/skew2.png)
+
 
 ### 其他变换
 
-正在编写...
+如果会使用 matrix，可以使用更灵活的变换。matrix 的 6 个参数 a, b, c, d, e, f 在变换的时候作为参数，变换是线性的：
 
+    X' = aX + cY + e
+    Y' = bX + dY + f
+
+比如要对图形以直线 `y = x` 为轴进行镜像，那么转换的时候应该是：
+
+    X' = Y
+    Y' = X
+
+对应的参数应该是 a = 0, b = 1, c = 1, d = 0, e = 0, f = 0。
+
+```js
+var triangle = new Path('M0 0 L 150 0 0 50 Z');
+triangle.setTransform(new Matrix(0, 1, 1, 0, 0, 0));
+```
+
+![自定义变换](images/matrix.png)
+
+### BoundaryBox
+
+BoundaryBox 是图形的最小包含矩形。可以理解为图形的边界。
+
+使用 `getBoundaryBox()` 方法获取图形的包围矩形。
+
+```js
+var rect = new Rect(0, 0, 200, 300);
+
+console.log( rect.getBoundaryBox() ); 
+// { x: 0, y: 0, width: 200, height: 300 }
+```
+
+### RenderBox
+
+图形经过所有的变换之后，并不影响其原来的 BoundaryBox。经过变换之后的图形，需要使用 `getRenderBox()` 方法来获取图形的真正边界。
+
+```js
+var rect = new Rect(0, 0, 200, 300);
+
+console.log( rect.getBoundaryBox() ); 
+// { x: 0, y: 0, width: 200, height: 300 }
+
+console.log( rect.getRenderBox() );
+// { x: 0, y: 0, width: 200, height: 300 }
+
+rect.translate(100, 100);
+
+console.log( rect.getBoundaryBox() );
+// { x: 0, y: 0, width: 200, height: 300 }
+
+console.log( rect.getRenderBox() );
+// { x: 100, y: 100, width: 200, height: 300 }
+```
 
 
 ## 事件
 
-正在编写...
+Kity 的对象支持事件绑定。
 
 ### 绑定到图形上
 
-正在编写...
+```js
+rect.on('click', function(e) {
+    // e.targetShape === rect
+    alert('you click my rect!!');
+});
+```
 
 ### 绑定到 Paper 上
 
-正在编写...
+```js
+paper.on('click', function(e) {
+    alert('you click ' + e.targetShape.getId());
+});
+```
 
+### 使用坐标
+
+使用 `e.getPosition()` 获得鼠标位置在用户坐标系统中的坐标
+
+```js
+paper.on('click', function(e) {
+    var p = e.getPosition();
+    var circle = new Circle( p.x, p.y, 3, 3 );
+    paper.addShape(circle);
+});
+```
 
 
 
 
 ----
-> 文档结束
+文档结束

@@ -66,6 +66,9 @@ define(function(require, exports, module) {
                     value = Math.floor( value );
                 }
 
+                if(name == 'h') {
+                    value = (value + 360) % 360;
+                }
                 this._color[ name ] = Math.max( Color._MIN_VALUE[ name ], Math.min( Color._MAX_VALUE[name], value ) );
 
                 if ( 'rgb'.indexOf( name ) !== -1 ) {
@@ -73,7 +76,6 @@ define(function(require, exports, module) {
                     this._color = Utils.extend( this._color, ColorUtils.rgbValueToHslValue( this._color ) );
 
                 } else if ( 'hsl'.indexOf( name ) !== -1 ) {
-
                     this._color = Utils.extend( this._color, ColorUtils.hslValueToRGBValue( this._color ) );
 
                 }
@@ -86,8 +88,13 @@ define(function(require, exports, module) {
 
                 value = this.get( name ) + value;
 
-                value = Math.min( Color._MAX_VALUE[ name ], value );
-                value = Math.max( Color._MIN_VALUE[ name ], value );
+                if(name == 'h') {
+                    value = (value + 360) % 360;
+                }
+                else {
+                    value = Math.min( Color._MAX_VALUE[ name ], value );
+                    value = Math.max( Color._MIN_VALUE[ name ], value );
+                }
 
                 return this.clone().set( name, value );
 
@@ -498,8 +505,9 @@ define(function(require, exports, module) {
 
         toString: function ( colorValue, type ) {
 
-            var vals = [],
-                colorValue = Utils.extend( {}, colorValue );
+            var vals = [];
+
+            colorValue = Utils.extend( {}, colorValue );
 
             if ( type.indexOf( 'hsl' ) !== -1 ) {
 

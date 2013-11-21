@@ -46,6 +46,10 @@ define(function (require, exports, module) {
         };
     };
 
+    function d2r(deg) {
+        return deg * Math.PI / 180;
+    }
+
     return require('core/class').createClass('Matrix', {
         constructor: Matrix,
 
@@ -62,14 +66,14 @@ define(function (require, exports, module) {
         },
 
         addRotate: function (deg) {
-            var rad = deg * Math.PI / 180;
+            var rad = d2r(deg);
             var sin = Math.sin(rad),
                 cos = Math.cos(rad);
             this.m = mergeMatrixData(this.m, {
                 a: cos,
-                c: sin,
+                c: -sin,
                 e: 0,
-                b: -sin,
+                b: sin,
                 d: cos,
                 f: 0
             });
@@ -95,10 +99,10 @@ define(function (require, exports, module) {
             if (degY === undefined) {
                 degY = degX;
             }
-            var tx = Math.tan(degX),
-                ty = Math.tan(degY);
+            var tx = Math.tan(d2r(degX)),
+                ty = Math.tan(d2r(degY));
             this.m = mergeMatrixData(this.m, {
-                a: 1 + tx * ty,
+                a: 1,
                 c: tx,
                 e: 0,
                 b: ty,
