@@ -14,10 +14,12 @@ define( function ( require, exports, module ) {
 			while ( this.shapeNode.firstChild ) {
 				this.shapeNode.removeChild( this.shapeNode.firstChild );
 			}
+            return this;
 		},
 
 		setContent: function ( content ) {
 			this.shapeNode.textContent = content;
+            return this;
 		},
 
 		getContent: function () {
@@ -26,15 +28,16 @@ define( function ( require, exports, module ) {
 
 		appendContent: function ( content ) {
 			this.shapeNode.textContent += content;
+            return this;
 		},
 
-        setFontSize: function( value ) {
+        setSize: function( value ) {
             this.fontsize = value;
             this.node.setAttribute('font-size', value);
             return this;
         },
 
-        getFontSize: function() {
+        getSize: function() {
             return this.fontsize;
         },
 	} );
