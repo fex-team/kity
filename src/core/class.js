@@ -213,6 +213,11 @@ define( function ( require, exports ) {
         delete defines.base;
 
         extend( thisClass.prototype, defines, true );
+
+        thisClass.isClassOf = function( obj ) {
+            return !!obj && !!obj.isInstanceOf && obj.isInstanceOf( thisClass );
+        };
+
         return thisClass;
     };
 
