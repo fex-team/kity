@@ -5,7 +5,7 @@ define( function ( require, exports, module ) {
         ShapeEvent = require( "graphic/shapeevent" ),
         Utils = require( "core/utils" );
 
-    function listen( obj, type, handler ) {
+    function listen( obj, type, handler, isOnce ) {
 
         var handlerList = null,
             shape = this,
@@ -26,9 +26,22 @@ define( function ( require, exports, module ) {
 
                 Utils.each( HANDLER_CACHE[ eid ][ type ], function ( fn, index ) {
 
+                    var result;
+
                     if ( fn ) {
-                        return fn.call( shape, e );
+
+                        result = fn.call( shape, e );
+
+                        //once 绑定， 执行完后删除
+                        if ( isOnce ) {
+
+                            shape.off( type, fn );
+
+                        }
+
                     }
+
+                    return result;
 
                 } );
 
@@ -87,7 +100,14 @@ define( function ( require, exports, module ) {
 
         addEventListener: function ( type, handler ) {
 
-            var record = {};
+            return this._addEvent( type, handler, false );
+
+        },
+
+        _addEvent: function ( type, handler, isOnce ) {
+
+            var record = {},
+                isOnce = !!isOnce;
 
             if ( typeof type === 'string' ) {
                 type = type.replace( /^\s+|\s+$/g, '' ).split( /\s+/ );
@@ -95,13 +115,20 @@ define( function ( require, exports, module ) {
 
             var shape = this;
             var node = this.node;
+
             Utils.each( type, function ( currentType ) {
 
-                record[ currentType ] = listen.call( shape, node, currentType, handler );
+                record[ currentType ] = listen.call( shape, node, currentType, handler, isOnce );
 
             } );
 
             return this;
+
+        },
+
+        addOnceEventListener: function ( type, handler ) {
+
+            return this._addEvent( type, handler, true );
 
         },
 
@@ -140,6 +167,8 @@ define( function ( require, exports, module ) {
 
                 deleteEvent( this.node, type, LISTENER_CACHE[ this._EventListenerId ] );
 
+                LISTENER_CACHE[ this._EventListenerId ] = null;
+
             }
 
             return this;
@@ -152,6 +181,10 @@ define( function ( require, exports, module ) {
 
         off: function () {
             return this.removeEventListener.apply( this, arguments );
+        },
+
+        once: function () {
+            return this.addOnceEventListener.apply( this, arguments );
         },
 
         trigger: function ( type, param ) {
