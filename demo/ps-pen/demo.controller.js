@@ -228,8 +228,8 @@ define( function ( require, exports, module ) {
                     break;
 
                 case PointGroup.TYPE_VERTEX:
-                    currentPoint.moveVertex( mousePoint.x, mousePoint.y );
-                    currentBezier.getPoint( pointIndex ).moveVertex( mousePoint.x, mousePoint.y );
+                    currentPoint.moveTo( mousePoint.x, mousePoint.y );
+                    currentBezier.getPoint( pointIndex ).moveTo( mousePoint.x, mousePoint.y );
                     break;
 
             }
