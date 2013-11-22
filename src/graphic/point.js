@@ -7,8 +7,8 @@ define( function ( require, exports, module ) {
     return require( 'core/class' ).createClass( 'Point', {
 
         constructor: function ( x, y ) {
-            this.px = x;
-            this.py = y;
+            this.px = x || 0;
+            this.py = y || 0;
         },
 
         setPoint: function ( x, y ) {
