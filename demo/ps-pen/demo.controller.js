@@ -8,7 +8,7 @@ define( function ( require, exports, module ) {
         Color = require( "graphic/color" ),
         Pen = require( "graphic/pen" ),
         Utils = require( "core/utils" ),
-        Rect = require( "graphic/rect" ),
+        Vector = require( "graphic/vector" ),
         // 引入可绘制的点集合
         PointGroup = require( "./demo.pointgroup" ),
         BezierPoint = require( "graphic/bezierpoint" );
@@ -213,7 +213,7 @@ define( function ( require, exports, module ) {
 
             mousePoint = e.getPosition();
             pointIndex = controller._modifyStatus.pointIndex;
-            currentPoint = currentPointGroup.getPointsByIndex( pointIndex );
+            currentPoint = currentPointGroup.getPointByIndex( pointIndex );
 
             switch ( controller._modifyStatus.pointType ) {
 
@@ -299,23 +299,81 @@ define( function ( require, exports, module ) {
 
         pointGroup.on( "pointmousedown", function ( e ) {
 
+            var currentPoint = null,
+                currentType = null,
+                index = -1,
+                vertexWidth = 0;
+
             // 非modify状态， 不处理
             if ( !controller.modifyState ) {
                 return;
             }
 
+            index = e.targetPointIndex;
+            currentType = e.targetPointType;
+            currentPoint = pointGroup.getPointByIndex( index );
+
+            // 获取到当前顶点的宽度
+            vertexWidth = pointGroup.getVertexWidth();
+
+            // 检查当前点击的点的控制点是否和顶点重叠
+            // 如果重叠了， 则认为点击是发生在forward的控制点上的
+            if ( currentType === PointGroup.TYPE_VERTEX ) {
+
+                //更新点类型
+                switch ( checkOverlapping( currentPoint, vertexWidth ) ) {
+
+                    case 1:
+                        currentType = PointGroup.TYPE_FORWARD;
+                        break;
+
+                    case 2:
+                        currentType = PointGroup.TYPE_BACKWARD
+                        break;
+
+                }
+
+            }
+
+
             // 运行更新
             controller.enableEdit();
 
             controller.setModifyStatus( {
-                pointType: e.targetPointType,
-                pointIndex: e.targetPointIndex
+                pointType: currentType,
+                pointIndex: index
             } );
 
             //更新当前的点
-            this.selectPoint( e.targetPointIndex );
+            this.selectPoint( index );
 
         } );
+
+    }
+
+    // 工具方法， 检测贝塞尔曲线上的点的控制点和顶点是否重叠在一起
+    // 参数distance控制了点之间的最小距离， 如果不大于该距离， 则认为是重叠的
+    // 返回值有： 0： 无重叠， 1： forward重叠， 2： backward重叠
+    function checkOverlapping ( bezierPoint, distance ) {
+
+        var forward = bezierPoint.getForward(),
+            backward = bezierPoint.getBackward(),
+            vertex = bezierPoint.getPoint();
+
+        if ( Vector.fromPoints( forward, vertex ).length() <= distance ) {
+
+            // forward重叠
+            return 1;
+
+        } else if ( Vector.fromPoints( backward, vertex ).length() <= distance ) {
+
+            // backward重叠
+            return 2;
+
+        }
+
+        // 无重叠
+        return 0;
 
     }
 

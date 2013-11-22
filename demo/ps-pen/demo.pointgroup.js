@@ -106,13 +106,18 @@ define( function ( require, exports, module ) {
 
         },
 
+        // 获取顶点宽度
+        getVertexWidth: function () {
+            return this.exterior.vertex.width;
+        },
+
         getPoints: function () {
 
             return this.points.slice( 0 );
 
         },
 
-        getPointsByIndex: function ( index ) {
+        getPointByIndex: function ( index ) {
 
             return this.points[ index ] || null;
 
@@ -154,9 +159,24 @@ define( function ( require, exports, module ) {
 
             var shapeGroup = this.pointShapes[ index ];
 
-            this._stroke( shapeGroup.forward );
-            this._stroke( shapeGroup.backward );
-            this._stroke( shapeGroup.vertex );
+            // 重绘当前点
+            this._redraw( this.getPointByIndex( index ) );
+
+            // 清空其他点的
+            Utils.each( this.pointShapes, function ( shape, i ) {
+
+                if ( i !== index ) {
+
+                    this._clearShapePoint( i );
+
+                }
+
+            }, this );
+
+            // 更新辅助点
+            if ( index > 0 ) {
+                this._drawAssistPoint( index-1 );
+            }
 
         },
 
@@ -189,6 +209,8 @@ define( function ( require, exports, module ) {
             shape.backward.setCenter( backward.x, backward.y );
             shape.line.setPoint1( forward.x, forward.y ).setPoint2( backward.x, backward.y );
             shape.vertex.setPosition( vertex.x - this.exterior.vertex.width / 2, vertex.y - this.exterior.vertex.height / 2 );
+
+            this._stroke( shape.vertex );
 
         },
 
