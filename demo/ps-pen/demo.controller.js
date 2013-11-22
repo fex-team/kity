@@ -146,6 +146,8 @@ define( function ( require, exports, module ) {
 
             var point = null;
 
+            e.preventDefault();
+
             if ( !controller.drawState ) {
                 return;
             }
@@ -307,10 +309,11 @@ define( function ( require, exports, module ) {
 
             controller.setModifyStatus( {
                 pointType: e.targetPointType,
-                point: e.targetPoint,
                 pointIndex: e.targetPointIndex
             } );
 
+            //更新当前的点
+            this.selectPoint( e.targetPointIndex );
 
         } );
 

@@ -149,6 +149,17 @@ define( function ( require, exports, module ) {
 
         },
 
+        // 选中给定索引的点，该操作会引起其他点的连锁反应
+        selectPoint: function ( index ) {
+
+            var shapeGroup = this.pointShapes[ index ];
+
+            this._stroke( shapeGroup.forward );
+            this._stroke( shapeGroup.backward );
+            this._stroke( shapeGroup.vertex );
+
+        },
+
         _draw: function () {
 
             var point = this.getLastPoint(),
