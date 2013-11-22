@@ -107,7 +107,8 @@ define( function ( require, exports, module ) {
 
         removeEventListener: function ( type, handler ) {
 
-            var handlerList = null;
+            var handlerList = null,
+                needRemove = true;
 
             try {
                 handlerList = HANDLER_CACHE[ this._EventListenerId ][ type ];
@@ -115,26 +116,25 @@ define( function ( require, exports, module ) {
                 return;
             }
 
-            //移除指定索引的监听器
-            if ( typeof handler === 'number' ) {
-
-                handler = Math.floor( handler );
-                delete handlerList[ handler ];
-
-                //移除指定的监听器
-            } else if ( typeof handler === 'function' ) {
+            //移除指定的监听器
+            if ( typeof handler === 'function' ) {
 
                 Utils.each( handlerList, function ( fn, index ) {
 
                     if ( fn === handler ) {
                         delete handlerList[ index ];
                         return false;
+                    } else if ( !!fn ) {
+                        needRemove = false;
                     }
 
                 } );
 
-                //删除所有监听器
-            } else if ( handler === undefined ) {
+            }
+
+
+            //删除所有监听器
+            if ( handler === undefined || needRemove ) {
 
                 HANDLER_CACHE[ this._EventListenerId ][ type ] = [];
 
