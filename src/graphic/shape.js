@@ -35,14 +35,14 @@ define( function ( require, exports, module ) {
         getRenderBox: function () {
             var b = this.getBoundaryBox();
             var xMin = Number.MAX_VALUE,
-                xMax = Number.MIN_VALUE,
+                xMax = -Number.MAX_VALUE,
                 yMin = Number.MAX_VALUE,
-                yMax = Number.MIN_VALUE;
+                yMax = -Number.MAX_VALUE;
             var bps = [
                 [b.x, b.y],
                 [b.x + b.width, b.y],
                 [b.x, b.y + b.height],
-                [b.x + b.width, b.x + b.height]
+                [b.x + b.width, b.y + b.height]
             ];
             var matrix = this.getTransform().getMatrix();
             var bp, rp;
@@ -141,6 +141,13 @@ define( function ( require, exports, module ) {
                 this.node.setAttribute( 'fill', brush );
             }
             return this;
+        },
+        getPaper: function() {
+            var paper = this.container;
+            while(paper && !paper.isInstanceOf(Paper)) {
+                paper = paper.container;
+            }
+            return paper;
         }
     } );
 } );
