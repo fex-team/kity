@@ -14,10 +14,9 @@ html, body {
     width: 960px;
     height: 450px;
     position: absolute;
-    top: 50%;
+    top: 100px;
     left: 50%;
     margin-left: -450px;
-    margin-top: -225px;
     border: 1px solid #c2c2c2;
 }
 
