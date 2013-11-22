@@ -1,8 +1,10 @@
-var Paper = require( 'graphic/paper' );
-var Rect = require( 'graphic/rect' );
+getRequires(['graphic/paper','graphic/rect']);
+
 describe( "Kity.EventHandler", function () {
+    var Paper , Rect;
     var paper, rect;
     beforeEach( function () {
+        Paper = src[0] , Rect = src[1];
         paper = new Paper( document.body );
         rect = new Rect( 0, 0, 100, 100 );
         paper.addItem( rect );

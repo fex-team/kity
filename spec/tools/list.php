@@ -9,6 +9,7 @@
 header( "Content-type: text/html; charset=utf-8" );
 $filter = array_key_exists( 'filter' , $_GET ) ? $_GET[ 'filter' ] : '*';
 $quirk = array_key_exists( 'quirk' , $_GET );
+$cov = array_key_exists( 'cov' , $_GET );
 if ( !$quirk ) {
     ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -53,7 +54,7 @@ if ( !$quirk ) {
     <?php
     /*分析所有源码与测试代码js文件一一对应的文件并追加到当前列表中*/
     require_once "caseSource.php";
-    Kiss::listcase( $filter );
+    Kiss::listcase( $filter ,$cov);
     ?>
     <div style="clear: both; overflow: hidden"></div>
 </div>

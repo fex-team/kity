@@ -1,10 +1,10 @@
-var Shape = require('graphic/shape');
-var Path = require('graphic/path');
-var Container = require('graphic/container');
-var Curve = require('graphic/curve');
+getRequires(['graphic/shape','graphic/path','graphic/container','graphic/curve']);
+
 describe("Kity.Curve", function () {
+    var Shape ,Path ,Container , Curve;
     var curve;
     beforeEach(function () {
+        Shape = src[0], Path = src[1], Container = src[2],Curve = src[3];
         curve = new Curve();
     });
 

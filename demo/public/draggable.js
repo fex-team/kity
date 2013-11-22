@@ -26,20 +26,13 @@ define(function(require, exports, module){
         },
         bindDrag: function() {
             var me = this;
+            var isDragging = false;
 
             function bind() {
                 var paper = me.getPaper();
                 if(!paper) {
                     return setTimeout(bind, 100);
                 }
-                var dragMove = function(e) {
-                    var dragPosition = e.getPosition();
-                    var delta = {
-                        x: dragPosition.x - startPosition.x,
-                        y: dragPosition.y - startPosition.y
-                    };
-                    me.drag(delta);
-                };
                 var startPosition = null;
                 paper.on('mousedown', function(e) {
                     if(!me.dragenabled || e.targetShape != me.getDragTarget()) {
@@ -47,10 +40,21 @@ define(function(require, exports, module){
                     }
                     startPosition = e.getPosition();
                     me.dragStart(startPosition);
-                    paper.on('mousemove', dragMove);
+                    isDragging = true;
+                });
+                paper.on('mousemove', function(e) {
+                    if(!isDragging) {
+                        return;
+                    }
+                    var dragPosition = e.getPosition();
+                    var delta = {
+                        x: dragPosition.x - startPosition.x,
+                        y: dragPosition.y - startPosition.y
+                    };
+                    me.drag(delta);
                 });
                 paper.on('mouseup', function(e) {
-                    paper.off('mousemove', dragMove);
+                    isDragging = false;
                     me.dragEnd(e.getPosition());
                 });
             }

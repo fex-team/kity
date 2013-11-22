@@ -4,9 +4,9 @@ beforeEach( function () {
         //用的时候这么用:
         //expect('***').customMatchers(true);
         //expect('***').not.customMatchers(true);
-        customMatchers: function ( expected ) {
-            return expected === true;
-        },
+//        customMatchers: function ( expected ) {
+//            return expected === true;
+//        },
 
         toImplement: function ( extension ) {
             var instance = this.actual;
@@ -44,3 +44,28 @@ beforeEach( function () {
 
     } );
 } );
+var src = new Array();//全局变量,引用的源码对象存放在这个数组里
+var getRequire =function (srcPath){
+
+    describe("getSrc", function () {
+
+        it('getSrc', function () {
+            var s;
+            waitsFor(function () {
+                seajs.use(srcPath, function (e) {
+                    s = e;
+                });
+                if (s !=undefined) {
+                    src.push(s);
+                    return true;
+                }
+            }, srcPath, 500);
+        });
+    });
+};
+var getRequires =function (srcPaths){
+    src = [];
+    for(var i=0;i < srcPaths.length;i++){
+        getRequire(srcPaths[i]);
+    }
+};

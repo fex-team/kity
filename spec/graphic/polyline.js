@@ -1,6 +1,9 @@
+getRequires(['graphic/polyline']);
 describe("Kity.Polyline", function () {
-
-    var Polyline = require( 'graphic/polyline' );
+    var Polyline ;
+    beforeEach(function() {
+        if(Polyline==undefined)Polyline = src[0];
+    });
 
     it("无参构造Polyline", function() {
 

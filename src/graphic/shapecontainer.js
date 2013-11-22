@@ -33,8 +33,8 @@ define(function (require, exports, module) {
         },
 
         /* public */
-        addShape: function (shape) {
-            return this.addItem(shape);
+        addShape: function (shape, pos) {
+            return this.addItem(shape, pos);
         },
 
         /* public */

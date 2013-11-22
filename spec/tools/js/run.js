@@ -9,7 +9,7 @@
  * 为批量运行提供入口，参数携带batchrun=true
  */
 
-function run(kiss, runnext) {
+function run(kiss,runnext) {
 
     window.document.title = kiss;
     var wb = window.brtest = window.brtest || {};
@@ -116,6 +116,7 @@ function run(kiss, runnext) {
     /**
      * 初始化执行区并通过嵌入iframe启动用例执行
      */
+
     var url = 'run.php?case=' + kiss + '&time=' + new Date().getTime() + "&"
         + location.search.substring(1);
 

@@ -1,10 +1,11 @@
-var Group = require('graphic/group');
-var Container = require('graphic/container');
+getRequires(['graphic/group','graphic/container']);
 
 describe("Kity.Group", function () {
+    var Group , Container;
     var group;
 
     beforeEach(function () {
+        Group = src[0], Container = src[1];
         group = new Group();
     });
 

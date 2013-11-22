@@ -1,7 +1,10 @@
+getRequires(["graphic/textspan"]);
 describe("Kity.TextSpan", function () {
 
-    var TextSpan = require( "graphic/textspan" );
-
+    var TextSpan ;
+    beforeEach(function() {
+        if(TextSpan==undefined)TextSpan = src[0];
+    });
     it("构造测试", function() {
 
         var textspan = new TextSpan( "test" );

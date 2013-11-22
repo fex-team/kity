@@ -83,11 +83,13 @@ define( function ( require, exports, module ) {
 
             if(config.debug) {
                 path.node.setAttribute('d', data);
+                this.trigger('shapeupdate', { type: 'pathdata' });
             } else {
                 // lazy dump data attribute
                 clearTimeout(this.lazyDumpId);
                 this.lazyDumpId = setTimeout(function() {
                     path.node.setAttribute('d', data);
+                    this.trigger('shapeupdate', { type: 'pathdata' });
                 });
             }
             return this;

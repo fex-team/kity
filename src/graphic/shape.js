@@ -77,10 +77,12 @@ define( function ( require, exports, module ) {
         },
         setTransform: function ( matrix ) {
             this.node.setAttribute( "transform", matrix );
+            this.trigger('shapeupdate', { type: 'transform'} );
             return this;
         },
         resetTransform: function () {
             this.node.removeAttribute( 'transform' );
+            this.trigger('shapeupdate', { type: 'transform'} );
             return this;
         },
         mergeTransform: function ( matrix ) {
@@ -124,12 +126,15 @@ define( function ( require, exports, module ) {
             }
             return this.mergeTransform( new Matrix().addSkew( sx, sy ) );
         },
-        stroke: function ( pen ) {
+        stroke: function ( pen, width ) {
             if ( pen && pen.stroke ) {
                 pen.stroke( this );
             } else {
                 // 字符串或重写了 toString 的对象
                 this.node.setAttribute( 'stroke', pen );
+                if(width) {
+                    this.node.setAttribute( 'stroke-width', width );
+                }
             }
             return this;
         },

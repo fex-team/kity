@@ -1,7 +1,10 @@
+getRequires([ "graphic/lineargradientbrush"]);
 describe("Kity.LinearGradientBrush", function() {
 
-    var LinearGradientBrush = require( "graphic/lineargradientbrush" );
-
+    var LinearGradientBrush ;
+    beforeEach(function() {
+        LinearGradientBrush = src[0];
+    });
     it("构造验证", function() {
 
         var linearBrush = new LinearGradientBrush(),
