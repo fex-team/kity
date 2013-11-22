@@ -92,14 +92,22 @@ define( function ( require, exports ) {
 
     BaseClass.prototype.mixin = function ( name ) {
         var caller = arguments.callee.caller;
-        var method = getMixins( getCallerClass( caller ) )[ name ];
+        var mixins = getMixins( getCallerClass( caller ) );
+        if(!mixins) {
+            return this;
+        }
+        var method = mixins[ name ];
         return method.apply( this, Array.prototype.slice.call( arguments, 1 ) );
     };
 
     BaseClass.prototype.callMixin = function () {
         var caller = arguments.callee.caller;
         var methodName = getMethodName( caller );
-        var method = getMixins( getCallerClass( caller ) )[ methodName ];
+        var mixins = getMixins( getCallerClass( caller ) );
+        if(!mixins) {
+            return this;
+        }
+        var method = mixins[ methodName ];
         if ( methodName == 'constructor' ) {
             for ( var i = 0, l = method.length; i < l; i++ ) {
                 method[ i ].call( this );
@@ -164,7 +172,8 @@ define( function ( require, exports ) {
             }
         } else {
             thisClass = function () {
-                this.callBase();
+                this.callBase.apply(this, arguments);
+                this.callMixin.apply(this, arguments);
             };
         }
 
