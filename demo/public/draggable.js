@@ -34,16 +34,9 @@ define(function(require, exports, module){
                     return setTimeout(bind, 100);
                 }
                 var startPosition = null;
-                paper.on('mousedown', function(e) {
-                    if(!me.dragenabled || e.targetShape != me.getDragTarget()) {
-                        return;
-                    }
-                    startPosition = e.getPosition();
-                    me.dragStart(startPosition);
-                    isDragging = true;
-                });
-                paper.on('mousemove', function(e) {
+                function drag (e) {
                     if(!isDragging) {
+                        paper.off('mousemove', drag);
                         return;
                     }
                     var dragPosition = e.getPosition();
@@ -52,6 +45,15 @@ define(function(require, exports, module){
                         y: dragPosition.y - startPosition.y
                     };
                     me.drag(delta);
+                }
+                paper.on('mousedown', function(e) {
+                    if(!me.dragenabled || e.targetShape != me.getDragTarget()) {
+                        return;
+                    }
+                    startPosition = e.getPosition();
+                    me.dragStart(startPosition);
+                    isDragging = true;
+                    paper.on('mousemove', drag);
                 });
                 paper.on('mouseup', function(e) {
                     isDragging = false;
