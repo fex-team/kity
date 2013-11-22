@@ -30,14 +30,14 @@ define( function ( require, exports, module ) {
             var newPoint = new BezierPoint(),
                 tmp = null;
 
-            tmp = this.getPoint();
-            newPoint.point = new ShapePoint( tmp.x, tmp.y, false );
+            tmp = this.getVertex();
+            newPoint.setVertex( tmp.x, tmp.y );
 
             tmp = this.getForward();
-            newPoint.forward = new ShapePoint( tmp.x, tmp.y );
+            newPoint.setForward( tmp.x, tmp.y );
 
             tmp = this.getBackward();
-            newPoint.backward = new ShapePoint( tmp.x, tmp.y );
+            newPoint.setBackward( tmp.x, tmp.y );
 
             newPoint.setSmooth( newPoint.isSmooth() );
 
@@ -59,7 +59,7 @@ define( function ( require, exports, module ) {
 
             var oldForward = this.forward.getPoint(),
                 oldBackward = this.backward.getPoint(),
-                oldVertex = this.point.getPoint(),
+                oldVertex = this.vertex.getPoint(),
 
                 //移动距离
                 distance = {
@@ -70,7 +70,7 @@ define( function ( require, exports, module ) {
             // 更新
             this.forward.setPoint( oldForward.x + distance.left, oldForward.y + distance.top );
             this.backward.setPoint( oldBackward.x + distance.left, oldBackward.y + distance.top );
-            this.point.setPoint( x, y );
+            this.vertex.setPoint( x, y );
 
             this.update();
 
@@ -103,8 +103,8 @@ define( function ( require, exports, module ) {
 
         },
 
-        setSymReflaction: function() {
-            this.symReflaction = true;
+        setSymReflaction: function( value ) {
+            this.symReflaction = value;
         },
 
         isSymReflaction: function() {
@@ -129,28 +129,19 @@ define( function ( require, exports, module ) {
 
         getVertex: function () {
 
-            return {
-                x: this.vertex.getX(),
-                y: this.vertex.getY()
-            };
+            return this.vertex.getPoint();
 
         },
 
         getForward: function () {
 
-            return {
-                x: this.forward.getX(),
-                y: this.forward.getY()
-            };
+            return this.forward.getPoint();
 
         },
 
         getBackward: function () {
 
-            return {
-                x: this.backward.getX(),
-                y: this.backward.getY()
-            };
+            return this.backward.getPoint();
 
         },
 

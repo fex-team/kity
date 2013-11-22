@@ -200,7 +200,7 @@ define( function ( require, exports, module ) {
             var index = this.indexOf( point ),
                 shape = this.pointShapes[ index ];
 
-            var vertex = point.getPoint(),
+            var vertex = point.getVertex(),
                 forward = point.getForward(),
                 backward = point.getBackward();
 
@@ -231,7 +231,7 @@ define( function ( require, exports, module ) {
             shape.backward = this._drawBackward( backward, index );
 
             //vertex
-            shape.vertex = this._drawVertex( point.getPoint(), index );
+            shape.vertex = this._drawVertex( point.getVertex(), index );
 
         },
 
@@ -240,7 +240,7 @@ define( function ( require, exports, module ) {
 
             var shape = this.pointShapes[ index ],
             // 当前的包含的数据点
-                vertex = this.points[ index ].getPoint();
+                vertex = this.points[ index ].getVertex();
 
             shape.line.setPoint1( vertex.x, vertex.y ).setPoint2( vertex.x, vertex.y );
             shape.forward.setCenter( vertex.x, vertex.y );
@@ -258,7 +258,7 @@ define( function ( require, exports, module ) {
             // 当前的包含的数据点
                 bezierPoint = this.points[ index ],
                 forward = bezierPoint.getForward(),
-                vertex = bezierPoint.getPoint();
+                vertex = bezierPoint.getVertex();
 
             shape.line.setPoint1( vertex.x, vertex.y ).setPoint2( forward.x, forward.y );
             shape.forward.setCenter( forward.x, forward.y );

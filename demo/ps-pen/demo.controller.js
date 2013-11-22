@@ -358,7 +358,7 @@ define( function ( require, exports, module ) {
 
         var forward = bezierPoint.getForward(),
             backward = bezierPoint.getBackward(),
-            vertex = bezierPoint.getPoint();
+            vertex = bezierPoint.getVertex();
 
         if ( Vector.fromPoints( forward, vertex ).length() <= distance ) {
 
