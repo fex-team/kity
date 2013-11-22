@@ -437,7 +437,7 @@ var p2 = bezier.getPoint(1);
 var p3 = bezier.getPoint(2);
 
 // 重新设置 p2 顶点的位置
-p2.setPoint(400, 400)
+p2.setVertex(400, 400)
 
 // 设置前向控制点会影响到下一段曲线的形状（p2 -> p3），
 // 如果 p2 是平滑的，则会同时影响上一段曲线的形状（p1 -> p2）
