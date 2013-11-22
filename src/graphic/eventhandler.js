@@ -167,7 +167,7 @@ define( function ( require, exports, module ) {
 
                 deleteEvent( this.node, type, LISTENER_CACHE[ this._EventListenerId ] );
 
-                LISTENER_CACHE[ this._EventListenerId ] = null;
+                LISTENER_CACHE[ this._EventListenerId ][ type ] = null;
 
             }
 

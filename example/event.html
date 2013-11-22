@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>事件</title>
+    <meta charset="utf-8">
+    <script src="../dev-lib/sea.js"></script>
+    <script>
+        seajs.config({
+            base: '../src'
+        });
+
+        define( 'start', function ( require, exports, module ) {
+
+            var Paper = require( 'graphic/paper' ),
+                Rect = require( 'graphic/rect' );
+
+            window.tt = function ( e ) {
+                console.log(5566)
+            };
+
+            window.onload = function () {
+
+                var paper = new Paper( document.body ),
+                    rect = new Rect( 0, 0, 500, 500 );
+
+                rect.fill( "red" );
+
+                rect.on( "click", window.tt );
+
+                paper.once( "click", function ( e ) {
+                    console.log(55)
+                } );
+
+                paper.addShape( rect );
+
+                window.rect = rect;
+
+            };
+
+
+        } );
+
+        seajs.use( 'start' );
+    </script>
+</head>
+<body>
+
+</body>
+</html>
