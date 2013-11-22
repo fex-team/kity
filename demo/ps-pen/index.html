@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PS钢笔工具</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="demo.css">
+    <script src="../../dev-lib/sea-debug.js"></script>
+    <script src="../../dev-lib/jquery-1.10.2.js"></script>
+    <script>
+
+        seajs.config({
+            base: '../../src'
+        });
+
+        seajs.use( './demo.start.js' );
+
+    </script>
+</head>
+<body>
+    <div class="box">
+        <div class="sidebar">
+            <button id="penBtn" type="button">笔</button>
+            <button id="modifyBtn" type="button">选</button>
+        </div>
+        <div class="canvas-area">
+            <div id="kityContainer" class="kity-container"></div>
+        </div>
+    </div>
+</body>
+</html>

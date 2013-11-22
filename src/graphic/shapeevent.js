@@ -4,7 +4,8 @@
 
 define( function ( require, exprots, module ) {
 
-    var Matrix = require( "graphic/matrix" );
+    var Matrix = require( "graphic/matrix" ),
+        Utils = require( "core/utils" );
 
     return require( 'core/class' ).createClass( 'EventHandler', {
 
@@ -12,6 +13,10 @@ define( function ( require, exprots, module ) {
 
             this.originEvent = event;
             this.targetShape = event.target.shape || event.target.paper;
+
+            if ( event.__kity_param ) {
+                Utils.extend( this, event.__kity_param );
+            }
 
         },
 

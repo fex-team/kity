@@ -7,7 +7,7 @@ define( function ( require, exports, module ) {
     var ShapePoint = require( 'graphic/shapepoint' );
     var Vector = require( 'graphic/vector' );
 
-    return require( "core/class" ).createClass( 'BezierPoint', {
+    var BezierPoint = require( "core/class" ).createClass( 'BezierPoint', {
 
         constructor: function ( x, y, isSmooth ) {
 
@@ -19,7 +19,27 @@ define( function ( require, exports, module ) {
             this.backward = new ShapePoint( x, y );
 
             //是否平滑
-            this.setSmooth( (isSmooth === undefined) || isSmooth);
+            this.setSmooth( ( isSmooth === undefined ) || isSmooth);
+
+        },
+
+        clone: function () {
+
+            var newPoint = new BezierPoint(),
+                tmp = null;
+
+            tmp = this.getPoint();
+            newPoint.point = new ShapePoint( tmp.x, tmp.y, false );
+
+            tmp = this.getForward();
+            newPoint.forward = new ShapePoint( tmp.x, tmp.y );
+
+            tmp = this.getBackward();
+            newPoint.backward = new ShapePoint( tmp.x, tmp.y );
+
+            newPoint.setSmooth( newPoint.isSmooth() );
+
+            return newPoint;
 
         },
 
@@ -30,6 +50,27 @@ define( function ( require, exports, module ) {
             this.update();
 
             return this;
+
+        },
+
+        moveVertex: function ( x, y ) {
+
+            var oldForward = this.forward.getPoint(),
+                oldBackward = this.backward.getPoint(),
+                oldVertex = this.point.getPoint(),
+
+                //移动距离
+                distance = {
+                    left: x - oldVertex.x,
+                    top: y - oldVertex.y
+                };
+
+            // 更新
+            this.forward.setPoint( oldForward.x + distance.left, oldForward.y + distance.top );
+            this.backward.setPoint( oldBackward.x + distance.left, oldBackward.y + distance.top );
+            this.point.setPoint( x, y );
+
+            this.update();
 
         },
 
@@ -121,10 +162,13 @@ define( function ( require, exports, module ) {
                 return this;
             }
 
-            this.container.update();
+            //新增参数 this， 把当前引起变化的点传递过去， 以便有需要的地方可以获取到引起变化的源
+            this.container.update && this.container.update( this );
 
         }
 
     } );
+
+    return BezierPoint;
 
 } );
