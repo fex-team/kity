@@ -21,6 +21,8 @@ define( function ( require, exports, module ) {
             //是否平滑
             this.setSmooth( ( isSmooth === undefined ) || isSmooth);
 
+            this.setSymReflaction(true);
+
         },
 
         clone: function () {
@@ -53,7 +55,7 @@ define( function ( require, exports, module ) {
 
         },
 
-        moveVertex: function ( x, y ) {
+        moveTo: function ( x, y ) {
 
             var oldForward = this.forward.getPoint(),
                 oldBackward = this.backward.getPoint(),
@@ -78,8 +80,6 @@ define( function ( require, exports, module ) {
 
             this.forward.setPoint( x, y );
 
-            this.fset = true;
-
             //更新后置点
             if(this.smooth) {
                 this.updateAnother(this.forward, this.backward);
@@ -93,8 +93,6 @@ define( function ( require, exports, module ) {
 
             this.backward.setPoint( x, y );
 
-            this.bset = true;
-
             //更新前置点
             if(this.smooth) {
                 this.updateAnother(this.backward, this.forward);
@@ -105,15 +103,19 @@ define( function ( require, exports, module ) {
 
         },
 
-        sameLength: function() {
-            return !this.bset || !this.fset;
+        setSymReflaction: function() {
+            this.symReflaction = true;
+        },
+
+        isSymReflaction: function() {
+            return this.symReflaction;
         },
 
         updateAnother: function(p, q) {
             var v = this.getVertex(),
                 pv = Vector.fromPoints(p.getPoint(), v),
                 vq = Vector.fromPoints(v, q.getPoint());
-            vq = Vector.normalize(pv, this.sameLength() ? pv.length() : vq.length());
+            vq = Vector.normalize(pv, this.isSymReflaction() ? pv.length() : vq.length());
             q.setPoint(v.x + vq.x, v.y + vq.y);
         },
 
