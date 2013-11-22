@@ -1,7 +1,7 @@
 define(function(require, exports, module){
     return require('core/class').createClass({
         constructor: function() {
-            this.bind();
+            this.bindDrag();
             this.enableDrag();
         },
         getDragTarget: function() {
@@ -9,9 +9,11 @@ define(function(require, exports, module){
         },
         enableDrag: function() {
             this.dragenabled = true;
+            this.getDragTarget().setStyle('cursor', 'move');
         },
         disableDrag: function() {
             this.dragenabled = false;
+            this.getDragTarget().setStyle('cursor', 'default');
         },
         dragStart: function(position) {
 
@@ -22,33 +24,37 @@ define(function(require, exports, module){
         dragEnd: function(position) {
 
         },
-        bind: function() {
-            var isDragging = false;
-            var startPosition = null;
+        bindDrag: function() {
             var me = this;
-            this.on('mousedown', function(e) {
-                if(!me.dragenabled || e.targetShape != me.getDragTarget()) {
-                    return;
+
+            function bind() {
+                var paper = me.getPaper();
+                if(!paper) {
+                    return setTimeout(bind, 100);
                 }
-                isDragging = true;
-                startPosition = e.getPosition();
-                me.dragStart(startPosition);
-            });
-            this.on('mousemove', function(e) {
-                if(!isDragging) {
-                    return false;
-                }
-                var dragPosition = e.getPosition();
-                var delta = {
-                    x: dragPosition.x - startPosition.x,
-                    y: dragPosition.y - startPosition.y
+                var dragMove = function(e) {
+                    var dragPosition = e.getPosition();
+                    var delta = {
+                        x: dragPosition.x - startPosition.x,
+                        y: dragPosition.y - startPosition.y
+                    };
+                    me.drag(delta);
                 };
-                me.drag(delta);
-            });
-            this.on('mouseup', function(e) {
-                isDragging = false;
-                me.dragEnd(e.getPosition());
-            });
+                var startPosition = null;
+                paper.on('mousedown', function(e) {
+                    if(!me.dragenabled || e.targetShape != me.getDragTarget()) {
+                        return;
+                    }
+                    startPosition = e.getPosition();
+                    me.dragStart(startPosition);
+                    paper.on('mousemove', dragMove);
+                });
+                paper.on('mouseup', function(e) {
+                    paper.off('mousemove', dragMove);
+                    me.dragEnd(e.getPosition());
+                });
+            }
+            bind();
         }
     });
 });
