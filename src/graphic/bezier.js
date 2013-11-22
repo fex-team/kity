@@ -10,15 +10,23 @@ define( function ( require, exports, module ) {
 
         base: require( "graphic/path" ),
 
-        constructor: function ( points ) {
+        constructor: function ( bezierPoints ) {
 
             this.callBase();
 
-            points = points || [];
+            bezierPoints = bezierPoints || [];
 
             this.changeable = true;
-            this.setPoints( points );
+            this.setBezierPoints( bezierPoints );
 
+        },
+
+        getBezierPoints: function() {
+            return this.getPoints();
+        },
+
+        setBezierPoints: function( bezierPoints ) {
+            return this.setPoints( bezierPoints );
         },
 
         //当点集合发生变化时采取的动作
@@ -33,10 +41,10 @@ define( function ( require, exports, module ) {
         update: function () {
 
             var drawer = null,
-                points = this.getPoints();
+                bezierPoints = this.getBezierPoints();
 
             //单独的一个点不画任何图形
-            if ( points.length < 2 ) {
+            if ( bezierPoints.length < 2 ) {
                 return;
             }
 
@@ -44,15 +52,19 @@ define( function ( require, exports, module ) {
 
             drawer.clear();
 
-            drawer.moveTo( points[ 0 ].getPoint().x, points[ 0 ].getPoint().y );
+            var vertex = bezierPoints[0].getVertex(),
+                forward = null,
+                backward = null;
 
-            for ( var i = 1, point, forward, backward, len = points.length - 1; i <= len; i++ ) {
+            drawer.moveTo( vertex.x, vertex.y );
 
-                point = points[ i ].getPoint();
-                backward = points[ i ].getBackward();
-                forward = points[ i - 1 ].getForward();
+            for ( var i = 1, len = bezierPoints.length; i < len; i++ ) {
 
-                drawer.bezierTo( forward.x, forward.y, backward.x, backward.y, point.x, point.y );
+                vertex = bezierPoints[ i ].getVertex();
+                backward = bezierPoints[ i ].getBackward();
+                forward = bezierPoints[ i - 1 ].getForward();
+
+                drawer.bezierTo( forward.x, forward.y, backward.x, backward.y, vertex.x, vertex.y );
 
             }
 

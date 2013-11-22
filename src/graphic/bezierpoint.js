@@ -12,7 +12,7 @@ define( function ( require, exports, module ) {
         constructor: function ( x, y, isSmooth ) {
 
             //顶点
-            this.point = new ShapePoint( x, y );
+            this.vertex = new ShapePoint( x, y );
 
             //控制点
             this.forward = new ShapePoint( x, y );
@@ -23,9 +23,9 @@ define( function ( require, exports, module ) {
 
         },
 
-        setPoint: function ( x, y ) {
+        setVertex: function ( x, y ) {
 
-            this.point.setPoint( x, y );
+            this.vertex.setPoint( x, y );
 
             this.update();
 
@@ -69,7 +69,7 @@ define( function ( require, exports, module ) {
         },
 
         updateAnother: function(p, q) {
-            var v = this.getPoint(),
+            var v = this.getVertex(),
                 pv = Vector.fromPoints(p.getPoint(), v),
                 vq = Vector.fromPoints(v, q.getPoint());
             vq = Vector.normalize(pv, this.sameLength() ? pv.length() : vq.length());
@@ -84,11 +84,11 @@ define( function ( require, exports, module ) {
 
         },
 
-        getPoint: function () {
+        getVertex: function () {
 
             return {
-                x: this.point.getX(),
-                y: this.point.getY()
+                x: this.vertex.getX(),
+                y: this.vertex.getY()
             };
 
         },

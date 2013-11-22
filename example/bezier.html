@@ -28,7 +28,7 @@
                     this.update();
                 },
                 update: function() {
-                    var points = this.bezier.getPoints();
+                    var points = this.bezier.getBezierPoints();
                     if(this.group) {
                         this.group.remove();
                     }
@@ -37,7 +37,7 @@
                             var p = points[i], f, b;
                             f = p.getForward();
                             b = p.getBackward();
-                            p = p.getPoint();
+                            p = p.getVertex();
                             this.addShape(new Path().pipe(function() {
                                 var d = this.getDrawer()
                                 d.moveTo(b.x, b.y);
