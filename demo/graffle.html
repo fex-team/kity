@@ -103,6 +103,7 @@
 
                     if(prevLevelObject.children.length == 0) {
                         levelObject.setCenterY( prevLevelObject.getCenterY() );
+                        prevLevelObject.children.push(levelObject);
                         return;
                     }
 
@@ -115,9 +116,9 @@
                     yValues.push(levelValue);
 
                     prevLevelObject.children.push(levelObject);
-                    
+
                     utils.each(prevLevelObject.children, function(child, index) {
-                        me.updateTreePosition( child, -delta );
+                        me.updateTreePosition( child, delta / 2 );
                     });
                 },
                 updateTreePosition: function ( levelObject, dy ) {
@@ -130,13 +131,13 @@
                 generateLevelObject: function(level) {
                     switch(level) {
                         case 0:
-                            return new MindRect(this.x + 100, 0, 200, 200, 10)
+                            return new MindRect(this.x + 100, -100, 200, 200, 10)
                                 .fill(this.palette.get('level0-fill'));
                         case 1:
                             return new MindRect(this.x + 400, 0, 200, 100, 5)
                                 .fill(this.palette.get('level1-fill'));
                         default:
-                            return new MindRect(this.x + 700 + 300 * (level - 2), 0, 200, 100, 3)
+                            return new MindRect(this.x + 700 + 300 * (level - 2), 0, 200, 80, 3)
                                 .fill(this.palette.get('fill'));
                     }
                 },
