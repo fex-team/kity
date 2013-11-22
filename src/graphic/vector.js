@@ -25,6 +25,9 @@ define( function (require, exports, module) {
     Vector.multipy = function( p, s ) {
         return new Vector( p.x * s, p.y * s );
     };
+    Vector.reverse = function( p ) {
+        return Vector.multipy(p, -1);
+    },
     Vector.dot = function ( p, q ) {
         return p.x * q.x + p.y * q.y;
     };
