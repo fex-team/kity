@@ -21,6 +21,7 @@ define(function (require, exports, module) {
             var parent = this.getShapeNode();
             for(var i = 0; i < shapes.length; i++) {
                 parent.appendChild(shapes[i].node);
+                shapes[i].trigger('add', { container: this } );
             }
         },
 
@@ -29,6 +30,7 @@ define(function (require, exports, module) {
             var parent = this.getShapeNode();
             for(var i = 0; i < shapes.length; i++) {
                 parent.removeChild(shapes[i].node);
+                shapes[i].trigger('remove', { container: this } );
             }
         },
 
