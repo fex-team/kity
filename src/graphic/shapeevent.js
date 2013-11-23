@@ -45,12 +45,15 @@ define( function ( require, exprots, module ) {
 
             var clientX = this.originEvent.clientX,
                 clientY = this.originEvent.clientY,
+                paper = this.targetShape.getPaper(),
                 //转换过后的点
-                transPoint = Matrix.transformPoint( clientX, clientY, this.targetShape.node.getScreenCTM().inverse() );
+                transPoint = Matrix.transformPoint( clientX, clientY, paper.node.getScreenCTM().inverse() );
+
+            var zoom = paper.getViewPort().zoom;
 
             return {
-                x: transPoint.x,
-                y: transPoint.y
+                x: transPoint.x / zoom,
+                y: transPoint.y / zoom
             };
 
         },
