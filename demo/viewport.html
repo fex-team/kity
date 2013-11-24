@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Graffle</title>
+    <title>Viewport</title>
     <script src="../dev-lib/sea.js"></script>
     <script>
 
@@ -21,8 +21,19 @@
             var paper = new Paper(document.body);
             paper.setViewBox(-50, -50, 100, 100).drag();
 
+            paper.on('dragstart', function() {
+                this.setStyle('cursor', '-webkit-grabbing');
+            }).on('dragend', function() {
+                this.setStyle('cursor', '-webkit-grab');
+            }).trigger('dragend');
+
             paper.addShape(new Grid(-1000, -1000, 2000, 2000, 10));
-            paper.addShape(new Rect(15, 15, 30, 30).fill('red').scale(0.5).drag());
+            paper.addShape(new Rect(15, 15, 30, 30).pipe(function() {
+                this.fill('red');
+                this.scale(0.5);
+                this.drag();
+                this.setStyle('cursor', 'move');
+            }));
             paper.addShape(new Path().pipe(function() {
                 var d = this.getDrawer();
                 d.moveTo(0, -10000).lineTo(0, 10000);

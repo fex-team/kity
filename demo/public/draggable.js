@@ -1,9 +1,15 @@
-define( function(require, exports, module) {
-    var Paper = require('graphic/paper');
-    return require('core/class').createClass({
-        drag: function( opt ) {
+define( function ( require, exports, module ) {
+    var Paper = require( 'graphic/paper' );
 
-            if( this.dragEnabled ) {
+    var touchable = window.ontouchstart !== undefined;
+    var DRAG_START_EVENT = touchable ? 'touchstart' : 'mousedown',
+        DRAG_MOVE_EVENT = touchable ? 'touchmove' : 'mousemove',
+        DRAG_END_EVENT = touchable ? 'touchend' : 'mouseup';
+
+    return require( 'core/class' ).createClass( {
+        drag: function ( opt ) {
+
+            if ( this.dragEnabled ) {
                 return;
             }
 
@@ -16,14 +22,15 @@ define( function(require, exports, module) {
             this.dragEnabled = true;
             this.dragTarget = dragTarget;
 
-            function bindEvents(paper) {
+            function bindEvents( paper ) {
 
                 var startPosition, lastPosition, dragging = false;
 
-                var dragFn = function(e) {
-                    if(!dragging) {
-                        paper.off('mousemove', dragFn);
+                var dragFn = function ( e ) {
+                    if ( !dragging ) {
+                        paper.off( DRAG_MOVE_EVENT, dragFn );
                     }
+
                     var currentPosition = e.getPosition();
                     var movement = {
                         x: currentPosition.x - startPosition.x,
@@ -33,90 +40,95 @@ define( function(require, exports, module) {
                         x: currentPosition.x - lastPosition.x,
                         y: currentPosition.y - lastPosition.y
                     };
-                    if(!dragMove) {
-                        if( me.isInstanceOf(Paper) ) {
-                            var view = me.getViewPort();
-                            view.center.x -= delta.x;
-                            view.center.y -= delta.y;
-                            me.setViewPort(view);
-                        } else {
-                            me.translate(delta.x, delta.y);
-                        }
-                    } else {
-                        dragMove.call(me, {
-                            position: currentPosition,
-                            movement: movement,
-                            delta: delta
-                        });
-                    }
+                    var dragInfo = {
+                        position: currentPosition,
+                        movement: movement,
+                        delta: delta
+                    };
                     lastPosition = currentPosition;
+
+                    if ( dragMove ) {
+                        dragMove.call( me, dragInfo );
+                    }
+
+                    else if ( me.isInstanceOf( Paper ) ) {
+                        // treate paper drag different
+                        var view = me.getViewPort();
+                        view.center.x -= delta.x;
+                        view.center.y -= delta.y;
+                        me.setViewPort( view );
+                    }
+
+                    else {
+                        me.translate( delta.x, delta.y );
+                    }
+
+                    dragTarget.trigger('dragmove', dragInfo);
                     e.stopPropagation();
+                    e.preventDefault();
                 };
 
-                dragTarget.on('mousedown', dragTarget._dragMouseDown = function(e) {
-                    if( e.originEvent.button ) {
+                dragTarget.on( DRAG_START_EVENT, dragTarget._dragStartHandler = function ( e ) {
+                    if ( e.originEvent.button ) {
                         return;
                     }
-                    lastPosition = startPosition = e.getPosition();
                     dragging = true;
-                    paper.on('mousemove', dragFn);
-                    if(dragStart) {
-                        var cancel = dragStart.call(me, {
-                            position: startPosition
-                        }) === false;
-                        if(cancel) {
+
+                    var dragInfo = {
+                        position: lastPosition = startPosition = e.getPosition()
+                    };
+
+                    if ( dragStart ) {
+                        var cancel = dragStart.call( me,  dragInfo) === false;
+                        if ( cancel ) {
                             return;
                         }
                     }
-                    if(me.isInstanceOf(Paper)) {
-                        me.setStyle('cursor', 'grabbing');
-                        me.setStyle('cursor', '-webkit-grabbing');
-                        me.setStyle('cursor', '-moz-grabbing');
-                    }
-                    e.stopPropagation();
-                });
 
-                paper.on('mouseup', dragTarget._dragMouseUp = function(e) {
-                    if(dragging) {
-                        dragging = false;
-                        paper.off('mousemove', dragFn);
-                        if(dragEnd) {
-                            dragEnd.call(me, {
-                                position: e.getPosition()
-                            });
-                        }
-                    }
-                    if(me.isInstanceOf(Paper)) {
-                        me.setStyle('cursor', 'grab');
-                        me.setStyle('cursor', '-webkit-grab');
-                        me.setStyle('cursor', '-moz-grab');
-                    }
+                    paper.on( DRAG_MOVE_EVENT, dragFn );
+
+                    dragTarget.trigger('dragstart', dragInfo);
+
                     e.stopPropagation();
-                });
+                    e.preventDefault();
+                } );
+
+                paper.on( DRAG_END_EVENT, dragTarget._dragEndHandler = function ( e ) {
+                    if ( dragging ) {
+                        dragging = false;
+                        var dragInfo = {
+                            position: e.getPosition()
+                        };
+                        if ( dragEnd ) {
+                            dragEnd.call( me,  dragInfo );
+                        }
+
+                        paper.off( DRAG_MOVE_EVENT, dragFn );
+                        dragTarget.trigger( 'dragend', dragInfo );
+
+                        e.stopPropagation();
+                        e.preventDefault();
+                    }
+                } );
             }
 
-            if(me.isInstanceOf(Paper)) {
-                bindEvents(me);
-                me.setStyle('cursor', 'grab');
-                me.setStyle('cursor', '-webkit-grab');
-                me.setStyle('cursor', '-moz-grab');
+            if ( me.isInstanceOf( Paper ) ) {
+                bindEvents( me );
             } else {
-                this.getPaperPromise(bindEvents);
-                dragTarget.setStyle('cursor', 'move');
+                this.getPaperPromise( bindEvents );
             }
             return this;
         }, // end of drag
 
 
-        undrag: function() {
+        undrag: function () {
             var target = this.dragTarget;
-            target.off('mousedown', target._dragMouseDown);
-            target.getPaper().off('mouseup', target._dragMouseUp);
-            delete target._dragMouseDown;
-            delete target._dragMouseUp;
-            target.setStyle('cursor', 'default');
+            target.off( DRAG_START_EVENT, target._dragStartHandler );
+            target.getPaper().off( DRAG_END_EVENT, target._dragEndHandler );
+            delete target._dragStartHandler;
+            delete target._dragEndHandler;
             this.dragEnabled = false;
             return this;
         }
-    });
-});
+    } );
+} );
