@@ -10,7 +10,7 @@ describe( "Kity.ColorBrush", function () {
     it( "无参构造的ColorBrush的初始颜色为Color的默认颜色", function () {
 
         var colorBrush = new ColorBrush();
-        expect( colorBrush.getColor().isInstanceOf( Color ) ).toBe( true );
+        expect( colorBrush.getColor() instanceof Color ).toBe( true );
         expect( colorBrush.getColor().toRGBA() ).toBe( new Color().toRGBA() );
 
     } );

@@ -149,7 +149,7 @@ define( function ( require, exports, module ) {
         },
         getPaper: function() {
             var paper = this.container;
-            while(paper && !paper.isInstanceOf(Paper)) {
+            while(paper && !(paper instanceof Paper)) {
                 paper = paper.container;
             }
             return paper;

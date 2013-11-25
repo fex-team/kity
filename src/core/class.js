@@ -14,85 +14,39 @@ define( function ( require, exports ) {
 
     var config = require( 'core/config' );
 
-    function setClassName( targetClass, name ) {
-        targetClass._class_name_ = name;
-    }
-
-    function getClassName( targetClass ) {
-        return targetClass._class_name_;
-    }
-
-    function setBase( targetClass, baseClass ) {
-        targetClass._base_ = baseClass;
-    }
-
-    function getBase( targetClass ) {
-        return targetClass._base_;
-    }
-
-    function setMixins( targetClass, mixins ) {
-        targetClass._mixins_ = mixins;
-    }
-
-    function getMixins( targetClass ) {
-        return targetClass._mixins_;
-    }
-
-    function setMethodName( method, name ) {
-        method._method_name_ = name;
-    }
-
-    function getMethodName( method ) {
-        return method._method_name_;
-    }
-
-    function setMethodDefine( method, proto ) {
-        method._method_define_ = proto;
-    }
-
-    function getMethodDefine( method ) {
-        return method._method_define_;
-    }
-
-    function getInstanceClass( instance ) {
-        return instance.constructor;
-    }
-
     // 方便调试查看
     if ( config.debug ) {
-        var origin = Function.prototype.toString;
-        Function.prototype.toString = function () {
-            return getClassName( this ) || origin.call( this );
+        var origin = Object.prototype.toString;
+        Object.prototype.toString = function () {
+            return this.__KityClassName || origin.call( this );
         };
     }
 
-    // 获得正在调用的函数所在的类
-    function getCallerClass( caller ) {
-        return getMethodDefine( caller ).constructor;
+    // 所有类的基类
+    function Class() {}
+    Class.__KityClassName = 'Class';
+
+    function getCallerClass( instance, caller ) {
+        var currentClass = instance.constructor;
     }
 
-    // 所有类的基类
-    function BaseClass() {}
-
-    setClassName( BaseClass, 'BaseClass' );
-
     // 提供 base 调用支持
-    BaseClass.prototype.base = function ( name ) {
+    Class.prototype.base = function ( name ) {
         var caller = arguments.callee.caller;
-        var method = getBase( getCallerClass( caller ) ).prototype[ name ];
+        var method = caller.__KityMethodClass.__KityBaseClass.prototype[ name ];
         return method.apply( this, Array.prototype.slice.call( arguments, 1 ) );
     };
 
     // 直接调用 base 类的同名方法
-    BaseClass.prototype.callBase = function () {
+    Class.prototype.callBase = function () {
         var caller = arguments.callee.caller;
-        var method = getBase( getCallerClass( caller ) ).prototype[ getMethodName( caller ) ];
+        var method = caller.__KityMethodClass.__KityBaseClass.prototype[ caller.__KityMethodName ];
         return method.apply( this, arguments );
     };
 
-    BaseClass.prototype.mixin = function ( name ) {
+    Class.prototype.mixin = function ( name ) {
         var caller = arguments.callee.caller;
-        var mixins = getMixins( getCallerClass( caller ) );
+        var mixins = caller.__KityMethodClass.__KityMixins;
         if(!mixins) {
             return this;
         }
@@ -100,10 +54,10 @@ define( function ( require, exports ) {
         return method.apply( this, Array.prototype.slice.call( arguments, 1 ) );
     };
 
-    BaseClass.prototype.callMixin = function () {
+    Class.prototype.callMixin = function () {
         var caller = arguments.callee.caller;
-        var methodName = getMethodName( caller );
-        var mixins = getMixins( getCallerClass( caller ) );
+        var methodName = caller.__KityMethodName;
+        var mixins = caller.__KityMethodClass.__KityMixins;
         if(!mixins) {
             return this;
         }
@@ -112,23 +66,13 @@ define( function ( require, exports ) {
             for ( var i = 0, l = method.length; i < l; i++ ) {
                 method[ i ].call( this );
             }
+            return this;
         } else {
             return method.apply( this, arguments );
         }
     };
 
-    BaseClass.prototype.isInstanceOf = function ( targetClass ) {
-        var currentClass = this.constructor;
-        while ( currentClass ) {
-            if ( currentClass == targetClass ) {
-                return true;
-            }
-            currentClass = getBase( currentClass );
-        }
-        return false;
-    };
-
-    BaseClass.prototype.pipe = function(fn) {
+    Class.prototype.pipe = function(fn) {
         if(typeof(fn) =='function') {
             fn.call(this, this);
         }
@@ -144,95 +88,118 @@ define( function ( require, exports ) {
         }
     }
 
-    function extend( target, proto, originDefined ) {
-        for ( var name in proto ) {
-            if ( proto.hasOwnProperty( name ) && name != 'constructor' ) {
-                setMethodName( target[ name ] = proto[ name ], name );
-                if ( originDefined ) {
-                    setMethodDefine( target[ name ], target );
+    var KITY_INHERIT_FLAG = '__KITY_INHERIT_FLAG_' + (+new Date());
+
+    function inherit( constructor, BaseClass ) {
+
+        var KityClass = function( __inherit__flag ) {
+            if( __inherit__flag != KITY_INHERIT_FLAG ) {
+                KityClass.__KityConstructor.apply(this, arguments);
+            }
+            this.__KityClassName = KityClass.__KityClassName;
+        };
+        KityClass.__KityConstructor = constructor;
+
+        KityClass.prototype = new BaseClass(KITY_INHERIT_FLAG);
+
+        for(var methodName in BaseClass.prototype) {
+            if(BaseClass.prototype.hasOwnProperty(methodName) && methodName.indexOf('__Kity') !== 0) {
+                KityClass.prototype[methodName] = BaseClass.prototype[methodName];
+            }
+        }
+
+        KityClass.prototype.constructor = KityClass;
+
+        return KityClass;
+    }
+
+    function mixin( NewClass, mixins ) {
+        if ( false === mixins instanceof Array ) {
+            return NewClass;
+        }
+
+        var i, length = mixins.length, proto, method;
+
+        NewClass.__KityMixins = {
+            constructor: []
+        };
+
+        for ( i = 0; i < length; i++ ) {
+            proto = mixins[i].prototype;
+
+            for( method in proto ) {
+                if( false === proto.hasOwnProperty(method) || method.indexOf('__Kity') === 0) {
+                    continue;
+                }
+                if( method === 'constructor' ) {
+                    // constructor 特殊处理
+                    NewClass.__KityMixins.constructor.push( proto[method] );
+                } else {
+                    NewClass.prototype[method] = NewClass.__KityMixins[method] = proto[method];
                 }
             }
         }
+
+        return NewClass;
+    }
+
+    function extend( BaseClass, extension ) {
+        if(extension.__KityClassName) {
+            extension = extension.prototype;
+        }
+        for(var methodName in extension) {
+            if(extension.hasOwnProperty(methodName) &&
+                methodName.indexOf('__Kity') &&
+                methodName != 'constructor') {
+                var method = BaseClass.prototype[ methodName ] = extension[ methodName ];
+                method.__KityMethodClass = BaseClass;
+                method.__KityMethodName = methodName;
+            }
+        }
+        return BaseClass;
     }
 
     exports.createClass = function ( classname, defines ) {
-        var thisClass, baseClass;
+        var constructor, NewClass, BaseClass;
 
         if(arguments.length === 1) {
-            defines = classname;
+            defines = arguments[0];
             classname = 'AnonymousClass';
         }
 
-        baseClass = defines.base || BaseClass;
+        BaseClass = defines.base || Class;
 
         if ( defines.hasOwnProperty( 'constructor' ) ) {
-            thisClass = defines.constructor;
-            if ( baseClass != BaseClass ) {
-                checkBaseConstructorCall( thisClass, classname );
+            constructor = defines.constructor;
+            if ( BaseClass != Class ) {
+                checkBaseConstructorCall( constructor, classname );
             }
         } else {
-            thisClass = function () {
+            constructor = function () {
                 this.callBase.apply(this, arguments);
                 this.callMixin.apply(this, arguments);
             };
         }
 
-        // 将类名写在构造器上，方便调试时查看
-        setClassName( thisClass, classname );
+        NewClass = inherit( constructor, BaseClass );
+        NewClass = mixin( NewClass, defines.mixins );
 
-        // 构造函数起名，用于调用父类构造函数
-        setMethodName( thisClass, 'constructor' );
+        NewClass.__KityClassName = constructor.__KityClassName = classname;
+        NewClass.__KityBaseClass = constructor.__KityBaseClass = BaseClass;
 
-        // 保存父类的引用
-        setBase( thisClass, baseClass );
-
-        thisClass.prototype = new BaseClass();
-
-        if(baseClass != BaseClass) {
-            // 继承父类的方法
-            extend( thisClass.prototype, baseClass.prototype );
-        }
-
-        // 修正原型链上的构造函数
-        thisClass.prototype.constructor = thisClass;
-        setMethodDefine( thisClass, thisClass.prototype );
-
-        // mixins
-        if ( defines.mixins instanceof Array ) {
-            var mixins = {
-                constructor: []
-            };
-            var i, length = defines.mixins.length;
-            for ( i = 0; i < length; i++ ) {
-                var mixinProto = defines.mixins[ i ].prototype;
-                extend( thisClass.prototype, mixinProto );
-                extend( mixins, mixinProto );
-                if ( mixinProto.hasOwnProperty( 'constructor' ) ) {
-                    mixins.constructor.push( mixinProto.constructor );
-                }
-            }
-            // 保存拓展的方法，改写后还能调用
-            setMixins( thisClass, mixins );
-        }
-
+        NewClass.__KityMethodName = constructor.__KityMethodName = 'constructor';
+        NewClass.__KityMethodClass = constructor.__KityMethodClass = NewClass;
 
         // 下面这些不需要拷贝到原型链上
         delete defines.mixins;
         delete defines.constructor;
         delete defines.base;
 
-        extend( thisClass.prototype, defines, true );
+        NewClass = extend( NewClass, defines );
 
-        thisClass.isClassOf = function( obj ) {
-            return !!obj && !!obj.isInstanceOf && obj.isInstanceOf( thisClass );
-        };
-
-        return thisClass;
+        return NewClass;
     };
 
-    exports.extendClass = function ( targetClass, proto ) {
-        extend( targetClass.prototype, proto );
-        return targetClass;
-    };
+    exports.extendClass = extend;
 
 } );

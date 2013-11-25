@@ -14,44 +14,18 @@ define(function (require, exports, module) {
         };
     }
 
-    function Matrix() {
-        if (arguments.length) {
-            this.setMatrix.apply(this, arguments);
-        } else {
-            this.setMatrix(1, 0, 0, 1, 0, 0);
-        }
-    }
-
-    Matrix.parse = function (str) {
-        var match;
-        var f = parseFloat;
-        if ((match = mPattern.exec(str))) {
-            var values = match[1].split(',');
-            return new Matrix({
-                a: f(values[0]),
-                b: f(values[1]),
-                c: f(values[2]),
-                d: f(values[3]),
-                e: f(values[4]),
-                f: f(values[5])
-            });
-        }
-        return new Matrix();
-    };
-
-    Matrix.transformPoint = function(x, y, m) {
-        return {
-            x: m.a * x + m.c * y + m.e,
-            y: m.b * x + m.d * y + m.f
-        };
-    };
-
     function d2r(deg) {
         return deg * Math.PI / 180;
     }
 
-    return require('core/class').createClass('Matrix', {
-        constructor: Matrix,
+    var Matrix = require('core/class').createClass('Matrix', {
+        constructor: function () {
+            if (arguments.length) {
+                this.setMatrix.apply(this, arguments);
+            } else {
+                this.setMatrix(1, 0, 0, 1, 0, 0);
+            }
+        },
 
         addTranslate: function (x, y) {
             this.m = mergeMatrixData(this.m, {
@@ -141,4 +115,30 @@ define(function (require, exports, module) {
             return 'matrix(' + [m.a, m.b, m.c, m.d, m.e, m.f].join(', ') + ')';
         }
     });
+
+    Matrix.parse = function (str) {
+        var match;
+        var f = parseFloat;
+        if ((match = mPattern.exec(str))) {
+            var values = match[1].split(',');
+            return new Matrix({
+                a: f(values[0]),
+                b: f(values[1]),
+                c: f(values[2]),
+                d: f(values[3]),
+                e: f(values[4]),
+                f: f(values[5])
+            });
+        }
+        return new Matrix();
+    };
+
+    Matrix.transformPoint = function(x, y, m) {
+        return {
+            x: m.a * x + m.c * y + m.e,
+            y: m.b * x + m.d * y + m.f
+        };
+    };
+
+    return Matrix;
 });
