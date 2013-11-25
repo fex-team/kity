@@ -143,6 +143,7 @@ define( function ( require, exports, module ) {
                 return;
             }
 
+
             //移除指定的监听器
             if ( typeof handler === 'function' ) {
 
@@ -163,7 +164,7 @@ define( function ( require, exports, module ) {
             //删除所有监听器
             if ( handler === undefined || needRemove ) {
 
-                HANDLER_CACHE[ this._EventListenerId ][ type ] = [];
+                HANDLER_CACHE[ this._EventListenerId ][ type ] = null;
 
                 deleteEvent( this.node, type, LISTENER_CACHE[ this._EventListenerId ] );
 
