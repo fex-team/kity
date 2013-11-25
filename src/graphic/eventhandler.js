@@ -5,7 +5,7 @@ define( function ( require, exports, module ) {
         ShapeEvent = require( "graphic/shapeevent" ),
         Utils = require( "core/utils" );
 
-    function listen( obj, type, handler ) {
+    function listen( obj, type, handler, isOnce ) {
 
         var handlerList = null,
             shape = this,
@@ -26,9 +26,22 @@ define( function ( require, exports, module ) {
 
                 Utils.each( HANDLER_CACHE[ eid ][ type ], function ( fn, index ) {
 
+                    var result;
+
                     if ( fn ) {
-                        return fn.call( shape, e );
+
+                        result = fn.call( shape, e );
+
+                        //once 绑定， 执行完后删除
+                        if ( isOnce ) {
+
+                            shape.off( type, fn );
+
+                        }
+
                     }
+
+                    return result;
 
                 } );
 
@@ -87,7 +100,14 @@ define( function ( require, exports, module ) {
 
         addEventListener: function ( type, handler ) {
 
-            var record = {};
+            return this._addEvent( type, handler, false );
+
+        },
+
+        _addEvent: function ( type, handler, isOnce ) {
+
+            var record = {},
+                isOnce = !!isOnce;
 
             if ( typeof type === 'string' ) {
                 type = type.replace( /^\s+|\s+$/g, '' ).split( /\s+/ );
@@ -95,9 +115,10 @@ define( function ( require, exports, module ) {
 
             var shape = this;
             var node = this.node;
+
             Utils.each( type, function ( currentType ) {
 
-                record[ currentType ] = listen.call( shape, node, currentType, handler );
+                record[ currentType ] = listen.call( shape, node, currentType, handler, isOnce );
 
             } );
 
@@ -105,9 +126,16 @@ define( function ( require, exports, module ) {
 
         },
 
+        addOnceEventListener: function ( type, handler ) {
+
+            return this._addEvent( type, handler, true );
+
+        },
+
         removeEventListener: function ( type, handler ) {
 
-            var handlerList = null;
+            var handlerList = null,
+                needRemove = true;
 
             try {
                 handlerList = HANDLER_CACHE[ this._EventListenerId ][ type ];
@@ -115,30 +143,31 @@ define( function ( require, exports, module ) {
                 return;
             }
 
-            //移除指定索引的监听器
-            if ( typeof handler === 'number' ) {
-
-                handler = Math.floor( handler );
-                delete handlerList[ handler ];
-
-                //移除指定的监听器
-            } else if ( typeof handler === 'function' ) {
+            //移除指定的监听器
+            if ( typeof handler === 'function' ) {
 
                 Utils.each( handlerList, function ( fn, index ) {
 
                     if ( fn === handler ) {
                         delete handlerList[ index ];
                         return false;
+                    } else if ( !!fn ) {
+                        needRemove = false;
                     }
 
                 } );
 
-                //删除所有监听器
-            } else if ( handler === undefined ) {
+            }
+
+
+            //删除所有监听器
+            if ( handler === undefined || needRemove ) {
 
                 HANDLER_CACHE[ this._EventListenerId ][ type ] = [];
 
                 deleteEvent( this.node, type, LISTENER_CACHE[ this._EventListenerId ] );
+
+                LISTENER_CACHE[ this._EventListenerId ][ type ] = null;
 
             }
 
@@ -152,6 +181,10 @@ define( function ( require, exports, module ) {
 
         off: function () {
             return this.removeEventListener.apply( this, arguments );
+        },
+
+        once: function () {
+            return this.addOnceEventListener.apply( this, arguments );
         },
 
         trigger: function ( type, param ) {
