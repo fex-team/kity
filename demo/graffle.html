@@ -9,9 +9,9 @@
             base: '../src'
         });
         define('start', function (require) {
-            var Paper = require('graphic/paper');
-            var Rect = require('graphic/rect');
             var Draggable = require('../demo/public/draggable');
+            var Paper = require('core/class').extendClass( require('graphic/paper'), Draggable.prototype );
+            var Rect = require('graphic/rect');
             var BezierConnection = require('../demo/connection/bezierconnection');
             var PatternBrush = require('graphic/patternbrush');
             var Group = require('graphic/group');
@@ -46,8 +46,8 @@
                 dragStart: function() {
                     this.dragStartPos = this.getPosition();
                 },
-                drag: function(delta) {
-                    var pos = this.dragStartPos;
+                dragMove: function( e ) {
+                    var pos = this.dragStartPos, delta = e.movement;
                     this.setPosition(pos.x + delta.x, pos.y + delta.y);
                 }
             } );
@@ -78,6 +78,7 @@
                     var level = prevLevelObject ? prevLevelObject.level + 1 : 0;
 
                     levelObject = this.generateLevelObject( level );
+                    levelObject.drag();
                     levelObject.level = level;
                     levelObject.children = [];
 
@@ -91,7 +92,7 @@
                         this.addShape( connection );
                     }
                     var me = this;
-                    levelObject.on('click', function() {
+                    levelObject.on('mousedown', function() {
                         me.select(levelObject);
                     });
                     return levelObject;
@@ -100,6 +101,8 @@
                     var yValues = [];
                     var delta = levelObject.getHeight() + this.gaps;
                     var me = this;
+
+                    levelObject.setCenterX( prevLevelObject.getCenterX() + levelObject.getWidth() + 200 );
 
                     if(prevLevelObject.children.length == 0) {
                         levelObject.setCenterY( prevLevelObject.getCenterY() );
@@ -131,13 +134,13 @@
                 generateLevelObject: function(level) {
                     switch(level) {
                         case 0:
-                            return new MindRect(this.x + 100, -100, 200, 200, 10)
+                            return new MindRect(0, -100, 200, 200, 10)
                                 .fill(this.palette.get('level0-fill'));
                         case 1:
-                            return new MindRect(this.x + 400, 0, 200, 100, 5)
+                            return new MindRect(0, 0, 200, 100, 5)
                                 .fill(this.palette.get('level1-fill'));
                         default:
-                            return new MindRect(this.x + 700 + 300 * (level - 2), 0, 200, 80, 3)
+                            return new MindRect(0, 0, 200, 80, 3)
                                 .fill(this.palette.get('fill'));
                     }
                 },
@@ -165,6 +168,7 @@
 
             var paper = new Paper(document.body);
             paper.setViewBox(-1000, -600, 2000, 1200);
+            paper.drag();
 
             var mc = new MindContainer(-1000, -600, 2000, 1200);
             paper.addShape(mc);
@@ -178,6 +182,15 @@
                         e.preventDefault();
                         return mc.nextLevel();
                 }
+            });
+            document.body.addEventListener('mousewheel', function(e) {
+                var viewport = paper.getViewPort();
+                if(e.wheelDelta > 0) {
+                    viewport.zoom = viewport.zoom * 0.95;
+                } else {
+                    viewport.zoom = viewport.zoom / 0.95;
+                }
+                paper.setViewPort(viewport);
             });
         });
         seajs.use('start');

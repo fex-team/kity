@@ -232,6 +232,7 @@ define( function ( require, exports ) {
 
     exports.extendClass = function ( targetClass, proto ) {
         extend( targetClass.prototype, proto );
+        return targetClass;
     };
 
 } );

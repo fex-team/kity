@@ -153,6 +153,17 @@ define( function ( require, exports, module ) {
                 paper = paper.container;
             }
             return paper;
+        },
+        getPaperPromise: function(fn) {
+            var me = this;
+            function loadPaper() {
+                var paper = me.getPaper();
+                if( !paper ) {
+                    return setTimeout(loadPaper, 100);
+                }
+                fn(paper);
+            }
+            loadPaper();
         }
     } );
 } );

@@ -5,9 +5,11 @@ define( function ( require, exports, module ) {
     var Container = require( 'graphic/container' );
     var ShapeContainer = require( 'graphic/shapecontainer' );
     var EventHandler = require( 'graphic/eventhandler' );
+    var Styled = require( 'graphic/styled' );
+    var Matrix = require( 'graphic/matrix' );
     return createClass( 'Paper', {
 
-        mixins: [ ShapeContainer, EventHandler ],
+        mixins: [ ShapeContainer, EventHandler, Styled ],
 
         constructor: function ( container ) {
             this.callBase();
@@ -67,8 +69,8 @@ define( function ( require, exports, module ) {
                 return {
                     x: 0,
                     y: 0,
-                    width: this.getWidth(),
-                    height: this.getHeigth()
+                    width: this.node.clientWidth,
+                    height: this.node.clientHeigth
                 };
             } else {
                 attr = attr.split( ' ' );
@@ -86,6 +88,48 @@ define( function ( require, exports, module ) {
             return this;
         },
 
+        setViewPort: function( cx, cy, zoom ) {
+            if (arguments.length == 1) {
+                var viewport = arguments[0];
+                cx = viewport.center.x;
+                cy = viewport.center.y;
+                zoom = viewport.zoom;
+            }
+
+            var box = this.getViewBox();
+            var zoom = zoom || 1;
+            var viewport = this.viewport = {
+                center: {
+                    x: cx,
+                    y: cy
+                },
+                zoom: zoom
+            };
+            var matrix = new Matrix();
+            var dx = (box.x + box.width / 2) - cx,
+                dy = (box.y + box.height / 2) - cy;
+            matrix.addTranslate(-cx, -cy)
+            matrix.addScale(zoom);
+            matrix.addTranslate(cx, cy);
+            matrix.addTranslate(dx, dy);
+            this.shapeNode.setAttribute('transform', matrix);
+            return this;
+        },
+
+        getViewPort: function() {
+            if(!this.viewport) {
+                var box = this.getViewBox();
+                this.viewport = {
+                    zoom: 1,
+                    center: {
+                        x: box.x + box.width / 2,
+                        y: box.y + box.height / 2
+                    }
+                };
+            }
+            return this.viewport;
+        },
+
         addResource: function ( resource ) {
             this.resources.appendItem( resource );
             if ( resource.node ) {
@@ -101,6 +145,10 @@ define( function ( require, exports, module ) {
             if ( resource.node ) {
                 this.resourceNode.removeChild( resource.node );
             }
+            return this;
+        },
+
+        getPaper: function() {
             return this;
         }
     } );

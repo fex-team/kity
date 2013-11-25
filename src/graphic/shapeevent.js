@@ -42,15 +42,21 @@ define( function ( require, exprots, module ) {
 
         //当前鼠标事件在用户坐标系中点击的点的坐标位置
         getPosition: function () {
+            var eventClient = this.originEvent.touches ?
+                this.originEvent.touches[0] :
+                this.originEvent;
 
-            var clientX = this.originEvent.clientX,
-                clientY = this.originEvent.clientY,
+            var clientX = eventClient.clientX,
+                clientY = eventClient.clientY,
+                paper = this.targetShape.getPaper(),
                 //转换过后的点
-                transPoint = Matrix.transformPoint( clientX, clientY, this.targetShape.node.getScreenCTM().inverse() );
+                transPoint = Matrix.transformPoint( clientX, clientY, paper.node.getScreenCTM().inverse() );
+
+            var zoom = paper.getViewPort().zoom;
 
             return {
-                x: transPoint.x,
-                y: transPoint.y
+                x: transPoint.x / zoom,
+                y: transPoint.y / zoom
             };
 
         },

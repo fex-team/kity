@@ -23,6 +23,7 @@ define(function(require, exports, module) {
             this.generate();
             this.control();
             this.callMixin();
+            this.drag();
         },
         generate: function() {
             this.generateCircle();
@@ -136,9 +137,6 @@ define(function(require, exports, module) {
                 this.setCircleColor(this.circle.color.set('s', s));
             }
         },
-        getDragTarget: function() {
-            return this.circle;
-        },
         getPan: function() {
             this.pan = this.pan || {
                 min: -this.outerRadius * 0.8,
@@ -149,12 +147,17 @@ define(function(require, exports, module) {
             return this.pan;
         },
         drag: function( delta ) {
-            var pan = this.getPan();
-            pan.value += delta.x;
-            pan.value = Math.min(pan.value, pan.max);
-            pan.value = Math.max(pan.value, pan.min);
-            this.updateSaturation( 100 * (pan.value - pan.min) / pan.length );
-            this.updatePosition(pan.value);
+            return this.callMixin( {
+                target: this.circle,
+                move: function(e) {
+                    var pan = this.getPan();
+                    pan.value += e.delta.x;
+                    pan.value = Math.min(pan.value, pan.max);
+                    pan.value = Math.max(pan.value, pan.min);
+                    this.updateSaturation( 100 * (pan.value - pan.min) / pan.length );
+                    this.updatePosition(pan.value);
+                }
+            });
         },
         updatePosition: function( x ) {
             this.setTransform(new Matrix().addTranslate(x, 0));
