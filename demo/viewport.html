@@ -10,11 +10,14 @@
         });
         define('start', function (require) {
             var Class = require('core/class');
-            var Draggable = require('../demo/public/draggable');
-            var Paper = Class.extendClass( require('graphic/paper'), Draggable.prototype );
-            var Shape = Class.extendClass( require('graphic/shape'), Draggable.prototype );
+            var Paper = require('graphic/paper');
+            var Shape = require('graphic/shape');
             var Path = require('graphic/path');
             var Grid = require('../demo/public/grid');
+            var Draggable = require('../demo/public/draggable');
+
+            Class.extendClass( Paper, Draggable );
+            Class.extendClass( Shape, Draggable );
 
             var Rect = require('graphic/rect');
 
