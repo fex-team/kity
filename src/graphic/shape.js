@@ -92,13 +92,13 @@ define( function ( require, exports, module ) {
             if ( dy === undefined ) {
                 dy = 0;
             }
-            return this.mergeTransform( new Matrix().addTranslate( dx, dy ) );
+            return this.mergeTransform( new Matrix().translate( dx, dy ) );
         },
         rotate: function ( deg, cx, cy ) {
             if(arguments.length === 3) {
                 return this.translate(-cx, -cy).rotate(deg).translate(cx, cy);
             }
-            return this.mergeTransform( new Matrix().addRotate( deg, cx, cy ) );
+            return this.mergeTransform( new Matrix().rotate( deg, cx, cy ) );
         },
         scale: function ( sx, sy, cx, cy ) {
             var args = arguments;
@@ -111,7 +111,7 @@ define( function ( require, exports, module ) {
             if ( sy === undefined ) {
                 sy = sx;
             }
-            return this.mergeTransform( new Matrix().addScale( sx, sy ) );
+            return this.mergeTransform( new Matrix().scale( sx, sy ) );
         },
         skew: function ( sx, sy, cx, cy ) {
             var args = arguments;
@@ -124,7 +124,7 @@ define( function ( require, exports, module ) {
             if ( sy === undefined ) {
                 sy = sx;
             }
-            return this.mergeTransform( new Matrix().addSkew( sx, sy ) );
+            return this.mergeTransform( new Matrix().skew( sx, sy ) );
         },
         stroke: function ( pen, width ) {
             if ( pen && pen.stroke ) {

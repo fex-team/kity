@@ -160,7 +160,7 @@ define(function(require, exports, module) {
             });
         },
         updatePosition: function( x ) {
-            this.setTransform(new Matrix().addTranslate(x, 0));
+            this.setTransform(new Matrix().translate(x, 0));
         }
     });
 });

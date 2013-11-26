@@ -27,7 +27,7 @@ define(function (require, exports, module) {
             }
         },
 
-        addTranslate: function (x, y) {
+        translate: function (x, y) {
             this.m = mergeMatrixData(this.m, {
                 a: 1,
                 c: 0,
@@ -39,7 +39,7 @@ define(function (require, exports, module) {
             return this;
         },
 
-        addRotate: function (deg) {
+        rotate: function (deg) {
             var rad = d2r(deg);
             var sin = Math.sin(rad),
                 cos = Math.cos(rad);
@@ -54,7 +54,7 @@ define(function (require, exports, module) {
             return this;
         },
 
-        addScale: function (sx, sy) {
+        scale: function (sx, sy) {
             if (sy === undefined) {
                 sy = sx;
             }
@@ -69,7 +69,7 @@ define(function (require, exports, module) {
             return this;
         },
 
-        addSkew: function (degX, degY) {
+        skew: function (degX, degY) {
             if (degY === undefined) {
                 degY = degX;
             }
