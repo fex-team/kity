@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>投影滤镜</title>
+    <meta charset="utf-8">
+    <script src="../../dev-lib/sea.js"></script>
+    <script>
+        seajs.config( {
+            base: "../../src"
+        } );
+
+        define( "start", function (require) {
+
+            window.onload = function () {
+
+                var Paper = require( "graphic/paper" ),
+                    Image = require( "graphic/image" ),
+                    ProjectionFilter = require( "filter/projectionfilter" );
+
+                var paper = new Paper( document.body );
+                    filter = new ProjectionFilter( 5 ),
+                    image = new Image( "1.jpg", 300, 500, 50, 50 );
+
+                paper.addResource( filter );
+                image.applyFilter( filter );
+
+                paper.addShape( image );
+
+                window.filter = filter;
+
+            };
+
+
+        } );
+
+        seajs.use( "start" );
+
+    </script>
+</head>
+<body>
+
+
+</body>
+</html>

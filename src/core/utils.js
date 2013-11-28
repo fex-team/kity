@@ -43,6 +43,12 @@ define(function (require, exports, module) {
                 }
             }
             return cloned;
+        },
+
+        getValue: function ( value, defaultValue ) {
+
+            return value !== undefined ? value : defaultValue;
+
         }
     };
 
