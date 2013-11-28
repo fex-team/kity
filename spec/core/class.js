@@ -28,7 +28,7 @@ describe("createClass", function () {
         });
 
         it("is instanceof Dog", function () {
-            expect(dog.isInstanceOf(Dog)).toBeTruthy();
+            expect(dog instanceof Dog).toBeTruthy();
         });
     });
 
@@ -76,10 +76,10 @@ describe("createClass", function () {
 
         describe("satsuma instance", function () {
             it("should be instanceof Dog", function () {
-                expect(satsuma.isInstanceOf(Dog)).toBeTruthy();
+                expect(satsuma instanceof Dog).toBeTruthy();
             });
             it("should be instanceof Animal", function () {
-                expect(satsuma.isInstanceOf(Animal)).toBeTruthy();
+                expect(satsuma instanceof Animal).toBeTruthy();
             });
             it("should be aged 12", function () {
                 expect(satsuma.getAge()).toBe(12);

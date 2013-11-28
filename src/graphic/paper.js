@@ -89,16 +89,16 @@ define( function ( require, exports, module ) {
         },
 
         setViewPort: function( cx, cy, zoom ) {
+            var viewport, box;
             if (arguments.length == 1) {
-                var viewport = arguments[0];
+                viewport = arguments[0];
                 cx = viewport.center.x;
                 cy = viewport.center.y;
                 zoom = viewport.zoom;
             }
-
-            var box = this.getViewBox();
-            var zoom = zoom || 1;
-            var viewport = this.viewport = {
+            zoom = zoom || 1;
+            box = this.getViewBox();
+            viewport = this.viewport = {
                 center: {
                     x: cx,
                     y: cy
@@ -108,10 +108,10 @@ define( function ( require, exports, module ) {
             var matrix = new Matrix();
             var dx = (box.x + box.width / 2) - cx,
                 dy = (box.y + box.height / 2) - cy;
-            matrix.addTranslate(-cx, -cy)
-            matrix.addScale(zoom);
-            matrix.addTranslate(cx, cy);
-            matrix.addTranslate(dx, dy);
+            matrix.translate(-cx, -cy);
+            matrix.scale(zoom);
+            matrix.translate(cx, cy);
+            matrix.translate(dx, dy);
             this.shapeNode.setAttribute('transform', matrix);
             return this;
         },

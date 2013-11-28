@@ -6,7 +6,7 @@ define( function ( require, exports, module ) {
 
         constructor: function ( color, width ) {
 
-            this.color = Color.isClassOf(color) ? color : new Color(color);
+            this.color = color instanceof Color ? color : new Color(color);
             this.width = width || 1;
             this.linecap = null;
             this.linejoin = null;

@@ -9,11 +9,11 @@ describe("Kity.Curve", function () {
     });
 
     it("should be an instance of Path", function () {
-        expect(curve.isInstanceOf(Curve)).toBeTruthy();
+        expect(curve instanceof Curve).toBeTruthy();
     });
 
     it("should be an instance of Shape", function () {
-        expect(curve.isInstanceOf(Shape)).toBeTruthy();
+        expect(curve instanceof Shape).toBeTruthy();
     });
 
     it("should extend Container", function () {
@@ -22,7 +22,7 @@ describe("Kity.Curve", function () {
 
     describe("addItem(point [, pos])", function () {
         beforeEach(function () {
-            curve.addItem({
+            curve.addPoint({
                 x: 10,
                 y: 10
             });
@@ -40,26 +40,26 @@ describe("Kity.Curve", function () {
 
     describe("removeChild(pos)", function () {
         beforeEach(function () {
-            curve.addItem({
+            curve.addPoint({
                 x: 10,
                 y: 10
             });
-            curve.addItem({
+            curve.addPoint({
                 x: 20,
                 y: 20
             });
-            curve.addItem({
+            curve.addPoint({
                 x: 30,
                 y: 30
             });
-            curve.removeItem(1);
+            curve.removePoint(1);
         });
         it("should remove a key point from the curve in given position", function () {
-            expect(curve.getFirstItem()).toMatchPlain({
+            expect(curve.getFirstPoint()).toMatchPlain({
                 x: 10,
                 y: 10
             });
-            expect(curve.getLastItem()).toMatchPlain({
+            expect(curve.getLastPoint()).toMatchPlain({
                 x: 30,
                 y: 30
             });

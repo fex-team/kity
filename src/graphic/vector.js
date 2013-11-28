@@ -1,8 +1,14 @@
 define( function (require, exports, module) {
-    var Vector = function(x, y) {
-        this.x = x || 0;
-        this.y = y || 0;
-    };
+    var Vector = require('core/class').createClass('Vector', {
+        constructor: function(x, y) {
+            this.x = x || 0;
+            this.y = y || 0;
+        },
+        length: function() {
+            return Math.sqrt( Vector.square( this ) );
+        }
+    });
+
     Vector.add = function ( p, q ) {
         return new Vector( p.x + q.x, p.y + q.y );
     };
@@ -27,7 +33,7 @@ define( function (require, exports, module) {
     };
     Vector.reverse = function( p ) {
         return Vector.multipy(p, -1);
-    },
+    };
     Vector.dot = function ( p, q ) {
         return p.x * q.x + p.y * q.y;
     };
@@ -49,10 +55,5 @@ define( function (require, exports, module) {
         }
         return new Vector( d * Math.cos(a), d * Math.sin(a) );
     };
-    return require('core/class').createClass('Vector', {
-        constructor: Vector,
-        length: function() {
-            return Math.sqrt( Vector.square( this ) );
-        }
-    });
+    return Vector;
 });

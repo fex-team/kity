@@ -170,7 +170,7 @@ define(function (require, exports, module) {
 
             this.callBase();
 
-            this.setPoints( points );
+            this.setPoints( points || [] );
 
             this.closeState = !!isColse;
             this.changeable = true;

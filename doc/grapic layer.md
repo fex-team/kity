@@ -936,16 +936,16 @@ CSS 样式支持
 
 图形变换
 
-### addTranslate(int x, int y) : this ###
+### translate(int x, int y) : this ###
 添加一个偏移数据到矩阵上
 
-### addRotate(int degress) : this ###
+### rotate(int degress) : this ###
 添加一个旋转数据到矩阵上
 
-### addScale(float sx, float sy) : this ###
+### scale(float sx, float sy) : this ###
 增加缩放数据到矩阵上，只给一个参数则等比缩放
 
-### addSkew(float sx, float sy) : this ###
+### skew(float sx, float sy) : this ###
 添加倾斜数据到矩阵上，只给一个参数等比倾斜
 
 ### getMatrix() : Plain ###

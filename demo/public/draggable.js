@@ -51,7 +51,7 @@ define( function ( require, exports, module ) {
                         dragMove.call( me, dragInfo );
                     }
 
-                    else if ( me.isInstanceOf( Paper ) ) {
+                    else if ( me instanceof Paper ) {
                         // treate paper drag different
                         var view = me.getViewPort();
                         view.center.x -= delta.x;
@@ -112,7 +112,7 @@ define( function ( require, exports, module ) {
                 } );
             }
 
-            if ( me.isInstanceOf( Paper ) ) {
+            if ( me instanceof Paper ) {
                 bindEvents( me );
             } else {
                 this.getPaperPromise( bindEvents );
