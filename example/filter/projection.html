@@ -18,8 +18,10 @@
                     ProjectionFilter = require( "filter/projectionfilter" );
 
                 var paper = new Paper( document.body ),
-                    filter = new ProjectionFilter( 5 ),
+                    filter = new ProjectionFilter( 5, 10, 10 ),
                     image = new Image( "1.jpg", 300, 500, 50, 50 );
+
+                filter.setColor( "rgba( 255, 0, 0, 0.3 )" );
 
                 paper.addResource( filter );
                 image.applyFilter( filter );

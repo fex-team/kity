@@ -18,11 +18,11 @@ define( function ( require, exports, module ) {
             this.set( "operator", Utils.getValue( operator, CompositeEffect.OPERATOR_OVER ) );
 
             if ( input ) {
-                this.setIn( input );
+                this.set( 'in', input );
             }
 
             if ( input2 ) {
-                this.setIn2( input2 );
+                this.set( 'in2', input2 );
             }
 
         }

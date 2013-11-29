@@ -7,8 +7,6 @@ define( function ( require, exports, module ) {
 
     var svg = require( "graphic/svg"),
 
-        Utils = require( "core/utils" ),
-
         Effect = require( "core/class" ).createClass( "Effect", {
 
             constructor: function ( type ) {
@@ -31,53 +29,18 @@ define( function ( require, exports, module ) {
 
             },
 
-            /*
-             * 设置input， 允许传递一个字符串或者另一个effect对象
-             * 注意： 如果传递的是一个effect对象， 那么该对象的result属性将作为被设置effect对象的input值，
-             *       如果该对象没有result属性， 则什么也不做。
-             * */
-            setIn: function ( effectInstance ) {
-
-                setInput( 'in', this, effectInstance );
-
-                return this;
-
-            },
-
-            setIn2: function ( effectInstance ) {
-
-                setInput( 'in2', this, effectInstance );
-
-                return this;
-
-            },
-
             getNode: function () {
 
                 return this.node;
 
+            },
+
+            // 返回该效果的result
+            toString: function () {
+                return this.node.getAttribute( "result" ) || "";
             }
 
         } );
-
-    function setInput ( type, effectObject, input ) {
-
-        var result = null;
-
-        if ( Utils.isString( input ) ) {
-
-            result = input;
-
-        } else {
-
-            // 特效对象处理
-            result = input.get( 'result' );
-
-        }
-
-        result && effectObject.set( type, result );
-
-    }
 
     require( "core/utils" ).extend( Effect, {
 

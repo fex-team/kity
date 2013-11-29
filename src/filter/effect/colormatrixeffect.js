@@ -17,7 +17,7 @@ define( function ( require, exports, module ) {
 
             this.set( "type", Utils.getValue( type, ColorMatrixEffect.TYPE_MATRIX ) );
 
-            this.setIn( Utils.getValue( input, Effect.INPUT_SOURCE_GRAPHIC ) );
+            this.set( 'in', Utils.getValue( input, Effect.INPUT_SOURCE_GRAPHIC ) );
 
         }
 

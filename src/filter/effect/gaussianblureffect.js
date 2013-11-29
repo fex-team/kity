@@ -17,7 +17,7 @@ define( function ( require, exports, module ) {
 
             this.set( "stdDeviation", Utils.getValue( stdDeviation, 1 ) );
 
-            this.setIn( Utils.getValue( input, Effect.INPUT_SOURCE_GRAPHIC ) );
+            this.set( 'in', Utils.getValue( input, Effect.INPUT_SOURCE_GRAPHIC ) );
 
         }
 

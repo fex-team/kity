@@ -17,7 +17,7 @@ define( function ( require, exports, module ) {
 
             this.set( 'edgeMode', Utils.getValue( edgeMode, ConvolveMatrixEffect.MODE_DUPLICATE ) );
 
-            this.setIn( Utils.getValue( input, Effect.INPUT_SOURCE_GRAPHIC ) );
+            this.set( 'in', Utils.getValue( input, Effect.INPUT_SOURCE_GRAPHIC ) );
 
         }
 
