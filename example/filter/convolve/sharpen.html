@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>矩阵卷积示例 - 锐化效果</title>
+    <meta charset="utf-8">
+    <style>
+        #container {
+            width: 350px;
+            height: 700px;
+        }
+    </style>
+    <script src="../../../dev-lib/sea.js"></script>
+    <script>
+        seajs.config( {
+            base: "../../../src"
+        } );
+
+        define( "start", function (require) {
+
+            var Paper = require( "graphic/paper" ),
+                    Image = require( "graphic/image" ),
+                    ConvolveMatrixEffect = require( "filter/effect/convolvematrixeffect" ),
+                    Filter = require( "filter/filter" );
+
+            var paper = new Paper( "container" ),
+                    effect = new ConvolveMatrixEffect(),
+                    filter = new Filter(),
+                    image = new Image( "../1.jpg", 300, 500, 50, 50 );
+
+            // 锐化效果
+            effect.set( 'kernelMatrix', '-1 -1 -1 -1 9 -1 -1 -1 -1' );
+
+            filter.addEffect( effect );
+
+            paper.addResource( filter );
+            image.applyFilter( filter );
+
+            paper.addShape( image );
+
+
+        } );
+
+        seajs.use( "start" );
+
+    </script>
+</head>
+<body>
+
+锐化效果：
+<div id="container"></div>
+
+</body>
+</html>

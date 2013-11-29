@@ -161,6 +161,9 @@ define( function ( require, exports, module ) {
             }
             return paper;
         },
+        clipWith: function ( clip ) {
+            clip.clip( this );
+        },
         getPaperPromise: function(fn) {
             var me = this;
             function loadPaper() {

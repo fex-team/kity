@@ -86,6 +86,7 @@ define( function ( require, exports, module ) {
         NAME_OFFSET: 'feOffset',
         NAME_COMPOSITE: 'feComposite',
         NAME_COLOR_MATRIX: 'feColorMatrix',
+        NAME_CONVOLVE_MATRIX: 'feConvolveMatrix',
 
         // 输入常量
         INPUT_SOURCE_GRAPHIC: 'SourceGraphic',
