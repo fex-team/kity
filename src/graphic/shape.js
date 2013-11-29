@@ -126,6 +126,13 @@ define( function ( require, exports, module ) {
             }
             return this.mergeTransform( new Matrix().skew( sx, sy ) );
         },
+        applyFilter: function ( filter ) {
+
+            var filterId = filter.get( 'id' );
+
+            filterId && this.node.setAttribute( "filter", 'url(#' + filterId + ')' );
+
+        },
         stroke: function ( pen, width ) {
             if ( pen && pen.stroke ) {
                 pen.stroke( this );

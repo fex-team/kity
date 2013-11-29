@@ -51,6 +51,8 @@ define(function (require, exports, module) {
                 item.container = this;
                 item.remove = itemRemove;
             }
+            //提供给具体实现以完成容器元素的添加
+            this.itemAddedHandler( item, pos );
             if(!noEvent) {
                 this.onContainerChanged('add', [item]);
             }
@@ -119,6 +121,7 @@ define(function (require, exports, module) {
             this.onContainerChanged('remove', removed);
             return this;
         },
+        itemAddedHandler: function ( item, pos ) {},
         onContainerChanged: function(type, items) {
 
         }
