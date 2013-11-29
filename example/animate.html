@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Easings</title>
+    <script src="../dev-lib/sea.js"></script>
+    <script>
+        seajs.config({
+            base: '../src'
+        });
+        define('start', function (require) {
+            var Paper = require('graphic/paper');
+            var Group = require('graphic/group');
+            var Path = require('graphic/path');
+            var Color = require('graphic/color');
+            var Text = require('graphic/text');
+            var Draggable = require('../demo/public/draggable');
+            var Animator = require('animate/animator');
+            var Matrix = require('graphic/matrix');
+            var Circle = require('graphic/circle');
+            require('animate/moveanimator');
+
+            require('core/class').extendClass(Paper, Draggable);
+
+            var paper = new Paper(document.body);
+            paper.setViewBox(0, 0, 1200, 600).drag();
+
+            var bounce = new Animator(50, 450, function(target, y) {
+                target.setCenterY(y);
+            });
+            var colorChanger = new Animator(function(target) {
+                return target.color;
+            }, function(target) {
+                return target.color.inc('h', 90)
+            }, function(target, color) {
+                target.fill(color);
+            });
+            
+            function atternuate(e) {
+                //e.target.scale(0.6 + Math.random() * 0.6, e.target.getCenterX(), e.target.getCenterY());
+            }
+
+            for(var i = 0; i < 24; i++) {
+                var color = Color.createHSL(i * 30, 80, 50);
+                var circle = new Circle( i * 50 + 25, 50, 15 );
+                circle.color = color;
+                circle.fill(color);
+                paper.addShape(circle);
+                bounce.start(circle, 500, 'easeInQuad', Math.random() * 5000).repeat(true, true).on('rollback', atternuate);
+                circle.move(0, 300, 1000, 'easeInQuad', Math.random() * 5000);
+                circle.move(-100, -100, 100, 'easeOutQuad');
+                circle.move(100, -200, 200, 'linear', 500);
+                colorChanger.start(circle, 500, 'linear').repeat(true, true);
+            }
+        });
+        seajs.use('start');
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
