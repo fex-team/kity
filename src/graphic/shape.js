@@ -163,6 +163,11 @@ define( function ( require, exports, module ) {
         },
         clipWith: function ( clip ) {
             clip.clip( this );
+            return this;
+        },
+        maskWith: function ( mask ) {
+            mask.mask( this );
+            return this;
         },
         getPaperPromise: function(fn) {
             var me = this;

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>剪切示例</title>
+    <title>蒙板示例</title>
     <meta charset="utf-8">
     <script src="../dev-lib/sea-debug.js"></script>
     <script>
@@ -13,19 +13,31 @@
 
             var Paper = require( "graphic/paper" ),
                 Rect = require( "graphic/rect" ),
-                Clip = require( "graphic/clip" ),
+                Mask = require( "graphic/mask" ),
+                LinearGradientBrush = require( "graphic/lineargradientbrush" ),
                 Circle = require( "graphic/circle" );
 
             var paper = new Paper( document.body ),
                 circle = new Circle( 200, 200, 100 ),
-                clip = new Clip(),
+                circleMask = new Circle( 200, 200, 100 ),
+                mask = new Mask(),
+                brush = new LinearGradientBrush(),
                 rect = new Rect( 100, 100, 200, 100 );
 
+            brush.addStop( '0', "white" );
+            brush.addStop( '1', "black" );
+
+            circleMask.fill( brush );
+
+            mask.addShape( circleMask );
+
+//            circle.maskWith( mask );
+            circle.fill( brush );
+
+            paper.addResource( brush );
+            paper.addResource( mask );
+
             paper.addShape( circle );
-            circle.fill( "red" );
-            clip.addShape( rect );
-            paper.addResource( clip );
-            circle.clipWith( clip );
 
         } );
 

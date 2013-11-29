@@ -1,23 +1,23 @@
 /**
- * 图形裁剪
+ * 蒙板
  */
 
 define( function ( require, exports, module ) {
 
-    return require( "core/class" ).createClass( "Clip", {
+    return require( "core/class" ).createClass( "Mask", {
 
         base: require( "graphic/shape" ),
         mixins: [ require( "graphic/shapecontainer" ) ],
 
         constructor: function () {
 
-            this.callBase( 'clipPath' );
+            this.callBase( 'mask' );
 
         },
 
-        clip: function ( shape ) {
+        mask: function ( shape ) {
 
-            shape.getNode().setAttribute( "clip-path", "url(#"+ this.getId() +")" );
+            shape.getNode().setAttribute( "mask", "url(#"+ this.getId() +")" );
             return this;
 
         }
