@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>USE示例</title>
+    <meta charset="utf-8">
+    <script src="../dev-lib/sea-debug.js"></script>
+    <script>
+
+        seajs.config( {
+
+            base: '../src'
+
+        } );
+
+        define( 'start', function ( require, exports, module ) {
+
+            var Paper = require( 'graphic/paper' ),
+                Rect = require( 'graphic/rect' ),
+                Use = require( 'graphic/use' );
+
+            var rect = new Rect( 100, 100, 200, 50 ),
+                useRect = new Use( rect ),
+                paper = new Paper( document.body );
+
+            rect.fill( "red" );
+
+            useRect.getNode().setAttribute( "x", "500" );
+
+            paper.addShape( rect );
+            paper.addShape( useRect );
+
+        } );
+
+        seajs.use( 'start' );
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>

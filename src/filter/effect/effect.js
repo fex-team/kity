@@ -15,6 +15,20 @@ define( function ( require, exports, module ) {
 
             },
 
+            getId: function () {
+
+                return this.node.id;
+
+            },
+
+            setId: function ( id ) {
+
+                this.node.id = id;
+
+                return this;
+
+            },
+
             set: function ( key, value ) {
 
                 this.node.setAttribute( key, value );
