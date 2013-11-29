@@ -122,6 +122,10 @@ define(function(require, exports, module) {
 
             },
 
+            getValues: function() {
+                return Utils.clone(this._color);
+            },
+
             toRGB: function () {
                 return ColorUtils.toString( this._color, 'rgb' );
             },
