@@ -12,19 +12,6 @@ define( function ( require, exports, module ) {
         CompositeEffect = require( "filter/effect/compositeeffect" ),
         OffsetEffect = require( "filter/effect/offseteffect" );
 
-    // 计算给定颜色矩阵数组应用透明度更改后的新矩阵数组
-    function calculateAlpha ( colorMatrix, opacity ) {
-
-        colorMatrix = colorMatrix.slice( 0 );
-
-        if ( opacity < 1 ) {
-            colorMatrix[ 18 ] *= opacity;
-        }
-
-        return colorMatrix;
-
-    }
-
     return require( "core/class" ).createClass( 'ProjectionFilter', {
 
         base: require( "filter/filter" ),
@@ -69,21 +56,20 @@ define( function ( require, exports, module ) {
             }
 
             matrix = ColorMatrixEffect.MATRIX_EMPTY.split( " " );
-            originMatrix = calculateAlpha( this.colorMatrixEffect.get( 'values' ).split( " " ), color.get( 'a' ) );
-
-            // alpha通道更改
-            matrix[ 18 ] = originMatrix[ 18 ];
 
             colorValue.push( color.get( 'r' ) );
             colorValue.push( color.get( 'g' ) );
             colorValue.push( color.get( 'b' ) );
 
-            // rgb 颜色更改
+            // rgb 分量更改
             for ( var i = 0, len = colorValue.length; i < len; i++ ) {
 
                 matrix[ i * 5 + 3 ] = colorValue[ i ] / 255;
 
             }
+
+            // alpha 分量更改
+            matrix[ 18 ] = color.get( 'a' );
 
             this.colorMatrixEffect.set( 'values', matrix.join( " " ) );
 
@@ -96,7 +82,7 @@ define( function ( require, exports, module ) {
 
             var matrix = this.colorMatrixEffect.get( 'values' ).split( " " );
 
-            matrix = calculateAlpha( matrix, opacity );
+            matrix[ 18 ] = opacity;
 
             this.colorMatrixEffect.set( 'values', matrix.join( " " ) );
 
