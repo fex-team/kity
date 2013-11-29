@@ -21,7 +21,7 @@ a.start(rect1, 1000, 'ease-in');
 a.start(rect2, 500, 'ease-out', 500);
 
 a.on('finish', function( e ) {
-    console.log('the ' + e.getId() + ' has move right');
+    console.log('the ' + e.target.getId() + ' has move right');
 });
 
 ```
@@ -37,9 +37,6 @@ a.on('finish', function( e ) {
     
     setter(target, val) <Function> 
     指定动画值的使用方法，该方法接受两个参数：动画对象（target）以及当前动画值（val）。
-
-    repeat <bool|int>
-    是否重复，如果为 true，会一直重复动画；如果指定了值，则重复指定的次数
 
 ### new Animator( animator1, animator2, ... )
 
@@ -122,7 +119,7 @@ play 方法的操作决定于时间线的状态：
 
 时间线在变为播放时触发的事件。注意，如果时间线本来就在播放状态，play() 方法不会触发该事件。
 
-    e.animateTarget <Object>
+    e.target <Object>
     动画目标
 
     e.lastStatus <"paused"|"stoped"|"finished">

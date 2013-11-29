@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Easings</title>
+    <script src="../dev-lib/sea.js"></script>
+    <script>
+        seajs.config({
+            base: '../src'
+        });
+        define('start', function (require) {
+            var Paper = require('graphic/paper');
+            var Group = require('graphic/group');
+            var Path = require('graphic/path');
+            var Color = require('graphic/color');
+            var Text = require('graphic/text');
+            var Draggable = require('../demo/public/draggable');
+            var easingTable = require('animate/easing');
+
+            require('core/class').extendClass(Paper, Draggable);
+
+            var paper = new Paper(document.body);
+            paper.setViewBox(0, 0, 1000, 500).drag();
+
+            var EasingGraph = require('core/class').createClass({
+                base: Group,
+                constructor: function( name, easing, x, y ) {
+                    this.callBase();
+                    this.name = name;
+                    this.easing = easing;
+                    this.draw();
+                    x = x || 0;
+                    y = y || 0;
+                    this.translate(x, y + 150);
+                },
+                draw: function() {
+                    this.drawCoordinate();
+                    this.drawEasingCurve();
+                    this.drawName();
+                },
+                drawCoordinate: function() {
+                    this.addShape(new Path().pipe(function(){
+                        var d = this.getDrawer();
+                        // x-alix
+                        d.moveTo(0, 0).lineTo(120, 0);
+                        // x-alix-marker
+                        d.moveTo(115, 5).lineTo(120, 0).lineTo(115, -5);
+                        // y-alix
+                        d.moveTo(0, 0).lineTo(0, -120);
+                        // y-alix-marker
+                        d.moveTo(5, -115).lineTo(0, -120).lineTo(-5, -115);
+                        // range-rect
+                        d.moveTo(0, -100).lineTo(100, -100).lineTo(100, 0);
+                        this.stroke('gray');
+                    }));
+                    this.addShape(new Text('time').setX(130).setY(6).setSize(14).fill('black'));
+                    this.addShape(new Text('value').setAnchor('middle').setX(0).setY(-130).setSize(14).fill('black'));
+                },
+                drawEasingCurve: function() {
+                    var easing = this.easing;
+                    this.addShape(new Path().pipe(function() {
+                        var d = this.getDrawer();
+                        d.moveTo(0, 0);
+                        for(var t = 0; t <= 100; t+=1) {
+                            d.lineTo(t, -easing(t, 0, 100, 100));
+                        }
+                        this.stroke('red');
+                    }));
+                },
+                drawName: function() {
+                    this.addShape(new Text(this.name).setSize(14).setX(50).setY(24).setAnchor('middle').fill('blue'));
+                }
+            });
+            
+            var index = 0, x, y;
+            for(var name in easingTable) {
+                x = 200 * (index % 5) + 25;
+                y = 200 * Math.floor(index / 5);
+                paper.addShape(new EasingGraph(name, easingTable[name], x, y));
+                index ++;
+            }
+            
+        });
+        seajs.use('start');
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
