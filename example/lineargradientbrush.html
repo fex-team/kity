@@ -19,7 +19,7 @@
             var rect = new Rect(10, 10, 200, 100);
             rect.fill(new LinearGradientBrush().pipe( function() {
                 this.addStop(0, 'red');
-                this.addStop(1, 'blue');
+                this.addStop(1, 'blue', 0.5);
                 this.setStartPosition(0, 0);
                 this.setEndPosition(1, 1);
                 paper.addResource(this);
