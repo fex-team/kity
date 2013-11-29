@@ -1,5 +1,5 @@
 /*
- * 高斯模糊滤镜
+ * 投影滤镜
  */
 
 define( function ( require, exports, module ) {
