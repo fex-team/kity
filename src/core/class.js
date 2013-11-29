@@ -12,6 +12,12 @@
  */
 define( function ( require, exports ) {
 
+    // just to bind context
+    Function.prototype.bind = Function.prototype.bind || function(thisObj) {
+        var args = Array.prototype.slice.call(arguments, 1);
+        return this.apply(thisObj, args);
+    };
+
     var config = require( 'core/config' );
 
     // 方便调试查看
