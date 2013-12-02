@@ -79,7 +79,7 @@ define(function(require, exports, module) {
                 if( pie instanceof Pie ) {
                     var color = pie.color;
 
-                    pie.scale(2, pie.center.x, pie.center.y);
+                    pie.scale(2);
                     pie.stroke('white');
 
                     ring.setCircleColor( color );

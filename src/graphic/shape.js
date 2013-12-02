@@ -103,6 +103,7 @@ define( function ( require, exports, module ) {
                 return this.anchor;
             }
             var rbox = this.getRenderBox();
+            // 注意没有设置 anchor 时是动态计算的
             return {
                 x: rbox.x + rbox.width / 2,
                 y: rbox.y + rbox.height / 2
@@ -115,47 +116,39 @@ define( function ( require, exports, module ) {
             };
             return this;
         },
+        resetAnchor: function() {
+            delete this.anchor;
+            return this;
+        },
         translate: function ( dx, dy ) {
             if ( dy === undefined ) {
                 dy = 0;
             }
             return this.mergeTransform( new Matrix().translate( dx, dy ) );
         },
-        rotate: function ( deg, ax, ay ) {
-            if ( ax === undefined ) {
-                var a = this.getAnchor();
-                ax = a.x;
-                ay = a.y;
-            }
-            return this.mergeTransform( new Matrix().translate( -ax, -ay ).rotate( deg ).translate( ax, ay ) );
+        rotate: function ( deg ) {
+            var a = this.getAnchor();
+            return this.mergeTransform( new Matrix().translate( -a.x, -a.y ).rotate( deg ).translate( a.x, a.y ) );
         },
-        scale: function ( sx, sy, ax, ay ) {
-            if ( ax === undefined ) {
-                var a = this.getAnchor();
-                ax = a.x;
-                ay = a.y;
-            }
+        scale: function ( sx, sy ) {
+            var a = this.getAnchor();
             if ( sy === undefined ) {
                 sy = sx;
             }
-            return this.mergeTransform( new Matrix().translate( -ax, -ay ).scale( sx, sy ).translate( ax, ay ) );
+            return this.mergeTransform( new Matrix().translate( -a.x, -a.y ).scale( sx, sy ).translate( a.x, a.y ) );
         },
-        skew: function ( sx, sy, ax, ay ) {
-            if ( ax === undefined ) {
-                var a = this.getAnchor();
-                ax = a.x;
-                ay = a.y;
-            }
+        skew: function ( sx, sy ) {
+            var a = this.getAnchor();
             if ( sy === undefined ) {
                 sy = sx;
             }
-            return this.mergeTransform( new Matrix().translate( -ax, -ay ).skew( sx, sy ).translate( ax, ay ) );
+            return this.mergeTransform( new Matrix().translate( -a.x, -a.y ).skew( sx, sy ).translate( a.x, a.y ) );
         },
         applyFilter: function ( filter ) {
 
             var filterId = filter.get( 'id' );
 
-            if( filterId ) {
+            if ( filterId ) {
                 this.node.setAttribute( "filter", 'url(#' + filterId + ')' );
             }
 
@@ -196,7 +189,7 @@ define( function ( require, exports, module ) {
             mask.mask( this );
             return this;
         },
-        getPaperPromise: function(fn) {
+        getPaperPromise: function ( fn ) {
             var me = this;
 
             function loadPaper() {
