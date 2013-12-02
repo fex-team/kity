@@ -18,7 +18,7 @@ define( function ( require, exports, module ) {
             this.set( 'dx', Utils.getValue( dx, 0 ) );
             this.set( 'dy', Utils.getValue( dy, 0 ) );
 
-            this.setIn( Utils.getValue( input, Effect.INPUT_SOURCE_GRAPHIC ) );
+            this.set( 'in', Utils.getValue( input, Effect.INPUT_SOURCE_GRAPHIC ) );
 
         }
 

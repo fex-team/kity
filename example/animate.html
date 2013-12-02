@@ -31,12 +31,16 @@
             var bounce = new Animator(50, 450, function(target, y) {
                 target.setPositionY(y);
             });
-            var colorChanger = new Animator(function(target) {
-                return target.color;
-            }, function(target) {
-                return target.color.inc('h', 90)
-            }, function(target, color) {
-                target.fill(color);
+            var colorChanger = new Animator({
+                beginValue: function(target) {
+                    return target.color;
+                }, 
+                endValue: function(target) {
+                    return target.color.inc('h', 90)
+                }, 
+                setter: function(target, color) {
+                    target.fill(color);
+                }
             });
             
             function atternuate(e) {
@@ -45,18 +49,21 @@
 
             for(var i = 0; i < 24; i++) {
                 var color = Color.createHSL(i * 30, 80, 50);
-                var circle = new Rect( i * 50 , 50, 50, 150 );
-                circle.color = color;
-                circle.fill(color);
+                var rect = new Rect( i * 50 , 50, 50, 150 );
+                rect.color = color;
+                rect.fill(color);
+
                 paper.addShape(circle);
+
                 bounce.start(circle, 500, 'easeInQuad', Math.random() * 5000).repeat(true, true).on('rollback', atternuate);
-                circle.fxTranslate(0, 300, '1s', 'easeInQuad', Math.random() * 5000);
-                circle.fxTranslate(-100, -100, '0.1s', 'easeOutQuad');
-                circle.fxRotate(1080, '2s', 'linear', 500);
-                circle.fxScale(.5, .5, '0.8s', 'easeInElastic');
-                circle.fxTranslate(100, -200, '0.8s', 'easeOutElastic');
-                circle.fadeOut(300).fadeIn(1000).fadeTo(.5, 100);
                 colorChanger.start(circle, 500, 'linear').repeat(true, true);
+
+                rect.fxTranslate(0, 300, '1s', 'easeInQuad', Math.random() * 5000);
+                rect.fxTranslate(-100, -100, '0.1s', 'easeOutQuad');
+                rect.fxRotate(1080, '2s', 'linear', 500);
+                rect.fxScale(.5, .5, '0.8s', 'easeInElastic');
+                rect.fxTranslate(100, -200, '0.8s', 'easeOutElastic');
+                rect.fadeOut(300).fadeIn(1000).fadeTo(.5, 100);
             }
         });
         seajs.use('start');

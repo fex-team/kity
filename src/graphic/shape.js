@@ -188,7 +188,15 @@ define( function ( require, exports, module ) {
             }
             return paper;
         },
-        getPaperPromise: function ( fn ) {
+        clipWith: function ( clip ) {
+            clip.clip( this );
+            return this;
+        },
+        maskWith: function ( mask ) {
+            mask.mask( this );
+            return this;
+        },
+        getPaperPromise: function(fn) {
             var me = this;
 
             function loadPaper() {

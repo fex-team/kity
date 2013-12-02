@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>剪切示例</title>
+    <meta charset="utf-8">
+    <script src="../dev-lib/sea-debug.js"></script>
+    <script>
+        seajs.config( {
+            base: '../src'
+        } );
+
+        define( 'start', function ( require ) {
+
+            var Paper = require( "graphic/paper" ),
+                Rect = require( "graphic/rect" ),
+                Clip = require( "graphic/clip" ),
+                Circle = require( "graphic/circle" );
+
+            var paper = new Paper( document.body ),
+                circle = new Circle( 200, 200, 100 ),
+                clip = new Clip(),
+                rect = new Rect( 100, 100, 200, 100 );
+
+            paper.addShape( circle );
+            circle.fill( "red" );
+            clip.addShape( rect );
+            paper.addResource( clip );
+            circle.clipWith( clip );
+
+        } );
+
+        seajs.use( 'start' );
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>
