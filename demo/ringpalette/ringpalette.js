@@ -146,7 +146,7 @@ define(function(require, exports, module) {
             };
             return this.pan;
         },
-        drag: function( delta ) {
+        drag: function() {
             return this.callMixin( {
                 target: this.circle,
                 move: function(e) {
