@@ -70,8 +70,8 @@ define( function ( require, exports, module ) {
             if(data) {
                 this.setPathData( data );
             }
-            this.node.setAttribute( 'fill', svg.defaults.fill );
-            this.node.setAttribute( 'stroke', svg.defaults.stroke );
+            //this.node.setAttribute( 'fill', svg.defaults.fill );
+            //this.node.setAttribute( 'stroke', svg.defaults.stroke );
         },
         setPathData: function ( data ) {
             if(!data) {
