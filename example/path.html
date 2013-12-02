@@ -35,60 +35,15 @@
                 
                 this.getDrawer().pipe(function(d) {
                     d.moveTo(10, 10);
-                    d.lineTo(100, 100);
+                    d.carcTo(60, 100, 100);
                     d.lineTo(200, 50);
                     d.close(); 
                 });
-
-                var pattern = new PatternBrush().pipe(function(p) {
-                    p.setWidth(20);
-                    p.setHeight(20);
-                    p.addShape(new Rect(0, 0, 10, 10).pipe(function(r){
-                        r.rotate(-45);
-                        r.fill(new LinearGradientBrush().pipe(function(g) {
-                            g.addStop(0, '#ff0000')
-                            g.addStop(0.5, '#ffff00')
-                            g.addStop(1, new Color('blue'));
-                            paper.addResource(g);
-                        }));
-                    }));
-                });
-
-                paper.addResource(pattern);
-                
-                this.fill(pattern);
-
-                this.setStyle({
-                    'stroke-width' : '5'
-                });
-                this.addClass('stroke-green');
+                this.fill('none');
+                this.stroke('red');
             });
 
             paper.addShape(path);
-
-            var upsidedown = new Path().pipe(function(){
-                this.setPathData('M0 0 C100 0 100 0 100 100 C100 200 100 200 200 200');
-                this.stroke(new Pen().pipe(function() {
-                    this.setWidth(1);
-                    this.setColor(new Color('gray'));
-                    this.setDashArray([2,2]);
-                }));
-                this.rotate(90).translate(100, 200);
-            });
-            paper.addShape(upsidedown);
-
-            var text = new Text('this is a text').pipe(function() {
-                this.setStyle({
-                    fill: 'red'
-                });
-                this.setFontSize(18);
-                this.setPath(upsidedown);
-                this.setAnchor('middle');
-                this.addSpan(new TextSpan('Baidu').fill('blue'));
-                this.addSpan(new TextSpan('Kity').fill('green'));
-            });
-
-            paper.addShape(text);
         });
         seajs.use('start');
     </script>

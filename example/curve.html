@@ -30,7 +30,7 @@
                         new ShapePoint(195, 190),
                         new ShapePoint(285, 100)
                     ];
-                    var curve = new Curve(points).stroke('black').setSmoothFactor(s);
+                    var curve = new Curve(points).fill('none').stroke('black').setSmoothFactor(s);
                     this.addShape(curve);
                     for(var i = 0; i < points.length; i++) {
                         var p = points[i];

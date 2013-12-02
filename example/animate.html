@@ -35,7 +35,7 @@
                 beginValue: function(target) {
                     return target.color;
                 }, 
-                endValue: function(target) {
+                finishValue: function(target) {
                     return target.color.inc('h', 90)
                 }, 
                 setter: function(target, color) {
@@ -53,10 +53,10 @@
                 rect.color = color;
                 rect.fill(color);
 
-                paper.addShape(circle);
+                paper.addShape(rect);
 
-                bounce.start(circle, 500, 'easeInQuad', Math.random() * 5000).repeat(true, true).on('rollback', atternuate);
-                colorChanger.start(circle, 500, 'linear').repeat(true, true);
+                bounce.start(rect, 500, 'easeInQuad', Math.random() * 5000).repeat(true, true).on('rollback', atternuate);
+                colorChanger.start(rect, 500, 'linear').repeat(true, true);
 
                 rect.fxTranslate(0, 300, '1s', 'easeInQuad', Math.random() * 5000);
                 rect.fxTranslate(-100, -100, '0.1s', 'easeOutQuad');

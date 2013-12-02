@@ -50,6 +50,7 @@
                         d.moveTo(5, -115).lineTo(0, -120).lineTo(-5, -115);
                         // range-rect
                         d.moveTo(0, -100).lineTo(100, -100).lineTo(100, 0);
+                        this.fill('none');
                         this.stroke('gray');
                     }));
                     this.addShape(new Text('time').setX(130).setY(6).setSize(14).fill('black'));
@@ -63,6 +64,7 @@
                         for(var t = 0; t <= 100; t+=1) {
                             d.lineTo(t, -easing(t, 0, 100, 100));
                         }
+                        this.fill('none');
                         this.stroke('red');
                     }));
                 },

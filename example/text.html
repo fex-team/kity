@@ -21,12 +21,13 @@
                 this.addSpan(new TextSpan('hello ').fill('red'));
                 this.addSpan(new TextSpan(' kity').fill('blue'));
                 this.setAnchor('middle');
-                this.setFontSize(36);
+                this.setSize(36);
 
                 this.setPath(new Path().pipe(function(){
                     var d = this.getDrawer();
                     d.moveTo(150, 200);
                     d.carcTo(200, 450, 200);
+                    this.fill('none');
                     this.stroke('green');
                     paper.addShape(this);
                 }));

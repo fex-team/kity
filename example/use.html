@@ -19,15 +19,15 @@
                 Use = require( 'graphic/use' );
 
             var rect = new Rect( 100, 100, 200, 50 ),
-                useRect = new Use( rect ),
+                use1 = new Use( rect ),
+                use2 = new Use( rect )
                 paper = new Paper( document.body );
 
-            rect.fill( "red" );
+            paper.addResource( rect );
 
-            useRect.getNode().setAttribute( "x", "500" );
-
-            paper.addShape( rect );
-            paper.addShape( useRect );
+            use1.fill('blue');
+            use2.fill('red').translate(500, 0);
+            paper.addShapes( [use1, use2] );
 
         } );
 
