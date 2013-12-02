@@ -1,0 +1,41 @@
+{
+    "name": "kitygraph",
+    "title": "kitygraph",
+    "description": "SVG Graphic Library",
+    "version": "1.0.0",
+    "homepage": "https://github.com/kitygraph/kitygraph",
+    "author": {
+        "name": "Baidu UEditor Group",
+        "url": "http://ueditor.baidu.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/kitygraph/kitygraph.git"
+    },
+    "keywords": [
+        "kity",
+        "svg",
+        "graphic",
+        "javascript",
+        "library"
+    ],
+    "bugs": {
+        "url": "http://www.ueditorbbs.com/forum.php"
+    },
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "https://github.com/jquery/jquery/blob/master/MIT-LICENSE.txt"
+        }
+    ],
+    "dependencies": {},
+    "devDependencies": {
+        "grunt": "~0.4.1",
+        "grunt-cmd-transport": "~0.3.0",
+        "grunt-cmd-concat": "~0.2.5",
+        "grunt-contrib-concat": "~0.3.0",
+        "grunt-contrib-uglify": "~0.2.6",
+        "grunt-contrib-clean": "~0.5.0"
+    }
+
+}
