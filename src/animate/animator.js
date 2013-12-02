@@ -60,6 +60,10 @@ define( function ( require, exports, module ) {
                 timeline.on( 'finish', callback );
             }
             return timeline;
+        },
+
+        reverse: function() {
+            return new Animator(this.finishVal, this.beginVal, this.setter);
         }
 
     } );

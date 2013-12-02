@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Easings</title>
+    <title>Animate</title>
     <script src="../dev-lib/sea.js"></script>
     <script>
         seajs.config({
@@ -17,7 +17,11 @@
             var Animator = require('animate/animator');
             var Matrix = require('graphic/matrix');
             var Circle = require('graphic/circle');
-            require('animate/moveanimator');
+            var Rect = require('graphic/rect');
+            require('animate/translateanimator');
+            require('animate/rotateanimator');
+            require('animate/scaleanimator');
+            require('animate/opacityanimator');
 
             require('core/class').extendClass(Paper, Draggable);
 
@@ -25,7 +29,7 @@
             paper.setViewBox(0, 0, 1200, 600).drag();
 
             var bounce = new Animator(50, 450, function(target, y) {
-                target.setCenterY(y);
+                target.setPositionY(y);
             });
             var colorChanger = new Animator(function(target) {
                 return target.color;
@@ -41,14 +45,17 @@
 
             for(var i = 0; i < 24; i++) {
                 var color = Color.createHSL(i * 30, 80, 50);
-                var circle = new Circle( i * 50 + 25, 50, 15 );
+                var circle = new Rect( i * 50 , 50, 50, 150 );
                 circle.color = color;
                 circle.fill(color);
                 paper.addShape(circle);
                 bounce.start(circle, 500, 'easeInQuad', Math.random() * 5000).repeat(true, true).on('rollback', atternuate);
-                circle.move(0, 300, 1000, 'easeInQuad', Math.random() * 5000);
-                circle.move(-100, -100, 100, 'easeOutQuad');
-                circle.move(100, -200, 200, 'linear', 500);
+                circle.fxTranslate(0, 300, '1s', 'easeInQuad', Math.random() * 5000);
+                circle.fxTranslate(-100, -100, '0.1s', 'easeOutQuad');
+                circle.fxRotate(1080, '2s', 'linear', 500);
+                circle.fxScale(.5, .5, '0.8s', 'easeInElastic');
+                circle.fxTranslate(100, -200, '0.8s', 'easeOutElastic');
+                circle.fadeOut(300).fadeIn(1000).fadeTo(.5, 100);
                 colorChanger.start(circle, 500, 'linear').repeat(true, true);
             }
         });

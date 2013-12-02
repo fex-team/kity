@@ -16,42 +16,53 @@ define( function ( require, exports, module ) {
     function execGlobalFrameAction() {
         var pending = globalFrameAction;
         globalFrameAction = [];
-        while(pending.length) {
+        while ( pending.length ) {
             pending.shift()();
         }
-        requestAnimationFrame(execGlobalFrameAction);
+        requestAnimationFrame( execGlobalFrameAction );
     }
 
     execGlobalFrameAction();
 
-
-    // 不会深度遍历
-    function getPercentValue( b, f, p ) {
-        if ( typeof ( b ) == 'number' ) {
-            return b + ( f - b ) * p;
+    function paralle( v1, v2, op ) {
+        if ( false === isNaN( parseFloat( v1 ) ) ) {
+            return op( v1, v2 );
         }
         var value = {};
-        for ( var n in b ) {
-            if ( b.hasOwnProperty( n ) ) {
-                value[ n ] = b[ n ] + ( f[ n ] - b[ n ] ) * p;
+        for ( var n in v1 ) {
+            if ( v1.hasOwnProperty( n ) ) {
+                value[ n ] = paralle( v1[ n ], v2[ n ], op );
             }
         }
         return value;
+    }
+
+    function getDelta( v1, v2 ) {
+        return paralle( v1, v2, function ( v1, v2 ) {
+            return v2 - v1;
+        } );
+    }
+
+    // 不会深度遍历
+    function getPercentValue( b, f, p ) {
+        return paralle( b, f, function ( b, f ) {
+            return b + ( f - b ) * p;
+        } );
     }
 
     function TimelineEvent( timeline, type, param ) {
         this.timeline = timeline;
         this.target = timeline.target;
         this.type = type;
-        for(var name in param) {
-            if(param.hasOwnProperty(name)) {
-                this[name] = param[name];
+        for ( var name in param ) {
+            if ( param.hasOwnProperty( name ) ) {
+                this[ name ] = param[ name ];
             }
         }
     }
 
     var Timeline = require( 'core/class' ).createClass( 'Timeline', {
-        mixins: [EventHandler],
+        mixins: [ EventHandler ],
         constructor: function ( animator, target, duration, easing ) {
             this.time = 0;
             this.duration = duration;
@@ -103,19 +114,18 @@ define( function ( require, exports, module ) {
             if ( elapsed > 200 ) {
                 elapsed = 1000 / 60;
             }
-
             this.time += elapsed;
-            this.setValue(this.getValue());
 
+            this.setValue( this.getValue() );
             this.lastFrameTS = ts;
 
             if ( this.time >= this.duration ) {
                 this.timeUp();
             }
 
-            globalFrameAction.push(this.nextFrame.bind(this));
+            globalFrameAction.push( this.nextFrame.bind( this ) );
         },
-        getPlayTime: function() {
+        getPlayTime: function () {
             return this.rollbacking ? this.duration - this.time : this.time;
         },
         getValue: function () {
@@ -125,22 +135,28 @@ define( function ( require, exports, module ) {
                 v;
 
             switch ( this.valueType ) {
-                case 'color':
-                    b = b.getValues();
-                    f = f.getValues();
-                    v = getPercentValue( b, f, p );
-                    return Color.createRGBA( v.r, v.g, v.b, v.a );
-                case 'matrix':
-                    b = b.getMatrix();
-                    f = f.getMatrix();
-                    v = getPercentValue( b, f, p );
-                    return new Matrix( v );
-                default:
-                    return getPercentValue( b, f, p );
+            case 'color':
+                b = b.getValues();
+                f = f.getValues();
+                v = getPercentValue( b, f, p );
+                return Color.createRGBA( v.r, v.g, v.b, v.a );
+            case 'matrix':
+                b = b.getMatrix();
+                f = f.getMatrix();
+                v = getPercentValue( b, f, p );
+                return new Matrix( v );
+            default:
+                return getPercentValue( b, f, p );
             }
         },
-        setValue: function( value ) {
-            this.setter.call( this.target, this.target, value );
+        getDelta: function() {
+            this.lastValue = this.lastValue || this.beginVal;
+            return getDelta( this.lastValue, this.currentValue );
+        },
+        setValue: function ( value, lastValue ) {
+            this.currentValue = value;
+            this.setter.call( this.target, this.target, value, this );
+            this.lastValue = value;
         },
         play: function () {
             var ctx = this.context;
@@ -148,41 +164,41 @@ define( function ( require, exports, module ) {
             var lastStatus = this.status;
             this.status = 'playing';
             switch ( lastStatus ) {
-                case 'ready':
-                    this.beginVal = typeof ( this.beginVal ) == 'function' ?
-                        this.beginVal.call( this.target, this.target ) :
-                        this.beginVal;
-                    this.finishVal = typeof ( this.finishVal ) == 'function' ?
-                        this.finishVal.call( this.target, this.target ) :
-                        this.finishVal;
-                    this.time = 0;
-                    this.guessValueType();
-                    this.nextFrame();
-                    break;
-                case 'finished':
-                case 'stoped':
-                    this.time = 0;
-                    this.nextFrame();
-                    break;
-                case 'paused':
-                    this.lastFrameTS = 0;
-                    this.nextFrame();
+            case 'ready':
+                this.beginVal = typeof ( this.beginVal ) == 'function' ?
+                    this.beginVal.call( this.target, this.target ) :
+                    this.beginVal;
+                this.finishVal = typeof ( this.finishVal ) == 'function' ?
+                    this.finishVal.call( this.target, this.target ) :
+                    this.finishVal;
+                this.time = 0;
+                this.guessValueType();
+                this.nextFrame();
+                break;
+            case 'finished':
+            case 'stoped':
+                this.time = 0;
+                this.nextFrame();
+                break;
+            case 'paused':
+                this.lastFrameTS = 0;
+                this.nextFrame();
             }
-            this.fire('play', new TimelineEvent(this, 'play', {
+            this.fire( 'play', new TimelineEvent( this, 'play', {
                 lastStatus: lastStatus
-            }));
+            } ) );
             return this;
         },
         pause: function () {
             this.status = 'paused';
-            this.fire('pause', new TimelineEvent(this, 'pause'));
+            this.fire( 'pause', new TimelineEvent( this, 'pause' ) );
             return this;
         },
         stop: function () {
             this.status = 'stoped';
-            this.setValue(this.finishVal);
+            this.setValue( this.finishVal );
             this.rollbacking = false;
-            this.fire('stop', new TimelineEvent(this, 'stop'));
+            this.fire( 'stop', new TimelineEvent( this, 'stop' ) );
             return this;
         },
         timeUp: function () {
@@ -194,7 +210,7 @@ define( function ( require, exports, module ) {
                         this.rollbacking = false;
                     } else {
                         this.rollbacking = true;
-                        this.fire('rollback', new TimelineEvent(this, 'rollback'));
+                        this.fire( 'rollback', new TimelineEvent( this, 'rollback' ) );
                     }
                 } else {
                     this.decreaseRepeat();
@@ -202,16 +218,16 @@ define( function ( require, exports, module ) {
                 if ( !this.repeatOption ) {
                     this.finish();
                 } else {
-                    this.fire('repeat', new TimelineEvent(this, 'repeat'));
+                    this.fire( 'repeat', new TimelineEvent( this, 'repeat' ) );
                 }
             } else {
                 this.finish();
             }
         },
-        finish: function() {
-            this.setValue(this.finishVal);
+        finish: function () {
+            this.setValue( this.finishVal );
             this.status = 'finished';
-            this.fire('finish', new TimelineEvent(this, 'finish'));
+            this.fire( 'finish', new TimelineEvent( this, 'finish' ) );
         },
         decreaseRepeat: function () {
             if ( this.repeatOption !== true ) {
