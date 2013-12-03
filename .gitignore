@@ -2,3 +2,4 @@
 *.sublime-project
 *.sublime-workspace
 *.node_module
+node_modules

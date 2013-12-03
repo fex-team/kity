@@ -2,21 +2,30 @@
 <html>
 <head>
     <title>Pen Example</title>
+    <!-- 正式发布的时候， 只需替换掉相应的脚本文件即可 -->
+
+    <!-- dev 版本 示例所需脚本文件 start -->
     <script src="../dev-lib/sea.js"></script>
     <script>
         seajs.config({
             base: '../src'
         });
-        define('start', function (require) {
-            var Paper = require('graphic/paper');
-            var Path = require('graphic/path');
-            var Pen = require('graphic/pen');
+    </script>
+    <script src="../dev-lib/exports.js"></script>
+    <!-- dev 版本 示例所需脚本文件 end -->
 
-            var paper = new Paper(document.body);
+    <!-- 正式版本 示例所需脚本文件 start -->
+    <!--<script src="../dist/kitygraph.all.min.js"></script>-->
+    <!-- 正式版本 示例所需脚本文件 end -->
+    <script>
+
+        window.onload = function () {
+
+            var paper = new kity.Paper(document.body);
 
             paper.setWidth(400).setHeight(300);
 
-            var path = new Path();
+            var path = new kity.Path();
             path.getDrawer().pipe(function(){
                 this.moveTo(10, 10);
                 this.lineTo(100, 10);
@@ -24,7 +33,7 @@
                 this.lineTo(10, 200);
                 this.close();
             });
-            path.stroke(new Pen().pipe(function() {
+            path.stroke(new kity.Pen().pipe(function() {
                 this.setWidth(5);
                 this.setDashArray([10, 5]);
                 this.setLineCap('butt');
@@ -33,8 +42,8 @@
             }));
             path.fill('none');
             paper.addShape(path);
-        });
-        seajs.use('start');
+
+        };
     </script>
 </head>
 <body>

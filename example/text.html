@@ -2,28 +2,38 @@
 <html>
 <head>
     <title>Text Example</title>
+
+    <!-- 正式发布的时候， 只需替换掉相应的脚本文件即可 -->
+
+    <!-- dev 版本 示例所需脚本文件 start -->
     <script src="../dev-lib/sea.js"></script>
     <script>
         seajs.config({
             base: '../src'
         });
-        define('start', function (require) {
-            var Paper = require('graphic/paper');
-            var Text = require('graphic/text');
-            var TextSpan = require('graphic/textspan');
-            var Path = require('graphic/path');
+    </script>
+    <script src="../dev-lib/exports.js"></script>
+    <!-- dev 版本 示例所需脚本文件 end -->
 
-            var paper = new Paper(document.body);
+    <!-- 正式版本 示例所需脚本文件 start -->
+    <!--<script src="../dist/kitygraph.all.min.js"></script>-->
+    <!-- 正式版本 示例所需脚本文件 end -->
+
+    <script>
+
+        window.onload = function () {
+
+            var paper = new kity.Paper(document.body);
 
             paper.setWidth(600).setHeight(400);
 
-            paper.addShape(new Text().pipe(function() {
-                this.addSpan(new TextSpan('hello ').fill('red'));
-                this.addSpan(new TextSpan(' kity').fill('blue'));
+            paper.addShape(new kity.Text().pipe(function() {
+                this.addSpan(new kity.TextSpan('hello ').fill('red'));
+                this.addSpan(new kity.TextSpan(' kity').fill('blue'));
                 this.setAnchor('middle');
                 this.setSize(36);
 
-                this.setPath(new Path().pipe(function(){
+                this.setPath(new kity.Path().pipe(function(){
                     var d = this.getDrawer();
                     d.moveTo(150, 200);
                     d.carcTo(200, 450, 200);
@@ -32,8 +42,8 @@
                     paper.addShape(this);
                 }));
             }));
-        });
-        seajs.use('start');
+        };
+
     </script>
 </head>
 <body>
