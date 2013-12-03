@@ -1,8 +1,17 @@
-'<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <title>Path Example</title>
+    <!-- dev 版本 -->
     <script src="../dev-lib/sea.js"></script>
+    <script>
+        seajs.config({
+            base: '../src'
+        });
+    </script>
+    <script src="../dev-lib/exports.js"></script>
+    <!-- 正式版 -->
+    <!--<script src="../dist/kitygraph.all.js"></script>-->
     <style>
         .stroke-green {
             stroke: green;
@@ -10,28 +19,15 @@
         }
     </style>
     <script>
-        seajs.config({
-            base: '../src'
-        });
-        define('start', function (require) {
-            var Path = require('graphic/path');
-            var Paper = require('graphic/paper');
-            var Color = require('graphic/color');
-            var LinearGradientBrush = require('graphic/lineargradientbrush');
-            var PatternBrush = require('graphic/patternbrush');
-            var Text = require('graphic/text');
-            var TextSpan = require('graphic/textspan');
-            var Matrix = require('graphic/matrix');
-            var Pen = require('graphic/pen');
-            var Rect = require('graphic/rect');
+       window.onload = function () {
 
-            var paper = new Paper(document.body).pipe(function() {
+            var paper = new kity.Paper(document.body).pipe(function() {
                 this.setWidth(900);
                 this.setHeight(600);
                 this.setViewBox(0, 0, 400, 300);
             });
 
-            var path = new Path().pipe(function() {
+            var path = new kity.Path().pipe(function() {
                 
                 this.getDrawer().pipe(function(d) {
                     d.moveTo(10, 10);
@@ -44,8 +40,8 @@
             });
 
             paper.addShape(path);
-        });
-        seajs.use('start');
+
+        };
     </script>
 </head>
 <body>

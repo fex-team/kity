@@ -3,35 +3,37 @@
 <head>
     <title>高斯模糊滤镜</title>
     <meta charset="utf-8">
+
+    <!-- 正式发布的时候， 只需替换掉相应的脚本文件即可 -->
+
+    <!-- dev 版本 示例所需脚本文件 start -->
     <script src="../../dev-lib/sea.js"></script>
     <script>
-        seajs.config( {
-            base: "../../src"
-        } );
+        seajs.config({
+            base: '../../src'
+        });
+    </script>
+    <script src="../../dev-lib/exports.js"></script>
+    <!-- dev 版本 示例所需脚本文件 end -->
 
-        define( "start", function (require) {
+    <!-- 正式版本 示例所需脚本文件 start -->
+    <!--<script src="../../dist/kitygraph.all.min.js"></script>-->
+    <!-- 正式版本 示例所需脚本文件 end -->
 
-            window.onload = function () {
+    <script>
 
-                var Paper = require( "graphic/paper" ),
-                    Image = require( "graphic/image" ),
-                    GaussianblurFilter = require( "filter/gaussianblurfilter" );
+        window.onload = function () {
 
-                var paper = new Paper( document.body ),
-                    filter = new GaussianblurFilter(),
-                    image = new Image( "1.jpg", 300, 500, 50, 50 );
+            var paper = new kity.Paper( document.body ),
+                filter = new kity.GaussianblurFilter(),
+                image = new kity.Image( "1.jpg", 300, 500, 50, 50 );
 
-                paper.addResource( filter );
-                image.applyFilter( filter );
+            paper.addResource( filter );
+            image.applyFilter( filter );
 
-                paper.addShape( image );
+            paper.addShape( image );
 
-            };
-
-
-        } );
-
-        seajs.use( "start" );
+        };
 
     </script>
 </head>
