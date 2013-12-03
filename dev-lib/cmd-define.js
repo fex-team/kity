@@ -2,79 +2,76 @@
  * cmd 内部定义
  */
 
-function use ( id ) {}
+// 模块存储
+var _modules = {};
 
-var define = ( function () {
+function define ( id, deps, factory ) {
 
-    var modules = {};
+    _modules[ id ] = {
 
-    function define ( id, deps, factory ) {
+        exports: {},
+        value: null,
+        factory: null
 
-        modules[ id ] = {
+    };
 
-            exports: {},
-            value: null,
-            factory: null
+    if ( arguments.length === 2 ) {
 
-        };
-
-        if ( arguments.length === 2 ) {
-
-            factory = deps;
-
-        }
-
-        if ( modules.toString.call( factory ) === '[object Object]' ) {
-
-            modules[ id ][ 'value' ] = factory;
-
-        } else if ( typeof factory === 'function' ) {
-
-            modules[ id ][ 'factory' ] = factory;
-
-        } else {
-
-            throw new Error( 'define函数未定义的行为' );
-
-        }
+        factory = deps;
 
     }
 
-    function require ( id ) {
+    if ( _modules.toString.call( factory ) === '[object Object]' ) {
 
-        var module = modules[ id ],
-            exports = null;
+        _modules[ id ][ 'value' ] = factory;
 
-        if ( !module ) {
+    } else if ( typeof factory === 'function' ) {
 
-            return null;
+        _modules[ id ][ 'factory' ] = factory;
 
-        }
+    } else {
 
-        if ( module.value ) {
+        throw new Error( 'define函数未定义的行为' );
 
-            return module.value;
+    }
 
-        }
+}
 
+function require ( id ) {
 
-        exports = module.factory.call( null, require, module.exports, module );
+    var module = _modules[ id ],
+        exports = null;
 
-        // return 值不为空， 则以return值为最终值
-        if ( exports ) {
+    if ( !module ) {
 
-            module.exports = exports;
+        return null;
 
-        }
+    }
 
-        module.value = module.exports;
+    if ( module.value ) {
 
         return module.value;
 
     }
 
-    use = require;
 
-    return define;
+    exports = module.factory.call( null, require, module.exports, module );
 
-} )();
+    // return 值不为空， 则以return值为最终值
+    if ( exports ) {
+
+        module.exports = exports;
+
+    }
+
+    module.value = module.exports;
+
+    return module.value;
+
+}
+
+function use ( id ) {
+
+    require.call( null, id );
+
+}
