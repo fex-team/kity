@@ -2,13 +2,7 @@
  * seajs 包裹
  */
 
-function define () {
-
-    _global_build_.define.apply( _global_build_, arguments );
-
-}
-
-define( 'start', function ( require, exports, module ) {
+define( 'kity.start', function ( require, exports, module ) {
 
     window.kity = {
 
@@ -19,4 +13,4 @@ define( 'start', function ( require, exports, module ) {
 
 } );
 
-_global_build_.seajs.use( 'start' );
+use( 'kity.start' );

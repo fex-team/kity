@@ -71,7 +71,7 @@ module.exports = function (grunt) {
                 },
 
                 files: {
-                    'dist/kitygraph.all.js': [ 'dev-lib/head.js', 'dev-lib/sea-debug.js', '.build_tmp/kitygraph-non.js', 'dev-lib/exports.js' ]
+                    'dist/kitygraph.all.js': [ 'dev-lib/cmd-define.js', '.build_tmp/kitygraph-non.js', 'dev-lib/exports.js' ]
                 }
 
             }
