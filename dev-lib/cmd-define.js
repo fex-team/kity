@@ -72,6 +72,6 @@ function require ( id ) {
 
 function use ( id ) {
 
-    require.call( null, id );
+    return require( id );
 
 }

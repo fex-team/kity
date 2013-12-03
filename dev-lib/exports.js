@@ -73,10 +73,10 @@
 
     } );
 
+    // build环境中才含有use
     try {
         use( 'kity.start' );
     } catch ( e ) {
-        global.seajs.use( 'kity.start' );
     }
 
 } )( this );
