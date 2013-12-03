@@ -2,29 +2,30 @@
 <html>
 <head>
     <title>Bezier Example</title>
+    <!-- 正式发布的时候， 只需替换掉相应的脚本文件即可 -->
+
+    <!-- dev 版本 示例所需脚本文件 start -->
     <script src="../dev-lib/sea.js"></script>
     <script>
         seajs.config({
             base: '../src'
         });
-        define('start', function (require) {
-            var Paper = require('graphic/paper');
-            var Bezier = require('graphic/bezier');
-            var BezierPoint = require('graphic/bezierpoint');
-            var Rect = require('graphic/rect');
-            var Group = require('graphic/group');
-            var Pen = require('graphic/pen');
-            var Color = require('graphic/color');
-            var Path = require('graphic/path');
-            var Rect = require('graphic/rect');
-            var Text = require('graphic/text');
+    </script>
+    <script src="../dev-lib/exports.js"></script>
+    <!-- dev 版本 示例所需脚本文件 end -->
 
-            var BezierViewer = require('core/class').createClass({
-                base: Group,
+    <!-- 正式版本 示例所需脚本文件 start -->
+    <!--<script src="../dist/kitygraph.all.min.js"></script>-->
+    <!-- 正式版本 示例所需脚本文件 end -->
+    <script>
+
+        window.onload = function () {
+            var BezierViewer = kity.createClass({
+                base: kity.Group,
                 constructor: function(bezier) {
                     this.callBase();
                     this.addShape(bezier);
-                    this.bezier = bezier.fill(new Color('red').set('a', .2));
+                    this.bezier = bezier.fill(new kity.Color('red').set('a', .2));
                     this.update();
                 },
                 update: function() {
@@ -32,13 +33,13 @@
                     if(this.group) {
                         this.group.remove();
                     }
-                    this.addShape(this.group = new Group().pipe(function() {
+                    this.addShape(this.group = new kity.Group().pipe(function() {
                         for(var i = 0; i < points.length; i++) {
                             var p = points[i], f, b;
                             f = p.getForward();
                             b = p.getBackward();
                             p = p.getVertex();
-                            this.addShape(new Path().pipe(function() {
+                            this.addShape(new kity.Path().pipe(function() {
                                 var d = this.getDrawer()
                                 d.moveTo(b.x, b.y);
                                 d.lineTo(p.x, p.y);
@@ -46,28 +47,28 @@
                                 this.fill('none');
                                 this.stroke('red');
                             }));
-                            this.addShape(new Rect(b.x - 3, b.y - 3, 6, 6).stroke('red').fill('white'));
-                            this.addShape(new Rect(f.x - 3, f.y - 3, 6, 6).stroke('red').fill('white'));
-                            this.addShape(new Rect(p.x - 3, p.y - 3, 6, 6).fill('red'));
+                            this.addShape(new kity.Rect(b.x - 3, b.y - 3, 6, 6).stroke('red').fill('white'));
+                            this.addShape(new kity.Rect(f.x - 3, f.y - 3, 6, 6).stroke('red').fill('white'));
+                            this.addShape(new kity.Rect(p.x - 3, p.y - 3, 6, 6).fill('red'));
                         }
                     }));
                 }
             });
 
-            var paper = new Paper(document.body);
+            var paper = new kity.Paper(document.body);
 
             paper.setWidth(600).setHeight(400);
-            var bezier = new Bezier().addPoints([
-                new BezierPoint(300, 150, false).setForward(350, 50).setBackward(250, 50),
-                new BezierPoint(450, 150).setForward(470, 200),
-                new BezierPoint(300, 350, false).setForward(200, 300).setBackward(400, 300),
-                new BezierPoint(150, 150).setBackward(130, 200),
-                new BezierPoint(300, 150, false).setForward(350, 50).setBackward(250, 50)
+            var bezier = new kity.Bezier().addPoints([
+                new kity.BezierPoint(300, 150, false).setForward(350, 50).setBackward(250, 50),
+                new kity.BezierPoint(450, 150).setForward(470, 200),
+                new kity.BezierPoint(300, 350, false).setForward(200, 300).setBackward(400, 300),
+                new kity.BezierPoint(150, 150).setBackward(130, 200),
+                new kity.BezierPoint(300, 150, false).setForward(350, 50).setBackward(250, 50)
             ]);
             paper.addShape(window.v = new BezierViewer(bezier));
             window.p = bezier.getPoint(1);
-        });
-        seajs.use('start');
+        };
+
     </script>
 </head>
 <body>

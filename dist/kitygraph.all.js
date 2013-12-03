@@ -4151,17 +4151,19 @@ define("graphic/vector", [ "core/class", "core/config" ], function(require, expo
 
     define( 'kity.start', function ( require ) {
 
-        var kity = global.kity = {
+        var kity = global.kity = require( 'core/class' );
+
+        require( 'core/utils' ).extend( kity, {
 
             // core
-            'Class': require( 'core/class' ),
+            Utils: require( "core/utils" ),
 
             // shape
             Bezier: require( 'graphic/bezier' ),
             BezierPoint: require( 'graphic/bezierpoint' ),
             Brush: require( 'graphic/brush' ),
             Circle: require( 'graphic/circle' ),
-            clip: require( 'graphic/clip' ),
+            Clip: require( 'graphic/clip' ),
             Color: require( 'graphic/color' ),
             ColorBrush: require( 'graphic/colorbrush' ),
             Curve: require( 'graphic/curve' ),
@@ -4212,7 +4214,7 @@ define("graphic/vector", [ "core/class", "core/config" ], function(require, expo
             GaussianblurEffect: require( 'filter/effect/gaussianblureffect' ),
             OffsetEffect: require( 'filter/effect/offseteffect' )
 
-        };
+        } );
 
     } );
 
@@ -4222,4 +4224,5 @@ define("graphic/vector", [ "core/class", "core/config" ], function(require, expo
         global.seajs.use( 'kity.start' );
     }
 
-} )( this );})();
+} )( this );
+})();
