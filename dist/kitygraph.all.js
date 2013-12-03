@@ -1476,6 +1476,7 @@ define("graphic/circle", [ "core/class", "core/config", "graphic/ellipse", "core
         },
         setRadius: function(radius) {
             this.rx = this.ry = this.radius = radius;
+            this.update();
         }
     });
 });
