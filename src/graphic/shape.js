@@ -61,13 +61,13 @@ define( function ( require, exports, module ) {
             };
         },
         getWidth: function () {
-            return this.getBoundaryBox().width;
+            return this.getRenderBox().width;
         },
         getHeight: function () {
-            return this.getBoundaryBox().height;
+            return this.getRenderBox().height;
         },
         getSize: function () {
-            var box = this.getBoundaryBox();
+            var box = this.getRenderBox();
             delete box.x;
             delete box.y;
             return box;
