@@ -3,23 +3,30 @@
 <head>
     <title>剪切示例</title>
     <meta charset="utf-8">
-    <script src="../dev-lib/sea-debug.js"></script>
+    <!-- 正式发布的时候， 只需替换掉相应的脚本文件即可 -->
+
+    <!-- dev 版本 示例所需脚本文件 start -->
+    <script src="../dev-lib/dev-define.js"></script>
     <script>
-        seajs.config( {
+        inc.config({
             base: '../src'
-        } );
+        });
+    </script>
+    <script src="../dev-lib/exports.js"></script>
+    <script src="../dev-lib/dev-start.js"></script>
+    <!-- dev 版本 示例所需脚本文件 end -->
 
-        define( 'start', function ( require ) {
+    <!-- 正式版本 示例所需脚本文件 start -->
+    <!--<script src="../dist/kitygraph.all.min.js"></script>-->
+    <!-- 正式版本 示例所需脚本文件 end -->
+    <script>
 
-            var Paper = require( "graphic/paper" ),
-                Rect = require( "graphic/rect" ),
-                Clip = require( "graphic/clip" ),
-                Circle = require( "graphic/circle" );
+        window.onload = function () {
 
-            var paper = new Paper( document.body ),
-                circle = new Circle( 200, 200, 100 ),
-                clip = new Clip(),
-                rect = new Rect( 100, 100, 200, 100 );
+            var paper = new kity.Paper( document.body ),
+                    circle = new kity.Circle( 200, 200, 100 ),
+                    clip = new kity.Clip(),
+                    rect = new kity.Rect( 100, 100, 200, 100 );
 
             paper.addShape( circle );
             circle.fill( "red" );
@@ -27,11 +34,10 @@
             paper.addResource( clip );
             circle.clipWith( clip );
 
-        } );
-
-        seajs.use( 'start' );
+        };
 
     </script>
+
 </head>
 <body>
 

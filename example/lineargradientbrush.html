@@ -1,23 +1,33 @@
-'<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <title>LinearGradientBrush Example</title>
-    <script src="../dev-lib/sea.js"></script>
+    <!-- 正式发布的时候， 只需替换掉相应的脚本文件即可 -->
+
+    <!-- dev 版本 示例所需脚本文件 start -->
+    <script src="../dev-lib/dev-define.js"></script>
     <script>
-        seajs.config({
+        inc.config({
             base: '../src'
         });
-        define('start', function (require) {
-            var Paper = require('graphic/paper');
-            var Rect = require('graphic/rect');
-            var LinearGradientBrush = require('graphic/lineargradientbrush');
+    </script>
+    <script src="../dev-lib/exports.js"></script>
+    <script src="../dev-lib/dev-start.js"></script>
+    <!-- dev 版本 示例所需脚本文件 end -->
 
-            var paper = new Paper(document.body);
+    <!-- 正式版本 示例所需脚本文件 start -->
+    <!--<script src="../dist/kitygraph.all.min.js"></script>-->
+    <!-- 正式版本 示例所需脚本文件 end -->
+    <script>
+
+        window.onload = function () {
+
+            var paper = new kity.Paper(document.body);
 
             paper.setWidth(400).setHeight(300);
 
-            var rect = new Rect(10, 10, 200, 100);
-            rect.fill(new LinearGradientBrush().pipe( function() {
+            var rect = new kity.Rect(10, 10, 200, 100);
+            rect.fill(new kity.LinearGradientBrush().pipe( function() {
                 this.addStop(0, 'red');
                 this.addStop(1, 'blue', 0.5);
                 this.setStartPosition(0, 0);
@@ -25,8 +35,9 @@
                 paper.addResource(this);
             }));
             paper.addShape(rect);
-        });
-        seajs.use('start');
+
+        };
+
     </script>
 </head>
 <body>

@@ -66,7 +66,7 @@ module.exports = function (grunt) {
                         ' */\n\n' +
                         '(function () {\n',
 
-                    footer: '}).call({});'
+                    footer: '})();'
 
                 },
 

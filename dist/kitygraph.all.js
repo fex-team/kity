@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kitygraph - v1.0.0 - 2013-12-03
+ * kitygraph - v1.0.0 - 2013-12-04
  * https://github.com/kitygraph/kitygraph
  * GitHub: https://github.com/kitygraph/kitygraph.git 
  * Copyright (c) 2013 Baidu UEditor Group; Licensed MIT
@@ -12,82 +12,79 @@
  * cmd 内部定义
  */
 
-function use ( id ) {}
+// 模块存储
+var _modules = {};
 
-var define = ( function () {
+function define ( id, deps, factory ) {
 
-    var modules = {};
+    _modules[ id ] = {
 
-    function define ( id, deps, factory ) {
+        exports: {},
+        value: null,
+        factory: null
 
-        modules[ id ] = {
+    };
 
-            exports: {},
-            value: null,
-            factory: null
+    if ( arguments.length === 2 ) {
 
-        };
-
-        if ( arguments.length === 2 ) {
-
-            factory = deps;
-
-        }
-
-        if ( modules.toString.call( factory ) === '[object Object]' ) {
-
-            modules[ id ][ 'value' ] = factory;
-
-        } else if ( typeof factory === 'function' ) {
-
-            modules[ id ][ 'factory' ] = factory;
-
-        } else {
-
-            throw new Error( 'define函数未定义的行为' );
-
-        }
+        factory = deps;
 
     }
 
-    function require ( id ) {
+    if ( _modules.toString.call( factory ) === '[object Object]' ) {
 
-        var module = modules[ id ],
-            exports = null;
+        _modules[ id ][ 'value' ] = factory;
 
-        if ( !module ) {
+    } else if ( typeof factory === 'function' ) {
 
-            return null;
+        _modules[ id ][ 'factory' ] = factory;
 
-        }
+    } else {
 
-        if ( module.value ) {
+        throw new Error( 'define函数未定义的行为' );
 
-            return module.value;
+    }
 
-        }
+}
 
+function require ( id ) {
 
-        exports = module.factory.call( null, require, module.exports, module );
+    var module = _modules[ id ],
+        exports = null;
 
-        // return 值不为空， 则以return值为最终值
-        if ( exports ) {
+    if ( !module ) {
 
-            module.exports = exports;
+        return null;
 
-        }
+    }
 
-        module.value = module.exports;
+    if ( module.value ) {
 
         return module.value;
 
     }
 
-    use = require;
 
-    return define;
+    exports = module.factory.call( null, require, module.exports, module );
 
-} )();
+    // return 值不为空， 则以return值为最终值
+    if ( exports ) {
+
+        module.exports = exports;
+
+    }
+
+    module.value = module.exports;
+
+    return module.value;
+
+}
+
+function use ( id ) {
+
+    return require( id );
+
+}
 define("animate/animator", [ "animate/timeline", "graphic/color", "graphic/matrix", "core/eventhandler", "core/class", "animate/easing", "core/config", "graphic/shape", "graphic/svg", "core/utils", "graphic/paper", "graphic/eventhandler", "graphic/styled", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
     function parseTime(str) {
         var value = parseFloat(str, 10);
@@ -1485,6 +1482,7 @@ define("graphic/circle", [ "core/class", "core/config", "graphic/ellipse", "core
         },
         setRadius: function(radius) {
             this.rx = this.ry = this.radius = radius;
+            this.update();
         }
     });
 });
@@ -3488,13 +3486,13 @@ define("graphic/shape", [ "graphic/svg", "core/utils", "graphic/paper", "core/cl
             };
         },
         getWidth: function() {
-            return this.getBoundaryBox().width;
+            return this.getRenderBox().width;
         },
         getHeight: function() {
-            return this.getBoundaryBox().height;
+            return this.getRenderBox().height;
         },
         getSize: function() {
-            var box = this.getBoundaryBox();
+            var box = this.getRenderBox();
             delete box.x;
             delete box.y;
             return box;
@@ -4153,19 +4151,85 @@ define("graphic/vector", [ "core/class", "core/config" ], function(require, expo
 });
 
 /**
- * seajs 包裹
+ * 模块暴露
  */
 
-define( 'kity.start', function ( require, exports, module ) {
+( function ( global ) {
 
-    window.kity = {
+    define( 'kity.start', function ( require ) {
 
-        Rect: require( 'graphic/rect' ),
-        Paper: require( 'graphic/paper' )
+        var kity = global.kity = require( 'core/class' );
 
-    };
+        require( 'core/utils' ).extend( kity, {
 
-} );
+            // core
+            Utils: require( "core/utils" ),
 
-use( 'kity.start' );
-}).call({});
+            // shape
+            Bezier: require( 'graphic/bezier' ),
+            BezierPoint: require( 'graphic/bezierpoint' ),
+            Brush: require( 'graphic/brush' ),
+            Circle: require( 'graphic/circle' ),
+            Clip: require( 'graphic/clip' ),
+            Color: require( 'graphic/color' ),
+            ColorBrush: require( 'graphic/colorbrush' ),
+            Curve: require( 'graphic/curve' ),
+            Ellipse: require( 'graphic/ellipse' ),
+            GradientBrush: require( 'graphic/gradientbrush' ),
+            Group: require( 'graphic/group' ),
+            Image: require( 'graphic/image' ),
+            Line: require( 'graphic/line' ),
+            LinearGradientBrush: require( 'graphic/lineargradientbrush' ),
+            Mask: require( 'graphic/mask' ),
+            Matrix: require( 'graphic/matrix' ),
+            Palette: require( 'graphic/palette' ),
+            Paper: require( 'graphic/paper' ),
+            Path: require( 'graphic/path' ),
+            PatternBrush: require( 'graphic/patternbrush' ),
+            Pen: require( 'graphic/pen' ),
+            Point: require( 'graphic/point' ),
+            Polygon: require( 'graphic/polygon' ),
+            Polyline: require( 'graphic/polyline' ),
+            RadialGradientBrush: require( 'graphic/radialgradientbrush' ),
+            Rect: require( 'graphic/rect' ),
+            Shape: require( 'graphic/shape' ),
+            ShapePoint: require( 'graphic/shapepoint' ),
+            Text: require( 'graphic/text' ),
+            TextSpan: require( 'graphic/textspan' ),
+            Use: require( 'graphic/use' ),
+            Vector: require( 'graphic/vector' ),
+
+            // animate
+            Animator: require( 'animate/animator' ),
+            Easing: require( 'animate/easing' ),
+            OpacityAnimator: require( 'animate/opacityanimator' ),
+            RotateAnimator: require( 'animate/rotateanimator' ),
+            ScaleAnimator: require( 'animate/scaleanimator' ),
+            Timeline: require( 'animate/timeline' ),
+            TranslateAnimator: require( 'animate/translateanimator' ),
+
+            // filter
+            Filter: require( 'filter/filter' ),
+            GaussianblurFilter: require( 'filter/gaussianblurfilter' ),
+            ProjectionFilter: require( 'filter/projectionfilter' ),
+
+            // effect
+            ColorMatrixEffect: require( 'filter/effect/colormatrixeffect' ),
+            CompositeEffect: require( 'filter/effect/compositeeffect' ),
+            ConvolveMatrixEffect: require( 'filter/effect/convolvematrixeffect' ),
+            Effect: require( 'filter/effect/effect' ),
+            GaussianblurEffect: require( 'filter/effect/gaussianblureffect' ),
+            OffsetEffect: require( 'filter/effect/offseteffect' )
+
+        } );
+
+    } );
+
+    // build环境中才含有use
+    try {
+        use( 'kity.start' );
+    } catch ( e ) {
+    }
+
+} )( this );
+})();

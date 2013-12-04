@@ -2,41 +2,46 @@
 <html>
 <head>
     <title>Pen Example</title>
-    <script src="../dev-lib/sea.js"></script>
+    <!-- 正式发布的时候， 只需替换掉相应的脚本文件即可 -->
+
+    <!-- dev 版本 示例所需脚本文件 start -->
+    <script src="../dev-lib/dev-define.js"></script>
     <script>
-        seajs.config({
+        inc.config({
             base: '../src'
         });
-        define('start', function (require) {
-            var Paper = require('graphic/paper');
-            var Curve = require('graphic/curve');
-            var Rect = require('graphic/rect');
-            var Group = require('graphic/group');
-            var Pen = require('graphic/pen');
-            var ShapePoint = require('graphic/shapepoint');
-            var Text = require('graphic/text');
+    </script>
+    <script src="../dev-lib/exports.js"></script>
+    <script src="../dev-lib/dev-start.js"></script>
+    <!-- dev 版本 示例所需脚本文件 end -->
 
-            var paper = new Paper(document.body);
+    <!-- 正式版本 示例所需脚本文件 start -->
+    <!--<script src="../dist/kitygraph.all.min.js"></script>-->
+    <!-- 正式版本 示例所需脚本文件 end -->
+    <script>
+        window.onload = function () {
+
+            var paper = new kity.Paper(document.body);
 
             paper.setWidth(600).setHeight(400);
 
-            var Curve2 = require('core/class').createClass({
-                base: Group,
+            var Curve2 = kity.createClass({
+                base: kity.Group,
                 constructor: function(x, y, s) {
                     this.callBase();
                     var points = [ 
-                        new ShapePoint(15, 100), 
-                        new ShapePoint(105, 10),
-                        new ShapePoint(195, 190),
-                        new ShapePoint(285, 100)
+                        new kity.ShapePoint(15, 100),
+                        new kity.ShapePoint(105, 10),
+                        new kity.ShapePoint(195, 190),
+                        new kity.ShapePoint(285, 100)
                     ];
-                    var curve = new Curve(points).fill('none').stroke('black').setSmoothFactor(s);
+                    var curve = new kity.Curve(points).fill('none').stroke('black').setSmoothFactor(s);
                     this.addShape(curve);
                     for(var i = 0; i < points.length; i++) {
                         var p = points[i];
-                        this.addShape(new Rect(p.getX() - 3, p.getY() - 3, 6, 6).fill('red'));
+                        this.addShape(new kity.Rect(p.getX() - 3, p.getY() - 3, 6, 6).fill('red'));
                     }
-                    this.addShape(new Text('k = ' + s).setX(180).setY(50).fill('blue'));
+                    this.addShape(new kity.Text('k = ' + s).setX(180).setY(50).fill('blue'));
                     this.scale(0.8).translate(x, y);
                 }
             });
@@ -47,8 +52,8 @@
                 new Curve2(0, 200, 1),
                 new Curve2(300, 200, 5)
             ]);
-        });
-        seajs.use('start');
+        };
+
     </script>
 </head>
 <body>

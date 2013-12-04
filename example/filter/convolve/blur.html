@@ -9,23 +9,32 @@
             height: 700px;
         }
     </style>
-    <script src="../../../dev-lib/sea.js"></script>
+
+    <!-- 正式发布的时候， 只需替换掉相应的脚本文件即可 -->
+
+    <!-- dev 版本 示例所需脚本文件 start -->
+    <script src="../../../dev-lib/dev-define.js"></script>
     <script>
-        seajs.config( {
-            base: "../../../src"
-        } );
+        inc.config({
+            base: '../../../src'
+        });
+    </script>
+    <script src="../../../dev-lib/exports.js"></script>
+    <script src="../../../dev-lib/dev-start.js"></script>
+    <!-- dev 版本 示例所需脚本文件 end -->
 
-        define( "start", function (require) {
+    <!-- 正式版本 示例所需脚本文件 start -->
+    <!--<script src="../../../dist/kitygraph.all.min.js"></script>-->
+    <!-- 正式版本 示例所需脚本文件 end -->
 
-            var Paper = require( "graphic/paper" ),
-                    Image = require( "graphic/image" ),
-                    ConvolveMatrixEffect = require( "filter/effect/convolvematrixeffect" ),
-                    Filter = require( "filter/filter" );
+    <script>
 
-            var paper = new Paper( "container" ),
-                    effect = new ConvolveMatrixEffect(),
-                    filter = new Filter(),
-                    image = new Image( "../1.jpg", 300, 500, 50, 50 );
+        window.onload = function () {
+
+            var paper = new kity.Paper( "container" ),
+                    effect = new kity.ConvolveMatrixEffect(),
+                    filter = new kity.Filter(),
+                    image = new kity.Image( "../1.jpg", 300, 500, 50, 50 );
 
             // 模糊效果
             effect.set( 'kernelMatrix', '1 1 1 1 1 1 1 1 1' );
@@ -38,9 +47,7 @@
             paper.addShape( image );
 
 
-        } );
-
-        seajs.use( "start" );
+        };
 
     </script>
 </head>

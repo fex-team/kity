@@ -2,41 +2,52 @@
 <html>
 <head>
     <title>Transform Example</title>
-    <script src="../dev-lib/sea.js"></script>
+
+    <!-- 正式发布的时候， 只需替换掉相应的脚本文件即可 -->
+
+    <!-- dev 版本 示例所需脚本文件 start -->
+    <script src="../dev-lib/dev-define.js"></script>
     <script>
-        seajs.config({
+        inc.config({
             base: '../src'
         });
-        define('start', function (require) {
-            var Paper = require('graphic/paper');
-            var Rect = require('graphic/rect');
-            var Path = require('graphic/path');
-            var Pen = require('graphic/pen');
-            var Matrix = require('graphic/matrix');
+    </script>
+    <script src="../dev-lib/exports.js"></script>
+    <script src="../dev-lib/dev-start.js"></script>
+    <!-- dev 版本 示例所需脚本文件 end -->
 
-            var paper = new Paper(document.body);
+    <!-- 正式版本 示例所需脚本文件 start -->
+    <!--<script src="../dist/kitygraph.all.min.js"></script>-->
+    <!-- 正式版本 示例所需脚本文件 end -->
+
+    <script>
+
+        window.onload = function () {
+
+            var paper = new kity.Paper(document.body);
             paper.setViewBox(-300, -200, 600, 400);
 
             paper.setWidth(600).setHeight(400);
 
-            paper.addShape(new Path().pipe(function() {
+            paper.addShape(new kity.Path().pipe(function() {
                 var d = this.getDrawer();
                 d.moveTo(-300, 0).lineTo(300, 0);
                 d.moveTo(0, -200).lineTo(0, 200);
                 this.stroke('gray');
             }));
 
-            r = new Path('M0 0 L 150 0 0 50 Z').stroke(new Pen().pipe(function() {
+            r = new kity.Path('M0 0 L 150 0 0 50 Z').stroke(new kity.Pen().pipe(function() {
                 this.setColor('hsl(0, 60%, 50%)');
                 this.setWidth(1);
                 this.setDashArray([5, 5]);
             })).fill('hsla(0, 50%, 80%, .5)');
 
-            t = new Path('M0 0 L 150 0 0 50 Z').stroke('red').fill('hsla(0, 50%, 80%, .5)').setTransform(new Matrix(0, 1, 1, 0, 0, 0));
+            t = new kity.Path('M0 0 L 150 0 0 50 Z').stroke('red').fill('hsla(0, 50%, 80%, .5)').setTransform(new kity.Matrix(0, 1, 1, 0, 0, 0));
             paper.addShape(r);
             paper.addShape(t);
-        });
-        seajs.use('start');
+
+        };
+
     </script>
 </head>
 <body>
