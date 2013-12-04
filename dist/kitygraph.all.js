@@ -88,7 +88,7 @@ var define = ( function () {
     return define;
 
 } )();
-define("animate/animator", [ "animate/timeline", "animate/easing", "graphic/color", "graphic/matrix", "core/eventhandler", "core/class", "core/config", "graphic/shape", "graphic/svg", "core/utils", "graphic/paper", "graphic/eventhandler", "graphic/styled", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
+define("animate/animator", [ "animate/timeline", "graphic/color", "graphic/matrix", "core/eventhandler", "core/class", "animate/easing", "core/config", "graphic/shape", "graphic/svg", "core/utils", "graphic/paper", "graphic/eventhandler", "graphic/styled", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
     function parseTime(str) {
         var value = parseFloat(str, 10);
         if (/ms/.test(str)) {
@@ -103,6 +103,7 @@ define("animate/animator", [ "animate/timeline", "animate/easing", "graphic/colo
         return value;
     }
     var Timeline = require("animate/timeline");
+    var easingTable = require("animate/easing");
     var Animator = require("core/class").createClass("Animator", {
         constructor: function(beginValue, finishValue, setter) {
             if (arguments.length == 1) {
@@ -136,6 +137,9 @@ define("animate/animator", [ "animate/timeline", "animate/easing", "graphic/colo
             var timeline;
             duration = duration && parseTime(duration) || Animator.DEFAULT_DURATION;
             easing = easing || Animator.DEFAULT_EASING;
+            if (typeof easing == "string") {
+                easing = easingTable[easing];
+            }
             timeline = new Timeline(this, target, duration, easing);
             if (typeof callback == "function") {
                 timeline.on("finish", callback);
@@ -353,7 +357,7 @@ define("animate/easing", [], function(require, exports, module) {
     };
     return easings;
 });
-define("animate/opacityanimator", [ "animate/animator", "animate/timeline", "core/class", "graphic/shape", "graphic/matrix", "core/utils", "core/config", "graphic/svg", "graphic/paper", "graphic/eventhandler", "graphic/styled", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
+define("animate/opacityanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/matrix", "core/utils", "core/config", "graphic/svg", "graphic/paper", "graphic/eventhandler", "graphic/styled", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
     var Animator = require("animate/animator");
     var Matrix = require("graphic/matrix");
     var OpacityAnimator = require("core/class").createClass("OpacityAnimator", {
@@ -387,7 +391,7 @@ define("animate/opacityanimator", [ "animate/animator", "animate/timeline", "cor
     });
     return OpacityAnimator;
 });
-define("animate/rotateanimator", [ "animate/animator", "animate/timeline", "core/class", "graphic/shape", "graphic/matrix", "core/utils", "core/config", "graphic/svg", "graphic/paper", "graphic/eventhandler", "graphic/styled", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
+define("animate/rotateanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/matrix", "core/utils", "core/config", "graphic/svg", "graphic/paper", "graphic/eventhandler", "graphic/styled", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
     var Animator = require("animate/animator");
     var Matrix = require("graphic/matrix");
     var RotateAnimator = require("core/class").createClass("RotateAnimator", {
@@ -414,7 +418,7 @@ define("animate/rotateanimator", [ "animate/animator", "animate/timeline", "core
     });
     return RotateAnimator;
 });
-define("animate/scaleanimator", [ "animate/animator", "animate/timeline", "core/class", "graphic/shape", "graphic/matrix", "core/utils", "core/config", "graphic/svg", "graphic/paper", "graphic/eventhandler", "graphic/styled", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
+define("animate/scaleanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/matrix", "core/utils", "core/config", "graphic/svg", "graphic/paper", "graphic/eventhandler", "graphic/styled", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
     var Animator = require("animate/animator");
     var Matrix = require("graphic/matrix");
     var ScaleAnimator = require("core/class").createClass("ScaleAnimator", {
@@ -443,8 +447,7 @@ define("animate/scaleanimator", [ "animate/animator", "animate/timeline", "core/
     });
     return ScaleAnimator;
 });
-define("animate/timeline", [ "animate/easing", "graphic/color", "core/utils", "graphic/standardcolor", "core/class", "graphic/matrix", "core/eventhandler", "core/config" ], function(require, exports, module) {
-    var easingTable = require("animate/easing");
+define("animate/timeline", [ "graphic/color", "core/utils", "graphic/standardcolor", "core/class", "graphic/matrix", "core/eventhandler", "core/config" ], function(require, exports, module) {
     var Color = require("graphic/color");
     var Matrix = require("graphic/matrix");
     var EventHandler = require("core/eventhandler");
@@ -498,7 +501,7 @@ define("animate/timeline", [ "animate/easing", "graphic/color", "core/utils", "g
             this.time = 0;
             this.duration = duration;
             this.target = target;
-            this.easing = easingTable[easing];
+            this.easing = easing;
             this.status = "ready";
             this.animator = animator;
             this.beginVal = animator.beginVal;
@@ -620,6 +623,9 @@ define("animate/timeline", [ "animate/easing", "graphic/color", "core/utils", "g
             this.fire("stop", new TimelineEvent(this, "stop"));
             return this;
         },
+        reset: function() {
+            this.setValue(this.beginVal);
+        },
         timeUp: function() {
             if (this.repeatOption) {
                 this.time = 0;
@@ -661,7 +667,7 @@ define("animate/timeline", [ "animate/easing", "graphic/color", "core/utils", "g
     });
     return Timeline;
 });
-define("animate/translateanimator", [ "animate/animator", "animate/timeline", "core/class", "graphic/shape", "graphic/matrix", "core/utils", "core/config", "graphic/svg", "graphic/paper", "graphic/eventhandler", "graphic/styled", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
+define("animate/translateanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/matrix", "core/utils", "core/config", "graphic/svg", "graphic/paper", "graphic/eventhandler", "graphic/styled", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
     var Animator = require("animate/animator");
     var Matrix = require("graphic/matrix");
     var TranslateAnimator = require("core/class").createClass("TranslateAnimator", {
