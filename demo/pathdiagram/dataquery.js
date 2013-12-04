@@ -62,6 +62,23 @@ define( function ( require, exports, module ) {
             ret.word = ret.seq[0];
             return ret;
         },
+        search: function( keyword ) {
+            var result = [], ret;
+            for ( var i = 0; i < length; i++ ) {
+                if ( data[ i ].length === 0 && data[i].seq[0].indexOf(keyword) != -1 ) {
+                    result.push( data[i] );
+                }
+            }
+            if(!result.length) {
+                return this.random();
+            }
+            result.sort(function(a, b) {
+                return b.uv - a.uv;
+            });
+            ret = result[0];
+            ret.word = ret.seq[0];
+            return ret;
+        },
         upstream: function ( path ) {
             var upstream = [];
             for ( var i = 0; i < length; i++ ) {

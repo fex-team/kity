@@ -17,5 +17,7 @@ define(function (require, exports, module) {
     paper.setWidth(1200).setHeight(800);
     paper.setViewBox(-600, -400, 1200, 800);
 
-    paper.addShape(new PathDiagram());
+    var keyword = /q=(.+)/.exec(window.location.href);
+    keyword = keyword && keyword[1];
+    paper.addShape(new PathDiagram(keyword));
 });

@@ -20,7 +20,7 @@ define( function ( require, exports, module ) {
 
     var PathDiagram = Class.createClass( {
         base: Group,
-        constructor: function () {
+        constructor: function ( keyword ) {
             this.callBase();
             this.levels = [
                 new LevelContainer( -2 ),
@@ -33,7 +33,7 @@ define( function ( require, exports, module ) {
             this.tailLevel = 0;
             this.render();
             this.bind();
-            this.showLevelM();
+            this.showKeyword(keyword);
         },
         render: function () {
             for ( var name in this.levels ) {
@@ -44,8 +44,8 @@ define( function ( require, exports, module ) {
         getLevelContainer: function ( level ) {
             return this.levels[ level + 2 ];
         },
-        showLevelM: function () {
-            this.currentPath = Query.random();
+        showKeyword: function (keyword) {
+            this.currentPath = keyword ? Query.search(keyword) : Query.random();
             this.getLevelContainer(0).render( [ this.currentPath ], -R_SIZE.width / 2, 0 );
             setTimeout( function() {
                 this.getLevelContainer(0).select(0);
@@ -161,9 +161,6 @@ define( function ( require, exports, module ) {
                     connection.stroke( colors.get( 'connect-stroke' ), 1 ).fill( 'none' );
                 }
             }
-        },
-        renderUp: function ( parent ) {
-
         }
     } );
 
