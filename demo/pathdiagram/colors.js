@@ -4,7 +4,7 @@ define( function ( require, exports, module ) {
     var colors = new Palette();
 
     colors.add( 'node-stroke', '#ccc' );
-    colors.add( 'node-stroke-active', 'hsl(200, 50, 60)' );
+    colors.add( 'node-stroke-active', 'hsl(200, 60, 40)' );
     colors.add( 'node-fill', 'white' );
     colors.add( 'node-fill-active', 'hsl(200, 50, 80)' );
     colors.add( 'text', 'black' );

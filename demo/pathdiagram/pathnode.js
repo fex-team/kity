@@ -7,7 +7,7 @@ define( function ( require, exports, module ) {
 
     return require( 'core/class' ).createClass( {
         base: Group,
-        constructor: function ( x, y, width, height, data ) {
+        constructor: function ( x, y, width, height, data, bold ) {
             this.callBase();
             this.data = data;
             this.rect = new Rect( x, y, width, height, 5 );
@@ -23,6 +23,7 @@ define( function ( require, exports, module ) {
             this.addShape( this.text );
             this.unselect();
             this.setStyle( 'cursor', 'pointer' );
+            this.bold = bold;
         },
         unselect: function () {
             this.rect.fill( colors.get( 'node-fill' ) );
@@ -30,7 +31,7 @@ define( function ( require, exports, module ) {
         },
         select: function () {
             this.rect.fill( colors.get( 'node-fill-active' ) );
-            this.rect.stroke( colors.get( 'node-stroke-active' ) );
+            this.rect.stroke( colors.get( 'node-stroke-active' ), this.bold ? 3 : 1 );
         }
     } );
 } );

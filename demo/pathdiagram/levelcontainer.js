@@ -34,7 +34,7 @@ define( function ( require, exports, module ) {
 
             for(i = 0, y = yStart; i < stream.length; i++, y += rHeight + rMargin) {
                 data = stream[ i ];
-                node = new PathNode( x, y, rWidth, rHeight, data );
+                node = new PathNode( x, y, rWidth, rHeight, data, this.level === 0 );
                 this.addShape( node );
                 node.on('click', this.onNodeClick.bind(this));
             }
