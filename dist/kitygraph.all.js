@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kitygraph - v1.0.0 - 2013-12-03
+ * kitygraph - v1.0.0 - 2013-12-04
  * https://github.com/kitygraph/kitygraph
  * GitHub: https://github.com/kitygraph/kitygraph.git 
  * Copyright (c) 2013 Baidu UEditor Group; Licensed MIT
@@ -82,7 +82,7 @@ function require ( id ) {
 
 function use ( id ) {
 
-    require.call( null, id );
+    return require( id );
 
 }
 define("animate/animator", [ "animate/timeline", "animate/easing", "graphic/color", "graphic/matrix", "core/eventhandler", "core/class", "core/config", "graphic/shape", "graphic/svg", "core/utils", "graphic/paper", "graphic/eventhandler", "graphic/styled", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
@@ -1476,6 +1476,7 @@ define("graphic/circle", [ "core/class", "core/config", "graphic/ellipse", "core
         },
         setRadius: function(radius) {
             this.rx = this.ry = this.radius = radius;
+            this.update();
         }
     });
 });
@@ -4218,10 +4219,10 @@ define("graphic/vector", [ "core/class", "core/config" ], function(require, expo
 
     } );
 
+    // build环境中才含有use
     try {
         use( 'kity.start' );
     } catch ( e ) {
-        global.seajs.use( 'kity.start' );
     }
 
 } )( this );
