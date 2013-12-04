@@ -1,6 +1,5 @@
 define( function ( require, exports, module ) {
 
-    var easingTable = require( 'animate/easing' );
     var Color = require( 'graphic/color' );
     var Matrix = require( 'graphic/matrix' );
     var EventHandler = require( 'core/eventhandler' );
@@ -67,7 +66,7 @@ define( function ( require, exports, module ) {
             this.time = 0;
             this.duration = duration;
             this.target = target;
-            this.easing = easingTable[ easing ];
+            this.easing = easing;
             this.status = 'ready';
             this.animator = animator;
             this.beginVal = animator.beginVal;
@@ -200,6 +199,9 @@ define( function ( require, exports, module ) {
             this.rollbacking = false;
             this.fire( 'stop', new TimelineEvent( this, 'stop' ) );
             return this;
+        },
+        reset: function() {
+            this.setValue( this.beginVal );
         },
         timeUp: function () {
             if ( this.repeatOption ) {
