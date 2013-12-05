@@ -7,7 +7,6 @@ define( function ( require, exports, module ) {
     var EventHandler = require( 'graphic/eventhandler' );
     var Styled = require( 'graphic/styled' );
     var Matrix = require( 'graphic/matrix' );
-    var Path = require( 'graphic/path' );
 
     return createClass( 'Paper', {
 
@@ -140,7 +139,7 @@ define( function ( require, exports, module ) {
 
             // 对路径移除默认的 fill 和 stroke
             // 这样被 use 之后可以重新填充和描边
-            if ( resource instanceof Path ) {
+            if ( resource instanceof require( 'graphic/path' ) ) {
                 if( resource.node.getAttribute('fill') == 'none' ) {
                     resource.node.removeAttribute('fill');
                 }

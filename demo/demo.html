@@ -2,25 +2,31 @@
 <html>
 <head>
     <title></title>
-    <script src="../dev-lib/sea.js"></script>
-    <script>
+    <meta charset="utf-8">
 
-        seajs.config({
+    <!-- 正式发布的时候， 只需替换掉相应的脚本文件即可 -->
+
+    <!-- dev 版本 示例所需脚本文件 start -->
+    <script src="../dev-lib/dev-define.js"></script>
+    <script>
+        inc.config({
             base: '../src'
         });
-        define('start', function (require){
-            var Draggable = require('../demo/public/draggable');
-            var Paper = require('graphic/paper');
-            var Path =  require('graphic/path');
-            var Circle =  require('graphic/circle');
-            var Pen = require('graphic/pen');
-            var Color = require('graphic/color');
-            var Group =   require('graphic/group');
-            var Text = require('graphic/text');
-            var paper = new Paper(document.body);
-            var GroupDraggable = require('core/class').createClass({
-                base: Group,
-                mixins: [Draggable],
+    </script>
+    <script src="../dev-lib/exports.js"></script>
+    <script src="../dev-lib/dev-start.js"></script>
+    <!-- dev 版本 示例所需脚本文件 end -->
+
+    <!-- 正式版本 示例所需脚本文件 start -->
+    <!--<script src="../dist/kitygraph.all.min.js"></script>-->
+    <!-- 正式版本 示例所需脚本文件 end -->
+    <script>
+        window.onload = function () {
+//            var Draggable = require('../demo/public/draggable');
+            var paper = new kity.Paper(document.body);
+            var GroupDraggable = kity.createClass({
+                base: kity.Group,
+//                mixins: [Draggable],
                 dragStart:function(){
                     this.getItem(0).fill(this.getItem(0).colorMove).stroke(this.getItem(0).penMove);
                 },
@@ -32,18 +38,20 @@
             paper.addShapes([
                 new GroupDraggable().setStyle('cursor','pointer')
                         .addItem(
-                                new Circle(200, 200, 60).pipe(function () {
-                                    this.color = Color.parse('#66FFCC').set('a', 0.6);
-                                    this.colorMove= Color.parse('#66FFCC').set('a', 0.3);
-                                    this.pen = new Pen(Color.parse('#33CCCC').set('a', 0.6), 4);
-                                    this.penMove = new Pen(Color.parse('#33CCCC').set('a', 0.3), 8);
-                                    this.colorOn = Color.parse('#00CCCC').set('a', 0.6);
-                                    this.penOn = new Pen(Color.parse('#99FF00').set('a', 0.6), 8);
+                                new kity.Circle(200, 200, 60).pipe(function () {
+                                    this.color = kity.Color.parse('#66FFCC').set('a', 0.6);
+                                    this.colorMove= kity.Color.parse('#66FFCC').set('a', 0.3);
+                                    this.pen = new kity.Pen(kity.Color.parse('#33CCCC').set('a', 0.6), 4);
+                                    this.penMove = new kity.Pen(kity.Color.parse('#33CCCC').set('a', 0.3), 8);
+                                    this.colorOn = kity.Color.parse('#00CCCC').set('a', 0.6);
+                                    this.penOn = new kity.Pen(kity.Color.parse('#99FF00').set('a', 0.6), 8);
                                     this.fill(this.color);
                                     this.stroke(this.pen);
                                 })).addItem(
-                                new Text('circle').setX(175).setY(205).fill(Color.parse('#003300')))
-                        .setId('circle').drag().addEventListener('mousewheel', function (e) {
+                                new kity.Text('circle').setX(175).setY(205).fill(kity.Color.parse('#003300')))
+                        .setId('circle')
+//                        .drag()
+                        .addEventListener('mousewheel', function (e) {
                             var r = this.getItem(0).getRadius();
                             if (e.originEvent.wheelDeltaY > 0 && r < 180) {
                                 this.getItem(0).setRadius(r + 12);
@@ -58,8 +66,7 @@
                             this.getItem(0).fill(this.getItem(0).color).stroke(this.getItem(0).pen);
                         })
             ]);
-        });
-        seajs.use('start');
+        };
     </script>
 </head>
 <body>
