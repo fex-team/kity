@@ -1,7 +1,7 @@
 define(function (require, exports, module) {
     var Container = require('graphic/container');
 
-    return require('core/class').createClass('ShapeContainer', {
+    var ShapeContainer = require('core/class').createClass('ShapeContainer', {
         base: Container,
 
         /* protected override */
@@ -16,27 +16,26 @@ define(function (require, exports, module) {
             }
         },
 
-        /* private */
-        onAddShapes: function(shapes) {
+        handleAdd: function(shape, index) {
             var parent = this.getShapeNode();
-            for(var i = 0; i < shapes.length; i++) {
-                parent.appendChild(shapes[i].node);
-                shapes[i].trigger('add', { container: this } );
-            }
+            parent.insertBefore(shape.node, parent.childNodes[index] || null);
+            shape.trigger('add', { container: this } );
         },
 
-        /* private */
-        onRemoveShapes: function(shapes) {
+        handleRemove: function(shape, index) {
             var parent = this.getShapeNode();
-            for(var i = 0; i < shapes.length; i++) {
-                parent.removeChild(shapes[i].node);
-                shapes[i].trigger('remove', { container: this } );
-            }
+            parent.removeChild(shape.node);
+            shape.trigger('remove', { container: this } );
         },
 
         /* public */
-        addShape: function (shape, pos) {
-            return this.addItem(shape, pos);
+        getShape: function(index) {
+            return this.getItem(index);
+        },
+
+        /* public */
+        addShape: function (shape, index) {
+            return this.addItem(shape, index);
         },
 
         /* public */
@@ -45,8 +44,8 @@ define(function (require, exports, module) {
         },
 
         /* public */
-        removeShape: function (pos) {
-            return this.removeItem(pos);
+        removeShape: function (index) {
+            return this.removeItem(index);
         },
 
         getShapes: function() {
@@ -58,9 +57,57 @@ define(function (require, exports, module) {
             return this.getShapeNode().getElementById(id).shape;
         },
 
+        bringTo: function(shape, index) {
+            return this.removeShape(shape).addShape(shape, index);
+        },
+
+        bringFront: function(shape) {
+            return this.bringTo(shape, this.indexOf(shape) + 1);
+        },
+
+        bringBack: function(shape) {
+            return this.bringTo(shape, this.indexOf(shape) - 1);
+        },
+
+        bringTop: function(shape) {
+            return this.removeShape(shape).addShape(shape);
+        },
+
+        bringRear: function(shape) {
+            return this.removeShape(shape).addShape(shape, 0);
+        },
+
         /* protected */
         getShapeNode: function () {
             return this.shapeNode || this.node; // 最佳可能
         }
     });
+
+    var Shape = require('graphic/shape');
+
+    require('core/class').extendClass(Shape, {
+        bringTo: function(index) {
+            this.container.bringTo(this, index);
+            return this;
+        },
+        bringFront: function() {
+            this.container.bringFront(this);
+            return this;
+        },
+        bringBack: function() {
+            this.container.bringBack(this);
+            return this;
+        },
+        bringTop: function() {
+            this.container.bringTop(this);
+            return this;
+        },
+        bringRear: function() {
+            this.container.bringRear(this);
+            return this;
+        }
+    });
+
+    return ShapeContainer;
+
 });
