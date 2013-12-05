@@ -45,9 +45,10 @@ define( function ( require, exports, module ) {
                 [ b.x + b.width, b.y + b.height ]
             ];
             var matrix = this.getTransform().getMatrix();
-            var bp, rp;
+            var bp, rp, rps;
             while ( ( bp = bps.pop() ) ) {
                 rp = Matrix.transformPoint( bp[ 0 ], bp[ 1 ], matrix );
+                rps.push( rp );
                 xMin = Math.min( xMin, rp.x );
                 xMax = Math.max( xMax, rp.x );
                 yMin = Math.min( yMin, rp.y );
@@ -57,7 +58,8 @@ define( function ( require, exports, module ) {
                 x: xMin,
                 y: yMin,
                 width: xMax - xMin,
-                height: yMax - yMin
+                height: yMax - yMin,
+                closurePoints: rps
             };
         },
         getWidth: function () {
