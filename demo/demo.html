@@ -41,7 +41,6 @@
                                     this.penOn = new Pen(Color.parse('#99FF00').set('a', 0.6), 8);
                                     this.fill(this.color);
                                     this.stroke(this.pen);
-
                                 })).addItem(
                                 new Text('circle').setX(175).setY(205).fill(Color.parse('#003300')))
                         .setId('circle').drag().addEventListener('mousewheel', function (e) {
@@ -52,6 +51,8 @@
                                 this.getItem(0).setRadius(r - 12);
                             }
                         }).addEventListener('mouseover', function (e) {
+                            paper.removeShape(this);
+                            paper.addShape(this);
                                 this.getItem(0).fill(this.getItem(0).colorOn).stroke(this.getItem(0).penOn);
                         }).addEventListener('mouseleave', function (e) {
                             this.getItem(0).fill(this.getItem(0).color).stroke(this.getItem(0).pen);
