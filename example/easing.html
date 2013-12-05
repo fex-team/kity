@@ -13,77 +13,113 @@
             var Path = require('graphic/path');
             var Color = require('graphic/color');
             var Text = require('graphic/text');
-            var Draggable = require('../demo/public/draggable');
+            var Matrix = require('graphic/matrix');
+            var Animator = require('animate/animator');
             var easingTable = require('animate/easing');
 
-            require('core/class').extendClass(Paper, Draggable);
+            var YMarker = require('core/class').createClass({
+                base: Path,
+                constructor: function( x, w, h ) {
+                    this.callBase();
+                    this.draw( x, w, h );
+                },
+                draw: function( x, w, h ) {
+                    var drawer = this.getDrawer();
+                    var hh = h / 2;
+                    drawer.moveTo( x, 0 );
+                    drawer.lineTo( x + hh, hh );
+                    drawer.lineTo( x + w, hh );
+                    drawer.lineTo( x + w, -hh );
+                    drawer.lineTo( x + hh, -hh );
+                    drawer.close();
+                },
+                mark: function( y ) {
+                    this.setTransform(new Matrix().translate(0, y));
+                }
+            });
 
-            var paper = new Paper(document.body);
-            paper.setViewBox(0, 0, 1000, 500).drag();
+            var MarkerAnimator = require('core/class').createClass({
+                base: Animator,
+                constructor: function( beginValue, finishValue ) {
+                    this.callBase( beginValue, finishValue, function( marker, value ) {
+                        marker.mark( value );
+                    } );
+                }
+            });
 
             var EasingGraph = require('core/class').createClass({
-                base: Group,
-                constructor: function( name, easing, x, y ) {
-                    this.callBase();
-                    this.name = name;
-                    this.easing = easing;
-                    this.draw();
-                    x = x || 0;
-                    y = y || 0;
-                    this.translate(x, y + 150);
+                base: Paper,
+                constructor: function( container, easing ) {
+                    this.callBase(container);
+                    this.setViewBox(0, 0, 200, 120);
+
+                    var x = [0, 150], y = [30, 90];
+                    this.draw( easing, x, y );
+                    this.bind( easing, x, y );
                 },
-                draw: function() {
-                    this.drawCoordinate();
-                    this.drawEasingCurve();
-                    this.drawName();
-                },
-                drawCoordinate: function() {
-                    this.addShape(new Path().pipe(function(){
+                draw: function( easing, x, y ) {
+                    this.coordinate = new Group().setAnchor(0, 60).scale(1, -1); // flip over y-alix
+                    this.coordinate.addShape(new Path().pipe(function() {
                         var d = this.getDrawer();
-                        // x-alix
-                        d.moveTo(0, 0).lineTo(120, 0);
-                        // x-alix-marker
-                        d.moveTo(115, 5).lineTo(120, 0).lineTo(115, -5);
-                        // y-alix
-                        d.moveTo(0, 0).lineTo(0, -120);
-                        // y-alix-marker
-                        d.moveTo(5, -115).lineTo(0, -120).lineTo(-5, -115);
-                        // range-rect
-                        d.moveTo(0, -100).lineTo(100, -100).lineTo(100, 0);
-                        this.fill('none');
-                        this.stroke('gray');
+                        d.moveTo(x[0], y[0]).lineTo(x[1], y[0]);
+                        d.moveTo(x[0], y[1]).lineTo(x[1], y[1]);
+                        this.fill('none')
+                        this.stroke('#CCC')
                     }));
-                    this.addShape(new Text('time').setX(130).setY(6).setSize(14).fill('black'));
-                    this.addShape(new Text('value').setAnchor('middle').setX(0).setY(-130).setSize(14).fill('black'));
-                },
-                drawEasingCurve: function() {
-                    var easing = this.easing;
-                    this.addShape(new Path().pipe(function() {
+                    this.coordinate.addShape(new Path().pipe(function() {
                         var d = this.getDrawer();
-                        d.moveTo(0, 0);
-                        for(var t = 0; t <= 100; t+=1) {
-                            d.lineTo(t, -easing(t, 0, 100, 100));
+                        d.moveTo(x[0], y[0]);
+                        for(var t = x[0]; t <= x[1]; t += 1) {
+                            d.lineTo(t, easing(t, y[0], y[1] - y[0], x[1] - x[0]));
                         }
                         this.fill('none');
                         this.stroke('red');
                     }));
+                    this.addShape(this.coordinate);
                 },
-                drawName: function() {
-                    this.addShape(new Text(this.name).setSize(14).setX(50).setY(24).setAnchor('middle').fill('blue'));
+                bind: function( easing, x, y ) {
+                    var marker = new YMarker( x[1] + 5, 25, 10 );
+                    marker.mark( y[0] );
+                    this.coordinate.addShape( marker );
+                    marker.fill('none');
+
+                    var animator = new MarkerAnimator( y[0], y[1] );
+                    var timeline = animator.create( marker, 1000, easing );
+                    var animateTimeout;
+
+                    this.on('mouseover', function() {
+                        marker.fill('red');
+                        timeline.play();
+                    });
+
+                    this.on('mouseout', function() {
+                        marker.fill('none');
+                        timeline.stop();
+                        timeline.reset();
+                    });
                 }
             });
             
-            var index = 0, x, y;
             for(var name in easingTable) {
-                x = 200 * (index % 5) + 25;
-                y = 200 * Math.floor(index / 5);
-                paper.addShape(new EasingGraph(name, easingTable[name], x, y));
-                index ++;
+                var div = document.createElement('div');
+                var graph = new EasingGraph( div, easingTable[name] );
+                graph.setWidth(200);
+                graph.setHeight(120);
+                document.body.appendChild(div);
+                div.appendChild(document.createTextNode(name));
             }
             
         });
         seajs.use('start');
     </script>
+    <style>
+        div {
+            width: 200px;
+            height: 150px;
+            float: left;
+            color: blue;
+        }
+    </style>
 </head>
 <body>
     

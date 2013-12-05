@@ -15,6 +15,7 @@ define( function ( require, exports, module ) {
     }
 
     var Timeline = require( 'animate/timeline' );
+    var easingTable = require( 'animate/easing' );
 
     var Animator = require( 'core/class' ).createClass( 'Animator', {
 
@@ -53,6 +54,10 @@ define( function ( require, exports, module ) {
 
             duration = duration && parseTime( duration ) || Animator.DEFAULT_DURATION;
             easing = easing || Animator.DEFAULT_EASING;
+
+            if( typeof(easing) == 'string' ) {
+                easing = easingTable[easing];
+            }
 
             timeline = new Timeline( this, target, duration, easing );
 

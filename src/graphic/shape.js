@@ -4,12 +4,13 @@ define( function ( require, exports, module ) {
     var Paper = require( 'graphic/paper' );
     var EventHandler = require( 'graphic/eventhandler' );
     var Styled = require( 'graphic/styled' );
+    var Data = require( 'graphic/data' );
     var Matrix = require( 'graphic/matrix' );
     var Pen = require( 'graphic/pen' );
     var Brush = require( 'graphic/brush' );
 
     return require( 'core/class' ).createClass( 'Shape', {
-        mixins: [ EventHandler, Styled ],
+        mixins: [ EventHandler, Styled, Data ],
         constructor: function ( tagName ) {
             this.node = svg.createNode( tagName );
             this.node.shape = this;
@@ -24,9 +25,6 @@ define( function ( require, exports, module ) {
         },
         getNode: function () {
             return this.node;
-        },
-        getType: function () {
-            throw new Error( "abstract method called" );
         },
         getBoundaryBox: function () {
             var box = this.node.getBBox();
@@ -45,9 +43,10 @@ define( function ( require, exports, module ) {
                 [ b.x + b.width, b.y + b.height ]
             ];
             var matrix = this.getTransform().getMatrix();
-            var bp, rp;
+            var bp, rp, rps;
             while ( ( bp = bps.pop() ) ) {
                 rp = Matrix.transformPoint( bp[ 0 ], bp[ 1 ], matrix );
+                rps.push( rp );
                 xMin = Math.min( xMin, rp.x );
                 xMax = Math.max( xMax, rp.x );
                 yMin = Math.min( yMin, rp.y );
@@ -57,17 +56,18 @@ define( function ( require, exports, module ) {
                 x: xMin,
                 y: yMin,
                 width: xMax - xMin,
-                height: yMax - yMin
+                height: yMax - yMin,
+                closurePoints: rps
             };
         },
         getWidth: function () {
-            return this.getBoundaryBox().width;
+            return this.getRenderBox().width;
         },
         getHeight: function () {
-            return this.getBoundaryBox().height;
+            return this.getRenderBox().height;
         },
         getSize: function () {
-            var box = this.getBoundaryBox();
+            var box = this.getRenderBox();
             delete box.x;
             delete box.y;
             return box;

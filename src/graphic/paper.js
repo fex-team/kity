@@ -7,6 +7,8 @@ define( function ( require, exports, module ) {
     var EventHandler = require( 'graphic/eventhandler' );
     var Styled = require( 'graphic/styled' );
     var Matrix = require( 'graphic/matrix' );
+    var Path = require( 'graphic/path' );
+
     return createClass( 'Paper', {
 
         mixins: [ ShapeContainer, EventHandler, Styled ],
@@ -134,6 +136,17 @@ define( function ( require, exports, module ) {
             this.resources.appendItem( resource );
             if ( resource.node ) {
                 this.resourceNode.appendChild( resource.node );
+            }
+
+            // 对路径移除默认的 fill 和 stroke
+            // 这样被 use 之后可以重新填充和描边
+            if ( resource instanceof Path ) {
+                if( resource.node.getAttribute('fill') == 'none' ) {
+                    resource.node.removeAttribute('fill');
+                }
+                if( resource.node.getAttribute('stroke') == 'none' ) {
+                    resource.node.removeAttribute('stroke');
+                }
             }
             return this;
         },
