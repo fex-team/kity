@@ -4,12 +4,13 @@ define( function ( require, exports, module ) {
     var Paper = require( 'graphic/paper' );
     var EventHandler = require( 'graphic/eventhandler' );
     var Styled = require( 'graphic/styled' );
+    var Data = require( 'graphic/data' );
     var Matrix = require( 'graphic/matrix' );
     var Pen = require( 'graphic/pen' );
     var Brush = require( 'graphic/brush' );
 
     return require( 'core/class' ).createClass( 'Shape', {
-        mixins: [ EventHandler, Styled ],
+        mixins: [ EventHandler, Styled, Data ],
         constructor: function ( tagName ) {
             this.node = svg.createNode( tagName );
             this.node.shape = this;
@@ -24,9 +25,6 @@ define( function ( require, exports, module ) {
         },
         getNode: function () {
             return this.node;
-        },
-        getType: function () {
-            throw new Error( "abstract method called" );
         },
         getBoundaryBox: function () {
             var box = this.node.getBBox();
