@@ -143,7 +143,6 @@ define( function ( require, exports, module ) {
                 return;
             }
 
-
             //移除指定的监听器
             if ( typeof handler === 'function' ) {
 
@@ -151,7 +150,6 @@ define( function ( require, exports, module ) {
 
                     if ( fn === handler ) {
                         delete handlerList[ index ];
-                        return false;
                     } else if ( !!fn ) {
                         needRemove = false;
                     }
