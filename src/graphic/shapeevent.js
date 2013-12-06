@@ -11,11 +11,22 @@ define( function ( require, exprots, module ) {
 
         constructor: function ( event ) {
 
+            var target = null;
+
             // dom 事件封装对象
-            if ( event.target.nodeType ) {
+            if ( !Utils.isObject( event.target ) ) {
+
+                target = event.target;
+
+                // use标签有特殊属性， 需要区别对待
+                if ( target.correspondingUseElement ) {
+
+                    target = target.correspondingUseElement;
+
+                }
 
                 this.originEvent = event;
-                this.targetShape = event.target.shape || event.target.paper;
+                this.targetShape = target.shape || target.paper;
 
                 if ( event.__kity_param ) {
 

@@ -69,7 +69,6 @@ define( function ( require, exports, module ) {
                 };
 
                 dragTarget.on( DRAG_START_EVENT, dragTarget._dragStartHandler = function ( e ) {
-                    
                     if ( e.originEvent.button ) {
                         return;
                     }
