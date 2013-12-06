@@ -4,9 +4,10 @@
 
 define( function ( require, exports, module ) {
 
-    var svg = require( "graphic/svg");
+    var svg = require( "graphic/svg" );
+    var Class = require( 'core/class' );
 
-    return require( 'core/class' ).createClass( "Filter", {
+    var Filter = Class.createClass( "Filter", {
 
         mixins: [ require( "filter/effectcontainer" ) ],
 
@@ -14,11 +15,18 @@ define( function ( require, exports, module ) {
 
             this.node = svg.createNode( 'filter' );
 
-            x !== undefined && this.set( 'x', x );
-            y !== undefined && this.set( 'y', y );
-            width !== undefined && this.set( 'width', width );
-            height !== undefined && this.set( 'height', height );
-
+            if ( x !== undefined ) {
+                this.set( 'x', x );
+            }
+            if ( y !== undefined ) {
+                this.set( 'y', y );
+            }
+            if ( width !== undefined ) {
+                this.set( 'width', width );
+            }
+            if ( height !== undefined ) {
+                this.set( 'height', height );
+            }
         },
 
         getId: function () {
@@ -56,5 +64,19 @@ define( function ( require, exports, module ) {
         }
 
     } );
+    
+    var Shape = require('graphic/shape');
 
+    Class.extendClass(Shape, {
+        applyFilter: function( filter ) {
+            var filterId = filter.get( 'id' );
+
+            if ( filterId ) {
+                this.node.setAttribute( "filter", 'url(#' + filterId + ')' );
+            }
+            return this;
+        }
+    });
+
+    return Filter;
 } );
