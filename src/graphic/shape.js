@@ -1,7 +1,6 @@
 define( function ( require, exports, module ) {
     var svg = require( 'graphic/svg' );
     var utils = require( 'core/utils' );
-    var Paper = require( 'graphic/paper' );
     var EventHandler = require( 'graphic/eventhandler' );
     var Styled = require( 'graphic/styled' );
     var Data = require( 'graphic/data' );
@@ -174,13 +173,6 @@ define( function ( require, exports, module ) {
             }
             return this;
         },
-        getPaper: function () {
-            var paper = this.container;
-            while ( paper && !( paper instanceof Paper ) ) {
-                paper = paper.container;
-            }
-            return paper;
-        },
         clipWith: function ( clip ) {
             clip.clip( this );
             return this;
@@ -188,18 +180,6 @@ define( function ( require, exports, module ) {
         maskWith: function ( mask ) {
             mask.mask( this );
             return this;
-        },
-        getPaperPromise: function ( fn ) {
-            var me = this;
-
-            function loadPaper() {
-                var paper = me.getPaper();
-                if ( !paper ) {
-                    return setTimeout( loadPaper, 100 );
-                }
-                fn( paper );
-            }
-            loadPaper();
         }
     } );
 } );
