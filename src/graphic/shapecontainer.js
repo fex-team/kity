@@ -4,28 +4,34 @@ define(function (require, exports, module) {
     var ShapeContainer = require('core/class').createClass('ShapeContainer', {
         base: Container,
 
-        /* protected override */
-        onContainerChanged: function(type, shapes) {
-            switch(type) {
-                case 'add':
-                    this.onAddShapes( shapes );
-                    break;
-                case 'remove':
-                    this.onRemoveShapes( shapes );
-                    break;
-            }
-        },
-
+        /* private */
         handleAdd: function(shape, index) {
             var parent = this.getShapeNode();
             parent.insertBefore(shape.node, parent.childNodes[index] || null);
             shape.trigger('add', { container: this } );
+            if(shape instanceof ShapeContainer) {
+                shape.notifyTreeModification( 'treeadd', this );
+            }
         },
 
+        /* private */
         handleRemove: function(shape, index) {
             var parent = this.getShapeNode();
             parent.removeChild(shape.node);
             shape.trigger('remove', { container: this } );
+            if(shape instanceof ShapeContainer) {
+                shape.notifyTreeModification( 'treeremove', this );
+            }
+        },
+
+        /* private */
+        notifyTreeModification: function( type, container ) {
+            this.eachItem(function(index, shape) {
+                if(shape instanceof ShapeContainer) {
+                    shape.notifyTreeModification( type, container );
+                }
+                shape.trigger(type, { container: container });
+            });
         },
 
         /* public */
