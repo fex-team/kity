@@ -2,7 +2,7 @@ define( function ( require, exports, module ) {
 
     var Color = require( 'graphic/color' );
     var Matrix = require( 'graphic/matrix' );
-    var EventHandler = require( 'core/eventhandler' );
+    var EventHandler = require( 'graphic/eventhandler' );
 
 
     var requestAnimationFrame = window.requestAnimationFrame ||

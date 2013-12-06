@@ -1,5 +1,5 @@
-/**
- * Created by hn on 13-12-6.
+/*
+ * kity event 实现
  */
 define( function ( require, exports, module ) {
 
@@ -117,6 +117,7 @@ define( function ( require, exports, module ) {
 
                     }
 
+                    // 如果用户handler里return了false， 则该节点上的此后的同类型事件将不再执行
                     return result;
 
                 }, targetObject );
@@ -141,10 +142,6 @@ define( function ( require, exports, module ) {
             if ( !!node ) {
 
                 bindDomEvent( node, type, INNER_HANDLER_CACHE[ eid ][ type ] );
-
-            } else {
-
-                alert(3)
 
             }
 
@@ -171,6 +168,7 @@ define( function ( require, exports, module ) {
 
     }
 
+    // 删除dom事件
     function deleteDomEvent ( node, type, handler ) {
 
         if ( node.removeEventListener ) {
@@ -182,6 +180,50 @@ define( function ( require, exports, module ) {
             node.detachEvent( type, handler );
 
         }
+
+    }
+
+    // 触发dom事件
+    function triggerDomEvent ( node, type, params ) {
+
+        var event = new CustomEvent( type, {
+                bubbles: true,
+                cancelable: true
+            } );
+
+        event.__kity_param = params;
+
+        node.dispatchEvent( event );
+
+    }
+
+    // 发送消息
+    function sendMessage ( messageObj, type, msg ) {
+
+        var event = null,
+            handler = null;
+
+        try {
+
+            handler = INNER_HANDLER_CACHE[ messageObj._EVNET_UID ][ type ];
+
+            if ( !handler ) {
+                return;
+            }
+
+        } catch ( exception ) {
+
+            return;
+
+        }
+
+        event = Utils.extend( {
+            type: type,
+            target: messageObj
+        }, msg || {} );
+
+
+        handler.call( messageObj, event );
 
     }
 
@@ -230,20 +272,21 @@ define( function ( require, exports, module ) {
 
         },
 
-        trigger: function ( type, params ) {
+        fire: function ( type, params ) {
 
-            var event = null;
+            return this.trigger.apply( this, arguments );
+
+        },
+
+        trigger: function ( type, params ) {
 
             if ( this.node ) {
 
-                event = new CustomEvent( type, {
-                    bubbles: true,
-                    cancelable: true
-                } );
+                triggerDomEvent( this.node, type, params );
 
-                event.__kity_param = params;
+            } else {
 
-                this.node.dispatchEvent( event );
+                sendMessage( this, type, params );
 
             }
 
