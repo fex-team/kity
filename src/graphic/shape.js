@@ -42,7 +42,7 @@ define( function ( require, exports, module ) {
                 [ b.x + b.width, b.y + b.height ]
             ];
             var matrix = this.getTransform().getMatrix();
-            var bp, rp, rps;
+            var bp, rp, rps = [];
             while ( ( bp = bps.pop() ) ) {
                 rp = Matrix.transformPoint( bp[ 0 ], bp[ 1 ], matrix );
                 rps.push( rp );

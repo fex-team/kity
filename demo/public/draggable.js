@@ -114,10 +114,12 @@ define( function ( require, exports, module ) {
 
             if ( me instanceof Paper ) {
                 bindEvents( me );
+            } else if (me.getPaper()) {
+                bindEvents( me.getPaper() );
             } else {
                 me.on('add treeadd', function(e) {
-                    if(e.container instanceof Paper) {
-                        bindEvents(e.container);
+                    if(e.targetShape.getPaper()) {
+                        bindEvents(e.targetShape.getPaper());
                     }
                 });
             }

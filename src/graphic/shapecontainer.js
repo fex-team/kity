@@ -9,7 +9,7 @@ define(function (require, exports, module) {
             var parent = this.getShapeNode();
             parent.insertBefore(shape.node, parent.childNodes[index] || null);
             shape.trigger('add', { container: this } );
-            if(shape instanceof ShapeContainer) {
+            if(shape.notifyTreeModification) {
                 shape.notifyTreeModification( 'treeadd', this );
             }
         },
@@ -19,7 +19,7 @@ define(function (require, exports, module) {
             var parent = this.getShapeNode();
             parent.removeChild(shape.node);
             shape.trigger('remove', { container: this } );
-            if(shape instanceof ShapeContainer) {
+            if(shape.notifyTreeModification) {
                 shape.notifyTreeModification( 'treeremove', this );
             }
         },
