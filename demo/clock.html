@@ -2,65 +2,59 @@
 <html>
 <head>
     <title>A Kity Clock</title>
-    <script src="../dev-lib/sea.js"></script>
-    <script>
+    <!-- 正式发布的时候， 只需替换掉相应的脚本文件即可 -->
 
-        seajs.config({
+    <!-- dev 版本 示例所需脚本文件 start -->
+    <script src="../dev-lib/dev-define.js"></script>
+    <script>
+        inc.config({
             base: '../src'
         });
-        define('start', function (require) {
-            var Path = require('graphic/path');
-            var Paper = require('graphic/paper');
-            var Color = require('graphic/color');
-            var LinearGradientBrush = require('graphic/lineargradientbrush');
-            var RadialGradientBrush = require('graphic/radialgradientbrush');
-            var PatternBrush = require('graphic/patternbrush');
-            var Text = require('graphic/text');
-            var TextSpan = require('graphic/textspan');
-            var Matrix = require('graphic/matrix');
-            var Pen = require('graphic/pen');
-            var Rect = require('graphic/rect');
-            var Circle = require('graphic/circle');
-            var Palette = require('graphic/palette');
-            var Group = require('graphic/group');
-            var Vector = require('graphic/vector');
-            var Clazz = require('core/class');
+    </script>
+    <script src="../dev-lib/exports.js"></script>
+    <script src="../dev-lib/dev-start.js"></script>
+    <!-- dev 版本 示例所需脚本文件 end -->
 
-            var paper = new Paper('clock').pipe(function() {
+    <!-- 正式版本 示例所需脚本文件 start -->
+    <!--<script src="../dist/kitygraph.all.min.js"></script>-->
+    <!-- 正式版本 示例所需脚本文件 end -->
+    <script>
+
+        
+        window.onload = function (require) {
+
+            var paper = new kity.Paper('clock').pipe(function() {
                 this.setWidth('100%').setHeight('100%');
                 this.setViewBox(-600, -600, 1200, 1200);
             });
 
-            var palette = new Palette().pipe(function() {
-                var gray = new Color('gray');
+            var palette = new kity.Palette().pipe(function() {
+                var gray = new kity.Color('gray');
                 this.add('outside', gray.dec('l', 20));
                 this.add('inside', gray.inc('l', 20));
                 this.add('big-ruler', gray.dec('l', 40));
                 this.add('small-ruler', gray.dec('l', 20));
                 this.add('h-pointer', gray.dec('l', 50));
                 this.add('m-pointer', gray.dec('l', 20));
-                this.add('s-pointer', new Color('hsl(0, 75, 50)'));
-                this.add('frame-light', new Color('white').dec('l', 5));
+                this.add('s-pointer', new kity.Color('hsl(0, 75, 50)'));
+                this.add('frame-light', new kity.Color('white').dec('l', 5));
                 this.add('frame-dark', gray.dec('l', 10));
             });
 
-            paper.addShape(new Circle(0, 0, 500).pipe(function(){
-                this.fill(new LinearGradientBrush().pipe(function() {
+            paper.addShape(new kity.Circle(0, 0, 500).pipe(function(){
+                this.fill(new kity.LinearGradientBrush().pipe(function() {
                     this.addStop(0, palette.get('frame-dark'));
                     this.addStop(0.4, palette.get('frame-light'));
                     this.addStop(0.6, palette.get('frame-light'));
                     this.addStop(1, palette.get('frame-dark'));
                     paper.addResource(this);
                 }));
-                this.stroke(new Pen().pipe(function(pen) {
-                    pen.setWidth(1);
-                    pen.setColor(palette.get('outside'));
-                }));
+                this.stroke( palette.get('outside') );
                 this.rotate(30);
             }));
 
-            paper.addShape(new Circle(0, 0, 465).pipe(function(){
-                this.fill(new LinearGradientBrush().pipe(function() {
+            paper.addShape(new kity.Circle(0, 0, 465).pipe(function(){
+                this.fill(new kity.LinearGradientBrush().pipe(function() {
                     this.addStop(0, palette.get('frame-light'));
                     this.addStop(0.4, palette.get('frame-dark'));
                     this.addStop(0.6, palette.get('frame-dark'));
@@ -71,30 +65,27 @@
             }));
 
             // 表盘
-            paper.addShape(new Circle(0, 0, 450).pipe(function() {
-                this.stroke(new Pen().pipe(function(pen) {
-                    pen.setWidth(8);
-                    pen.setColor(palette.get('inside'));
-                }));
-                this.fill(new RadialGradientBrush().pipe(function(brush){
+            paper.addShape(new kity.Circle(0, 0, 450).pipe(function() {
+                this.stroke(palette.get('inside'), 8);
+                this.fill(new kity.RadialGradientBrush().pipe(function(brush){
                     paper.addResource(brush);
                     brush.setFocal(0.8, 0.2);
                     brush.setRadius(0.6);
-                    brush.addStop(0, new Color('white'));
-                    brush.addStop(1, new Color('hsl(0, 0, 80)'));
+                    brush.addStop(0, new kity.Color('white'));
+                    brush.addStop(1, new kity.Color('hsl(0, 0, 80)'));
                 }));
             }));
 
             // 刻度
-            paper.addShape(new Group().pipe(function() {
+            paper.addShape(new kity.Group().pipe(function() {
                 var minutes = 60, stepDeg = 360 / minutes;
                 var deg = 90, distance = 390, step = 0;
                 while(step < minutes) {
                     var rect;
                     if(!(step % 5)) {
-                        rect = new Rect(390, -5, 50, 10).fill(palette.get('big-ruler'));
+                        rect = new kity.Rect(390, -5, 50, 10).fill(palette.get('big-ruler'));
                     } else {
-                        rect = new Rect(410, -3, 25, 6).fill(palette.get('small-ruler'));
+                        rect = new kity.Rect(410, -3, 25, 6).fill(palette.get('small-ruler'));
                     }
                     this.addShape(rect.rotate(deg));
                     deg += stepDeg;
@@ -102,12 +93,12 @@
                 }
             }));
 
-            paper.addShape(new Text().pipe(function() {
-                this.addSpan(new TextSpan('Hello ').fill(new Color('blue').set('s', 40)));
-                this.addSpan(new TextSpan(' Kity').fill(new Color('red').set('s', 40)));
-                this.setPath(new Path().pipe(function() {
+            paper.addShape(new kity.Text().pipe(function() {
+                this.addSpan(new kity.TextSpan('Hello ').fill(new kity.Color('blue').set('s', 40)));
+                this.addSpan(new kity.TextSpan(' Kity').fill(new kity.Color('red').set('s', 40)));
+                this.setPath(new kity.Path().pipe(function() {
                     var radius = 280;
-                    var start = Vector.fromPolar(radius, -120), end = Vector.fromPolar(radius, -60);
+                    var start = kity.Vector.fromPolar(radius, -120), end = kity.Vector.fromPolar(radius, -60);
                     var d = this.getDrawer();
                     d.moveTo(start.x, start.y).carcTo(radius, end.x, end.y, 0, 1);
                     paper.addResource(this);
@@ -116,8 +107,8 @@
                 this.setAnchor('middle');
             }));
 
-            var Pointer = Clazz.createClass('Pointer', {
-                base: Path,
+            var Pointer = kity.createClass('Pointer', {
+                base: kity.Path,
                 constructor: function( headWidth, tailWidth, length, offset, color ) {
                     this.callBase();
                     this.draw( headWidth, tailWidth, length, offset );
@@ -141,39 +132,33 @@
             mPointer = new Pointer( 20, 10, 400, 80, palette.get('m-pointer') );
             sPointer = new Pointer( 10, 5, 450, 90, palette.get('s-pointer') );
 
-            pointers = new Group().pipe(function(){
+            pointers = new kity.Group().pipe(function(){
                 this.rotate(-90);
                 this.addShape(hPointer);
                 this.addShape(mPointer);
                 this.addShape(sPointer); 
             });
 
-            var msPointer = new Pointer( 10, 2, 80, 0, new Color('gray'));
-            var msMeter = new Group().pipe(function() {
-                this.addShape(new Circle(0, 0, 90).pipe(function() {
-                    this.stroke(new Pen().pipe(function(pen) {
-                        pen.setWidth(5);
-                        pen.setColor(palette.get('inside'));
-                    }));
+            var msPointer = new Pointer( 10, 2, 80, 0, new kity.Color('gray'));
+            var msMeter = new kity.Group().pipe(function() {
+                this.addShape(new kity.Circle(0, 0, 90).pipe(function() {
+                    this.stroke(palette.get('inside'), 5);
                 }));
                 this.addShape(msPointer);
-                this.addShape(new Circle(0, 0, 8).fill(new Color('gray')));
+                this.addShape(new kity.Circle(0, 0, 8).fill(new kity.Color('gray')));
                 this.rotate(-90);
                 this.translate(0, 250);
             });
 
-            var mmPointer = new Pointer( 4, 1, 40, 0, new Color('gray'));
-            var mmMeter = new Group().pipe(function() {
-                this.addShape(new Circle(0, 0, 50).pipe(function() {
-                    this.stroke(new Pen().pipe(function(pen) {
-                        pen.setWidth(3);
-                        pen.setColor(palette.get('inside'));
-                    }));
+            var mmPointer = new Pointer( 4, 1, 40, 0, new kity.Color('gray'));
+            var mmMeter = new kity.Group().pipe(function() {
+                this.addShape(new kity.Circle(0, 0, 50).pipe(function() {
+                    this.stroke(palette.get('inside'), 3);
                 }));
                 this.addShape(mmPointer);
-                this.addShape(new Circle(0, 0, 6).fill(new Color('gray')));
+                this.addShape(new kity.Circle(0, 0, 6).fill(new kity.Color('gray')));
                 this.rotate(90);
-                var pos = Vector.fromPolar(250, 50);
+                var pos = kity.Vector.fromPolar(250, 50);
                 this.translate(pos.x, pos.y);
             });
 
@@ -190,16 +175,15 @@
                     mm = time % 500;
                 m += s / 60;
                 h += m / 60;
-                sPointer.setTransform(new Matrix().rotate(s * 6));
-                mPointer.setTransform(new Matrix().rotate(m * 6));
-                hPointer.setTransform(new Matrix().rotate(h * 30));
-                msPointer.setTransform(new Matrix().rotate(ms * 360 / 1000));
-                mmPointer.setTransform(new Matrix().rotate(mm * 360 / 500));
+                sPointer.setTransform(new kity.Matrix().rotate(s * 6));
+                mPointer.setTransform(new kity.Matrix().rotate(m * 6));
+                hPointer.setTransform(new kity.Matrix().rotate(h * 30));
+                msPointer.setTransform(new kity.Matrix().rotate(ms * 360 / 1000));
+                mmPointer.setTransform(new kity.Matrix().rotate(mm * 360 / 500));
                 requestAnimationFrame(updatePointers);
             }
             updatePointers();
-        });
-        seajs.use('start');
+        };
     </script>
     <style>
         body, div, html {
