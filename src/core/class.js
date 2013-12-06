@@ -98,6 +98,13 @@ define( function ( require, exports ) {
         }
     }
 
+    function checkMixinConstructorCall( targetClass, classname ) {
+        var code = targetClass.toString();
+        if ( !/this\.callMixin/.test( code ) ) {
+            throw new Error( classname + ' : 类构造函数没有调用父类的构造函数！为了安全，请调用父类的构造函数' );
+        }
+    }
+
     var KITY_INHERIT_FLAG = '__KITY_INHERIT_FLAG_' + (+new Date());
 
     function inherit( constructor, BaseClass ) {
