@@ -106,7 +106,7 @@ define( function ( require, exports, module ) {
 
                     if ( fn ) {
 
-                        result = fn.apply( targetObject, [ e ].concat( e.__kity_param || [] ) );
+                        result = fn.call( targetObject, e );
 
                         //once 绑定， 执行完后删除
                         if ( isOnce ) {
@@ -241,7 +241,7 @@ define( function ( require, exports, module ) {
                     cancelable: true
                 } );
 
-                event.__kity_param = [].slice.call( arguments, 1 );
+                event.__kity_param = params;
 
                 this.node.dispatchEvent( event );
 
