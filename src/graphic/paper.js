@@ -153,5 +153,16 @@ define( function ( require, exports, module ) {
             return this;
         }
     } );
+    
+    var Shape = require('graphic/shape');
+    Class.extendClass(Shape, {
+        getPaper: function() {
+            var parent = this.container;
+            while(parent && parent instanceof Paper === false) {
+                parent = parent.container;
+            }
+            return parent;
+        }
+    });
     return Paper;
 } );
