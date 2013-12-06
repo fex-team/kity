@@ -143,15 +143,6 @@ define( function ( require, exports, module ) {
             }
             return this.mergeTransform( new Matrix().translate( -a.x, -a.y ).skew( sx, sy ).translate( a.x, a.y ) );
         },
-        applyFilter: function ( filter ) {
-
-            var filterId = filter.get( 'id' );
-
-            if ( filterId ) {
-                this.node.setAttribute( "filter", 'url(#' + filterId + ')' );
-            }
-
-        },
         stroke: function ( pen, width ) {
             if ( pen && pen.stroke ) {
                 pen.stroke( this );
@@ -171,14 +162,6 @@ define( function ( require, exports, module ) {
                 // 字符串或重写了 toString 的对象
                 this.node.setAttribute( 'fill', brush );
             }
-            return this;
-        },
-        clipWith: function ( clip ) {
-            clip.clip( this );
-            return this;
-        },
-        maskWith: function ( mask ) {
-            mask.mask( this );
             return this;
         }
     } );
