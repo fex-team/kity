@@ -14,9 +14,7 @@ define( function ( require, exprots, module ) {
             this.originEvent = event;
             this.targetShape = event.target.shape || event.target.paper;
 
-            if ( event.__kity_param ) {
-                Utils.extend( this, event.__kity_param );
-            }
+            this.__kity_param = event.__kity_param || [];
 
         },
 
