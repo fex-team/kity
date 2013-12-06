@@ -4,9 +4,12 @@
 
 define( function ( require, exports, module ) {
 
-    return require( "core/class" ).createClass( "Mask", {
+    var Class = require( 'core/class' );
+    var Shape = require( 'graphic/shape' );
 
-        base: require( "graphic/shape" ),
+    var Mask = Class.createClass( "Mask", {
+
+        base: Shape,
         mixins: [ require( "graphic/shapecontainer" ) ],
 
         constructor: function () {
@@ -24,5 +27,13 @@ define( function ( require, exports, module ) {
 
     } );
 
+    Class.extendClass( Shape, {
+        maskWith: function( mask ) {
+            mask.mask(this);
+            return this;
+        }
+    });
+
+    return Mask;
 } );
 

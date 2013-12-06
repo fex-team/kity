@@ -3,10 +3,12 @@
  */
 
 define( function ( require, exports, module ) {
+    var Class = require('core/class');
+    var Shape = require('graphic/shape');
 
-    return require( "core/class" ).createClass( "Clip", {
+    var Clip = Class.createClass( "Clip", {
 
-        base: require( "graphic/shape" ),
+        base: Shape,
         mixins: [ require( "graphic/shapecontainer" ) ],
 
         constructor: function () {
@@ -23,6 +25,15 @@ define( function ( require, exports, module ) {
         }
 
     } );
+
+    Class.extendClass( Shape, {
+        clipWith: function( clip ) {
+            clip.clip( this );
+            return this;
+        }
+    });
+
+    return Clip;
 
 } );
 

@@ -1,7 +1,6 @@
 define( function ( require, exports, module ) {
     var svg = require( 'graphic/svg' );
     var utils = require( 'core/utils' );
-    var Paper = require( 'graphic/paper' );
     var EventHandler = require( 'graphic/eventhandler' );
     var Styled = require( 'graphic/styled' );
     var Data = require( 'graphic/data' );
@@ -144,15 +143,6 @@ define( function ( require, exports, module ) {
             }
             return this.mergeTransform( new Matrix().translate( -a.x, -a.y ).skew( sx, sy ).translate( a.x, a.y ) );
         },
-        applyFilter: function ( filter ) {
-
-            var filterId = filter.get( 'id' );
-
-            if ( filterId ) {
-                this.node.setAttribute( "filter", 'url(#' + filterId + ')' );
-            }
-
-        },
         stroke: function ( pen, width ) {
             if ( pen && pen.stroke ) {
                 pen.stroke( this );
@@ -173,33 +163,6 @@ define( function ( require, exports, module ) {
                 this.node.setAttribute( 'fill', brush );
             }
             return this;
-        },
-        getPaper: function () {
-            var paper = this.container;
-            while ( paper && !( paper instanceof Paper ) ) {
-                paper = paper.container;
-            }
-            return paper;
-        },
-        clipWith: function ( clip ) {
-            clip.clip( this );
-            return this;
-        },
-        maskWith: function ( mask ) {
-            mask.mask( this );
-            return this;
-        },
-        getPaperPromise: function ( fn ) {
-            var me = this;
-
-            function loadPaper() {
-                var paper = me.getPaper();
-                if ( !paper ) {
-                    return setTimeout( loadPaper, 100 );
-                }
-                fn( paper );
-            }
-            loadPaper();
         }
     } );
 } );
