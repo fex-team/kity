@@ -1,5 +1,5 @@
 define( function ( require, exports, module ) {
-    var createClass = require( 'core/class' ).createClass;
+    var Class = require( 'core/class' );
     var utils = require( 'core/utils' );
     var svg = require( 'graphic/svg' );
     var Container = require( 'graphic/container' );
@@ -7,9 +7,8 @@ define( function ( require, exports, module ) {
     var EventHandler = require( 'graphic/eventhandler' );
     var Styled = require( 'graphic/styled' );
     var Matrix = require( 'graphic/matrix' );
-    var Path = require( 'graphic/path' );
 
-    return createClass( 'Paper', {
+    var Paper = Class.createClass( 'Paper', {
 
         mixins: [ ShapeContainer, EventHandler, Styled ],
 
@@ -72,7 +71,7 @@ define( function ( require, exports, module ) {
                     x: 0,
                     y: 0,
                     width: this.node.clientWidth,
-                    height: this.node.clientHeigth
+                    height: this.node.clientHeight
                 };
             } else {
                 attr = attr.split( ' ' );
@@ -137,17 +136,6 @@ define( function ( require, exports, module ) {
             if ( resource.node ) {
                 this.resourceNode.appendChild( resource.node );
             }
-
-            // 对路径移除默认的 fill 和 stroke
-            // 这样被 use 之后可以重新填充和描边
-            if ( resource instanceof Path ) {
-                if( resource.node.getAttribute('fill') == 'none' ) {
-                    resource.node.removeAttribute('fill');
-                }
-                if( resource.node.getAttribute('stroke') == 'none' ) {
-                    resource.node.removeAttribute('stroke');
-                }
-            }
             return this;
         },
 
@@ -165,4 +153,5 @@ define( function ( require, exports, module ) {
             return this;
         }
     } );
+    return Paper;
 } );
