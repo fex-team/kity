@@ -114,8 +114,14 @@ define( function ( require, exports, module ) {
 
             if ( me instanceof Paper ) {
                 bindEvents( me );
+            } else if (me.getPaper()) {
+                bindEvents( me.getPaper() );
             } else {
-                this.getPaperPromise( bindEvents );
+                me.on('add treeadd', function(e) {
+                    if(e.targetShape.getPaper()) {
+                        bindEvents(e.targetShape.getPaper());
+                    }
+                });
             }
             return this;
         }, // end of drag

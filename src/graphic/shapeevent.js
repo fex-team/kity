@@ -11,11 +11,24 @@ define( function ( require, exprots, module ) {
 
         constructor: function ( event ) {
 
-            this.originEvent = event;
-            this.targetShape = event.target.shape || event.target.paper;
+            // dom 事件封装对象
+            if ( event.target.nodeType ) {
 
-            if ( event.__kity_param ) {
-                Utils.extend( this, event.__kity_param );
+                this.originEvent = event;
+                this.targetShape = event.target.shape || event.target.paper;
+
+                if ( event.__kity_param ) {
+
+                    Utils.extend( this, event.__kity_param );
+
+                }
+
+
+            // 普通事件封装对象
+            } else {
+
+                Utils.extend( this, event );
+
             }
 
         },
@@ -23,6 +36,10 @@ define( function ( require, exprots, module ) {
         preventDefault: function () {
 
             var evt = this.originEvent;
+
+            if ( !evt ) {
+                return true;
+            }
 
             if ( evt.preventDefault ) {
 
@@ -42,6 +59,11 @@ define( function ( require, exprots, module ) {
 
         //当前鼠标事件在用户坐标系中点击的点的坐标位置
         getPosition: function () {
+
+            if ( !this.originEvent ) {
+                return null;
+            }
+
             var eventClient = this.originEvent.touches ?
                 this.originEvent.touches[0] :
                 this.originEvent;
@@ -64,6 +86,10 @@ define( function ( require, exprots, module ) {
         stopPropagation: function () {
 
             var evt = this.originEvent;
+
+            if ( !evt ) {
+                return true;
+            }
 
             if ( evt.stopPropagation ) {
 

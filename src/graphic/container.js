@@ -1,8 +1,6 @@
 define(function (require, exports, module) {
     function itemRemove() {
-        var container = this.container,
-            index = container.indexOf(this);
-        container.removeItem(index);
+        this.container.removeItem(this);
         return this;
     }
     return require('core/class').createClass('Container', {
@@ -51,8 +49,7 @@ define(function (require, exports, module) {
                 item.container = this;
                 item.remove = itemRemove;
             }
-            //提供给具体实现以完成容器元素的添加
-            this.itemAddedHandler( item, pos );
+            this.handleAdd( item, pos );
             if(!noEvent) {
                 this.onContainerChanged('add', [item]);
             }
@@ -105,6 +102,8 @@ define(function (require, exports, module) {
                 delete item.remove;
             }
 
+            this.handleRemove(item, pos);
+
             if(!noEvent) {
                 this.onContainerChanged('remove', [item]);
             }
@@ -121,9 +120,10 @@ define(function (require, exports, module) {
             this.onContainerChanged('remove', removed);
             return this;
         },
-        itemAddedHandler: function ( item, pos ) {},
-        onContainerChanged: function(type, items) {
+        onContainerChanged: function(type, items) {},
 
-        }
+        handleAdd: function(item, index) {},
+
+        handleRemove: function(item, index) {}
     });
 });

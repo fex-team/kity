@@ -1,203 +1,296 @@
+/*
+ * kity event 实现
+ */
 define( function ( require, exports, module ) {
 
-    var HANDLER_CACHE = {},
-        LISTENER_CACHE = {},
-        ShapeEvent = require( "graphic/shapeevent" ),
-        Utils = require( "core/utils" );
+    var Utils = require( "core/utils" ),
+        ShapeEvent = require( "graphic/shapeevent" );
 
-    function listen( obj, type, handler, isOnce ) {
+    // 内部处理器缓存
+    var INNER_HANDLER_CACHE = {},
+    // 用户处理器缓存
+        USER_HANDLER_CACHE = {},
+        guid = 0;
 
-        var handlerList = null,
-            shape = this,
-            eid = this._EventListenerId;
 
-        if ( !HANDLER_CACHE[ eid ] ) {
-            HANDLER_CACHE[ eid ] = {};
+    // 添加事件统一入口
+    function _addEvent ( type, handler, isOnce ) {
+
+        isOnce = !!isOnce;
+
+        if ( Utils.isString( type ) ) {
+            type = type.match( /\S+/g );
         }
 
-        if ( !HANDLER_CACHE[ eid ][ type ] ) {
+        Utils.each( type, function ( currentType ) {
 
-            HANDLER_CACHE[ eid ][ type ] = [];
+            listen.call( this, this.node, currentType, handler, isOnce );
 
-            //监听器
-            LISTENER_CACHE[ eid ] = function ( e ) {
+        }, this );
+
+        return this;
+
+    }
+
+    // 移除事件统一入口
+    function _removeEvent ( type, handler ) {
+
+        var userHandlerList = null,
+            eventId = this._EVNET_UID,
+            isRemoveAll = handler === undefined;
+
+        try {
+            userHandlerList = USER_HANDLER_CACHE[ eventId ][ type ];
+        } catch ( e ) {
+            return;
+        }
+
+        //移除指定的监听器
+        if ( !isRemoveAll ) {
+
+            isRemoveAll = true;
+
+            Utils.each( userHandlerList, function ( fn, index ) {
+
+                if ( fn === handler ) {
+
+                    // 不能结束， 需要查找完整个list， 避免丢失移除多次绑定同一个处理器的情况
+                    delete userHandlerList[ index ];
+
+                } else {
+
+                    isRemoveAll = false;
+
+                }
+
+            } );
+
+        }
+
+
+        //删除所有监听器
+        if ( isRemoveAll ) {
+
+            deleteDomEvent( this.node, type, INNER_HANDLER_CACHE[ eventId ][ type ] );
+
+            delete USER_HANDLER_CACHE[ eventId ][ type ];
+            delete INNER_HANDLER_CACHE[ eventId ][ type ];
+
+        }
+
+        return this;
+
+    }
+
+    // 执行绑定, 该方法context为shape或者mixin了eventhandler的对象
+    function listen ( node, type, handler, isOnce ) {
+
+        var eid = this._EVNET_UID,
+            targetObject = this;
+
+        // 初始化内部监听器
+        if ( !INNER_HANDLER_CACHE[ eid ] ) {
+
+            INNER_HANDLER_CACHE[ eid ] = {};
+
+        }
+
+        if ( !INNER_HANDLER_CACHE[ eid ][ type ] ) {
+
+            // 内部监听器
+            INNER_HANDLER_CACHE[ eid ][ type ] = function ( e ) {
 
                 e = new ShapeEvent( e || window.event );
 
-                Utils.each( HANDLER_CACHE[ eid ][ type ], function ( fn, index ) {
-
-                    var result;
+                Utils.each( USER_HANDLER_CACHE[ eid ][ type ], function ( fn ) {
 
                     if ( fn ) {
 
-                        result = fn.call( shape, e );
+                        result = fn.call( targetObject, e );
 
                         //once 绑定， 执行完后删除
                         if ( isOnce ) {
 
-                            shape.off( type, fn );
+                            targetObject.off( type, fn );
 
                         }
 
                     }
 
+                    // 如果用户handler里return了false， 则该节点上的此后的同类型事件将不再执行
                     return result;
 
-                } );
-
+                }, targetObject );
 
             };
 
-            //绑定事件
-            bindEvent( obj, type, LISTENER_CACHE[ eid ] );
+        }
+
+        // 初始化用户监听器列表
+        if ( !USER_HANDLER_CACHE[ eid ] ) {
+
+            USER_HANDLER_CACHE[ eid ] = {};
 
         }
 
-        handlerList = HANDLER_CACHE[ eid ][ type ];
+        if ( !USER_HANDLER_CACHE[ eid ][ type ] ) {
 
-        handlerList.push( handler );
+            USER_HANDLER_CACHE[ eid ][ type ] = [ handler ];
 
-        return handlerList.length - 1;
+            // 绑定对应类型的事件
+            // dom对象利用dom event进行处理， 非dom对象， 由消息分发机制处理
+            if ( !!node ) {
 
-    }
+                bindDomEvent( node, type, INNER_HANDLER_CACHE[ eid ][ type ] );
 
-    function bindEvent( obj, type, handler ) {
-
-        if ( obj.addEventListener ) {
-
-            obj.addEventListener( type, handler, false );
+            }
 
         } else {
 
-            obj.attachEvent( "on" + type, handler );
+            USER_HANDLER_CACHE[ eid ][ type ].push( handler );
 
         }
 
     }
 
-    function deleteEvent( obj, type, handler ) {
+    // 绑定dom事件
+    function bindDomEvent ( node, type, handler ) {
 
-        if ( obj.removeEventListener ) {
+        if ( node.addEventListener ) {
 
-            obj.removeEventListener( type, handler, false );
+            node.addEventListener( type, handler, false );
 
         } else {
 
-            obj.detachEvent( type, handler );
+            node.attachEvent( "on" + type, handler );
 
         }
 
     }
 
-    return require( 'core/class' ).createClass( 'EventHandler', {
+    // 删除dom事件
+    function deleteDomEvent ( node, type, handler ) {
+
+        if ( node.removeEventListener ) {
+
+            node.removeEventListener( type, handler, false );
+
+        } else {
+
+            node.detachEvent( type, handler );
+
+        }
+
+    }
+
+    // 触发dom事件
+    function triggerDomEvent ( node, type, params ) {
+
+        var event = new CustomEvent( type, {
+                bubbles: true,
+                cancelable: true
+            } );
+
+        event.__kity_param = params;
+
+        node.dispatchEvent( event );
+
+    }
+
+    // 发送消息
+    function sendMessage ( messageObj, type, msg ) {
+
+        var event = null,
+            handler = null;
+
+        try {
+
+            handler = INNER_HANDLER_CACHE[ messageObj._EVNET_UID ][ type ];
+
+            if ( !handler ) {
+                return;
+            }
+
+        } catch ( exception ) {
+
+            return;
+
+        }
+
+        event = Utils.extend( {
+            type: type,
+            target: messageObj
+        }, msg || {} );
+
+
+        handler.call( messageObj, event );
+
+    }
+
+    // 对外接口
+    return require( "core/class" ).createClass( "EventHandler", {
 
         constructor: function () {
 
-            //当前对象的事件处理器ID
-            this._EventListenerId = +new Date()+''+Math.floor( Math.random() * 10000 );
+            this._EVNET_UID = ++guid;
 
         },
 
         addEventListener: function ( type, handler ) {
 
-            return this._addEvent( type, handler, false );
-
-        },
-
-        _addEvent: function ( type, handler, isOnce ) {
-
-            var record = {},
-                isOnce = !!isOnce;
-
-            if ( typeof type === 'string' ) {
-                type = type.replace( /^\s+|\s+$/g, '' ).split( /\s+/ );
-            }
-
-            var shape = this;
-            var node = this.node;
-
-            Utils.each( type, function ( currentType ) {
-
-                record[ currentType ] = listen.call( shape, node, currentType, handler, isOnce );
-
-            } );
-
-            return this;
+            return _addEvent.call( this, type, handler, false );
 
         },
 
         addOnceEventListener: function ( type, handler ) {
 
-            return this._addEvent( type, handler, true );
+            return _addEvent.call( this, type, handler, true );
 
         },
 
         removeEventListener: function ( type, handler ) {
 
-            var handlerList = null,
-                needRemove = true;
+            return _removeEvent.call( this, type, handler );
 
-            try {
-                handlerList = HANDLER_CACHE[ this._EventListenerId ][ type ];
-            } catch ( e ) {
-                return;
-            }
+        },
 
+        on: function ( type, handler ) {
 
-            //移除指定的监听器
-            if ( typeof handler === 'function' ) {
+            return this.addEventListener.apply( this, arguments );
 
-                Utils.each( handlerList, function ( fn, index ) {
+        },
 
-                    if ( fn === handler ) {
-                        delete handlerList[ index ];
-                        return false;
-                    } else if ( !!fn ) {
-                        needRemove = false;
-                    }
+        once: function ( type, handler ) {
 
-                } );
+            return this.addOnceEventListener.apply( this, arguments );
 
-            }
+        },
 
+        off: function () {
 
-            //删除所有监听器
-            if ( handler === undefined || needRemove ) {
+            return this.removeEventListener.apply( this, arguments );
 
-                HANDLER_CACHE[ this._EventListenerId ][ type ] = null;
+        },
 
-                deleteEvent( this.node, type, LISTENER_CACHE[ this._EventListenerId ] );
+        fire: function ( type, params ) {
 
-                LISTENER_CACHE[ this._EventListenerId ][ type ] = null;
+            return this.trigger.apply( this, arguments );
+
+        },
+
+        trigger: function ( type, params ) {
+
+            if ( this.node ) {
+
+                triggerDomEvent( this.node, type, params );
+
+            } else {
+
+                sendMessage( this, type, params );
 
             }
 
             return this;
-
-        },
-
-        on: function () {
-            return this.addEventListener.apply( this, arguments );
-        },
-
-        off: function () {
-            return this.removeEventListener.apply( this, arguments );
-        },
-
-        once: function () {
-            return this.addOnceEventListener.apply( this, arguments );
-        },
-
-        trigger: function ( type, param ) {
-
-            var evt = new CustomEvent( type, {
-                bubbles: true,
-                cancelable: true
-            } );
-
-            evt.__kity_param = param;
-
-            this.node.dispatchEvent( evt );
 
         }
 

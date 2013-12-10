@@ -85,11 +85,22 @@ define( function ( require, exports ) {
         return this;
     };
 
+    Class.prototype.getType = function() {
+        return this.__KityClassName;
+    };
+
     // 检查基类是否调用了父类的构造函数
     // 该检查是弱检查，假如调用的代码被注释了，同样能检查成功（这个特性可用于知道建议调用，但是出于某些原因不想调用的情况）
     function checkBaseConstructorCall( targetClass, classname ) {
         var code = targetClass.toString();
         if ( !/this\.callBase/.test( code ) ) {
+            throw new Error( classname + ' : 类构造函数没有调用父类的构造函数！为了安全，请调用父类的构造函数' );
+        }
+    }
+
+    function checkMixinConstructorCall( targetClass, classname ) {
+        var code = targetClass.toString();
+        if ( !/this\.callMixin/.test( code ) ) {
             throw new Error( classname + ' : 类构造函数没有调用父类的构造函数！为了安全，请调用父类的构造函数' );
         }
     }

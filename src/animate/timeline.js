@@ -2,7 +2,7 @@ define( function ( require, exports, module ) {
 
     var Color = require( 'graphic/color' );
     var Matrix = require( 'graphic/matrix' );
-    var EventHandler = require( 'core/eventhandler' );
+    var EventHandler = require( 'graphic/eventhandler' );
 
 
     var requestAnimationFrame = window.requestAnimationFrame ||
@@ -63,6 +63,7 @@ define( function ( require, exports, module ) {
     var Timeline = require( 'core/class' ).createClass( 'Timeline', {
         mixins: [ EventHandler ],
         constructor: function ( animator, target, duration, easing ) {
+            this.callMixin();
             this.time = 0;
             this.duration = duration;
             this.target = target;

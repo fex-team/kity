@@ -6,5 +6,5 @@
  * To change this template use File | Settings | File Templates.
  */
 seajs.config( {
-    base: 'http://localhost:8089/kitygraph_git/src/'
+    base: 'http://localhost/kitygraph_b/src/'
 } );
