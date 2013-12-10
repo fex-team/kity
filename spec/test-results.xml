@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<testsuites>
+  <testsuite name="Chrome 31.0.1650 (Windows 7)" package="" timestamp="2013-12-10T07:08:34" id="0" hostname="C31C05B08799601" tests="9" errors="0" failures="0" time="0.359">
+    <properties>
+      <property name="browser.fullName" value="Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36"/>
+    </properties>
+    <testcase name="getSrc" time="0.328" classname="Chrome 31.0.1650 (Windows 7).getSrc"/>
+    <testcase name="can be instantiated" time="0.015" classname="Chrome 31.0.1650 (Windows 7).createClass define class Dog"/>
+    <testcase name="is instanceof Dog" time="0" classname="Chrome 31.0.1650 (Windows 7).createClass define class Dog"/>
+    <testcase name="should be instanceof Dog" time="0" classname="Chrome 31.0.1650 (Windows 7).createClass inherit Dog from Animal satsuma instance"/>
+    <testcase name="should be instanceof Animal" time="0" classname="Chrome 31.0.1650 (Windows 7).createClass inherit Dog from Animal satsuma instance"/>
+    <testcase name="should be aged 12" time="0" classname="Chrome 31.0.1650 (Windows 7).createClass inherit Dog from Animal satsuma instance"/>
+    <testcase name="can bark" time="0" classname="Chrome 31.0.1650 (Windows 7).createClass inherit Dog from Animal satsuma instance"/>
+    <testcase name="should call all the super to string" time="0.016" classname="Chrome 31.0.1650 (Windows 7).createClass inherit Dog from Animal satsuma instance"/>
+    <testcase name="正确地使用callBase和callMixin" time="0" classname="Chrome 31.0.1650 (Windows 7).createClass mixin to Animal and Dog"/>
+    <system-out><![CDATA[
+]]></system-out>
+    <system-err/>
+  </testsuite>
+</testsuites>
