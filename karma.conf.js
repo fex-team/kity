@@ -80,15 +80,20 @@ module.exports = function(config) {
 
     // Continuous Integration mode
     // if true, it capture browsers, run tests and exit
-    singleRun: false,
+    singleRun: true,
     //coverage
-    reporters: ['progress', 'coverage'],
-    preprocessors: {
-        './src/core/*.js': ['coverage']
-    ,'./src/graphic/*.js': ['coverage']},
-    coverageReporter: {
-          type: 'html',
-          dir: './spec/coverage/'
-    }
+//    reporters: ['progress', 'coverage'],
+//    preprocessors: {
+//        './src/core/*.js': ['coverage']
+//    ,'./src/graphic/*.js': ['coverage']},
+//    coverageReporter: {
+//          type: 'html',
+//          dir: './spec/coverage/'
+//    }
+//      ,
+      reporters: ['dots', 'junit'],
+      junitReporter: {
+          outputFile: 'test-results.xml'
+      }
   });
 };
