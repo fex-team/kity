@@ -23,7 +23,7 @@ module.exports = function(config) {
 //        './src/core/utils.js',
 //        './src/graphic/*.js',
         '../spec/tools/js/UserAction.js',
-        '../spec/tools/js/karmaHelper.js',
+        '../spec/karmaConfig.js',
         '../spec/SpecHelper.js',
 //        './spec/core/*.js',
         '../spec/core/class.js'
