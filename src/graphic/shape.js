@@ -102,6 +102,7 @@ define( function ( require, exports, module ) {
                 return this.anchor;
             }
             var anchor = anchor || 'center';
+            var rbox = this.getRenderBox();
             var value = {
                 x: rbox.x + rbox.width / 2,
                 y: rbox.y + rbox.height / 2
