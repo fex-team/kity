@@ -18,20 +18,17 @@ module.exports = function(config) {
         '../spec/tools/lib/seajs-2.1.1/sea-debug.js',
         '../src/core/config.js',
         '../src/core/class.js',
-//        './src/core/kity.js',
-//        './src/core/define.js',
-//        './src/core/utils.js',
-//        './src/graphic/*.js',
+        '../src/core/kity.js',
+        '../src/core/utils.js',
         '../spec/tools/js/UserAction.js',
         '../spec/karmaConfig.js',
         '../spec/SpecHelper.js',
-//        './spec/core/*.js',
-        '../spec/core/class.js'
-//        './spec/_examples.js'//这是各种断言和用例编写方法的例子,真的写用例时把这个注了
-//        ,'./spec_examples/src/Song.js'
-//        ,'./spec/_examples/src/Player.js'
-//        ,'./spec/_examples/spec/SpecHelper.js'
-//,'./spec/_examples/spec/Player.js'
+        '../spec/core/*.js'
+
+//        ,'../spec/graphic/brush.js'
+//        ,'../spec/graphic/color.js'
+//        ,'../spec/graphic/colorbrush.js'
+        ,'../spec/graphic/*.js'
     ],
 
 
