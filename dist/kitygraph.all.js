@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kitygraph - v1.0.0 - 2013-12-04
+ * kitygraph - v1.0.0 - 2013-12-06
  * https://github.com/kitygraph/kitygraph
  * GitHub: https://github.com/kitygraph/kitygraph.git 
  * Copyright (c) 2013 Baidu UEditor Group; Licensed MIT
@@ -85,7 +85,7 @@ function use ( id ) {
     return require( id );
 
 }
-define("animate/animator", [ "animate/timeline", "graphic/color", "graphic/matrix", "core/eventhandler", "core/class", "animate/easing", "core/config", "graphic/shape", "graphic/svg", "core/utils", "graphic/paper", "graphic/eventhandler", "graphic/styled", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
+define("animate/animator", [ "animate/timeline", "graphic/color", "graphic/matrix", "graphic/eventhandler", "core/class", "animate/easing", "core/config", "graphic/shape", "graphic/svg", "core/utils", "graphic/styled", "graphic/data", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
     function parseTime(str) {
         var value = parseFloat(str, 10);
         if (/ms/.test(str)) {
@@ -354,7 +354,7 @@ define("animate/easing", [], function(require, exports, module) {
     };
     return easings;
 });
-define("animate/opacityanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/matrix", "core/utils", "core/config", "graphic/svg", "graphic/paper", "graphic/eventhandler", "graphic/styled", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
+define("animate/opacityanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/matrix", "core/utils", "core/config", "graphic/svg", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
     var Animator = require("animate/animator");
     var Matrix = require("graphic/matrix");
     var OpacityAnimator = require("core/class").createClass("OpacityAnimator", {
@@ -388,7 +388,7 @@ define("animate/opacityanimator", [ "animate/animator", "animate/timeline", "ani
     });
     return OpacityAnimator;
 });
-define("animate/rotateanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/matrix", "core/utils", "core/config", "graphic/svg", "graphic/paper", "graphic/eventhandler", "graphic/styled", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
+define("animate/rotateanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/matrix", "core/utils", "core/config", "graphic/svg", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
     var Animator = require("animate/animator");
     var Matrix = require("graphic/matrix");
     var RotateAnimator = require("core/class").createClass("RotateAnimator", {
@@ -415,7 +415,7 @@ define("animate/rotateanimator", [ "animate/animator", "animate/timeline", "anim
     });
     return RotateAnimator;
 });
-define("animate/scaleanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/matrix", "core/utils", "core/config", "graphic/svg", "graphic/paper", "graphic/eventhandler", "graphic/styled", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
+define("animate/scaleanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/matrix", "core/utils", "core/config", "graphic/svg", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
     var Animator = require("animate/animator");
     var Matrix = require("graphic/matrix");
     var ScaleAnimator = require("core/class").createClass("ScaleAnimator", {
@@ -444,10 +444,10 @@ define("animate/scaleanimator", [ "animate/animator", "animate/timeline", "anima
     });
     return ScaleAnimator;
 });
-define("animate/timeline", [ "graphic/color", "core/utils", "graphic/standardcolor", "core/class", "graphic/matrix", "core/eventhandler", "core/config" ], function(require, exports, module) {
+define("animate/timeline", [ "graphic/color", "core/utils", "graphic/standardcolor", "core/class", "graphic/matrix", "graphic/eventhandler", "graphic/shapeevent", "core/config" ], function(require, exports, module) {
     var Color = require("graphic/color");
     var Matrix = require("graphic/matrix");
-    var EventHandler = require("core/eventhandler");
+    var EventHandler = require("graphic/eventhandler");
     var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
     var globalFrameAction = [];
     function execGlobalFrameAction() {
@@ -495,6 +495,7 @@ define("animate/timeline", [ "graphic/color", "core/utils", "graphic/standardcol
     var Timeline = require("core/class").createClass("Timeline", {
         mixins: [ EventHandler ],
         constructor: function(animator, target, duration, easing) {
+            this.callMixin();
             this.time = 0;
             this.duration = duration;
             this.target = target;
@@ -664,7 +665,7 @@ define("animate/timeline", [ "graphic/color", "core/utils", "graphic/standardcol
     });
     return Timeline;
 });
-define("animate/translateanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/matrix", "core/utils", "core/config", "graphic/svg", "graphic/paper", "graphic/eventhandler", "graphic/styled", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
+define("animate/translateanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/matrix", "core/utils", "core/config", "graphic/svg", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
     var Animator = require("animate/animator");
     var Matrix = require("graphic/matrix");
     var TranslateAnimator = require("core/class").createClass("TranslateAnimator", {
@@ -766,11 +767,20 @@ define("core/class", [ "core/config" ], function(require, exports) {
         }
         return this;
     };
+    Class.prototype.getType = function() {
+        return this.__KityClassName;
+    };
     // 检查基类是否调用了父类的构造函数
     // 该检查是弱检查，假如调用的代码被注释了，同样能检查成功（这个特性可用于知道建议调用，但是出于某些原因不想调用的情况）
     function checkBaseConstructorCall(targetClass, classname) {
         var code = targetClass.toString();
         if (!/this\.callBase/.test(code)) {
+            throw new Error(classname + " : 类构造函数没有调用父类的构造函数！为了安全，请调用父类的构造函数");
+        }
+    }
+    function checkMixinConstructorCall(targetClass, classname) {
+        var code = targetClass.toString();
+        if (!/this\.callMixin/.test(code)) {
             throw new Error(classname + " : 类构造函数没有调用父类的构造函数！为了安全，请调用父类的构造函数");
         }
     }
@@ -867,88 +877,6 @@ define("core/config", [], function(require, exports, module) {
         debug: true,
         version: "1.0.0"
     };
-});
-define("core/eventhandler", [ "core/class", "core/config" ], function(require, exports, module) {
-    var targetMap = {};
-    var targetId = 0;
-    function getTargetId(obj) {
-        return obj._kityTargetId || (obj._kityTargetId = "KITY_EVENT_TARGET_ID_" + targetId++);
-    }
-    function getCallbackList(obj, name) {
-        var id = getTargetId(obj);
-        targetMap[id] = targetMap[id] || {};
-        return targetMap[id][name] || (targetMap[id][name] = []);
-    }
-    function addCallBack(obj, name, handler, oncemark) {
-        var list = getCallbackList(obj, name);
-        if (list.indexOf(handler) == -1) {
-            list.push(handler);
-            if (oncemark) {
-                list.once = list.once || [];
-                list.once.push(handler);
-            }
-        }
-    }
-    function removeCallBack(obj, name, handler) {
-        var list = getCallbackList(obj, name);
-        var index = list.indexOf(handler);
-        if (index != -1) {
-            list.splice(index, 1);
-        }
-    }
-    function removeAllCallback(obj, name) {
-        var list = getCallbackList(obj, name);
-        list.splice(0, list.length);
-    }
-    function triggerCallbackList(obj, name, e) {
-        var list = getCallbackList(obj, name);
-        for (var i = 0, length = list.length; i < length; i++) {
-            list[i].call(obj, e);
-        }
-        if (list.once) {
-            while (list.once.length) {
-                removeCallBack(obj, name, list.once.pop());
-            }
-        }
-    }
-    return require("core/class").createClass("EventHandler", {
-        on: function(name, handler) {
-            addCallBack(this, name, handler);
-            return this;
-        },
-        off: function(name, handler) {
-            if (handler) {
-                removeCallBack(this, name, handler);
-            } else {
-                removeAllCallback(this, name);
-            }
-            return this;
-        },
-        once: function(name, handler) {
-            addCallBack(this, name, handler);
-            return this;
-        },
-        trigger: function(name, e) {
-            if (this.muted()[name]) {
-                return;
-            }
-            triggerCallbackList(this, name, e);
-            return this;
-        },
-        fire: function(name, e) {
-            return this.trigger(name, e);
-        },
-        muted: function() {
-            this._kityMuteEvent = this._kityMuteEvent || {};
-            return this._kityMuteEvent;
-        },
-        mute: function(name) {
-            this.muted()[name] = true;
-        },
-        unmute: function(name) {
-            this.muted()[name] = false;
-        }
-    });
 });
 define("core/utils", [], function(require, exports, module) {
     var utils = {
@@ -1205,16 +1133,25 @@ define("filter/effectcontainer", [ "core/class", "core/config", "graphic/contain
 /**
  * Filter 基类
  */
-define("filter/filter", [ "graphic/svg", "core/class", "core/config", "filter/effectcontainer", "graphic/container" ], function(require, exports, module) {
+define("filter/filter", [ "graphic/svg", "core/class", "core/config", "filter/effectcontainer", "graphic/container", "graphic/shape", "core/utils", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
     var svg = require("graphic/svg");
-    return require("core/class").createClass("Filter", {
+    var Class = require("core/class");
+    var Filter = Class.createClass("Filter", {
         mixins: [ require("filter/effectcontainer") ],
         constructor: function(x, y, width, height) {
             this.node = svg.createNode("filter");
-            x !== undefined && this.set("x", x);
-            y !== undefined && this.set("y", y);
-            width !== undefined && this.set("width", width);
-            height !== undefined && this.set("height", height);
+            if (x !== undefined) {
+                this.set("x", x);
+            }
+            if (y !== undefined) {
+                this.set("y", y);
+            }
+            if (width !== undefined) {
+                this.set("width", width);
+            }
+            if (height !== undefined) {
+                this.set("height", height);
+            }
         },
         getId: function() {
             return this.id;
@@ -1234,11 +1171,22 @@ define("filter/filter", [ "graphic/svg", "core/class", "core/config", "filter/ef
             return this.node;
         }
     });
+    var Shape = require("graphic/shape");
+    Class.extendClass(Shape, {
+        applyFilter: function(filter) {
+            var filterId = filter.get("id");
+            if (filterId) {
+                this.node.setAttribute("filter", "url(#" + filterId + ")");
+            }
+            return this;
+        }
+    });
+    return Filter;
 });
 /*
  * 高斯模糊滤镜
  */
-define("filter/gaussianblurfilter", [ "filter/effect/gaussianblureffect", "filter/effect/effect", "core/utils", "core/class", "core/config", "filter/filter", "graphic/svg", "filter/effectcontainer" ], function(require, exports, module) {
+define("filter/gaussianblurfilter", [ "filter/effect/gaussianblureffect", "filter/effect/effect", "core/utils", "core/class", "core/config", "filter/filter", "graphic/svg", "filter/effectcontainer", "graphic/shape" ], function(require, exports, module) {
     var GaussianblurEffect = require("filter/effect/gaussianblureffect");
     return require("core/class").createClass("GaussianblurFilter", {
         base: require("filter/filter"),
@@ -1251,7 +1199,7 @@ define("filter/gaussianblurfilter", [ "filter/effect/gaussianblureffect", "filte
 /*
  * 投影滤镜
  */
-define("filter/projectionfilter", [ "filter/effect/gaussianblureffect", "filter/effect/effect", "core/utils", "core/class", "graphic/svg", "filter/effect/colormatrixeffect", "graphic/color", "graphic/standardcolor", "filter/effect/compositeeffect", "filter/effect/offseteffect", "core/config", "filter/filter", "filter/effectcontainer" ], function(require, exports, module) {
+define("filter/projectionfilter", [ "filter/effect/gaussianblureffect", "filter/effect/effect", "core/utils", "core/class", "graphic/svg", "filter/effect/colormatrixeffect", "graphic/color", "graphic/standardcolor", "filter/effect/compositeeffect", "filter/effect/offseteffect", "core/config", "filter/filter", "filter/effectcontainer", "graphic/shape" ], function(require, exports, module) {
     var GaussianblurEffect = require("filter/effect/gaussianblureffect"), Effect = require("filter/effect/effect"), ColorMatrixEffect = require("filter/effect/colormatrixeffect"), Color = require("graphic/color"), Utils = require("core/utils"), CompositeEffect = require("filter/effect/compositeeffect"), OffsetEffect = require("filter/effect/offseteffect");
     return require("core/class").createClass("ProjectionFilter", {
         base: require("filter/filter"),
@@ -1489,9 +1437,11 @@ define("graphic/circle", [ "core/class", "core/config", "graphic/ellipse", "core
 /**
  * 图形裁剪
  */
-define("graphic/clip", [ "core/class", "core/config", "graphic/shape", "graphic/svg", "core/utils", "graphic/paper", "graphic/eventhandler", "graphic/styled", "graphic/matrix", "graphic/pen", "graphic/brush", "graphic/shapecontainer", "graphic/container" ], function(require, exports, module) {
-    return require("core/class").createClass("Clip", {
-        base: require("graphic/shape"),
+define("graphic/clip", [ "core/class", "core/config", "graphic/shape", "graphic/svg", "core/utils", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen", "graphic/brush", "graphic/shapecontainer", "graphic/container" ], function(require, exports, module) {
+    var Class = require("core/class");
+    var Shape = require("graphic/shape");
+    var Clip = Class.createClass("Clip", {
+        base: Shape,
         mixins: [ require("graphic/shapecontainer") ],
         constructor: function() {
             this.callBase("clipPath");
@@ -1501,6 +1451,13 @@ define("graphic/clip", [ "core/class", "core/config", "graphic/shape", "graphic/
             return this;
         }
     });
+    Class.extendClass(Shape, {
+        clipWith: function(clip) {
+            clip.clip(this);
+            return this;
+        }
+    });
+    return Clip;
 });
 define("graphic/color", [ "core/utils", "graphic/standardcolor", "core/class", "core/config" ], function(require, exports, module) {
     var Utils = require("core/utils"), StandardColor = require("graphic/standardcolor"), ColorUtils = {}, Color = require("core/class").createClass("Color", {
@@ -1879,8 +1836,7 @@ define("graphic/colorbrush", [ "graphic/color", "core/utils", "graphic/standardc
 });
 define("graphic/container", [ "core/class", "core/config" ], function(require, exports, module) {
     function itemRemove() {
-        var container = this.container, index = container.indexOf(this);
-        container.removeItem(index);
+        this.container.removeItem(this);
         return this;
     }
     return require("core/class").createClass("Container", {
@@ -1925,8 +1881,7 @@ define("graphic/container", [ "core/class", "core/config" ], function(require, e
                 item.container = this;
                 item.remove = itemRemove;
             }
-            //提供给具体实现以完成容器元素的添加
-            this.itemAddedHandler(item, pos);
+            this.handleAdd(item, pos);
             if (!noEvent) {
                 this.onContainerChanged("add", [ item ]);
             }
@@ -1971,6 +1926,7 @@ define("graphic/container", [ "core/class", "core/config" ], function(require, e
             if (item.remove) {
                 delete item.remove;
             }
+            this.handleRemove(item, pos);
             if (!noEvent) {
                 this.onContainerChanged("remove", [ item ]);
             }
@@ -1986,8 +1942,9 @@ define("graphic/container", [ "core/class", "core/config" ], function(require, e
             this.onContainerChanged("remove", removed);
             return this;
         },
-        itemAddedHandler: function(item, pos) {},
-        onContainerChanged: function(type, items) {}
+        onContainerChanged: function(type, items) {},
+        handleAdd: function(item, index) {},
+        handleRemove: function(item, index) {}
     });
 });
 /*
@@ -2183,6 +2140,24 @@ define("graphic/curve", [ "core/utils", "core/class", "core/config", "graphic/pa
         }
     });
 });
+define("graphic/data", [ "core/class", "core/config" ], function(require, exports, module) {
+    return require("core/class").createClass("Data", {
+        constructor: function() {
+            this._data = {};
+        },
+        setData: function(name, value) {
+            this._data[name] = value;
+            return this;
+        },
+        getData: function(name) {
+            return this._data[name];
+        },
+        removeData: function(name) {
+            delete this._data[name];
+            return this;
+        }
+    });
+});
 define("graphic/defbrush", [ "graphic/svg", "graphic/brush", "core/class", "core/config" ], function(require, exports, module) {
     var svg = require("graphic/svg");
     var Brush = require("graphic/brush");
@@ -2270,116 +2245,167 @@ define("graphic/ellipse", [ "core/utils", "core/class", "core/config", "graphic/
         }
     });
 });
-define("graphic/eventhandler", [ "graphic/shapeevent", "graphic/matrix", "core/utils", "core/class", "core/config" ], function(require, exports, module) {
-    var HANDLER_CACHE = {}, LISTENER_CACHE = {}, ShapeEvent = require("graphic/shapeevent"), Utils = require("core/utils");
-    function listen(obj, type, handler, isOnce) {
-        var handlerList = null, shape = this, eid = this._EventListenerId;
-        if (!HANDLER_CACHE[eid]) {
-            HANDLER_CACHE[eid] = {};
+/*
+ * kity event 实现
+ */
+define("graphic/eventhandler", [ "core/utils", "graphic/shapeevent", "graphic/matrix", "core/class", "core/config" ], function(require, exports, module) {
+    var Utils = require("core/utils"), ShapeEvent = require("graphic/shapeevent");
+    // 内部处理器缓存
+    var INNER_HANDLER_CACHE = {}, // 用户处理器缓存
+    USER_HANDLER_CACHE = {}, guid = 0;
+    // 添加事件统一入口
+    function _addEvent(type, handler, isOnce) {
+        isOnce = !!isOnce;
+        if (Utils.isString(type)) {
+            type = type.match(/\S+/g);
         }
-        if (!HANDLER_CACHE[eid][type]) {
-            HANDLER_CACHE[eid][type] = [];
-            //监听器
-            LISTENER_CACHE[eid] = function(e) {
+        Utils.each(type, function(currentType) {
+            listen.call(this, this.node, currentType, handler, isOnce);
+        }, this);
+        return this;
+    }
+    // 移除事件统一入口
+    function _removeEvent(type, handler) {
+        var userHandlerList = null, eventId = this._EVNET_UID, isRemoveAll = handler === undefined;
+        try {
+            userHandlerList = USER_HANDLER_CACHE[eventId][type];
+        } catch (e) {
+            return;
+        }
+        //移除指定的监听器
+        if (!isRemoveAll) {
+            isRemoveAll = true;
+            Utils.each(userHandlerList, function(fn, index) {
+                if (fn === handler) {
+                    // 不能结束， 需要查找完整个list， 避免丢失移除多次绑定同一个处理器的情况
+                    delete userHandlerList[index];
+                } else {
+                    isRemoveAll = false;
+                }
+            });
+        }
+        //删除所有监听器
+        if (isRemoveAll) {
+            deleteDomEvent(this.node, type, INNER_HANDLER_CACHE[eventId][type]);
+            delete USER_HANDLER_CACHE[eventId][type];
+            delete INNER_HANDLER_CACHE[eventId][type];
+        }
+        return this;
+    }
+    // 执行绑定, 该方法context为shape或者mixin了eventhandler的对象
+    function listen(node, type, handler, isOnce) {
+        var eid = this._EVNET_UID, targetObject = this;
+        // 初始化内部监听器
+        if (!INNER_HANDLER_CACHE[eid]) {
+            INNER_HANDLER_CACHE[eid] = {};
+        }
+        if (!INNER_HANDLER_CACHE[eid][type]) {
+            // 内部监听器
+            INNER_HANDLER_CACHE[eid][type] = function(e) {
                 e = new ShapeEvent(e || window.event);
-                Utils.each(HANDLER_CACHE[eid][type], function(fn, index) {
-                    var result;
+                Utils.each(USER_HANDLER_CACHE[eid][type], function(fn) {
                     if (fn) {
-                        result = fn.call(shape, e);
+                        result = fn.call(targetObject, e);
                         //once 绑定， 执行完后删除
                         if (isOnce) {
-                            shape.off(type, fn);
+                            targetObject.off(type, fn);
                         }
                     }
+                    // 如果用户handler里return了false， 则该节点上的此后的同类型事件将不再执行
                     return result;
-                });
+                }, targetObject);
             };
-            //绑定事件
-            bindEvent(obj, type, LISTENER_CACHE[eid]);
         }
-        handlerList = HANDLER_CACHE[eid][type];
-        handlerList.push(handler);
-        return handlerList.length - 1;
-    }
-    function bindEvent(obj, type, handler) {
-        if (obj.addEventListener) {
-            obj.addEventListener(type, handler, false);
-        } else {
-            obj.attachEvent("on" + type, handler);
+        // 初始化用户监听器列表
+        if (!USER_HANDLER_CACHE[eid]) {
+            USER_HANDLER_CACHE[eid] = {};
         }
-    }
-    function deleteEvent(obj, type, handler) {
-        if (obj.removeEventListener) {
-            obj.removeEventListener(type, handler, false);
-        } else {
-            obj.detachEvent(type, handler);
-        }
-    }
-    return require("core/class").createClass("EventHandler", {
-        constructor: function() {
-            //当前对象的事件处理器ID
-            this._EventListenerId = +new Date() + "" + Math.floor(Math.random() * 1e4);
-        },
-        addEventListener: function(type, handler) {
-            return this._addEvent(type, handler, false);
-        },
-        _addEvent: function(type, handler, isOnce) {
-            var record = {}, isOnce = !!isOnce;
-            if (typeof type === "string") {
-                type = type.replace(/^\s+|\s+$/g, "").split(/\s+/);
+        if (!USER_HANDLER_CACHE[eid][type]) {
+            USER_HANDLER_CACHE[eid][type] = [ handler ];
+            // 绑定对应类型的事件
+            // dom对象利用dom event进行处理， 非dom对象， 由消息分发机制处理
+            if (!!node) {
+                bindDomEvent(node, type, INNER_HANDLER_CACHE[eid][type]);
             }
-            var shape = this;
-            var node = this.node;
-            Utils.each(type, function(currentType) {
-                record[currentType] = listen.call(shape, node, currentType, handler, isOnce);
-            });
-            return this;
-        },
-        addOnceEventListener: function(type, handler) {
-            return this._addEvent(type, handler, true);
-        },
-        removeEventListener: function(type, handler) {
-            var handlerList = null, needRemove = true;
-            try {
-                handlerList = HANDLER_CACHE[this._EventListenerId][type];
-            } catch (e) {
+        } else {
+            USER_HANDLER_CACHE[eid][type].push(handler);
+        }
+    }
+    // 绑定dom事件
+    function bindDomEvent(node, type, handler) {
+        if (node.addEventListener) {
+            node.addEventListener(type, handler, false);
+        } else {
+            node.attachEvent("on" + type, handler);
+        }
+    }
+    // 删除dom事件
+    function deleteDomEvent(node, type, handler) {
+        if (node.removeEventListener) {
+            node.removeEventListener(type, handler, false);
+        } else {
+            node.detachEvent(type, handler);
+        }
+    }
+    // 触发dom事件
+    function triggerDomEvent(node, type, params) {
+        var event = new CustomEvent(type, {
+            bubbles: true,
+            cancelable: true
+        });
+        event.__kity_param = params;
+        node.dispatchEvent(event);
+    }
+    // 发送消息
+    function sendMessage(messageObj, type, msg) {
+        var event = null, handler = null;
+        try {
+            handler = INNER_HANDLER_CACHE[messageObj._EVNET_UID][type];
+            if (!handler) {
                 return;
             }
-            //移除指定的监听器
-            if (typeof handler === "function") {
-                Utils.each(handlerList, function(fn, index) {
-                    if (fn === handler) {
-                        delete handlerList[index];
-                        return false;
-                    } else if (!!fn) {
-                        needRemove = false;
-                    }
-                });
-            }
-            //删除所有监听器
-            if (handler === undefined || needRemove) {
-                HANDLER_CACHE[this._EventListenerId][type] = null;
-                deleteEvent(this.node, type, LISTENER_CACHE[this._EventListenerId]);
-                LISTENER_CACHE[this._EventListenerId][type] = null;
-            }
-            return this;
+        } catch (exception) {
+            return;
+        }
+        event = Utils.extend({
+            type: type,
+            target: messageObj
+        }, msg || {});
+        handler.call(messageObj, event);
+    }
+    // 对外接口
+    return require("core/class").createClass("EventHandler", {
+        constructor: function() {
+            this._EVNET_UID = ++guid;
         },
-        on: function() {
+        addEventListener: function(type, handler) {
+            return _addEvent.call(this, type, handler, false);
+        },
+        addOnceEventListener: function(type, handler) {
+            return _addEvent.call(this, type, handler, true);
+        },
+        removeEventListener: function(type, handler) {
+            return _removeEvent.call(this, type, handler);
+        },
+        on: function(type, handler) {
             return this.addEventListener.apply(this, arguments);
+        },
+        once: function(type, handler) {
+            return this.addOnceEventListener.apply(this, arguments);
         },
         off: function() {
             return this.removeEventListener.apply(this, arguments);
         },
-        once: function() {
-            return this.addOnceEventListener.apply(this, arguments);
+        fire: function(type, params) {
+            return this.trigger.apply(this, arguments);
         },
-        trigger: function(type, param) {
-            var evt = new CustomEvent(type, {
-                bubbles: true,
-                cancelable: true
-            });
-            evt.__kity_param = param;
-            this.node.dispatchEvent(evt);
+        trigger: function(type, params) {
+            if (this.node) {
+                triggerDomEvent(this.node, type, params);
+            } else {
+                sendMessage(this, type, params);
+            }
+            return this;
         }
     });
 });
@@ -2411,7 +2437,7 @@ define("graphic/gradientbrush", [ "graphic/svg", "graphic/defbrush", "graphic/br
         }
     });
 });
-define("graphic/group", [ "graphic/shapecontainer", "graphic/container", "core/class", "core/config", "graphic/shape", "graphic/svg", "core/utils", "graphic/paper", "graphic/eventhandler", "graphic/styled", "graphic/matrix", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
+define("graphic/group", [ "graphic/shapecontainer", "graphic/container", "core/class", "graphic/shape", "core/config", "graphic/svg", "core/utils", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
     var ShapeContainer = require("graphic/shapecontainer");
     return require("core/class").createClass("Group", {
         mixins: [ ShapeContainer ],
@@ -2421,7 +2447,7 @@ define("graphic/group", [ "graphic/shapecontainer", "graphic/container", "core/c
         }
     });
 });
-define("graphic/image", [ "core/class", "core/config", "graphic/shape", "graphic/svg", "core/utils", "graphic/paper", "graphic/eventhandler", "graphic/styled", "graphic/matrix", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
+define("graphic/image", [ "core/class", "core/config", "graphic/shape", "graphic/svg", "core/utils", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
     return require("core/class").createClass("Image", {
         base: require("graphic/shape"),
         constructor: function(url, width, height, x, y) {
@@ -2565,9 +2591,11 @@ define("graphic/lineargradientbrush", [ "graphic/svg", "graphic/gradientbrush", 
 /**
  * 蒙板
  */
-define("graphic/mask", [ "core/class", "core/config", "graphic/shape", "graphic/svg", "core/utils", "graphic/paper", "graphic/eventhandler", "graphic/styled", "graphic/matrix", "graphic/pen", "graphic/brush", "graphic/shapecontainer", "graphic/container" ], function(require, exports, module) {
-    return require("core/class").createClass("Mask", {
-        base: require("graphic/shape"),
+define("graphic/mask", [ "core/class", "core/config", "graphic/shape", "graphic/svg", "core/utils", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen", "graphic/brush", "graphic/shapecontainer", "graphic/container" ], function(require, exports, module) {
+    var Class = require("core/class");
+    var Shape = require("graphic/shape");
+    var Mask = Class.createClass("Mask", {
+        base: Shape,
         mixins: [ require("graphic/shapecontainer") ],
         constructor: function() {
             this.callBase("mask");
@@ -2577,6 +2605,13 @@ define("graphic/mask", [ "core/class", "core/config", "graphic/shape", "graphic/
             return this;
         }
     });
+    Class.extendClass(Shape, {
+        maskWith: function(mask) {
+            mask.mask(this);
+            return this;
+        }
+    });
+    return Mask;
 });
 define("graphic/matrix", [ "core/utils", "core/class", "core/config" ], function(require, exports, module) {
     var utils = require("core/utils");
@@ -2809,8 +2844,8 @@ define("graphic/palette", [ "graphic/standardcolor", "graphic/color", "core/util
     });
     return Palette;
 });
-define("graphic/paper", [ "core/class", "core/config", "core/utils", "graphic/svg", "graphic/container", "graphic/shapecontainer", "graphic/eventhandler", "graphic/shapeevent", "graphic/styled", "graphic/matrix" ], function(require, exports, module) {
-    var createClass = require("core/class").createClass;
+define("graphic/paper", [ "core/class", "core/config", "core/utils", "graphic/svg", "graphic/container", "graphic/shapecontainer", "graphic/shape", "graphic/eventhandler", "graphic/shapeevent", "graphic/styled", "graphic/matrix", "graphic/data", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
+    var Class = require("core/class");
     var utils = require("core/utils");
     var svg = require("graphic/svg");
     var Container = require("graphic/container");
@@ -2818,7 +2853,7 @@ define("graphic/paper", [ "core/class", "core/config", "core/utils", "graphic/sv
     var EventHandler = require("graphic/eventhandler");
     var Styled = require("graphic/styled");
     var Matrix = require("graphic/matrix");
-    return createClass("Paper", {
+    var Paper = Class.createClass("Paper", {
         mixins: [ ShapeContainer, EventHandler, Styled ],
         constructor: function(container) {
             this.callBase();
@@ -2868,7 +2903,7 @@ define("graphic/paper", [ "core/class", "core/config", "core/utils", "graphic/sv
                     x: 0,
                     y: 0,
                     width: this.node.clientWidth,
-                    height: this.node.clientHeigth
+                    height: this.node.clientHeight
                 };
             } else {
                 attr = attr.split(" ");
@@ -2943,8 +2978,19 @@ define("graphic/paper", [ "core/class", "core/config", "core/utils", "graphic/sv
             return this;
         }
     });
+    var Shape = require("graphic/shape");
+    Class.extendClass(Shape, {
+        getPaper: function() {
+            var parent = this.container;
+            while (parent && parent instanceof Paper === false) {
+                parent = parent.container;
+            }
+            return parent;
+        }
+    });
+    return Paper;
 });
-define("graphic/path", [ "core/utils", "core/class", "core/config", "graphic/shape", "graphic/svg", "graphic/paper", "graphic/eventhandler", "graphic/styled", "graphic/matrix", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
+define("graphic/path", [ "core/utils", "core/class", "core/config", "graphic/shape", "graphic/svg", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
     var Utils = require("core/utils");
     var createClass = require("core/class").createClass;
     var Shape = require("graphic/shape");
@@ -3014,6 +3060,8 @@ define("graphic/path", [ "core/utils", "core/class", "core/config", "graphic/sha
             if (data) {
                 this.setPathData(data);
             }
+            this.node.setAttribute("fill", svg.defaults.fill);
+            this.node.setAttribute("stroke", svg.defaults.stroke);
         },
         setPathData: function(data) {
             if (!data) {
@@ -3050,7 +3098,7 @@ define("graphic/path", [ "core/utils", "core/class", "core/config", "graphic/sha
         }
     });
 });
-define("graphic/patternbrush", [ "graphic/defbrush", "graphic/svg", "graphic/brush", "core/class", "graphic/shapecontainer", "graphic/container", "core/config" ], function(require, exports, module) {
+define("graphic/patternbrush", [ "graphic/defbrush", "graphic/svg", "graphic/brush", "core/class", "graphic/shapecontainer", "graphic/container", "graphic/shape", "core/config" ], function(require, exports, module) {
     var DefBrush = require("graphic/defbrush");
     var ShapeContainer = require("graphic/shapecontainer");
     var svg = require("graphic/svg");
@@ -3432,17 +3480,17 @@ define("graphic/rect", [ "core/utils", "core/class", "core/config", "graphic/pat
         }
     });
 });
-define("graphic/shape", [ "graphic/svg", "core/utils", "graphic/paper", "core/class", "graphic/container", "graphic/shapecontainer", "graphic/eventhandler", "graphic/styled", "graphic/matrix", "graphic/shapeevent", "graphic/pen", "graphic/color", "graphic/brush", "core/config" ], function(require, exports, module) {
+define("graphic/shape", [ "graphic/svg", "core/utils", "graphic/eventhandler", "graphic/shapeevent", "core/class", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen", "graphic/color", "graphic/brush", "core/config" ], function(require, exports, module) {
     var svg = require("graphic/svg");
     var utils = require("core/utils");
-    var Paper = require("graphic/paper");
     var EventHandler = require("graphic/eventhandler");
     var Styled = require("graphic/styled");
+    var Data = require("graphic/data");
     var Matrix = require("graphic/matrix");
     var Pen = require("graphic/pen");
     var Brush = require("graphic/brush");
     return require("core/class").createClass("Shape", {
-        mixins: [ EventHandler, Styled ],
+        mixins: [ EventHandler, Styled, Data ],
         constructor: function(tagName) {
             this.node = svg.createNode(tagName);
             this.node.shape = this;
@@ -3458,9 +3506,6 @@ define("graphic/shape", [ "graphic/svg", "core/utils", "graphic/paper", "core/cl
         getNode: function() {
             return this.node;
         },
-        getType: function() {
-            throw new Error("abstract method called");
-        },
         getBoundaryBox: function() {
             var box = this.node.getBBox();
             return box;
@@ -3470,9 +3515,10 @@ define("graphic/shape", [ "graphic/svg", "core/utils", "graphic/paper", "core/cl
             var xMin = Number.MAX_VALUE, xMax = -Number.MAX_VALUE, yMin = Number.MAX_VALUE, yMax = -Number.MAX_VALUE;
             var bps = [ [ b.x, b.y ], [ b.x + b.width, b.y ], [ b.x, b.y + b.height ], [ b.x + b.width, b.y + b.height ] ];
             var matrix = this.getTransform().getMatrix();
-            var bp, rp;
+            var bp, rp, rps = [];
             while (bp = bps.pop()) {
                 rp = Matrix.transformPoint(bp[0], bp[1], matrix);
+                rps.push(rp);
                 xMin = Math.min(xMin, rp.x);
                 xMax = Math.max(xMax, rp.x);
                 yMin = Math.min(yMin, rp.y);
@@ -3482,7 +3528,8 @@ define("graphic/shape", [ "graphic/svg", "core/utils", "graphic/paper", "core/cl
                 x: xMin,
                 y: yMin,
                 width: xMax - xMin,
-                height: yMax - yMin
+                height: yMax - yMin,
+                closurePoints: rps
             };
         },
         getWidth: function() {
@@ -3569,12 +3616,6 @@ define("graphic/shape", [ "graphic/svg", "core/utils", "graphic/paper", "core/cl
             }
             return this.mergeTransform(new Matrix().translate(-a.x, -a.y).skew(sx, sy).translate(a.x, a.y));
         },
-        applyFilter: function(filter) {
-            var filterId = filter.get("id");
-            if (filterId) {
-                this.node.setAttribute("filter", "url(#" + filterId + ")");
-            }
-        },
         stroke: function(pen, width) {
             if (pen && pen.stroke) {
                 pen.stroke(this);
@@ -3595,82 +3636,61 @@ define("graphic/shape", [ "graphic/svg", "core/utils", "graphic/paper", "core/cl
                 this.node.setAttribute("fill", brush);
             }
             return this;
-        },
-        getPaper: function() {
-            var paper = this.container;
-            while (paper && !(paper instanceof Paper)) {
-                paper = paper.container;
-            }
-            return paper;
-        },
-        clipWith: function(clip) {
-            clip.clip(this);
-            return this;
-        },
-        maskWith: function(mask) {
-            mask.mask(this);
-            return this;
-        },
-        getPaperPromise: function(fn) {
-            var me = this;
-            function loadPaper() {
-                var paper = me.getPaper();
-                if (!paper) {
-                    return setTimeout(loadPaper, 100);
-                }
-                fn(paper);
-            }
-            loadPaper();
         }
     });
 });
-define("graphic/shapecontainer", [ "graphic/container", "core/class", "core/config" ], function(require, exports, module) {
+define("graphic/shapecontainer", [ "graphic/container", "core/class", "core/config", "graphic/shape", "graphic/svg", "core/utils", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
     var Container = require("graphic/container");
-    return require("core/class").createClass("ShapeContainer", {
+    var ShapeContainer = require("core/class").createClass("ShapeContainer", {
         base: Container,
-        /* protected override */
-        onContainerChanged: function(type, shapes) {
-            switch (type) {
-              case "add":
-                this.onAddShapes(shapes);
-                break;
-
-              case "remove":
-                this.onRemoveShapes(shapes);
-                break;
+        /* private */
+        handleAdd: function(shape, index) {
+            var parent = this.getShapeNode();
+            parent.insertBefore(shape.node, parent.childNodes[index] || null);
+            shape.trigger("add", {
+                container: this
+            });
+            if (shape.notifyTreeModification) {
+                shape.notifyTreeModification("treeadd", this);
             }
         },
         /* private */
-        onAddShapes: function(shapes) {
+        handleRemove: function(shape, index) {
             var parent = this.getShapeNode();
-            for (var i = 0; i < shapes.length; i++) {
-                parent.appendChild(shapes[i].node);
-                shapes[i].trigger("add", {
-                    container: this
-                });
+            parent.removeChild(shape.node);
+            shape.trigger("remove", {
+                container: this
+            });
+            if (shape.notifyTreeModification) {
+                shape.notifyTreeModification("treeremove", this);
             }
         },
         /* private */
-        onRemoveShapes: function(shapes) {
-            var parent = this.getShapeNode();
-            for (var i = 0; i < shapes.length; i++) {
-                parent.removeChild(shapes[i].node);
-                shapes[i].trigger("remove", {
-                    container: this
+        notifyTreeModification: function(type, container) {
+            this.eachItem(function(index, shape) {
+                if (shape instanceof ShapeContainer) {
+                    shape.notifyTreeModification(type, container);
+                }
+                shape.trigger(type, {
+                    container: container
                 });
-            }
+            });
         },
         /* public */
-        addShape: function(shape, pos) {
-            return this.addItem(shape, pos);
+        getShape: function(index) {
+            return this.getItem(index);
+        },
+        /* public */
+        addShape: function(shape, index) {
+            return this.addItem(shape, index);
         },
         /* public */
         addShapes: function(shapes) {
             return this.addItems(shapes);
         },
         /* public */
-        removeShape: function(pos) {
-            return this.removeItem(pos);
+        removeShape: function(index) {
+            return this.removeItem(index);
         },
         getShapes: function() {
             return this.getItems();
@@ -3679,11 +3699,50 @@ define("graphic/shapecontainer", [ "graphic/container", "core/class", "core/conf
         getShapeById: function(id) {
             return this.getShapeNode().getElementById(id).shape;
         },
+        bringTo: function(shape, index) {
+            return this.removeShape(shape).addShape(shape, index);
+        },
+        bringFront: function(shape) {
+            return this.bringTo(shape, this.indexOf(shape) + 1);
+        },
+        bringBack: function(shape) {
+            return this.bringTo(shape, this.indexOf(shape) - 1);
+        },
+        bringTop: function(shape) {
+            return this.removeShape(shape).addShape(shape);
+        },
+        bringRear: function(shape) {
+            return this.removeShape(shape).addShape(shape, 0);
+        },
         /* protected */
         getShapeNode: function() {
             return this.shapeNode || this.node;
         }
     });
+    var Shape = require("graphic/shape");
+    require("core/class").extendClass(Shape, {
+        bringTo: function(index) {
+            this.container.bringTo(this, index);
+            return this;
+        },
+        bringFront: function() {
+            this.container.bringFront(this);
+            return this;
+        },
+        bringBack: function() {
+            this.container.bringBack(this);
+            return this;
+        },
+        bringTop: function() {
+            this.container.bringTop(this);
+            return this;
+        },
+        bringRear: function() {
+            this.container.bringRear(this);
+            return this;
+        }
+    });
+    return ShapeContainer;
 });
 /*
  * 图形事件包装类
@@ -3692,14 +3751,28 @@ define("graphic/shapeevent", [ "graphic/matrix", "core/utils", "core/class", "co
     var Matrix = require("graphic/matrix"), Utils = require("core/utils");
     return require("core/class").createClass("EventHandler", {
         constructor: function(event) {
-            this.originEvent = event;
-            this.targetShape = event.target.shape || event.target.paper;
-            if (event.__kity_param) {
-                Utils.extend(this, event.__kity_param);
+            var target = null;
+            // dom 事件封装对象
+            if (!Utils.isObject(event.target)) {
+                target = event.target;
+                // use标签有特殊属性， 需要区别对待
+                if (target.correspondingUseElement) {
+                    target = target.correspondingUseElement;
+                }
+                this.originEvent = event;
+                this.targetShape = target.shape || target.paper;
+                if (event.__kity_param) {
+                    Utils.extend(this, event.__kity_param);
+                }
+            } else {
+                Utils.extend(this, event);
             }
         },
         preventDefault: function() {
             var evt = this.originEvent;
+            if (!evt) {
+                return true;
+            }
             if (evt.preventDefault) {
                 evt.preventDefault();
                 return evt.cancelable;
@@ -3710,6 +3783,9 @@ define("graphic/shapeevent", [ "graphic/matrix", "core/utils", "core/class", "co
         },
         //当前鼠标事件在用户坐标系中点击的点的坐标位置
         getPosition: function() {
+            if (!this.originEvent) {
+                return null;
+            }
             var eventClient = this.originEvent.touches ? this.originEvent.touches[0] : this.originEvent;
             var clientX = eventClient.clientX, clientY = eventClient.clientY, paper = this.targetShape.getPaper(), //转换过后的点
             transPoint = Matrix.transformPoint(clientX, clientY, paper.node.getScreenCTM().inverse());
@@ -3721,6 +3797,9 @@ define("graphic/shapeevent", [ "graphic/matrix", "core/utils", "core/class", "co
         },
         stopPropagation: function() {
             var evt = this.originEvent;
+            if (!evt) {
+                return true;
+            }
             if (evt.stopPropagation) {
                 evt.stopPropagation();
             } else {
@@ -4026,7 +4105,7 @@ define("graphic/text", [ "graphic/textcontent", "graphic/shape", "core/class", "
         }
     });
 });
-define("graphic/textcontent", [ "graphic/shape", "graphic/svg", "core/utils", "graphic/paper", "graphic/eventhandler", "graphic/styled", "graphic/matrix", "graphic/pen", "graphic/brush", "core/class", "core/config" ], function(require, exports, module) {
+define("graphic/textcontent", [ "graphic/shape", "graphic/svg", "core/utils", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen", "graphic/brush", "core/class", "core/config" ], function(require, exports, module) {
     var Shape = require("graphic/shape");
     return require("core/class").createClass("TextContent", {
         base: Shape,
@@ -4077,9 +4156,10 @@ define("graphic/textspan", [ "graphic/textcontent", "graphic/shape", "core/class
 /*
  * USE 功能
  */
-define("graphic/use", [ "graphic/svg", "core/class", "core/config", "graphic/shape", "core/utils", "graphic/paper", "graphic/eventhandler", "graphic/styled", "graphic/matrix", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
+define("graphic/use", [ "graphic/svg", "core/class", "core/config", "graphic/shape", "core/utils", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
     var Svg = require("graphic/svg");
-    return require("core/class").createClass("Use", {
+    var Class = require("core/class");
+    var Use = Class.createClass("Use", {
         base: require("graphic/shape"),
         constructor: function(shape) {
             var shapeId = null;
@@ -4088,8 +4168,24 @@ define("graphic/use", [ "graphic/svg", "core/class", "core/config", "graphic/sha
             if (shapeId) {
                 this.node.setAttributeNS(Svg.xlink, "xlink:href", "#" + shapeId);
             }
+            // by techird
+            // 作为 Use 的图形，如果没有 fill 和 stroke，移除默认的 'none' 值，用于 Use 覆盖
+            if (shape.node.getAttribute("fill") === "none") {
+                shape.node.removeAttribute("fill");
+            }
+            if (shape.node.getAttribute("stroke") === "none") {
+                shape.node.removeAttribute("stroke");
+            }
         }
     });
+    var Shape = require("graphic/shape");
+    Class.extendClass(Shape, {
+        // fast-use
+        use: function() {
+            return new Use(this);
+        }
+    });
+    return Use;
 });
 define("graphic/vector", [ "core/class", "core/config" ], function(require, exports, module) {
     var Vector = require("core/class").createClass("Vector", {
