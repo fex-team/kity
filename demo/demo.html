@@ -20,13 +20,19 @@
     <!-- 正式版本 示例所需脚本文件 start -->
     <!--<script src="../dist/kitygraph.all.min.js"></script>-->
     <!-- 正式版本 示例所需脚本文件 end -->
+    <script src="../dev-lib/sea.js"></script>
     <script>
-        window.onload = function () {
-//            var Draggable = require('../demo/public/draggable');
+        seajs.config({
+            base: '../src'
+        });
+
+
+            define('start', function (require) {
+            var Draggable = require('../demo/public/draggable');
             var paper = new kity.Paper(document.body);
             var GroupDraggable = kity.createClass({
                 base: kity.Group,
-//                mixins: [Draggable],
+                mixins: [Draggable],
                 dragStart:function(){
                     this.getItem(0).fill(this.getItem(0).colorMove).stroke(this.getItem(0).penMove);
                 },
@@ -50,7 +56,7 @@
                                 })).addItem(
                                 new kity.Text('circle').setX(175).setY(205).fill(kity.Color.parse('#003300')))
                         .setId('circle')
-//                        .drag()
+                        .drag()
                         .addEventListener('mousewheel', function (e) {
                             var r = this.getItem(0).getRadius();
                             if (e.originEvent.wheelDeltaY > 0 && r < 180) {
@@ -66,7 +72,11 @@
                             this.getItem(0).fill(this.getItem(0).color).stroke(this.getItem(0).pen);
                         })
             ]);
+            });
+        window.onload = function () {
+            seajs.use('start');
         };
+
     </script>
 </head>
 <body>
