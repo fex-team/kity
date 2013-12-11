@@ -117,11 +117,14 @@ define( function ( require, exports, module ) {
             } else if (me.getPaper()) {
                 bindEvents( me.getPaper() );
             } else {
-                me.on('add treeadd', function(e) {
+                var listener = function(e) {
                     if(e.targetShape.getPaper()) {
                         bindEvents(e.targetShape.getPaper());
+                        me.off('add', listener);
+                        me.off('treeadd', listener);
                     }
-                });
+                }
+                me.on('add treeadd', listener);
             }
             return this;
         }, // end of drag
