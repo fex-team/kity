@@ -98,21 +98,37 @@ define( function ( require, exports, module ) {
             return this.setTransform( this.getTransform().mergeMatrix( matrix ) );
         },
         getAnchor: function ( ax, ay ) {
-            if ( this.anchor ) {
+            if ( this.anchor && this.anchor.x !== undefined ) {
                 return this.anchor;
             }
-            var rbox = this.getRenderBox();
-            // 注意没有设置 anchor 时是动态计算的
-            return {
+            var anchor = anchor || 'center';
+            var value = {
                 x: rbox.x + rbox.width / 2,
                 y: rbox.y + rbox.height / 2
             };
+            if(!~anchor.indexOf('left')) {
+                value.x = rbox.x;
+            }
+            if(!~anchor.indexOf('right')) {
+                value.x = rbox.x + rbox.width
+            }
+            if(!~anchor.indexOf('top')) {
+                value.y = rbox.y;
+            }
+            if(!~anchor.indexOf('bottom')) {
+                value.y = rbox.y + rbox.height;
+            }
+            return value;
         },
         setAnchor: function ( ax, ay ) {
-            this.anchor = {
-                x: ax,
-                y: ay
-            };
+            if( arguments.length === 1 ) {
+                this.anchor = ax;
+            } else {
+                this.anchor = {
+                    x: ax,
+                    y: ay
+                };   
+            }
             return this;
         },
         resetAnchor: function() {
