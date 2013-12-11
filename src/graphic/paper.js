@@ -136,6 +136,8 @@ define( function ( require, exports, module ) {
             if ( resource.node ) {
                 this.resourceNode.appendChild( resource.node );
             }
+
+
             return this;
         },
 

@@ -1,10 +1,13 @@
-getRequires([ 'graphic/polygon']);
+getRequires([ 'graphic/polygon','graphic/point']);
 describe("Kity.Polygon", function () {
-    var Polygon = require( 'graphic/polygon' ),
-        Point = require( 'graphic/point' );
-    var Polygon ;
+//    var Polygon = require( 'graphic/polygon' ),
+//        Point = require( 'graphic/point' );
+    var Polygon ,Point;
     beforeEach(function() {
-        if(Polygon==undefined) Polygon = src[0];
+        if(Polygon==undefined){
+            Polygon = src[0];
+            Point = src[1];
+        }
     });
     it("无参构造Polygon", function() {
 
