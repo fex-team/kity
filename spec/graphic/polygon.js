@@ -1,7 +1,7 @@
 getRequires([ 'graphic/polygon']);
 describe("Kity.Polygon", function () {
     var Polygon = require( 'graphic/polygon' ),
-        Point = require( 'graphic/point' );
+        Point = require( 'graphic/shapepoint' );
     var Polygon ;
     beforeEach(function() {
         if(Polygon==undefined) Polygon = src[0];
@@ -17,16 +17,10 @@ describe("Kity.Polygon", function () {
 
     it("点集合构造Polygon", function() {
 
-        var polygon = new Polygon( [ {
-            x: 3,
-            y: 2
-        }, {
-            x: 4,
-            y: 2
-        } ] );
+        var polygon = new Polygon( [ new Point(3, 2), new Point(4, 2) ] );
 
         expect( polygon.getPathData() ).not.toBe( "" );
-        expect( polygon.getItems().length ).toBe( 2 );
+        expect( polygon.getPoints().length ).toBe( 2 );
 
     });
 
@@ -34,12 +28,12 @@ describe("Kity.Polygon", function () {
 
         var polygon = new Polygon();
 
-        polygon.addPoint( { x: 3, y: 2 } );
+        polygon.addPoint( new Point(3, 2) );
         expect( polygon.getPathData() ).not.toBe( "" );
-        expect( polygon.getItems().length ).toBe( 1 );
-        polygon.removeItem( 0 );
+        expect( polygon.getPoints().length ).toBe( 1 );
+        polygon.removePoint( 0 );
         expect( polygon.getPathData() ).toBe( "M 0 0" );
-        expect( polygon.getItems().length ).toBe( 0 );
+        expect( polygon.getPoints().length ).toBe( 0 );
 
     });
 

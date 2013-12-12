@@ -12,7 +12,7 @@ beforeEach( function () {
             var instance = this.actual;
             var notImplements = [];
             for ( var m in extension.prototype ) {
-                if ( typeof ( instance[ m ] ) != 'function' ) {
+                if ( typeof(extension.prototype[m]) == 'function' && typeof ( instance[ m ] ) != 'function' ) {
                     notImplements.push( m );
                 }
             }
