@@ -24,11 +24,8 @@ module.exports = function(config) {
         '../spec/karmaConfig.js',
         '../spec/SpecHelper.js',
         '../spec/core/*.js'
-
-//        ,'../spec/graphic/brush.js'
-//        ,'../spec/graphic/color.js'
-//        ,'../spec/graphic/colorbrush.js'
         ,'../spec/graphic/*.js'
+//        ,'../spec/graphic/ellipse.js'
     ],
 
 
