@@ -8,7 +8,7 @@ describe("Kity.Image", function() {
         image = new Image(300, 400);
     });
     it("should be an instance of Shape", function() {
-        expect(image.isInstanceOf(Shape)).toBeTruthy();
+        expect(image instanceof Shape).toBeTruthy();
     });
 
     it("用 url 构造", function() {

@@ -1,46 +1,43 @@
-getRequires(['graphic/polyline']);
+getRequires(['graphic/polyline', 'graphic/shapepoint']);
 describe("Kity.Polyline", function () {
-    var Polyline ;
+    var Polyline, Point ;
     beforeEach(function() {
-        if(Polyline==undefined)Polyline = src[0];
+        if(Polyline==undefined) {
+            Polyline = src[0];
+            Point = src[1];
+        }
     });
 
     it("无参构造Polyline", function() {
 
         var polyline = new Polyline();
 
-        expect( polyline.getPathData() ).toBe( "" );
-        expect( polyline.getChildren().length ).toBe( 0 );
+        expect( polyline.getPathData() ).toBe( "M 0 0" );
+        expect( polyline.getPoints().length ).toBe( 0 );
         expect( polyline.isClosed() ).toBe( false );
 
     });
 
     it("点集合构造Polyline", function() {
 
-        var polyline = new Polyline( [ {
-            x: 3,
-            y: 2
-        }, {
-            x: 4,
-            y: 2
-        } ] );
+        var polyline = new Polyline( [ new Point(3, 2), new Point(4, 2) ] );
 
         expect( polyline.getPathData() ).not.toBe( "" );
-        expect( polyline.getChildren().length ).toBe( 2 );
+        expect( polyline.getPoints().length ).toBe( 2 );
         expect( polyline.isClosed() ).toBe( false );
 
     });
 
-    it("child操作验证", function() {
+    it("Points操作验证", function() {
 
         var polyline = new Polyline();
 
-        polyline.addChild( { x: 3, y: 2 } );
+        polyline.addPoint( new Point(3, 2) );
         expect( polyline.getPathData() ).not.toBe( "" );
-        expect( polyline.getChildren().length ).toBe( 1 );
-        polyline.removeChild( 0 );
-        expect( polyline.getPathData() ).toBe( "" );
-        expect( polyline.getChildren().length ).toBe( 0 );
+        expect( polyline.getPoints().length ).toBe( 1 );
+        polyline.removePoint( 0 );
+        expect( polyline.getPathData() ).toBe( "M 0 0" );
+        expect( polyline.getPoints().length ).toBe( 0 );
 
         expect( polyline.isClosed() ).toBe( false );
     });

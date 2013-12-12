@@ -95,7 +95,7 @@ define( function ( require, exports, module ) {
             return this;
         },
         getPathData: function () {
-            return this.pathdata;
+            return this.pathdata || '';
         },
         getDrawer: function () {
             return new PathDrawer( this );

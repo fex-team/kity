@@ -13,11 +13,11 @@ describe( "Kity.Line", function () {
     } );
 
     it( "应该是一个Path实例", function () {
-        expect( line.isInstanceOf( Path ) ).toBeTruthy();
+        expect( line instanceof Path ).toBeTruthy();
     } );
 
     it( "应该是一个Shape实例", function () {
-        expect( line.isInstanceOf( Shape ) ).toBeTruthy();
+        expect( line instanceof Shape ).toBeTruthy();
     } );
 
     it( "正确设置了Path.data", function () {

@@ -10,10 +10,10 @@ define(function(require, exports, module) {
 
             this.callBase();
 
-            this.cx = cx;
-            this.cy = cy;
-            this.rx = rx;
-            this.ry = ry;
+            this.cx = cx || 0;
+            this.cy = cy || 0;
+            this.rx = rx || 0;
+            this.ry = ry || 0;
 
             //防止createClass构造原型链时报错
             if ( arguments.length > 0 ) {
@@ -73,32 +73,38 @@ define(function(require, exports, module) {
             this.rx = rx;
             this.ry = ry;
             this.update();
+            return this;
         },
 
         setRadiusX: function ( rx ) {
             this.rx = rx;
             this.update();
+            return this;
         },
 
         setRadiusY: function ( ry ) {
             this.ry = ry;
             this.update();
+            return this;
         },
 
         setCenter: function ( cx, cy ) {
             this.cx = cx;
             this.cy = cy;
             this.update();
+            return this;
         },
 
         setCenterX: function ( cx ) {
             this.cx = cx;
             this.update();
+            return this;
         },
 
         setCenterY: function ( cy ) {
             this.cy = cy;
             this.update();
+            return this;
         }
 
 
