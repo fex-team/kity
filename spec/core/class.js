@@ -1,9 +1,8 @@
-getRequires(["core/class"]);
-
+//getRequires(["core/class"]);
 describe("createClass", function () {
     var createClass;
     beforeEach(function () {
-        if(createClass==undefined)createClass = src[0].createClass;
+        createClass = kity.createClass;
     });
     describe("define class Dog", function () {
         var dog, Dog;

@@ -16,7 +16,7 @@ module.exports = function(config) {
     files: [
 //todo 顺序
         '../spec/tools/lib/seajs-2.1.1/sea-debug.js',
-        '../src/core/config.js',
+
         '../src/core/class.js',
         '../src/core/kity.js',
         '../src/core/utils.js',
@@ -24,7 +24,7 @@ module.exports = function(config) {
         '../spec/karmaConfig.js',
         '../spec/SpecHelper.js',
         '../spec/core/*.js'
-        ,'../spec/graphic/*.js'
+//        ,'../spec/graphic/*.js'
 //        ,'../spec/graphic/ellipse.js'
     ],
 
@@ -65,8 +65,8 @@ module.exports = function(config) {
     // - Safari (only Mac)
     // - PhantomJS
     // - IE (only Windows)
-//    browsers: ['Chrome'],
-      browsers: ['Chrome','Firefox','IE'],
+    browsers: ['Chrome'],
+//      browsers: ['Chrome','Firefox','IE'],
 
 
     // If browser does not capture in given timeout [ms], kill it
@@ -86,9 +86,17 @@ module.exports = function(config) {
 //          dir: './spec/coverage/'
 //    }
 //      ,
-      reporters: ['progress','dots', 'junit'],
+      reporters: ['progress','dots', 'junit', 'coverage'],
       junitReporter: {
           outputFile: 'test-results.xml'
       }
+  , preprocessors: {
+        '../src/core/*.js': ['coverage']
+//    ,'./src/graphic/*.js': ['coverage']
+      },
+    coverageReporter: {
+          type: 'html',
+          dir: '../spec/_coverage/'
+    }
   });
 };
