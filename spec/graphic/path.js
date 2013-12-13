@@ -1,10 +1,6 @@
-getRequires(["graphic/path"]);
 describe("Kity.Path", function () {
 
-    var Path ;
-    beforeEach(function() {
-        if(Path==undefined)Path = src[0];
-    });
+    var Path = kity.Path;
 
     it("无参构造Path", function () {
 

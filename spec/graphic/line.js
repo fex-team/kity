@@ -1,11 +1,8 @@
-getRequires(['graphic/paper','graphic/shape' ,'graphic/path','graphic/line']);
-
 describe( "Kity.Line", function () {
-    var Paper , Shape , Path,Line ;
+    var Paper = kity.Paper, Shape = kity.Shape, Path = kity.Path,Line = kity.Line;
     var paper, container, line;
 
     beforeEach( function () {
-        Paper = src[0] , Shape =src[1] , Path = src[2],Line = src[3];
         container = document.createElement( 'div' );
         document.body.appendChild( container );
         paper = new Paper( container );

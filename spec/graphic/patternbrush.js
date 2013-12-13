@@ -1,10 +1,6 @@
-getRequires(["graphic/patternbrush"]);
 describe("Kity.PatternBrush", function () {
 
-    var PatternBrush ;
-    beforeEach(function() {
-        if(PatternBrush==undefined)PatternBrush = src[0];
-    });
+    var PatternBrush  = kity.PatternBrush;
     it("构造验证", function () {
 
     });

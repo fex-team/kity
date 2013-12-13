@@ -1,12 +1,7 @@
-getRequires(['graphic/pen','graphic/color']);
 describe("Kity.Pen", function() {
-    var Pen , Color ;
+    var Pen = kity.Pen, Color = kity.Color;
     var pen;
     beforeEach(function() {
-        if(Pen==undefined){
-            Pen = src[0];
-            Color = src[1];
-        }
         pen = new Pen(Color.parse('#123'), 1);
     });
 

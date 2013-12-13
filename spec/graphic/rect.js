@@ -1,16 +1,13 @@
-getRequires(['graphic/rect', 'graphic/paper', 'graphic/color','graphic/colorbrush' ]);
 describe( "Kity.Rect", function () {
 
-    var Rect , Paper , Color , ColorBrush  ;
+    var Rect = kity.Rect, Paper = kity.Paper, Color = kity.Color, ColorBrush = kity.ColorBrush ;
     var rect, paper;
 
     var color ;
 
     beforeEach( function () {
-        if(Rect==undefined){
-            Rect  =src[0],Paper = src[1],Color = src[2],ColorBrush = src[2];
-            color = new Color( 'hsl(0, 80, 50)' );
-        }
+
+        color = new Color( 'hsl(0, 80, 50)' );
         rect = new Rect( 10, 20, 100, 50 );
         if ( !paper ) {
             paper = new Paper( document.body.appendChild( document.createElement( 'div' ) ) );

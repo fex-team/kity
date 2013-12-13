@@ -1,10 +1,7 @@
-getRequires(["graphic/ellipse","graphic/path","graphic/shape"]);
-
 describe("Kity.Ellipse", function () {
-    var Ellipse,Path,Shape;
+    var Ellipse = kity.Ellipse,Path = kity.Path,Shape = kity.Path;
 	var ellipse;
 	beforeEach(function() {
-        Ellipse = src[0],Path=src[1],Shape=src[2];
 		ellipse = new Ellipse();
 	});
 

@@ -1,10 +1,5 @@
-getRequires(['graphic/color','core/utils']);
 describe("Kity.graphic.Color", function () {
-    var Color,utils;
-    beforeEach(function () {
-        Color = src[0];
-        utils = src[1];
-    });
+    var Color = kity.Color;
     describe("Color(colorString) 构造函数", function () {
 
         it("每个分量正确", function () {
