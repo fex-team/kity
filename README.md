@@ -4,9 +4,9 @@ Kity
 
 参考文档：
 
-1. [Get Started](doc/Get+Started.md)
+1. [Get Started](doc/Get%20Started.md)
 2. [API](doc/API.md)
-3. [Animate](doc/Animate+API.md)
+3. [Animate](doc/Animate%20API.md)
 
 当前文档工作未完善，有疑惑之处请发邮件联系我们。
 
