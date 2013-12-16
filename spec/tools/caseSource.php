@@ -38,11 +38,13 @@ class Kiss
         else{
             $basePath =  '../../src';
         }
-        print "<script type='text/javascript' src='./lib/seajs-2.1.1/sea-debug.js' ></script>\n";
-        print "<script>seajs.config( {
+        print "<script type='text/javascript' src='../../dev-lib/dev-define.js' ></script>\n";
+        print "<script>inc.config( {
             base:'".$basePath."'
         } );
         </script>\n";
+        print "<script type='text/javascript' src='../exports.js' ></script>\n";
+        print "<script type='text/javascript' src='../../dev-lib/dev-start.js' ></script>\n";
         /*load ua*/
         print "<script type='text/javascript' src='./js/UserAction.js' ></script>\n";
         /* load case source*/
@@ -58,12 +60,13 @@ class Kiss
                 print '<script type="text/javascript" src="' . $this->testPath . $f  . '"></script>' . "\n";
             }
         }
-        $testFilePath = dirname( __FILE__ ) . '/../' . $this->name . '.js';
-        if(file_exists($testFilePath)){
-            $caseContent = file_get_contents($testFilePath, 'r' );
-            print '<script>define("case_start", function ( require ) {'. $caseContent .'});</script>';
-            print '<script>seajs.use( "case_start" )</script>';
-        }
+//        $testFilePath = dirname( __FILE__ ) . '/../' . $this->name . '.js';
+//        if(file_exists($testFilePath)){
+//            $caseContent = file_get_contents($testFilePath, 'r' );
+//            print '<script>define("case_start", function ( require ) {'. $caseContent .'});</script>';
+//            print '<script>seajs.use( "case_start" )</script>';
+//        }
+        print '<script type="text/javascript" src="../' . $this->name . '.js "></script>' . "\n";
 
     }
     public function match( $matcher )

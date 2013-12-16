@@ -1,9 +1,7 @@
-getRequires(["graphic/container"]);
 describe("Kity.Container", function () {
-    var Container , container;
+    var Container = kity.Container, container;
 
     beforeEach(function () {
-        Container = src[0];
         container = new Container();
     });
 

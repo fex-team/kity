@@ -1,12 +1,6 @@
-getRequires(['graphic/polyline', 'graphic/shapepoint']);
 describe("Kity.Polyline", function () {
-    var Polyline, Point ;
-    beforeEach(function() {
-        if(Polyline==undefined) {
-            Polyline = src[0];
-            Point = src[1];
-        }
-    });
+    var Polyline = kity.Polyline, Point = kity.Point;
+
 
     it("无参构造Polyline", function() {
 

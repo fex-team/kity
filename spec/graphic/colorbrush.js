@@ -1,12 +1,7 @@
-getRequires(["graphic/colorbrush","graphic/color"]);
 describe( "Kity.ColorBrush", function () {
 
-    var ColorBrush ,
-        Color ;
-    beforeEach(function () {
-        ColorBrush = src[0];
-        Color = src[1];
-    });
+    var ColorBrush = kity.ColorBrush,
+        Color = kity.Color;
     it( "无参构造的ColorBrush的初始颜色为Color的默认颜色", function () {
 
         var colorBrush = new ColorBrush();

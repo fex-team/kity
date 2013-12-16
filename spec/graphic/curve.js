@@ -1,10 +1,7 @@
-getRequires(['graphic/shape','graphic/path','graphic/container','graphic/curve', 'graphic/shapepoint']);
-
 describe("Kity.Curve", function () {
-    var Shape ,Path ,Container , Curve, Point;
+    var Shape = kity.Shape,Path = kity.Path,Container = kity.Container, Curve = kity.Curve, Point = kity.Point
     var curve;
     beforeEach(function () {
-        Shape = src[0], Path = src[1], Container = src[2],Curve = src[3], Point = src[4];
         curve = new Curve();
     });
 

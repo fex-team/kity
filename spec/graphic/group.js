@@ -1,11 +1,8 @@
-getRequires(['graphic/group','graphic/container']);
-
 describe("Kity.Group", function () {
-    var Group , Container;
+    var Group = kity.Group, Container = kity.Container;
     var group;
 
     beforeEach(function () {
-        Group = src[0], Container = src[1];
         group = new Group();
     });
 

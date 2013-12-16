@@ -1,9 +1,5 @@
-getRequires(["graphic/radialgradientbrush"]);
 describe("Kity.RadialGradientBrush", function () {
-    var RadialGradientBrush ;
-    beforeEach(function() {
-        if(RadialGradientBrush==undefined)RadialGradientBrush = src[0];
-    });
+    var RadialGradientBrush = kity.RadialGradientBrush;
 
     describe("构造验证", function () {
         var radialBrush;
