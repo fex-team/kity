@@ -57,13 +57,13 @@ define( function ( require, exports, module ) {
         var brush = new PatternBrush(),
             rect = null,
             radius = 10*100,
-            bgRect = new Rect( 0, 0, 600 * ZOOM, 300 * ZOOM );
+            bgRect = new Rect( 600 * ZOOM, 300 * ZOOM );
 
         brush.setWidth( 2*radius ).setHeight( 2*radius );
 
         for ( var i = 0, len = 2; i < len; i++ ) {
 
-            rect = new Rect( i*radius, i*radius, radius, radius );
+            rect = new Rect( radius, radius, i*radius, i*radius );
 
             rect.fill( new Color( "lightgray" ).set( 'a', 0.2 ) );
 

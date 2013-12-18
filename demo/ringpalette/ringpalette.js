@@ -31,7 +31,7 @@ define(function(require, exports, module) {
             this.generateLabels();
         },
         generateCircle: function() {
-            this.circle = new Circle( 0, 0, this.innerRadius );
+            this.circle = new Circle( this.innerRadius );
             this.circle.stroke(new Pen('white', 5));
             this.circle.setStyle('cursor', 'move');
             this.addShape(this.circle);

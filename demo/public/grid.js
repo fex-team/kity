@@ -7,7 +7,7 @@ define(function(require, exports, module) {
             this.color1 = color1 || 'white';
             this.color2 = color2 || 'lightgray';
             this.gridSize = gridSize;
-            this.callBase(x, y, width, height);
+            this.callBase(width, height, x, y);
             this.draw();
         },
         draw: function() {
@@ -21,7 +21,7 @@ define(function(require, exports, module) {
                 me.fill(new PatternBrush().pipe(function() {
                     this.setX(0).setY(0);
                     this.setWidth(size * 2).setHeight(size * 2);
-                    this.addShape(new Rect(0, 0, size, size).fill(me.color2));
+                    this.addShape(new Rect(size, size).fill(me.color2));
                     this.addShape(new Rect(size, size, size, size).fill(me.color2));
                     paper.addResource(this);
                 }));

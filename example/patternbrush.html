@@ -26,16 +26,16 @@
 
             paper.setWidth(400).setHeight(300);
 
-            var rect = new kity.Rect(40, 40, 200, 100);
+            var rect = new kity.Rect(200, 100, 40, 40);
             rect.fill(new kity.PatternBrush().pipe( function() {
                 var colors = ['red', 'blue', 'yellow', 'green'];
                 this.setWidth(40);
                 this.setHeight(40);
                 this.addShapes([
-                    new kity.Circle(10, 10, 5).fill(colors.shift()),
-                    new kity.Circle(30, 10, 5).fill(colors.shift()),
-                    new kity.Circle(10, 30, 5).fill(colors.shift()),
-                    new kity.Circle(30, 30, 5).fill(colors.shift())
+                    new kity.Circle(5, 10, 10).fill(colors.shift()),
+                    new kity.Circle(5, 30, 10).fill(colors.shift()),
+                    new kity.Circle(5, 10, 30).fill(colors.shift()),
+                    new kity.Circle(5, 30, 30).fill(colors.shift())
                 ]);
                 paper.addResource(this);
             }));

@@ -6,7 +6,6 @@ define( function ( require, exports, module ) {
     var Data = require( 'graphic/data' );
     var Matrix = require( 'graphic/matrix' );
     var Pen = require( 'graphic/pen' );
-    var Brush = require( 'graphic/brush' );
 
     return require( 'core/class' ).createClass( 'Shape', {
         mixins: [ EventHandler, Styled, Data ],
@@ -107,16 +106,16 @@ define( function ( require, exports, module ) {
                 x: rbox.x + rbox.width / 2,
                 y: rbox.y + rbox.height / 2
             };
-            if(!~anchor.indexOf('left')) {
+            if(~anchor.indexOf('left')) {
                 value.x = rbox.x;
             }
-            if(!~anchor.indexOf('right')) {
-                value.x = rbox.x + rbox.width
+            if(~anchor.indexOf('right')) {
+                value.x = rbox.x + rbox.width;
             }
-            if(!~anchor.indexOf('top')) {
+            if(~anchor.indexOf('top')) {
                 value.y = rbox.y;
             }
-            if(!~anchor.indexOf('bottom')) {
+            if(~anchor.indexOf('bottom')) {
                 value.y = rbox.y + rbox.height;
             }
             return value;
@@ -128,7 +127,7 @@ define( function ( require, exports, module ) {
                 this.anchor = {
                     x: ax,
                     y: ay
-                };   
+                };
             }
             return this;
         },

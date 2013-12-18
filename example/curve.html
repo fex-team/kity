@@ -39,7 +39,7 @@
                     this.addShape(curve);
                     for(var i = 0; i < points.length; i++) {
                         var p = points[i];
-                        this.addShape(new kity.Rect(p.getX() - 3, p.getY() - 3, 6, 6).fill('red'));
+                        this.addShape(new kity.Rect(6, 6, p.getX() - 3, p.getY() - 3).fill('red'));
                     }
                     this.addShape(new kity.Text('k = ' + s).setX(180).setY(50).fill('blue'));
                     this.scale(0.8).translate(x, y);

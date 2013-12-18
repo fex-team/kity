@@ -16,11 +16,9 @@
             // shape
             Bezier: require( 'graphic/bezier' ),
             BezierPoint: require( 'graphic/bezierpoint' ),
-            Brush: require( 'graphic/brush' ),
             Circle: require( 'graphic/circle' ),
             Clip: require( 'graphic/clip' ),
             Color: require( 'graphic/color' ),
-            ColorBrush: require( 'graphic/colorbrush' ),
             Curve: require( 'graphic/curve' ),
             Ellipse: require( 'graphic/ellipse' ),
             GradientBrush: require( 'graphic/gradientbrush' ),

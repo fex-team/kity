@@ -134,13 +134,13 @@
                 generateLevelObject: function(level) {
                     switch(level) {
                         case 0:
-                            return new MindRect(0, -100, 200, 200, 10)
+                            return new MindRect(200, 200, 0, -100, 10)
                                 .fill(this.palette.get('level0-fill'));
                         case 1:
-                            return new MindRect(0, 0, 200, 100, 5)
+                            return new MindRect(200, 100, 0, 0, 5)
                                 .fill(this.palette.get('level1-fill'));
                         default:
-                            return new MindRect(0, 0, 200, 80, 3)
+                            return new MindRect(200, 80, 0, 0, 3)
                                 .fill(this.palette.get('fill'));
                     }
                 },

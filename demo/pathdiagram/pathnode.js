@@ -10,7 +10,7 @@ define( function ( require, exports, module ) {
         constructor: function ( x, y, width, height, data, bold ) {
             this.callBase();
             this.data = data;
-            this.rect = new Rect( x, y, width, height, 5 );
+            this.rect = new Rect( width, height, x, y, 5 );
             this.text = new Text().pipe( function () {
                 this.setSize( 14 );
                 this.setX( x + width / 2 );

@@ -41,7 +41,7 @@
                 this.add('frame-dark', gray.dec('l', 10));
             });
 
-            paper.addShape(new kity.Circle(0, 0, 500).pipe(function(){
+            paper.addShape(new kity.Circle(500).pipe(function(){
                 this.fill(new kity.LinearGradientBrush().pipe(function() {
                     this.addStop(0, palette.get('frame-dark'));
                     this.addStop(0.4, palette.get('frame-light'));
@@ -53,7 +53,7 @@
                 this.rotate(30);
             }));
 
-            paper.addShape(new kity.Circle(0, 0, 465).pipe(function(){
+            paper.addShape(new kity.Circle(465).pipe(function(){
                 this.fill(new kity.LinearGradientBrush().pipe(function() {
                     this.addStop(0, palette.get('frame-light'));
                     this.addStop(0.4, palette.get('frame-dark'));
@@ -65,7 +65,7 @@
             }));
 
             // 表盘
-            paper.addShape(new kity.Circle(0, 0, 450).pipe(function() {
+            paper.addShape(new kity.Circle(450).pipe(function() {
                 this.stroke(palette.get('inside'), 8);
                 this.fill(new kity.RadialGradientBrush().pipe(function(brush){
                     paper.addResource(brush);
@@ -83,9 +83,9 @@
                 while(step < minutes) {
                     var rect;
                     if(!(step % 5)) {
-                        rect = new kity.Rect(390, -5, 50, 10).fill(palette.get('big-ruler'));
+                        rect = new kity.Rect(50, 10, 390, -5).fill(palette.get('big-ruler'));
                     } else {
-                        rect = new kity.Rect(410, -3, 25, 6).fill(palette.get('small-ruler'));
+                        rect = new kity.Rect(25, 6, 410, -3).fill(palette.get('small-ruler'));
                     }
                     this.addShape(rect.rotate(deg));
                     deg += stepDeg;
@@ -141,22 +141,22 @@
 
             var msPointer = new Pointer( 10, 2, 80, 0, new kity.Color('gray'));
             var msMeter = new kity.Group().pipe(function() {
-                this.addShape(new kity.Circle(0, 0, 90).pipe(function() {
+                this.addShape(new kity.Circle(90).pipe(function() {
                     this.stroke(palette.get('inside'), 5);
                 }));
                 this.addShape(msPointer);
-                this.addShape(new kity.Circle(0, 0, 8).fill(new kity.Color('gray')));
+                this.addShape(new kity.Circle(8).fill(new kity.Color('gray')));
                 this.rotate(-90);
                 this.translate(0, 250);
             });
 
             var mmPointer = new Pointer( 4, 1, 40, 0, new kity.Color('gray'));
             var mmMeter = new kity.Group().pipe(function() {
-                this.addShape(new kity.Circle(0, 0, 50).pipe(function() {
+                this.addShape(new kity.Circle(50).pipe(function() {
                     this.stroke(palette.get('inside'), 3);
                 }));
                 this.addShape(mmPointer);
-                this.addShape(new kity.Circle(0, 0, 6).fill(new kity.Color('gray')));
+                this.addShape(new kity.Circle(6).fill(new kity.Color('gray')));
                 this.rotate(90);
                 var pos = kity.Vector.fromPolar(250, 50);
                 this.translate(pos.x, pos.y);

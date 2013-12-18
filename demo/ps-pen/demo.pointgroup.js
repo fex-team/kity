@@ -279,7 +279,7 @@ define( function ( require, exports, module ) {
 
             var width = this.exterior.vertex.width,
                 height = this.exterior.vertex.height,
-                vertextRect = new Rect( vertex.x - width / 2 , vertex.y - height / 2, width, height );
+                vertextRect = new Rect( width, height, vertex.x - width / 2 , vertex.y - height / 2 );
 
             //记录下图形
             this._stroke( vertextRect );
@@ -316,7 +316,7 @@ define( function ( require, exports, module ) {
 
             var styles = this.exterior.control,
                 radius = styles.radius,
-                controlPoint = new Circle( point.x, point.y, radius );
+                controlPoint = new Circle( radius, point.x, point.y );
 
             this._stroke( controlPoint );
 

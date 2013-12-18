@@ -31,7 +31,7 @@
             }).trigger('dragend');
 
             paper.addShape(new Grid(-1000, -1000, 2000, 2000, 10));
-            paper.addShape(new Rect(15, 15, 30, 30).pipe(function() {
+            paper.addShape(new Rect(30, 30, 15, 15).pipe(function() {
                 this.fill('red');
                 this.scale(0.5);
                 this.drag();
