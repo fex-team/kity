@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kitygraph - v1.0.0 - 2013-12-06
+ * kitygraph - v1.0.0 - 2013-12-18
  * https://github.com/kitygraph/kitygraph
  * GitHub: https://github.com/kitygraph/kitygraph.git 
  * Copyright (c) 2013 Baidu UEditor Group; Licensed MIT
@@ -2180,10 +2180,10 @@ define("graphic/ellipse", [ "core/utils", "core/class", "core/config", "graphic/
         base: require("graphic/path"),
         constructor: function(cx, cy, rx, ry) {
             this.callBase();
-            this.cx = cx;
-            this.cy = cy;
-            this.rx = rx;
-            this.ry = ry;
+            this.cx = cx || 0;
+            this.cy = cy || 0;
+            this.rx = rx || 0;
+            this.ry = ry || 0;
             //防止createClass构造原型链时报错
             if (arguments.length > 0) {
                 this.update();
@@ -2221,27 +2221,33 @@ define("graphic/ellipse", [ "core/utils", "core/class", "core/config", "graphic/
             this.rx = rx;
             this.ry = ry;
             this.update();
+            return this;
         },
         setRadiusX: function(rx) {
             this.rx = rx;
             this.update();
+            return this;
         },
         setRadiusY: function(ry) {
             this.ry = ry;
             this.update();
+            return this;
         },
         setCenter: function(cx, cy) {
             this.cx = cx;
             this.cy = cy;
             this.update();
+            return this;
         },
         setCenterX: function(cx) {
             this.cx = cx;
             this.update();
+            return this;
         },
         setCenterY: function(cy) {
             this.cy = cy;
             this.update();
+            return this;
         }
     });
 });
@@ -3087,7 +3093,7 @@ define("graphic/path", [ "core/utils", "core/class", "core/config", "graphic/sha
             return this;
         },
         getPathData: function() {
-            return this.pathdata;
+            return this.pathdata || "";
         },
         getDrawer: function() {
             return new PathDrawer(this);
@@ -3419,7 +3425,7 @@ define("graphic/rect", [ "core/utils", "core/class", "core/config", "graphic/pat
             this.y = y || 0;
             this.width = width || 0;
             this.height = height || 0;
-            this.radius = RectUtils.formatRadius(width, height, radius || 0);
+            this.radius = RectUtils.formatRadius(this.width, this.height, radius || 0);
             this.update();
         },
         update: function() {
@@ -3571,21 +3577,38 @@ define("graphic/shape", [ "graphic/svg", "core/utils", "graphic/eventhandler", "
             return this.setTransform(this.getTransform().mergeMatrix(matrix));
         },
         getAnchor: function(ax, ay) {
-            if (this.anchor) {
+            if (this.anchor && this.anchor.x !== undefined) {
                 return this.anchor;
             }
+            var anchor = anchor || "center";
             var rbox = this.getRenderBox();
-            // 注意没有设置 anchor 时是动态计算的
-            return {
+            var value = {
                 x: rbox.x + rbox.width / 2,
                 y: rbox.y + rbox.height / 2
             };
+            if (!~anchor.indexOf("left")) {
+                value.x = rbox.x;
+            }
+            if (!~anchor.indexOf("right")) {
+                value.x = rbox.x + rbox.width;
+            }
+            if (!~anchor.indexOf("top")) {
+                value.y = rbox.y;
+            }
+            if (!~anchor.indexOf("bottom")) {
+                value.y = rbox.y + rbox.height;
+            }
+            return value;
         },
         setAnchor: function(ax, ay) {
-            this.anchor = {
-                x: ax,
-                y: ay
-            };
+            if (arguments.length === 1) {
+                this.anchor = ax;
+            } else {
+                this.anchor = {
+                    x: ax,
+                    y: ay
+                };
+            }
             return this;
         },
         resetAnchor: function() {

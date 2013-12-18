@@ -72,7 +72,7 @@ define(function(require, exports, module) {
             this.y = y || 0;
             this.width = width || 0;
             this.height = height || 0;
-            this.radius = RectUtils.formatRadius( width, height, radius || 0 );
+            this.radius = RectUtils.formatRadius( this.width, this.height, radius || 0 );
 
             this.update();
 
