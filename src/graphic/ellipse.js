@@ -6,37 +6,27 @@ define(function(require, exports, module) {
 
         base: require( 'graphic/path' ),
 
-        constructor: function( cx, cy, rx, ry ) {
-
+        constructor: function( rx, ry, cx, cy ) {
             this.callBase();
-
-            this.cx = cx || 0;
-            this.cy = cy || 0;
             this.rx = rx || 0;
             this.ry = ry || 0;
-
-            //防止createClass构造原型链时报错
-            if ( arguments.length > 0 ) {
-                this.update();
-            }
-
+            this.cx = cx || 0;
+            this.cy = cy || 0;
+            this.update();
         },
 
         update: function () {
-
-            var pathData = [
-
-                'M ' + ( this.cx + this.rx ) + ' ' + this.cy,
-                ' A ' + this.rx + ' ' + this.ry,
-                ' 0 1 1 ' + ( this.cx - this.rx ) + ' ' + this.cy,
-                ' A ' + this.rx + ' ' + this.ry,
-                ' 0 1 1 ' + ( this.cx + this.rx ) + ' ' + this.cy,
-                ' Z'
-
-            ];
-
-            this.setPathData( pathData.join( "" ) );
-
+            var rx = this.rx,
+                ry = this.ry
+                x1 = this.cx + rx,
+                x2 = this.cx - rx,
+                y = this.cy;
+            var drawer = this.getDrawer();
+            drawer.clear();
+            drawer.moveTo(x1, y);
+            drawer.arcTo(rx, ry, 0, 1, 1, x2, y);
+            drawer.arcTo(rx, ry, 0, 1, 1, x1, y);
+            return this;
         },
 
         getRadius: function () {
@@ -72,39 +62,33 @@ define(function(require, exports, module) {
         setRadius: function ( rx, ry ) {
             this.rx = rx;
             this.ry = ry;
-            this.update();
-            return this;
+            return this.update();
         },
 
         setRadiusX: function ( rx ) {
             this.rx = rx;
-            this.update();
-            return this;
+            return this.update();
         },
 
         setRadiusY: function ( ry ) {
             this.ry = ry;
-            this.update();
-            return this;
+            return this.update();
         },
 
         setCenter: function ( cx, cy ) {
             this.cx = cx;
             this.cy = cy;
-            this.update();
-            return this;
+            return this.update();
         },
 
         setCenterX: function ( cx ) {
             this.cx = cx;
-            this.update();
-            return this;
+            return this.update();
         },
 
         setCenterY: function ( cy ) {
             this.cy = cy;
-            this.update();
-            return this;
+            return this.update();
         }
 
 

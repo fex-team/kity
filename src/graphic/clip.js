@@ -1,7 +1,3 @@
-/**
- * 图形裁剪
- */
-
 define( function ( require, exports, module ) {
     var Class = require('core/class');
     var Shape = require('graphic/shape');

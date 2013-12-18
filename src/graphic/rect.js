@@ -31,7 +31,7 @@ define(function(require, exports, module) {
                     ' Z'
                 ];
 
-                //圆角
+            //圆角
             } else {
 
                 width -= 2 * radius;
@@ -64,7 +64,7 @@ define(function(require, exports, module) {
 
         base: require( 'graphic/path' ),
 
-        constructor: function( x, y, width, height, radius ) {
+        constructor: function( width, height, x, y, radius ) {
 
             this.callBase();
 

@@ -4,23 +4,16 @@ define(function(require, exports, module) {
 
         base: require( 'graphic/ellipse' ),
 
-        constructor: function( cx, cy, radius ) {
-
-            this.callBase( cx, cy, radius, radius );
-
-            this.rx = this.ry = this.radius = radius;
-
-            this.update();
-
+        constructor: function( radius, cx, cy ) {
+            this.callBase( radius, radius, cx, cy );
         },
 
         getRadius: function () {
-            return this.radius;
+            return this.getRadiusX();
         },
 
         setRadius: function ( radius ) {
-            this.rx = this.ry = this.radius = radius;
-            this.update();
+            return this.callBase( radius, radius );
         }
 
     });

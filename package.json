@@ -1,16 +1,16 @@
 {
     "name": "kitygraph",
     "title": "kitygraph",
-    "description": "SVG Graphic Library",
+    "description": "Kity Graphic Library",
     "version": "1.0.0",
-    "homepage": "https://github.com/kitygraph/kitygraph",
+    "homepage": "https://github.com/kitygraph/kity",
     "author": {
         "name": "Baidu UEditor Group",
         "url": "http://ueditor.baidu.com"
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/kitygraph/kitygraph.git"
+        "url": "https://github.com/kitygraph/kity.git"
     },
     "keywords": [
         "kity",

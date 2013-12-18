@@ -9,13 +9,13 @@ define(function(require, exports, module) {
             this.callBase();
 
             this.point1 = {
-                x: x1,
-                y: y1
+                x: x1 || 0,
+                y: y1 || 0
             };
 
             this.point2 = {
-                x: x2,
-                y: y2
+                x: x2 || 0,
+                y: y2 || 0
             };
 
             this.update();

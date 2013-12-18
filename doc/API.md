@@ -1,19 +1,5 @@
 # Kity Graphic Layer API #
 
-## Serializable ###
-> 接口
-
-表示一个类的实例是可序列化和反序列化的。如果一个类是可序列化的，那么在所有使用该类型的参数中，都可以使用字符串表示。
-
-### toString() : string ###
-返回当前实例的完整字符串表示
-
-### parse(object data) : this ###
-从给定的数据（字符串、数字、JSON等，取决于实现的类型）表示反序列化自身
-
-
-
-
 
 ## Point ##
 > 数据契约（JSON 格式）
