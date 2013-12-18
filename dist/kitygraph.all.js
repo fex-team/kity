@@ -1,8 +1,8 @@
 /*!
  * ====================================================
  * kitygraph - v1.0.0 - 2013-12-18
- * https://github.com/kitygraph/kitygraph
- * GitHub: https://github.com/kitygraph/kitygraph.git 
+ * https://github.com/kitygraph/kity
+ * GitHub: https://github.com/kitygraph/kity.git 
  * Copyright (c) 2013 Baidu UEditor Group; Licensed MIT
  * ====================================================
  */
@@ -85,7 +85,7 @@ function use ( id ) {
     return require( id );
 
 }
-define("animate/animator", [ "animate/timeline", "graphic/color", "graphic/matrix", "graphic/eventhandler", "core/class", "animate/easing", "core/config", "graphic/shape", "graphic/svg", "core/utils", "graphic/styled", "graphic/data", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
+define("animate/animator", [ "animate/timeline", "graphic/color", "graphic/matrix", "graphic/eventhandler", "core/class", "animate/easing", "core/config", "graphic/shape", "graphic/svg", "core/utils", "graphic/styled", "graphic/data", "graphic/pen" ], function(require, exports, module) {
     function parseTime(str) {
         var value = parseFloat(str, 10);
         if (/ms/.test(str)) {
@@ -354,7 +354,7 @@ define("animate/easing", [], function(require, exports, module) {
     };
     return easings;
 });
-define("animate/opacityanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/matrix", "core/utils", "core/config", "graphic/svg", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
+define("animate/opacityanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/matrix", "core/utils", "core/config", "graphic/svg", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/pen" ], function(require, exports, module) {
     var Animator = require("animate/animator");
     var Matrix = require("graphic/matrix");
     var OpacityAnimator = require("core/class").createClass("OpacityAnimator", {
@@ -388,7 +388,7 @@ define("animate/opacityanimator", [ "animate/animator", "animate/timeline", "ani
     });
     return OpacityAnimator;
 });
-define("animate/rotateanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/matrix", "core/utils", "core/config", "graphic/svg", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
+define("animate/rotateanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/matrix", "core/utils", "core/config", "graphic/svg", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/pen" ], function(require, exports, module) {
     var Animator = require("animate/animator");
     var Matrix = require("graphic/matrix");
     var RotateAnimator = require("core/class").createClass("RotateAnimator", {
@@ -415,7 +415,7 @@ define("animate/rotateanimator", [ "animate/animator", "animate/timeline", "anim
     });
     return RotateAnimator;
 });
-define("animate/scaleanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/matrix", "core/utils", "core/config", "graphic/svg", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
+define("animate/scaleanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/matrix", "core/utils", "core/config", "graphic/svg", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/pen" ], function(require, exports, module) {
     var Animator = require("animate/animator");
     var Matrix = require("graphic/matrix");
     var ScaleAnimator = require("core/class").createClass("ScaleAnimator", {
@@ -665,7 +665,7 @@ define("animate/timeline", [ "graphic/color", "core/utils", "graphic/standardcol
     });
     return Timeline;
 });
-define("animate/translateanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/matrix", "core/utils", "core/config", "graphic/svg", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
+define("animate/translateanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/matrix", "core/utils", "core/config", "graphic/svg", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/pen" ], function(require, exports, module) {
     var Animator = require("animate/animator");
     var Matrix = require("graphic/matrix");
     var TranslateAnimator = require("core/class").createClass("TranslateAnimator", {
@@ -1133,7 +1133,7 @@ define("filter/effectcontainer", [ "core/class", "core/config", "graphic/contain
 /**
  * Filter 基类
  */
-define("filter/filter", [ "graphic/svg", "core/class", "core/config", "filter/effectcontainer", "graphic/container", "graphic/shape", "core/utils", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
+define("filter/filter", [ "graphic/svg", "core/class", "core/config", "filter/effectcontainer", "graphic/container", "graphic/shape", "core/utils", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen" ], function(require, exports, module) {
     var svg = require("graphic/svg");
     var Class = require("core/class");
     var Filter = Class.createClass("Filter", {
@@ -1408,36 +1408,21 @@ define("graphic/bezierpoint", [ "graphic/shapepoint", "core/class", "graphic/poi
     });
     return BezierPoint;
 });
-define("graphic/brush", [ "core/class", "core/config" ], function(require, exports, module) {
-    var Brush = require("core/class").createClass("Brush", {
-        constructor: function() {},
-        getType: function() {
-            throw new Error("abstract method call error");
-        }
-    });
-    return Brush;
-});
 define("graphic/circle", [ "core/class", "core/config", "graphic/ellipse", "core/utils", "graphic/path" ], function(require, exports, module) {
     return require("core/class").createClass("Circle", {
         base: require("graphic/ellipse"),
-        constructor: function(cx, cy, radius) {
-            this.callBase(cx, cy, radius, radius);
-            this.rx = this.ry = this.radius = radius;
-            this.update();
+        constructor: function(radius, cx, cy) {
+            this.callBase(radius, radius, cx, cy);
         },
         getRadius: function() {
-            return this.radius;
+            return this.getRadiusX();
         },
         setRadius: function(radius) {
-            this.rx = this.ry = this.radius = radius;
-            this.update();
+            return this.callBase(radius, radius);
         }
     });
 });
-/**
- * 图形裁剪
- */
-define("graphic/clip", [ "core/class", "core/config", "graphic/shape", "graphic/svg", "core/utils", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen", "graphic/brush", "graphic/shapecontainer", "graphic/container" ], function(require, exports, module) {
+define("graphic/clip", [ "core/class", "core/config", "graphic/shape", "graphic/svg", "core/utils", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen", "graphic/shapecontainer", "graphic/container" ], function(require, exports, module) {
     var Class = require("core/class");
     var Shape = require("graphic/shape");
     var Clip = Class.createClass("Clip", {
@@ -1809,31 +1794,6 @@ define("graphic/color", [ "core/utils", "graphic/standardcolor", "core/class", "
     });
     return Color;
 });
-define("graphic/colorbrush", [ "graphic/color", "core/utils", "graphic/standardcolor", "core/class", "graphic/brush", "core/config" ], function(require, exports, module) {
-    var Color = require("graphic/color");
-    var Brush = require("graphic/brush");
-    var ColorBrush = require("core/class").createClass("ColorBrush", {
-        base: Brush,
-        constructor: function(color) {
-            this.callBase();
-            this.setColor(color || new Color());
-        },
-        getType: function() {
-            return "ColorBrush";
-        },
-        setColor: function(color) {
-            this.color = color;
-        },
-        getColor: function() {
-            return this.color;
-        },
-        fill: function(path) {
-            var node = path.node;
-            node.setAttribute("fill", this.getColor());
-        }
-    });
-    return ColorBrush;
-});
 define("graphic/container", [ "core/class", "core/config" ], function(require, exports, module) {
     function itemRemove() {
         this.container.removeItem(this);
@@ -2158,11 +2118,9 @@ define("graphic/data", [ "core/class", "core/config" ], function(require, export
         }
     });
 });
-define("graphic/defbrush", [ "graphic/svg", "graphic/brush", "core/class", "core/config" ], function(require, exports, module) {
+define("graphic/defbrush", [ "graphic/svg", "core/class", "core/config" ], function(require, exports, module) {
     var svg = require("graphic/svg");
-    var Brush = require("graphic/brush");
     return require("core/class").createClass("GradientBrush", {
-        base: Brush,
         constructor: function(nodeType) {
             this.callBase();
             this.node = svg.createNode(nodeType);
@@ -2178,20 +2136,23 @@ define("graphic/ellipse", [ "core/utils", "core/class", "core/config", "graphic/
     var Utils = require("core/utils");
     return require("core/class").createClass("Ellipse", {
         base: require("graphic/path"),
-        constructor: function(cx, cy, rx, ry) {
+        constructor: function(rx, ry, cx, cy) {
             this.callBase();
-            this.cx = cx || 0;
-            this.cy = cy || 0;
             this.rx = rx || 0;
             this.ry = ry || 0;
-            //防止createClass构造原型链时报错
-            if (arguments.length > 0) {
-                this.update();
-            }
+            this.cx = cx || 0;
+            this.cy = cy || 0;
+            this.update();
         },
         update: function() {
-            var pathData = [ "M " + (this.cx + this.rx) + " " + this.cy, " A " + this.rx + " " + this.ry, " 0 1 1 " + (this.cx - this.rx) + " " + this.cy, " A " + this.rx + " " + this.ry, " 0 1 1 " + (this.cx + this.rx) + " " + this.cy, " Z" ];
-            this.setPathData(pathData.join(""));
+            var rx = this.rx, ry = this.ry;
+            x1 = this.cx + rx, x2 = this.cx - rx, y = this.cy;
+            var drawer = this.getDrawer();
+            drawer.clear();
+            drawer.moveTo(x1, y);
+            drawer.arcTo(rx, ry, 0, 1, 1, x2, y);
+            drawer.arcTo(rx, ry, 0, 1, 1, x1, y);
+            return this;
         },
         getRadius: function() {
             return {
@@ -2220,34 +2181,28 @@ define("graphic/ellipse", [ "core/utils", "core/class", "core/config", "graphic/
         setRadius: function(rx, ry) {
             this.rx = rx;
             this.ry = ry;
-            this.update();
-            return this;
+            return this.update();
         },
         setRadiusX: function(rx) {
             this.rx = rx;
-            this.update();
-            return this;
+            return this.update();
         },
         setRadiusY: function(ry) {
             this.ry = ry;
-            this.update();
-            return this;
+            return this.update();
         },
         setCenter: function(cx, cy) {
             this.cx = cx;
             this.cy = cy;
-            this.update();
-            return this;
+            return this.update();
         },
         setCenterX: function(cx) {
             this.cx = cx;
-            this.update();
-            return this;
+            return this.update();
         },
         setCenterY: function(cy) {
             this.cy = cy;
-            this.update();
-            return this;
+            return this.update();
         }
     });
 });
@@ -2415,7 +2370,7 @@ define("graphic/eventhandler", [ "core/utils", "graphic/shapeevent", "graphic/ma
         }
     });
 });
-define("graphic/gradientbrush", [ "graphic/svg", "graphic/defbrush", "graphic/brush", "core/class", "graphic/color", "core/utils", "graphic/standardcolor", "core/config" ], function(require, exports, module) {
+define("graphic/gradientbrush", [ "graphic/svg", "graphic/defbrush", "core/class", "graphic/color", "core/utils", "graphic/standardcolor", "core/config" ], function(require, exports, module) {
     var svg = require("graphic/svg");
     var DefBrush = require("graphic/defbrush");
     var Color = require("graphic/color");
@@ -2443,7 +2398,7 @@ define("graphic/gradientbrush", [ "graphic/svg", "graphic/defbrush", "graphic/br
         }
     });
 });
-define("graphic/group", [ "graphic/shapecontainer", "graphic/container", "core/class", "graphic/shape", "core/config", "graphic/svg", "core/utils", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
+define("graphic/group", [ "graphic/shapecontainer", "graphic/container", "core/class", "graphic/shape", "core/config", "graphic/svg", "core/utils", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen" ], function(require, exports, module) {
     var ShapeContainer = require("graphic/shapecontainer");
     return require("core/class").createClass("Group", {
         mixins: [ ShapeContainer ],
@@ -2453,7 +2408,7 @@ define("graphic/group", [ "graphic/shapecontainer", "graphic/container", "core/c
         }
     });
 });
-define("graphic/image", [ "core/class", "core/config", "graphic/shape", "graphic/svg", "core/utils", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
+define("graphic/image", [ "core/class", "core/config", "graphic/shape", "graphic/svg", "core/utils", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen" ], function(require, exports, module) {
     return require("core/class").createClass("Image", {
         base: require("graphic/shape"),
         constructor: function(url, width, height, x, y) {
@@ -2516,12 +2471,12 @@ define("graphic/line", [ "core/class", "core/config", "graphic/path", "core/util
         constructor: function(x1, y1, x2, y2) {
             this.callBase();
             this.point1 = {
-                x: x1,
-                y: y1
+                x: x1 || 0,
+                y: y1 || 0
             };
             this.point2 = {
-                x: x2,
-                y: y2
+                x: x2 || 0,
+                y: y2 || 0
             };
             this.update();
         },
@@ -2597,7 +2552,7 @@ define("graphic/lineargradientbrush", [ "graphic/svg", "graphic/gradientbrush", 
 /**
  * 蒙板
  */
-define("graphic/mask", [ "core/class", "core/config", "graphic/shape", "graphic/svg", "core/utils", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen", "graphic/brush", "graphic/shapecontainer", "graphic/container" ], function(require, exports, module) {
+define("graphic/mask", [ "core/class", "core/config", "graphic/shape", "graphic/svg", "core/utils", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen", "graphic/shapecontainer", "graphic/container" ], function(require, exports, module) {
     var Class = require("core/class");
     var Shape = require("graphic/shape");
     var Mask = Class.createClass("Mask", {
@@ -2850,7 +2805,7 @@ define("graphic/palette", [ "graphic/standardcolor", "graphic/color", "core/util
     });
     return Palette;
 });
-define("graphic/paper", [ "core/class", "core/config", "core/utils", "graphic/svg", "graphic/container", "graphic/shapecontainer", "graphic/shape", "graphic/eventhandler", "graphic/shapeevent", "graphic/styled", "graphic/matrix", "graphic/data", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
+define("graphic/paper", [ "core/class", "core/config", "core/utils", "graphic/svg", "graphic/container", "graphic/shapecontainer", "graphic/shape", "graphic/eventhandler", "graphic/shapeevent", "graphic/styled", "graphic/matrix", "graphic/data", "graphic/pen" ], function(require, exports, module) {
     var Class = require("core/class");
     var utils = require("core/utils");
     var svg = require("graphic/svg");
@@ -2996,7 +2951,7 @@ define("graphic/paper", [ "core/class", "core/config", "core/utils", "graphic/sv
     });
     return Paper;
 });
-define("graphic/path", [ "core/utils", "core/class", "core/config", "graphic/shape", "graphic/svg", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
+define("graphic/path", [ "core/utils", "core/class", "core/config", "graphic/shape", "graphic/svg", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen" ], function(require, exports, module) {
     var Utils = require("core/utils");
     var createClass = require("core/class").createClass;
     var Shape = require("graphic/shape");
@@ -3104,7 +3059,7 @@ define("graphic/path", [ "core/utils", "core/class", "core/config", "graphic/sha
         }
     });
 });
-define("graphic/patternbrush", [ "graphic/defbrush", "graphic/svg", "graphic/brush", "core/class", "graphic/shapecontainer", "graphic/container", "graphic/shape", "core/config" ], function(require, exports, module) {
+define("graphic/patternbrush", [ "graphic/defbrush", "graphic/svg", "core/class", "graphic/shapecontainer", "graphic/container", "graphic/shape", "core/config" ], function(require, exports, module) {
     var DefBrush = require("graphic/defbrush");
     var ShapeContainer = require("graphic/shapecontainer");
     var svg = require("graphic/svg");
@@ -3419,7 +3374,7 @@ define("graphic/rect", [ "core/utils", "core/class", "core/config", "graphic/pat
     });
     return require("core/class").createClass("Rect", {
         base: require("graphic/path"),
-        constructor: function(x, y, width, height, radius) {
+        constructor: function(width, height, x, y, radius) {
             this.callBase();
             this.x = x || 0;
             this.y = y || 0;
@@ -3486,7 +3441,7 @@ define("graphic/rect", [ "core/utils", "core/class", "core/config", "graphic/pat
         }
     });
 });
-define("graphic/shape", [ "graphic/svg", "core/utils", "graphic/eventhandler", "graphic/shapeevent", "core/class", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen", "graphic/color", "graphic/brush", "core/config" ], function(require, exports, module) {
+define("graphic/shape", [ "graphic/svg", "core/utils", "graphic/eventhandler", "graphic/shapeevent", "core/class", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen", "graphic/color", "core/config" ], function(require, exports, module) {
     var svg = require("graphic/svg");
     var utils = require("core/utils");
     var EventHandler = require("graphic/eventhandler");
@@ -3494,7 +3449,6 @@ define("graphic/shape", [ "graphic/svg", "core/utils", "graphic/eventhandler", "
     var Data = require("graphic/data");
     var Matrix = require("graphic/matrix");
     var Pen = require("graphic/pen");
-    var Brush = require("graphic/brush");
     return require("core/class").createClass("Shape", {
         mixins: [ EventHandler, Styled, Data ],
         constructor: function(tagName) {
@@ -3586,16 +3540,16 @@ define("graphic/shape", [ "graphic/svg", "core/utils", "graphic/eventhandler", "
                 x: rbox.x + rbox.width / 2,
                 y: rbox.y + rbox.height / 2
             };
-            if (!~anchor.indexOf("left")) {
+            if (~anchor.indexOf("left")) {
                 value.x = rbox.x;
             }
-            if (!~anchor.indexOf("right")) {
+            if (~anchor.indexOf("right")) {
                 value.x = rbox.x + rbox.width;
             }
-            if (!~anchor.indexOf("top")) {
+            if (~anchor.indexOf("top")) {
                 value.y = rbox.y;
             }
-            if (!~anchor.indexOf("bottom")) {
+            if (~anchor.indexOf("bottom")) {
                 value.y = rbox.y + rbox.height;
             }
             return value;
@@ -3662,7 +3616,7 @@ define("graphic/shape", [ "graphic/svg", "core/utils", "graphic/eventhandler", "
         }
     });
 });
-define("graphic/shapecontainer", [ "graphic/container", "core/class", "core/config", "graphic/shape", "graphic/svg", "core/utils", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
+define("graphic/shapecontainer", [ "graphic/container", "core/class", "core/config", "graphic/shape", "graphic/svg", "core/utils", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen" ], function(require, exports, module) {
     var Container = require("graphic/container");
     var ShapeContainer = require("core/class").createClass("ShapeContainer", {
         base: Container,
@@ -4128,7 +4082,7 @@ define("graphic/text", [ "graphic/textcontent", "graphic/shape", "core/class", "
         }
     });
 });
-define("graphic/textcontent", [ "graphic/shape", "graphic/svg", "core/utils", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen", "graphic/brush", "core/class", "core/config" ], function(require, exports, module) {
+define("graphic/textcontent", [ "graphic/shape", "graphic/svg", "core/utils", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen", "core/class", "core/config" ], function(require, exports, module) {
     var Shape = require("graphic/shape");
     return require("core/class").createClass("TextContent", {
         base: Shape,
@@ -4179,7 +4133,7 @@ define("graphic/textspan", [ "graphic/textcontent", "graphic/shape", "core/class
 /*
  * USE 功能
  */
-define("graphic/use", [ "graphic/svg", "core/class", "core/config", "graphic/shape", "core/utils", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen", "graphic/brush" ], function(require, exports, module) {
+define("graphic/use", [ "graphic/svg", "core/class", "core/config", "graphic/shape", "core/utils", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen" ], function(require, exports, module) {
     var Svg = require("graphic/svg");
     var Class = require("core/class");
     var Use = Class.createClass("Use", {
@@ -4287,11 +4241,9 @@ define("graphic/vector", [ "core/class", "core/config" ], function(require, expo
             // shape
             Bezier: require( 'graphic/bezier' ),
             BezierPoint: require( 'graphic/bezierpoint' ),
-            Brush: require( 'graphic/brush' ),
             Circle: require( 'graphic/circle' ),
             Clip: require( 'graphic/clip' ),
             Color: require( 'graphic/color' ),
-            ColorBrush: require( 'graphic/colorbrush' ),
             Curve: require( 'graphic/curve' ),
             Ellipse: require( 'graphic/ellipse' ),
             GradientBrush: require( 'graphic/gradientbrush' ),
