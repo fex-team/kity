@@ -476,7 +476,9 @@ define("animate/timeline", [ "graphic/color", "core/utils", "graphic/standardcol
         while (pending.length) {
             pending.shift()();
         }
-        frameRequestId = requestAnimationFrame(execGlobalFrameAction);
+        if (frameRequests.length > 0) {
+            frameRequestId = requestAnimationFrame(execGlobalFrameAction);
+        }
     }
     function paralle(v1, v2, op) {
         if (false === isNaN(parseFloat(v1))) {
@@ -3751,7 +3753,7 @@ define("graphic/shapecontainer", [ "graphic/container", "core/class", "core/conf
  * */
 define("graphic/shapeevent", [ "graphic/matrix", "core/utils", "core/class", "core/config" ], function(require, exprots, module) {
     var Matrix = require("graphic/matrix"), Utils = require("core/utils");
-    return require("core/class").createClass("EventHandler", {
+    return require("core/class").createClass("ShapeEvent", {
         constructor: function(event) {
             var target = null;
             // dom 事件封装对象

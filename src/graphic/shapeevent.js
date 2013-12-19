@@ -7,7 +7,7 @@ define( function ( require, exprots, module ) {
     var Matrix = require( "graphic/matrix" ),
         Utils = require( "core/utils" );
 
-    return require( 'core/class' ).createClass( 'EventHandler', {
+    return require( 'core/class' ).createClass( 'ShapeEvent', {
 
         constructor: function ( event ) {
 
