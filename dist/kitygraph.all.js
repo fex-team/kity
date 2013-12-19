@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kitygraph - v1.0.0 - 2013-12-18
+ * kitygraph - v1.0.0 - 2013-12-19
  * https://github.com/kitygraph/kity
  * GitHub: https://github.com/kitygraph/kity.git 
  * Copyright (c) 2013 Baidu UEditor Group; Licensed MIT
@@ -449,16 +449,35 @@ define("animate/timeline", [ "graphic/color", "core/utils", "graphic/standardcol
     var Matrix = require("graphic/matrix");
     var EventHandler = require("graphic/eventhandler");
     var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+    var cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame || window.webkitCancelAnimationFrame || window.msCancelAnimationFrame;
     var globalFrameAction = [];
+    var frameRequests = [];
+    var frameRequestId = 0;
+    function requestFrame(id) {
+        if (!~frameRequests.indexOf(id)) {
+            frameRequests.push(id);
+        }
+        if (frameRequests.length === 1) {
+            frameRequestId = execGlobalFrameAction();
+        }
+    }
+    function releaseFrame(id) {
+        var index = frameRequests.indexOf(id);
+        if (index !== -1) {
+            frameRequests.splice(index, 1);
+        }
+        if (frameRequests.length === 0) {
+            cancelAnimationFrame(frameRequestId);
+        }
+    }
     function execGlobalFrameAction() {
         var pending = globalFrameAction;
         globalFrameAction = [];
         while (pending.length) {
             pending.shift()();
         }
-        requestAnimationFrame(execGlobalFrameAction);
+        frameRequestId = requestAnimationFrame(execGlobalFrameAction);
     }
-    execGlobalFrameAction();
     function paralle(v1, v2, op) {
         if (false === isNaN(parseFloat(v1))) {
             return op(v1, v2);
@@ -492,6 +511,7 @@ define("animate/timeline", [ "graphic/color", "core/utils", "graphic/standardcol
             }
         }
     }
+    var timelineId = 0;
     var Timeline = require("core/class").createClass("Timeline", {
         mixins: [ EventHandler ],
         constructor: function(animator, target, duration, easing) {
@@ -505,6 +525,7 @@ define("animate/timeline", [ "graphic/color", "core/utils", "graphic/standardcol
             this.beginVal = animator.beginVal;
             this.finishVal = animator.finishVal;
             this.setter = animator.setter;
+            this.id = timelineId++;
         },
         guessValueType: function() {
             var value = this.beginVal;
@@ -607,11 +628,13 @@ define("animate/timeline", [ "graphic/color", "core/utils", "graphic/standardcol
             this.fire("play", new TimelineEvent(this, "play", {
                 lastStatus: lastStatus
             }));
+            requestFrame(this.id);
             return this;
         },
         pause: function() {
             this.status = "paused";
             this.fire("pause", new TimelineEvent(this, "pause"));
+            releaseFrame(this.id);
             return this;
         },
         stop: function() {
@@ -619,6 +642,7 @@ define("animate/timeline", [ "graphic/color", "core/utils", "graphic/standardcol
             this.setValue(this.finishVal);
             this.rollbacking = false;
             this.fire("stop", new TimelineEvent(this, "stop"));
+            releaseFrame(this.id);
             return this;
         },
         reset: function() {
@@ -651,6 +675,7 @@ define("animate/timeline", [ "graphic/color", "core/utils", "graphic/standardcol
             this.setValue(this.finishVal);
             this.status = "finished";
             this.fire("finish", new TimelineEvent(this, "finish"));
+            releaseFrame(this.id);
         },
         decreaseRepeat: function() {
             if (this.repeatOption !== true) {
@@ -3731,6 +3756,7 @@ define("graphic/shapeevent", [ "graphic/matrix", "core/utils", "core/class", "co
             var target = null;
             // dom 事件封装对象
             if (!Utils.isObject(event.target)) {
+                this.type = event.type;
                 target = event.target;
                 // use标签有特殊属性， 需要区别对待
                 if (target.correspondingUseElement) {

@@ -16,6 +16,8 @@ define( function ( require, exprots, module ) {
             // dom 事件封装对象
             if ( !Utils.isObject( event.target ) ) {
 
+                this.type = event.type;
+
                 target = event.target;
 
                 // use标签有特殊属性， 需要区别对待

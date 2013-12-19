@@ -10,7 +10,33 @@ define( function ( require, exports, module ) {
         window.webkitRequestAnimationFrame ||
         window.msRequestAnimationFrame;
 
+    var cancelAnimationFrame = window.cancelAnimationFrame ||
+        window.mozCancelAnimationFrame ||
+        window.webkitCancelAnimationFrame ||
+        window.msCancelAnimationFrame;
+
     var globalFrameAction = [];
+    var frameRequests = [];
+    var frameRequestId = 0;
+
+    function requestFrame(id) {
+        if(!~frameRequests.indexOf(id)) {
+            frameRequests.push(id);
+        }
+        if(frameRequests.length === 1) {
+            frameRequestId = execGlobalFrameAction();
+        }
+    }
+
+    function releaseFrame(id) {
+        var index = frameRequests.indexOf(id);
+        if(index !== -1) {
+            frameRequests.splice(index, 1);
+        }
+        if(frameRequests.length === 0) {
+            cancelAnimationFrame(frameRequestId);
+        }
+    }
 
     function execGlobalFrameAction() {
         var pending = globalFrameAction;
@@ -18,10 +44,10 @@ define( function ( require, exports, module ) {
         while ( pending.length ) {
             pending.shift()();
         }
-        requestAnimationFrame( execGlobalFrameAction );
+        if(frameRequests.length > 0){
+            frameRequestId = requestAnimationFrame( execGlobalFrameAction );   
+        }
     }
-
-    execGlobalFrameAction();
 
     function paralle( v1, v2, op ) {
         if ( false === isNaN( parseFloat( v1 ) ) ) {
@@ -60,6 +86,8 @@ define( function ( require, exports, module ) {
         }
     }
 
+    var timelineId = 0;
+
     var Timeline = require( 'core/class' ).createClass( 'Timeline', {
         mixins: [ EventHandler ],
         constructor: function ( animator, target, duration, easing ) {
@@ -73,6 +101,7 @@ define( function ( require, exports, module ) {
             this.beginVal = animator.beginVal;
             this.finishVal = animator.finishVal;
             this.setter = animator.setter;
+            this.id = timelineId++;
         },
         guessValueType: function () {
             var value = this.beginVal;
@@ -187,11 +216,13 @@ define( function ( require, exports, module ) {
             this.fire( 'play', new TimelineEvent( this, 'play', {
                 lastStatus: lastStatus
             } ) );
+            requestFrame(this.id);
             return this;
         },
         pause: function () {
             this.status = 'paused';
             this.fire( 'pause', new TimelineEvent( this, 'pause' ) );
+            releaseFrame(this.id);
             return this;
         },
         stop: function () {
@@ -199,6 +230,7 @@ define( function ( require, exports, module ) {
             this.setValue( this.finishVal );
             this.rollbacking = false;
             this.fire( 'stop', new TimelineEvent( this, 'stop' ) );
+            releaseFrame(this.id);
             return this;
         },
         reset: function() {
@@ -231,6 +263,7 @@ define( function ( require, exports, module ) {
             this.setValue( this.finishVal );
             this.status = 'finished';
             this.fire( 'finish', new TimelineEvent( this, 'finish' ) );
+            releaseFrame(this.id);
         },
         decreaseRepeat: function () {
             if ( this.repeatOption !== true ) {
