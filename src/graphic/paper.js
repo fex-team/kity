@@ -14,21 +14,28 @@ define( function ( require, exports, module ) {
 
         constructor: function ( container ) {
             this.callBase();
-            if ( utils.isString( container ) ) {
-                container = document.getElementById( container );
-            }
-            this.container = container;
 
             this.node = this.createSVGNode();
             this.node.paper = this;
-            container.appendChild( this.node );
 
             this.node.appendChild( this.resourceNode = svg.createNode( 'defs' ) );
             this.node.appendChild( this.shapeNode = svg.createNode( 'g' ) );
 
             this.resources = new Container();
-            this.setWidth('100%').setHeight('100%');
+            this.setWidth( '100%' ).setHeight( '100%' );
+
+            if ( container ) {
+                this.renderTo( container );
+            }
             this.callMixin();
+        },
+
+        renderTo: function ( container ) {
+            if ( utils.isString( container ) ) {
+                container = document.getElementById( container );
+            }
+            this.container = container;
+            container.appendChild( this.node );
         },
 
         createSVGNode: function () {
@@ -89,10 +96,10 @@ define( function ( require, exports, module ) {
             return this;
         },
 
-        setViewPort: function( cx, cy, zoom ) {
+        setViewPort: function ( cx, cy, zoom ) {
             var viewport, box;
-            if (arguments.length == 1) {
-                viewport = arguments[0];
+            if ( arguments.length == 1 ) {
+                viewport = arguments[ 0 ];
                 cx = viewport.center.x;
                 cy = viewport.center.y;
                 zoom = viewport.zoom;
@@ -107,18 +114,18 @@ define( function ( require, exports, module ) {
                 zoom: zoom
             };
             var matrix = new Matrix();
-            var dx = (box.x + box.width / 2) - cx,
-                dy = (box.y + box.height / 2) - cy;
-            matrix.translate(-cx, -cy);
-            matrix.scale(zoom);
-            matrix.translate(cx, cy);
-            matrix.translate(dx, dy);
-            this.shapeNode.setAttribute('transform', matrix);
+            var dx = ( box.x + box.width / 2 ) - cx,
+                dy = ( box.y + box.height / 2 ) - cy;
+            matrix.translate( -cx, -cy );
+            matrix.scale( zoom );
+            matrix.translate( cx, cy );
+            matrix.translate( dx, dy );
+            this.shapeNode.setAttribute( 'transform', matrix );
             return this;
         },
 
-        getViewPort: function() {
-            if(!this.viewport) {
+        getViewPort: function () {
+            if ( !this.viewport ) {
                 var box = this.getViewBox();
                 this.viewport = {
                     zoom: 1,
@@ -151,20 +158,20 @@ define( function ( require, exports, module ) {
             return this;
         },
 
-        getPaper: function() {
+        getPaper: function () {
             return this;
         }
     } );
-    
-    var Shape = require('graphic/shape');
-    Class.extendClass(Shape, {
-        getPaper: function() {
+
+    var Shape = require( 'graphic/shape' );
+    Class.extendClass( Shape, {
+        getPaper: function () {
             var parent = this.container;
-            while(parent && parent instanceof Paper === false) {
+            while ( parent && parent instanceof Paper === false ) {
                 parent = parent.container;
             }
             return parent;
         }
-    });
+    } );
     return Paper;
 } );
