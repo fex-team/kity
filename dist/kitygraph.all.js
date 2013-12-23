@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kitygraph - v1.0.0 - 2013-12-19
+ * kitygraph - v1.0.0 - 2013-12-23
  * https://github.com/kitygraph/kity
  * GitHub: https://github.com/kitygraph/kity.git 
  * Copyright (c) 2013 Baidu UEditor Group; Licensed MIT
@@ -2845,18 +2845,23 @@ define("graphic/paper", [ "core/class", "core/config", "core/utils", "graphic/sv
         mixins: [ ShapeContainer, EventHandler, Styled ],
         constructor: function(container) {
             this.callBase();
-            if (utils.isString(container)) {
-                container = document.getElementById(container);
-            }
-            this.container = container;
             this.node = this.createSVGNode();
             this.node.paper = this;
-            container.appendChild(this.node);
             this.node.appendChild(this.resourceNode = svg.createNode("defs"));
             this.node.appendChild(this.shapeNode = svg.createNode("g"));
             this.resources = new Container();
             this.setWidth("100%").setHeight("100%");
+            if (container) {
+                this.renderTo(container);
+            }
             this.callMixin();
+        },
+        renderTo: function(container) {
+            if (utils.isString(container)) {
+                container = document.getElementById(container);
+            }
+            this.container = container;
+            container.appendChild(this.node);
         },
         createSVGNode: function() {
             var node = svg.createNode("svg");
