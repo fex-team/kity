@@ -1,4 +1,4 @@
-define(function (require, exports, module) {
+define(function(require, exports, module) {
     var Container = require('graphic/container');
 
     var ShapeContainer = require('core/class').createClass('ShapeContainer', {
@@ -8,9 +8,11 @@ define(function (require, exports, module) {
         handleAdd: function(shape, index) {
             var parent = this.getShapeNode();
             parent.insertBefore(shape.node, parent.childNodes[index] || null);
-            shape.trigger('add', { container: this } );
-            if(shape.notifyTreeModification) {
-                shape.notifyTreeModification( 'treeadd', this );
+            shape.trigger('add', {
+                container: this
+            });
+            if (shape.notifyTreeModification) {
+                shape.notifyTreeModification('treeadd', this);
             }
         },
 
@@ -18,19 +20,23 @@ define(function (require, exports, module) {
         handleRemove: function(shape, index) {
             var parent = this.getShapeNode();
             parent.removeChild(shape.node);
-            shape.trigger('remove', { container: this } );
-            if(shape.notifyTreeModification) {
-                shape.notifyTreeModification( 'treeremove', this );
+            shape.trigger('remove', {
+                container: this
+            });
+            if (shape.notifyTreeModification) {
+                shape.notifyTreeModification('treeremove', this);
             }
         },
 
         /* private */
-        notifyTreeModification: function( type, container ) {
+        notifyTreeModification: function(type, container) {
             this.eachItem(function(index, shape) {
-                if(shape instanceof ShapeContainer) {
-                    shape.notifyTreeModification( type, container );
+                if (shape instanceof ShapeContainer) {
+                    shape.notifyTreeModification(type, container);
                 }
-                shape.trigger(type, { container: container });
+                shape.trigger(type, {
+                    container: container
+                });
             });
         },
 
@@ -40,8 +46,36 @@ define(function (require, exports, module) {
         },
 
         /* public */
-        addShape: function (shape, index) {
+        addShape: function(shape, index) {
             return this.addItem(shape, index);
+        },
+
+        appendShape: function(shape) {
+            return this.addShape(shape);
+        },
+
+        prependShape: function(shape) {
+            return this.addShape(shape, 0);
+        },
+
+        replaceShape: function(origin, replacer) {
+            var index = this.indexOf(origin);
+            if (index === -1) {
+                return;
+            }
+            this.removeShape(index);
+            this.addShape(replacer, index);
+            return this;
+        },
+
+        addShapeBefore: function(refer, shape) {
+            var index = this.indexOf(refer);
+            return this.addShape(shape, index);
+        },
+
+        addShapeAfter: function(refer, shape) {
+            var index = this.indexOf(refer);
+            return this.addShape(shape, index === -1 ? undefined : index + 1);
         },
 
         /* public */
@@ -50,7 +84,7 @@ define(function (require, exports, module) {
         },
 
         /* public */
-        removeShape: function (index) {
+        removeShape: function(index) {
             return this.removeItem(index);
         },
 
@@ -59,7 +93,7 @@ define(function (require, exports, module) {
         },
 
         /* public */
-        getShapeById: function (id) {
+        getShapeById: function(id) {
             return this.getShapeNode().getElementById(id).shape;
         },
 
@@ -84,7 +118,7 @@ define(function (require, exports, module) {
         },
 
         /* protected */
-        getShapeNode: function () {
+        getShapeNode: function() {
             return this.shapeNode || this.node; // 最佳可能
         }
     });
