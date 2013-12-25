@@ -58,7 +58,7 @@ define(function(require, exports, module) {
             return this.addShape(shape, 0);
         },
 
-        replaceShape: function(origin, replacer) {
+        replaceShape: function(replacer, origin) {
             var index = this.indexOf(origin);
             if (index === -1) {
                 return;
@@ -68,12 +68,12 @@ define(function(require, exports, module) {
             return this;
         },
 
-        addShapeBefore: function(refer, shape) {
+        addShapeBefore: function(shape, refer) {
             var index = this.indexOf(refer);
             return this.addShape(shape, index);
         },
 
-        addShapeAfter: function(refer, shape) {
+        addShapeAfter: function(shape, refer) {
             var index = this.indexOf(refer);
             return this.addShape(shape, index === -1 ? undefined : index + 1);
         },

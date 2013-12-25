@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kitygraph - v1.0.0 - 2013-12-23
+ * kitygraph - v1.0.0 - 2013-12-25
  * https://github.com/kitygraph/kity
  * GitHub: https://github.com/kitygraph/kity.git 
  * Copyright (c) 2013 Baidu UEditor Group; Licensed MIT
@@ -1854,16 +1854,7 @@ define("graphic/container", [ "core/class", "core/config" ], function(require, e
             if (!(pos >= 0 && pos < length)) {
                 pos = length;
             }
-            if (pos === 0) {
-                items.unshift(item);
-            } else if (pos == length) {
-                items.push(item);
-            } else {
-                before = items.slice(0, pos);
-                before.push(item);
-                after = items.slice(pos);
-                this.items = before.concat(after);
-            }
+            items.splice(pos, 0, item);
             if (typeof item === "object") {
                 item.container = this;
                 item.remove = itemRemove;
@@ -3693,6 +3684,29 @@ define("graphic/shapecontainer", [ "graphic/container", "core/class", "core/conf
         addShape: function(shape, index) {
             return this.addItem(shape, index);
         },
+        appendShape: function(shape) {
+            return this.addShape(shape);
+        },
+        prependShape: function(shape) {
+            return this.addShape(shape, 0);
+        },
+        replaceShape: function(replacer, origin) {
+            var index = this.indexOf(origin);
+            if (index === -1) {
+                return;
+            }
+            this.removeShape(index);
+            this.addShape(replacer, index);
+            return this;
+        },
+        addShapeBefore: function(shape, refer) {
+            var index = this.indexOf(refer);
+            return this.addShape(shape, index);
+        },
+        addShapeAfter: function(shape, refer) {
+            var index = this.indexOf(refer);
+            return this.addShape(shape, index === -1 ? undefined : index + 1);
+        },
         /* public */
         addShapes: function(shapes) {
             return this.addItems(shapes);
@@ -4148,6 +4162,15 @@ define("graphic/textcontent", [ "graphic/shape", "graphic/svg", "core/utils", "g
         },
         getSize: function() {
             return this.fontsize;
+        },
+        getExtentOfChar: function(index) {
+            return this.node.getExtentOfChar(index);
+        },
+        getRotationOfChar: function(index) {
+            return this.node.getRotationOfChar(index);
+        },
+        getCharNumAtPosition: function(x, y) {
+            return this.node.getCharNumAtPosition(this.node.viewportElement.createSVGPoint(x, y));
         }
     });
 });
