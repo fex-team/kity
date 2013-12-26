@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Color Ring</title>
+    <script src="../dev-lib/sea.js"></script>
+    <script>
+
+        seajs.config({
+            base: '../src'
+        });
+        define('start', function (require) {
+            var Paper = require('graphic/paper');
+            var ChinaMap = require('../demo/chinamap/chinamap');
+            var paper = new Paper(document.body);
+
+            paper.addShape(new ChinaMap());
+
+        });
+        seajs.use('start');
+    </script>
+    <style>
+        body, div, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+</body>
+</html>

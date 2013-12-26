@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kitygraph - v1.0.0 - 2013-12-25
+ * kitygraph - v1.0.0 - 2013-12-26
  * https://github.com/kitygraph/kity
  * GitHub: https://github.com/kitygraph/kity.git 
  * Copyright (c) 2013 Baidu UEditor Group; Licensed MIT
@@ -380,10 +380,10 @@ define("animate/opacityanimator", [ "animate/animator", "animate/timeline", "ani
             return this.fxOpacity.apply(this, arguments);
         },
         fadeIn: function() {
-            return this.fxOpacity.apply(this, [ 1 ].concat(arguments));
+            return this.fxOpacity.apply(this, [ 1 ].concat([].slice.call(arguments)));
         },
         fadeOut: function() {
-            return this.fxOpacity.apply(this, [ 0 ].concat(arguments));
+            return this.fxOpacity.apply(this, [ 0 ].concat([].slice.call(arguments)));
         }
     });
     return OpacityAnimator;
@@ -2823,17 +2823,18 @@ define("graphic/palette", [ "graphic/standardcolor", "graphic/color", "core/util
     });
     return Palette;
 });
-define("graphic/paper", [ "core/class", "core/config", "core/utils", "graphic/svg", "graphic/container", "graphic/shapecontainer", "graphic/shape", "graphic/eventhandler", "graphic/shapeevent", "graphic/styled", "graphic/matrix", "graphic/data", "graphic/pen" ], function(require, exports, module) {
+define("graphic/paper", [ "core/class", "core/config", "core/utils", "graphic/svg", "graphic/container", "graphic/shapecontainer", "graphic/shape", "graphic/viewbox", "graphic/eventhandler", "graphic/shapeevent", "graphic/styled", "graphic/matrix", "graphic/data", "graphic/pen" ], function(require, exports, module) {
     var Class = require("core/class");
     var utils = require("core/utils");
     var svg = require("graphic/svg");
     var Container = require("graphic/container");
     var ShapeContainer = require("graphic/shapecontainer");
+    var ViewBox = require("graphic/viewbox");
     var EventHandler = require("graphic/eventhandler");
     var Styled = require("graphic/styled");
     var Matrix = require("graphic/matrix");
     var Paper = Class.createClass("Paper", {
-        mixins: [ ShapeContainer, EventHandler, Styled ],
+        mixins: [ ShapeContainer, EventHandler, Styled, ViewBox ],
         constructor: function(container) {
             this.callBase();
             this.node = this.createSVGNode();
@@ -2878,29 +2879,6 @@ define("graphic/paper", [ "core/class", "core/config", "core/utils", "graphic/sv
         },
         setHeight: function(height) {
             this.node.setAttribute("height", height);
-            return this;
-        },
-        getViewBox: function() {
-            var attr = this.node.getAttribute("viewBox");
-            if (attr === null) {
-                return {
-                    x: 0,
-                    y: 0,
-                    width: this.node.clientWidth,
-                    height: this.node.clientHeight
-                };
-            } else {
-                attr = attr.split(" ");
-                return {
-                    x: +attr[0],
-                    y: +attr[1],
-                    width: +attr[2],
-                    height: +attr[3]
-                };
-            }
-        },
-        setViewBox: function(x, y, width, height) {
-            this.node.setAttribute("viewBox", [ x, y, width, height ].join(" "));
             return this;
         },
         setViewPort: function(cx, cy, zoom) {
@@ -3806,11 +3784,11 @@ define("graphic/shapeevent", [ "graphic/matrix", "core/utils", "core/class", "co
             }
         },
         //当前鼠标事件在用户坐标系中点击的点的坐标位置
-        getPosition: function() {
+        getPosition: function(touch_index) {
             if (!this.originEvent) {
                 return null;
             }
-            var eventClient = this.originEvent.touches ? this.originEvent.touches[0] : this.originEvent;
+            var eventClient = this.originEvent.touches ? this.originEvent.touches[touch_index || 0] : this.originEvent;
             var clientX = eventClient.clientX, clientY = eventClient.clientY, paper = this.targetShape.getPaper(), //转换过后的点
             transPoint = Matrix.transformPoint(clientX, clientY, paper.node.getScreenCTM().inverse());
             var zoom = paper.getViewPort().zoom;
@@ -4091,7 +4069,7 @@ define("graphic/text", [ "graphic/textcontent", "graphic/shape", "core/class", "
         getY: function() {
             return +this.node.getAttribute("y");
         },
-        setAnchor: function(anchor) {
+        setTextAnchor: function(anchor) {
             if (anchor == "center") {
                 anchor = "middle";
             }
@@ -4106,7 +4084,7 @@ define("graphic/text", [ "graphic/textcontent", "graphic/shape", "core/class", "
             }
             return this;
         },
-        getAnchor: function() {
+        getTextAnchor: function() {
             return this.node.getAttribute("text-anchor") || "start";
         },
         addSpan: function(span) {
@@ -4277,6 +4255,44 @@ define("graphic/vector", [ "core/class", "core/config" ], function(require, expo
         return new Vector(d * Math.cos(a), d * Math.sin(a));
     };
     return Vector;
+});
+define("graphic/view", [ "graphic/shapecontainer", "graphic/container", "core/class", "graphic/shape", "graphic/viewbox", "core/config", "graphic/view" ], function(require, exports, module) {
+    var ShapeContainer = require("graphic/shapecontainer");
+    var ViewBox = require("graphic/viewbox");
+    return require("core/class").createClass("View", {
+        mixins: [ ShapeContainer, ViewBox ],
+        base: require("graphic/view"),
+        constructor: function() {
+            this.callBase("view");
+        }
+    });
+});
+define("graphic/viewbox", [ "core/class", "core/config" ], function(require, exports, module) {
+    return require("core/class").createClass("ViewBox", {
+        getViewBox: function() {
+            var attr = this.node.getAttribute("viewBox");
+            if (attr === null) {
+                return {
+                    x: 0,
+                    y: 0,
+                    width: this.node.clientWidth,
+                    height: this.node.clientHeight
+                };
+            } else {
+                attr = attr.split(" ");
+                return {
+                    x: +attr[0],
+                    y: +attr[1],
+                    width: +attr[2],
+                    height: +attr[3]
+                };
+            }
+        },
+        setViewBox: function(x, y, width, height) {
+            this.node.setAttribute("viewBox", [ x, y, width, height ].join(" "));
+            return this;
+        }
+    });
 });
 
 /**

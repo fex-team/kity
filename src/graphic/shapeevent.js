@@ -2,26 +2,26 @@
  * 图形事件包装类
  * */
 
-define( function ( require, exprots, module ) {
+define(function(require, exprots, module) {
 
-    var Matrix = require( "graphic/matrix" ),
-        Utils = require( "core/utils" );
+    var Matrix = require("graphic/matrix"),
+        Utils = require("core/utils");
 
-    return require( 'core/class' ).createClass( 'ShapeEvent', {
+    return require('core/class').createClass('ShapeEvent', {
 
-        constructor: function ( event ) {
+        constructor: function(event) {
 
             var target = null;
 
             // dom 事件封装对象
-            if ( !Utils.isObject( event.target ) ) {
+            if (!Utils.isObject(event.target)) {
 
                 this.type = event.type;
 
                 target = event.target;
 
                 // use标签有特殊属性， 需要区别对待
-                if ( target.correspondingUseElement ) {
+                if (target.correspondingUseElement) {
 
                     target = target.correspondingUseElement;
 
@@ -30,31 +30,31 @@ define( function ( require, exprots, module ) {
                 this.originEvent = event;
                 this.targetShape = target.shape || target.paper;
 
-                if ( event.__kity_param ) {
+                if (event.__kity_param) {
 
-                    Utils.extend( this, event.__kity_param );
+                    Utils.extend(this, event.__kity_param);
 
                 }
 
 
-            // 普通事件封装对象
+                // 普通事件封装对象
             } else {
 
-                Utils.extend( this, event );
+                Utils.extend(this, event);
 
             }
 
         },
 
-        preventDefault: function () {
+        preventDefault: function() {
 
             var evt = this.originEvent;
 
-            if ( !evt ) {
+            if (!evt) {
                 return true;
             }
 
-            if ( evt.preventDefault ) {
+            if (evt.preventDefault) {
 
                 evt.preventDefault();
 
@@ -71,21 +71,21 @@ define( function ( require, exprots, module ) {
         },
 
         //当前鼠标事件在用户坐标系中点击的点的坐标位置
-        getPosition: function () {
+        getPosition: function(touch_index) {
 
-            if ( !this.originEvent ) {
+            if (!this.originEvent) {
                 return null;
             }
 
             var eventClient = this.originEvent.touches ?
-                this.originEvent.touches[0] :
+                this.originEvent.touches[touch_index || 0] :
                 this.originEvent;
 
             var clientX = eventClient.clientX,
                 clientY = eventClient.clientY,
                 paper = this.targetShape.getPaper(),
                 //转换过后的点
-                transPoint = Matrix.transformPoint( clientX, clientY, paper.node.getScreenCTM().inverse() );
+                transPoint = Matrix.transformPoint(clientX, clientY, paper.node.getScreenCTM().inverse());
 
             var zoom = paper.getViewPort().zoom;
 
@@ -96,15 +96,15 @@ define( function ( require, exprots, module ) {
 
         },
 
-        stopPropagation: function () {
+        stopPropagation: function() {
 
             var evt = this.originEvent;
 
-            if ( !evt ) {
+            if (!evt) {
                 return true;
             }
 
-            if ( evt.stopPropagation ) {
+            if (evt.stopPropagation) {
 
                 evt.stopPropagation();
 
@@ -116,6 +116,6 @@ define( function ( require, exprots, module ) {
 
         }
 
-    } );
+    });
 
-} );
+});

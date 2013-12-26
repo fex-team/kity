@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>A Kity Clock</title>
+    <!-- 正式发布的时候， 只需替换掉相应的脚本文件即可 -->
+
+    <!-- dev 版本 示例所需脚本文件 start -->
+    <script src="../dev-lib/dev-define.js"></script>
+    <script>
+        inc.config({
+            base: '../src'
+        });
+    </script>
+    <script src="../dev-lib/exports.js"></script>
+    <script src="../dev-lib/dev-start.js"></script>
+    <!-- dev 版本 示例所需脚本文件 end -->
+
+    <!-- 正式版本 示例所需脚本文件 start -->
+    <!--<script src="../dist/kitygraph.all.min.js"></script>-->
+    <!-- 正式版本 示例所需脚本文件 end -->
+    <style>
+        body, div, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+</body>
+<script>
+    var paper = new kity.Paper();
+    paper.renderTo(document.body);
+    paper.on('touchstart', function(e) {
+        var touches = e.originEvent.touches;
+        for(var i = 0; i < touches.length; i++) {
+            var pos = e.getPosition(i);
+            var circle = new kity.Circle(10, pos.x, pos.y).fill('red');
+            paper.addShape(circle);
+            circle.fxScale(5, 5, 300).fadeOut(300, 'ease', '', function(e) {
+                paper.removeShape(e.originEvent.target);
+            });
+        }
+    });
+</script>
+</html>

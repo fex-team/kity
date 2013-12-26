@@ -1,47 +1,47 @@
-define( function ( require, exports, module ) {
+define(function(require, exports, module) {
 
-    var TextContent = require( 'graphic/textcontent' );
-    var ShapeContainer = require( 'graphic/shapecontainer' );
-    var svg = require( 'graphic/svg' );
+    var TextContent = require('graphic/textcontent');
+    var ShapeContainer = require('graphic/shapecontainer');
+    var svg = require('graphic/svg');
 
-    return require( 'core/class' ).createClass( 'Text', {
+    return require('core/class').createClass('Text', {
         base: TextContent,
 
-        mixins: [ ShapeContainer ],
+        mixins: [ShapeContainer],
 
-        constructor: function ( content ) {
-            this.callBase( 'text' );
-            if ( content !== undefined ) {
-                this.setContent( content );
+        constructor: function(content) {
+            this.callBase('text');
+            if (content !== undefined) {
+                this.setContent(content);
             }
         },
 
-        setX: function ( x ) {
-            this.node.setAttribute( 'x', x );
+        setX: function(x) {
+            this.node.setAttribute('x', x);
             return this;
         },
 
-        setY: function ( y ) {
-            this.node.setAttribute( 'y', y );
+        setY: function(y) {
+            this.node.setAttribute('y', y);
             return this;
         },
 
-        getX: function () {
-            return +this.node.getAttribute( 'x' );
+        getX: function() {
+            return +this.node.getAttribute('x');
         },
 
-        getY: function () {
-            return +this.node.getAttribute( 'y' );
+        getY: function() {
+            return +this.node.getAttribute('y');
         },
 
-        setAnchor: function( anchor ) {
-            if(anchor == 'center') {
+        setTextAnchor: function(anchor) {
+            if (anchor == 'center') {
                 anchor = 'middle';
             }
             this.node.setAttribute('text-anchor', anchor);
 
             // text path
-            if(this.shapeNode != this.node) {
+            if (this.shapeNode != this.node) {
                 this.shapeNode.setAttribute('startOffset', {
                     'start': '0',
                     'middle': '50%',
@@ -51,7 +51,7 @@ define( function ( require, exports, module ) {
             return this;
         },
 
-        getAnchor: function() {
+        getTextAnchor: function() {
             return this.node.getAttribute('text-anchor') || 'start';
         },
 
@@ -60,19 +60,19 @@ define( function ( require, exports, module ) {
             return this;
         },
 
-        setPath: function ( path ) {
+        setPath: function(path) {
             var textpath = this.shapeNode;
-            if ( this.shapeNode == this.node ) {
+            if (this.shapeNode == this.node) {
                 // 当前还不是 textpath
-                textpath = this.shapeNode = svg.createNode( 'textPath' );
-                while ( this.node.firstChild ) {
-                    this.shapeNode.appendChild( this.node.firstChild );
+                textpath = this.shapeNode = svg.createNode('textPath');
+                while (this.node.firstChild) {
+                    this.shapeNode.appendChild(this.node.firstChild);
                 }
-                this.node.appendChild( textpath );
+                this.node.appendChild(textpath);
             }
-            textpath.setAttributeNS( svg.xlink, "xlink:href", '#' + path.node.id );
+            textpath.setAttributeNS(svg.xlink, "xlink:href", '#' + path.node.id);
             this.setAnchor(this.getAnchor());
             return this;
         }
-    } );
-} );
+    });
+});
