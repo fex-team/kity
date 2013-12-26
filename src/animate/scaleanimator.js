@@ -1,4 +1,4 @@
-define(function (require, exports, module) {
+define(function(require, exports, module) {
     var Animator = require('animate/animator');
     var Matrix = require('graphic/matrix');
 
@@ -12,7 +12,7 @@ define(function (require, exports, module) {
                     var delta = timeline.getDelta();
                     var kx = Math.pow(sx, delta);
                     var ky = Math.pow(sy, delta);
-                    target.scale(ky, kx, ax, ay);
+                    target.scale(ky, kx);
                 }
             });
         }
@@ -22,12 +22,9 @@ define(function (require, exports, module) {
 
     require('core/class').extendClass(Shape, {
         fxScale: function(sx, sy, duration, easing, delay, callback) {
-            return this.animate( new ScaleAnimator(sx, sy), duration, easing, delay, callback );
-        },
-        fxScaleAnchor: function(sx, sy, ax, ay, duration, easing, delay, callback) {
-            return this.animate( new ScaleAnimator(sx, sy, ax, ay), duration, easing, delay, callback);
+            return this.animate(new ScaleAnimator(sx, sy), duration, easing, delay, callback);
         }
     });
 
     return ScaleAnimator;
-} );
+});

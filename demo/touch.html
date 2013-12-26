@@ -31,16 +31,48 @@
 <script>
     var paper = new kity.Paper();
     paper.renderTo(document.body);
+    var line = new kity.Line(0, 0, 960, 0).stroke(new kity.Pen().setDashArray([20, 10]).setColor('red'));
+
+    var line2 = new kity.Line(0, 0, 0, 960).stroke(new kity.Pen().setDashArray([20, 10]).setColor('blue'));
+    paper.addShape(line);
+    paper.addShape(line2);
+    var touchEffect = new kity.Animator({
+        beginValue: { scale: 1, opacity: 1 },
+        finishValue: { scale: 5, opacity: 0 },
+        setter: function( target, value ) {
+            var a = target.getAnchor();
+            target.setTransform(new kity.Matrix().translate(-a.x, -a.y).scale(value.scale).translate(a.x, a.y)).setOpacity(value.opacity);
+        }
+    });
+    var ly = 0, lx = 0;
+    window.ontouchstart = function() {};
     paper.on('touchstart', function(e) {
         var touches = e.originEvent.touches;
         for(var i = 0; i < touches.length; i++) {
             var pos = e.getPosition(i);
-            var circle = new kity.Circle(10, pos.x, pos.y).fill('red');
+            var circle = new kity.Circle(30, pos.x, pos.y).fill('red');
             paper.addShape(circle);
-            circle.fxScale(5, 5, 300).fadeOut(300, 'ease', '', function(e) {
+            touchEffect.start(circle, 500, 'ease', function(e) {
                 paper.removeShape(e.originEvent.target);
             });
         }
+        var pos = e.getPosition();
+        var x = pos.x;
+        var y = pos.y;
+        line.fxTranslate(0, y - ly, 100);
+        line2.fxTranslate( x - lx, 0, 100);
+        lx = x;
+        ly = y;
+        e.preventDefault();
+    }).on('touchmove', function(e) {
+        var pos = e.getPosition();
+        var y = pos.y, x = pos.x;
+        line.setTransform(new kity.Matrix().translate(0, y));
+        line2.setTransform(new kity.Matrix().translate(x, 0));
+        lx = x;
+        ly = y;
+    }).on('toucheend', function(e) {
+        e.preventDefault();
     });
 </script>
 </html>
