@@ -205,3 +205,10 @@ var genderData = {
 		female: 0.8
 	}
 };
+var genderData2 = {
+	colors: ["deepskyblue", "deeppink"],
+	data: {
+		male: 0.9,
+		female: 0.1
+	}
+};

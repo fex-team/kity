@@ -1,17 +1,48 @@
 var KCGenderChart = kity.createClass("GenderChart", (function() {
 	return {
 		constructor: function(data, target) {
-			this.centerX = 250;
-			this.centerY = 150;
-			this.r = 80;
-			this.R = 120;
 			this._paper = new kity.Paper(target);
+			var _width = this._paper.getContainer().clientWidth;
+			var _height = this._paper.getContainer().clientHeight;
+			this.centerX = _width / 2;
+			this.centerY = _height / 2;
+			this.R = _height / 2 - 10;
+			this.r = this.R * 0.7;
+			this._paper.setWidth(_width).setHeight(_height);
 			this.renderData(data);
 		},
 		renderData: function(d) {
 			var genderDis = d.data;
 			var me = this;
 			console.log(me.centerX, me.centerY);
+			//绘制箭头
+			var drawArrow = function(color, rotate) {
+				var _paper = me._paper;
+				var group = new kity.Group();
+				var polygon1 = new kity.Polygon([
+					new kity.Point(30, 0),
+					new kity.Point(-5, -20),
+					new kity.Point(-5, 20)
+				]);
+				var rect2 = new kity.Rect(30, me.R * 0.2, -25, -me.R * 0.1, 0);
+				polygon1.fill(color);
+				rect2.fill(color);
+				group.addShapes([polygon1, rect2]);
+				group.translate(me.centerX + me.R + 10, me.centerY).setAnchor(me.centerX, me.centerY).rotate(rotate);
+				_paper.addShape(group);
+			};
+			//绘制十字
+			var drawCross = function(color, rotate) {
+				var _paper = me._paper;
+				var group = new kity.Group();
+				var rect1 = new kity.Rect(me.R * 0.2, 50, -me.R * 0.1, -25, me.R * 0.05);
+				var rect2 = new kity.Rect(50, me.R * 0.2, -25, -me.R * 0.1, me.R * 0.05);
+				rect1.fill(color);
+				rect2.fill(color);
+				group.addShapes([rect1, rect2]);
+				group.translate(me.centerX + me.R + 10, me.centerY).setAnchor(me.centerX, me.centerY).rotate(rotate);
+				_paper.addShape(group);
+			};
 			var renderPie = function(pMale, pFemale) {
 				var group = new kity.Group();
 				var _paper = me._paper;
@@ -22,8 +53,11 @@ var KCGenderChart = kity.createClass("GenderChart", (function() {
 				mPie.fill(_colors[0]).stroke("white");
 				fPie.fill(_colors[1]).stroke("white");
 				group.addShapes([mPie, fPie]);
-				group.translate(me.centerX, me.centerY).rotate(-pMale * 360);
+				var _rotate = -pMale * 180 - 45;
+				group.translate(me.centerX, me.centerY).rotate(_rotate);
 				_paper.addShape(group);
+				drawCross(_colors[1], -225);
+				drawArrow(_colors[0], -45);
 			};
 			//绘制male图标
 			var drawMale = function(color, x, y) {
@@ -59,8 +93,8 @@ var KCGenderChart = kity.createClass("GenderChart", (function() {
 			};
 
 			renderPie(genderDis.male, genderDis.female);
-			drawMale(d.colors[0], 280, 120);
-			drawFemale(d.colors[1], 220, 120);
+			drawMale(d.colors[0], this.centerX + 30, this.centerY - 30);
+			drawFemale(d.colors[1], this.centerX - 30, this.centerY - 30);
 		}
 	};
 })());
