@@ -180,6 +180,10 @@ var dMap = {
 	}]
 };
 
-var genderData = function() {
-
-}
+var genderData = {
+	colors: ["deepskyblue", "deeppink"],
+	data: {
+		male: 0.2,
+		female: 0.8
+	}
+};

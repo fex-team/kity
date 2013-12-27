@@ -16,7 +16,7 @@ var kityPie = kity.createClass({
         var dir = Math.abs(a2 - a1) > 180 ? 1 : 0;
         d.carcTo(R, p3.x + x, p3.y + y, dir, 1);
         d.lineTo(p4.x + x, p4.y + y);
-        d.carcTo(r, p1.x + x, p1.y + y);
+        d.carcTo(r, p1.x + x, p1.y + y, dir);
         d.close();
     }
 });

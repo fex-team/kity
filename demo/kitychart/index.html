@@ -9,6 +9,7 @@
     <script src="charts/line-chart.js"></script>
     <script src="charts/chinamap.js"></script>
     <script src="charts/ubp-map.js"></script>
+    <script src="charts/gender-chart.js"></script>
     <script src="test/data.test.js"></script>
     <link href="styles.css" rel="stylesheet" type="text/css">
     <meta http-equiv="content-type" content="text/html;charset=utf-8">
@@ -24,13 +25,16 @@
         
     </div>
     <div class="chart-area-min" id="c4">
-        <div></div>
-        <div></div>
+        
+    </div>
+    <div class="chart-area-min" id="c5">
+        
     </div>
 </body>
 <script>
     var scatter = new KCScatterDiagram(dScatter,"c1");
     var line = new KCLineChart(dLine,"c2");
     var ubpmap = new KCUbpMap(dMap,"c3");
+    var genderchart = new KCGenderChart(genderData,"c5");
 </script>
 </html>
