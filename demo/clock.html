@@ -27,7 +27,6 @@
                 this.setWidth('100%').setHeight('100%');
                 this.setViewBox(-600, -600, 1200, 1200);
             });
-
             var palette = new kity.Palette().pipe(function() {
                 var gray = new kity.Color('gray');
                 this.add('outside', gray.dec('l', 20));
@@ -180,7 +179,7 @@
                 hPointer.setTransform(new kity.Matrix().rotate(h * 30));
                 msPointer.setTransform(new kity.Matrix().rotate(ms * 360 / 1000));
                 mmPointer.setTransform(new kity.Matrix().rotate(mm * 360 / 500));
-                requestAnimationFrame(updatePointers);
+                (window.requestAnimationFrame || setTimeout)(updatePointers, 16);
             }
             updatePointers();
         };

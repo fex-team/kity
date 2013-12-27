@@ -1,61 +1,76 @@
 /*
  * kity event 实现
  */
-define( function ( require, exports, module ) {
+define(function(require, exports, module) {
+    // polyfill
+    (function() {
 
-    var Utils = require( "core/utils" ),
-        ShapeEvent = require( "graphic/shapeevent" );
+        function CustomEvent(event, params) {
+            params = params || {
+                bubbles: false,
+                cancelable: false,
+                detail: undefined
+            };
+            var evt = document.createEvent('CustomEvent');
+            evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
+            return evt;
+        }
+
+        window.CustomEvent = window.CustomEvent || CustomEvent;
+    })();
+
+    var Utils = require("core/utils"),
+        ShapeEvent = require("graphic/shapeevent");
 
     // 内部处理器缓存
     var INNER_HANDLER_CACHE = {},
-    // 用户处理器缓存
+        // 用户处理器缓存
         USER_HANDLER_CACHE = {},
         guid = 0;
 
 
     // 添加事件统一入口
-    function _addEvent ( type, handler, isOnce ) {
+    function _addEvent(type, handler, isOnce) {
 
-        isOnce = !!isOnce;
+        isOnce = !! isOnce;
 
-        if ( Utils.isString( type ) ) {
-            type = type.match( /\S+/g );
+        if (Utils.isString(type)) {
+            type = type.match(/\S+/g);
         }
 
-        Utils.each( type, function ( currentType ) {
+        Utils.each(type, function(currentType) {
+            listen.call(this, this.node, currentType, handler, isOnce);
 
-            listen.call( this, this.node, currentType, handler, isOnce );
-
-        }, this );
+        }, this);
 
         return this;
 
     }
 
     // 移除事件统一入口
-    function _removeEvent ( type, handler ) {
+    function _removeEvent(type, handler) {
 
         var userHandlerList = null,
             eventId = this._EVNET_UID,
             isRemoveAll = handler === undefined;
 
         try {
-            userHandlerList = USER_HANDLER_CACHE[ eventId ][ type ];
-        } catch ( e ) {
+            userHandlerList = USER_HANDLER_CACHE[eventId][type];
+        } catch (e) {
             return;
         }
 
         //移除指定的监听器
-        if ( !isRemoveAll ) {
+        if (!isRemoveAll) {
 
             isRemoveAll = true;
 
-            Utils.each( userHandlerList, function ( fn, index ) {
+            Utils.each(userHandlerList, function(fn, index) {
 
-                if ( fn === handler ) {
+                if (fn === handler) {
 
                     // 不能结束， 需要查找完整个list， 避免丢失移除多次绑定同一个处理器的情况
-                    delete userHandlerList[ index ];
+                    delete userHandlerList[index];
 
                 } else {
 
@@ -63,18 +78,18 @@ define( function ( require, exports, module ) {
 
                 }
 
-            } );
+            });
 
         }
 
 
         //删除所有监听器
-        if ( isRemoveAll ) {
+        if (isRemoveAll) {
 
-            deleteDomEvent( this.node, type, INNER_HANDLER_CACHE[ eventId ][ type ] );
+            deleteDomEvent(this.node, type, INNER_HANDLER_CACHE[eventId][type]);
 
-            delete USER_HANDLER_CACHE[ eventId ][ type ];
-            delete INNER_HANDLER_CACHE[ eventId ][ type ];
+            delete USER_HANDLER_CACHE[eventId][type];
+            delete INNER_HANDLER_CACHE[eventId][type];
 
         }
 
@@ -83,35 +98,35 @@ define( function ( require, exports, module ) {
     }
 
     // 执行绑定, 该方法context为shape或者mixin了eventhandler的对象
-    function listen ( node, type, handler, isOnce ) {
+    function listen(node, type, handler, isOnce) {
 
         var eid = this._EVNET_UID,
             targetObject = this;
 
         // 初始化内部监听器
-        if ( !INNER_HANDLER_CACHE[ eid ] ) {
+        if (!INNER_HANDLER_CACHE[eid]) {
 
-            INNER_HANDLER_CACHE[ eid ] = {};
+            INNER_HANDLER_CACHE[eid] = {};
 
         }
 
-        if ( !INNER_HANDLER_CACHE[ eid ][ type ] ) {
+        if (!INNER_HANDLER_CACHE[eid][type]) {
 
             // 内部监听器
-            INNER_HANDLER_CACHE[ eid ][ type ] = function ( e ) {
+            INNER_HANDLER_CACHE[eid][type] = function(e) {
 
-                e = new ShapeEvent( e || window.event );
+                e = new ShapeEvent(e || window.event);
 
-                Utils.each( USER_HANDLER_CACHE[ eid ][ type ], function ( fn ) {
+                Utils.each(USER_HANDLER_CACHE[eid][type], function(fn) {
+                    var result;
+                    if (fn) {
 
-                    if ( fn ) {
-
-                        result = fn.call( targetObject, e );
+                        result = fn.call(targetObject, e);
 
                         //once 绑定， 执行完后删除
-                        if ( isOnce ) {
+                        if (isOnce) {
 
-                            targetObject.off( type, fn );
+                            targetObject.off(type, fn);
 
                         }
 
@@ -120,173 +135,171 @@ define( function ( require, exports, module ) {
                     // 如果用户handler里return了false， 则该节点上的此后的同类型事件将不再执行
                     return result;
 
-                }, targetObject );
+                }, targetObject);
 
             };
 
         }
 
         // 初始化用户监听器列表
-        if ( !USER_HANDLER_CACHE[ eid ] ) {
+        if (!USER_HANDLER_CACHE[eid]) {
 
-            USER_HANDLER_CACHE[ eid ] = {};
+            USER_HANDLER_CACHE[eid] = {};
 
         }
 
-        if ( !USER_HANDLER_CACHE[ eid ][ type ] ) {
+        if (!USER_HANDLER_CACHE[eid][type]) {
 
-            USER_HANDLER_CACHE[ eid ][ type ] = [ handler ];
+            USER_HANDLER_CACHE[eid][type] = [handler];
 
             // 绑定对应类型的事件
             // dom对象利用dom event进行处理， 非dom对象， 由消息分发机制处理
-            if ( !!node ) {
-
-                bindDomEvent( node, type, INNER_HANDLER_CACHE[ eid ][ type ] );
+            if ( !! node) {
+                bindDomEvent(node, type, INNER_HANDLER_CACHE[eid][type]);
 
             }
 
         } else {
 
-            USER_HANDLER_CACHE[ eid ][ type ].push( handler );
+            USER_HANDLER_CACHE[eid][type].push(handler);
 
         }
 
     }
 
     // 绑定dom事件
-    function bindDomEvent ( node, type, handler ) {
+    function bindDomEvent(node, type, handler) {
 
-        if ( node.addEventListener ) {
-
-            node.addEventListener( type, handler, false );
+        if (node.addEventListener) {
+            node.addEventListener(type, handler, false);
 
         } else {
 
-            node.attachEvent( "on" + type, handler );
+            node.attachEvent("on" + type, handler);
 
         }
 
     }
 
     // 删除dom事件
-    function deleteDomEvent ( node, type, handler ) {
+    function deleteDomEvent(node, type, handler) {
 
-        if ( node.removeEventListener ) {
+        if (node.removeEventListener) {
 
-            node.removeEventListener( type, handler, false );
+            node.removeEventListener(type, handler, false);
 
         } else {
 
-            node.detachEvent( type, handler );
+            node.detachEvent(type, handler);
 
         }
 
     }
 
     // 触发dom事件
-    function triggerDomEvent ( node, type, params ) {
+    function triggerDomEvent(node, type, params) {
 
-        var event = new CustomEvent( type, {
-                bubbles: true,
-                cancelable: true
-            } );
+        var event = new CustomEvent(type, {
+            bubbles: true,
+            cancelable: true
+        });
 
         event.__kity_param = params;
 
-        node.dispatchEvent( event );
+        node.dispatchEvent(event);
 
     }
 
     // 发送消息
-    function sendMessage ( messageObj, type, msg ) {
+    function sendMessage(messageObj, type, msg) {
 
         var event = null,
             handler = null;
 
         try {
 
-            handler = INNER_HANDLER_CACHE[ messageObj._EVNET_UID ][ type ];
+            handler = INNER_HANDLER_CACHE[messageObj._EVNET_UID][type];
 
-            if ( !handler ) {
+            if (!handler) {
                 return;
             }
 
-        } catch ( exception ) {
+        } catch (exception) {
 
             return;
 
         }
 
-        event = Utils.extend( {
+        event = Utils.extend({
             type: type,
             target: messageObj
-        }, msg || {} );
+        }, msg || {});
 
 
-        handler.call( messageObj, event );
+        handler.call(messageObj, event);
 
     }
 
     // 对外接口
-    return require( "core/class" ).createClass( "EventHandler", {
+    return require("core/class").createClass("EventHandler", {
 
-        constructor: function () {
+        constructor: function() {
 
             this._EVNET_UID = ++guid;
 
         },
 
-        addEventListener: function ( type, handler ) {
+        addEventListener: function(type, handler) {
 
-            return _addEvent.call( this, type, handler, false );
-
-        },
-
-        addOnceEventListener: function ( type, handler ) {
-
-            return _addEvent.call( this, type, handler, true );
+            return _addEvent.call(this, type, handler, false);
 
         },
 
-        removeEventListener: function ( type, handler ) {
+        addOnceEventListener: function(type, handler) {
 
-            return _removeEvent.call( this, type, handler );
-
-        },
-
-        on: function ( type, handler ) {
-
-            return this.addEventListener.apply( this, arguments );
+            return _addEvent.call(this, type, handler, true);
 
         },
 
-        once: function ( type, handler ) {
+        removeEventListener: function(type, handler) {
 
-            return this.addOnceEventListener.apply( this, arguments );
-
-        },
-
-        off: function () {
-
-            return this.removeEventListener.apply( this, arguments );
+            return _removeEvent.call(this, type, handler);
 
         },
 
-        fire: function ( type, params ) {
+        on: function(type, handler) {
 
-            return this.trigger.apply( this, arguments );
+            return this.addEventListener.apply(this, arguments);
 
         },
 
-        trigger: function ( type, params ) {
+        once: function(type, handler) {
 
-            if ( this.node ) {
+            return this.addOnceEventListener.apply(this, arguments);
 
-                triggerDomEvent( this.node, type, params );
+        },
+
+        off: function() {
+
+            return this.removeEventListener.apply(this, arguments);
+
+        },
+
+        fire: function(type, params) {
+
+            return this.trigger.apply(this, arguments);
+
+        },
+
+        trigger: function(type, params) {
+
+            if (this.node) {
+
+                triggerDomEvent(this.node, type, params);
 
             } else {
 
-                sendMessage( this, type, params );
+                sendMessage(this, type, params);
 
             }
 
@@ -294,6 +307,6 @@ define( function ( require, exports, module ) {
 
         }
 
-    } );
+    });
 
-} );
+});
