@@ -1,0 +1,21 @@
+{
+    "undef" : true,
+    "unused" : false,
+    "strict" : false,
+    "curly" : true,
+    "newcap" : true,
+    "trailing" : true,
+    "white": false,
+    "quotmark": false,
+    "predef" : [
+        "define",
+        "require",
+        "describe",
+        "expect",
+        "beforeEach",
+        "kity",
+        "kityPie",
+        "console",
+        "ChinaMap"
+    ]
+}

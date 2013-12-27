@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <script src="../../dist/kitygraph.all.js"></script>
+    <script src="lib/quo.js"></script>
+    <script src="charts/pie.js"></script>
+    <script src="charts/scatter-diagram.js"></script>
+    <script src="charts/line-chart.js"></script>
+    <script src="charts/chinamap.js"></script>
+    <script src="charts/ubp-map.js"></script>
+    <script src="test/data.test.js"></script>
+    <script src="test/data.test.js"></script>
+    <link href="styles.css" rel="stylesheet" type="text/css">
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+</head>
+<body>
+    <div class="chart-area-min" id="c1">
+        
+    </div>
+    <div class="chart-area-min" id="c2">
+        
+    </div>
+    <div class="chart-area-min" id="c3">
+        
+    </div>
+    <div class="chart-area-min" id="c4">
+        
+    </div>
+</body>
+<script>
+    var scatter = new KCScatterDiagram(dScatter,"c1");
+    var line = new KCLineChart(dLine,"c2");
+    var ubpmap = new KCUbpMap(dMap,"c3");
+</script>
+</html>
