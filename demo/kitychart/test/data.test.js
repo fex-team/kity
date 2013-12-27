@@ -180,9 +180,6 @@ var dMap = {
 	}]
 };
 
-var genderData = function() {
-
-};
 
 var dPoly = {
 	xAlis: ['18-24', '25-29', '30-34', '35-39', '40-49', '50-59'],
@@ -196,5 +193,12 @@ var dPoly = {
 			name: '西门子',
 			data: [30, 121, 120, 113, 115, 118]
 		}
+	}
+};
+var genderData = {
+	colors: ["deepskyblue", "deeppink"],
+	data: {
+		male: 0.2,
+		female: 0.8
 	}
 };
