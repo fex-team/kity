@@ -122,11 +122,8 @@ var dLine = {
 		label: "",
 		data: (function() {
 			var items = [];
-			for (var i = 0; i < 3; i++) {
-				items.push(randData(12000, 13000));
-			}
-			for (var j = 0; j < 17; j++) {
-				items.push(randData(15000, 19000));
+			for (var i = 0; i < 17; i++) {
+				items.push(randData(13000 + i * 200, 13000 + i * 300));
 			}
 			return items;
 		})()
