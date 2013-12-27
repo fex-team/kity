@@ -2,6 +2,7 @@ var KCUbpMap = kity.createClass("KCUbpMap", (function() {
 	return {
 		constructor: function(data, target) {
 			this._paper = new kity.Paper(target);
+			this._paper.setWidth(500).setHeight(300);
 			var chinaMap = (new ChinaMap()).setWidth(350);
 			this._paper.addShape(chinaMap);
 			this.drawData(data);
