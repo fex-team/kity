@@ -86,6 +86,12 @@ var dScatter = {
 var randData = function(base, top) {
 	var items = [];
 	var area = top - base;
+	// 突变
+	if (Math.random() < 0.1) {
+		base -= 2 * area;
+		top += 2 * area;
+		area *= 5;
+	}
 	for (var i = 0; i < 10; i++) {
 		items.push(
 			base + Math.ceil(Math.random() * area)
@@ -123,7 +129,7 @@ var dLine = {
 		data: (function() {
 			var items = [];
 			for (var i = 0; i < 17; i++) {
-				items.push(randData(13000 + i * 200, 13000 + i * 300));
+				items.push(randData(14000 + i * 200, 14000 + i * 300));
 			}
 			return items;
 		})()
