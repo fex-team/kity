@@ -83,14 +83,15 @@ var dScatter = {
 		}
 	}
 };
-var randData = function(base, top) {
+var randData = function(base, top, seed) {
 	var items = [];
 	var area = top - base;
+	seed = seed || 0;
 	// 突变
 	if (Math.random() < 0.1) {
-		base -= 2 * area;
-		top += 2 * area;
-		area *= 5;
+		base -= seed * area;
+		top += seed * area;
+		area = top - base;
 	}
 	for (var i = 0; i < 10; i++) {
 		items.push(
@@ -129,7 +130,7 @@ var dLine = {
 		data: (function() {
 			var items = [];
 			for (var i = 0; i < 17; i++) {
-				items.push(randData(14000 + i * 200, 14000 + i * 300));
+				items.push(randData(14000 + i * 200, 14000 + i * 300, 2));
 			}
 			return items;
 		})()
@@ -186,7 +187,7 @@ var dMap = {
 
 var dPoly = {
 	xAlis: ['18-24', '25-29', '30-34', '35-39', '40-49', '50-59'],
-	yAlis: [80, 100, 120],
+	yAlis: [60, 100, 120],
 	series: {
 		haier: {
 			name: '海尔',

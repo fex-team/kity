@@ -3,9 +3,9 @@ var KCPolyChart = kity.createClass('PolyChart', {
 	constructor: function(data, container, series) {
 		this.callBase(container);
 		this.setWidth(260).setHeight(200);
-		this.setViewBox(-30.5, -170.5, 260, 200);
+		this.setViewBox(-30.5, -180.5, 260, 200);
 		this.xLength = 220;
-		this.yLength = 150;
+		this.yLength = 140;
 		this.renderLowArea(100);
 		this.renderAlis(data);
 		this.renderData(data.series[series].data);
@@ -74,6 +74,9 @@ var KCPolyChart = kity.createClass('PolyChart', {
 				d.moveTo(-3, -yLength).lineTo(3, -yLength).lineTo(0, -yLength - 7).close();
 				this.fill('gray');
 			}));
+
+			this.addShape(new kity.Rect(80, 25, -20, -yLength - 40, 6).fill('#f0f0f0'));
+			this.addShape(new kity.Text('喜好度(TGI)').setX(-12).setY(-yLength - 23).setSize(6));
 		});
 		this.addShape(alis);
 	},
