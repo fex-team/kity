@@ -182,4 +182,19 @@ var dMap = {
 
 var genderData = function() {
 
-}
+};
+
+var dPoly = {
+	xAlis: ['18-24', '25-29', '30-34', '35-39', '40-49', '50-59'],
+	yAlis: [80, 100, 120],
+	series: {
+		haier: {
+			name: '海尔',
+			data: [50, 120, 108, 108, 118, 123]
+		},
+		siemens: {
+			name: '西门子',
+			data: [30, 121, 120, 113, 115, 118]
+		}
+	}
+};

@@ -1,15 +1,19 @@
 body { margin: 0; padding: 0;}
 .chart-area-min{
 	float: left;
-	width: 500px;
+	width: 540px;
 	margin: 2.5%;
 	border-radius: 5px;
 	box-shadow: 0 0 10px #ccc;
-	height: 300px;
 }
 .chart-area-full{
 	z-index: 2
 }
 .mask{
 	z-index: 3
+}
+.quarter {
+    float: left;
+    width: 260px;
+    height: 200px;
 }

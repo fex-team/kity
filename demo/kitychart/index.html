@@ -9,6 +9,7 @@
     <script src="charts/line-chart.js"></script>
     <script src="charts/chinamap.js"></script>
     <script src="charts/ubp-map.js"></script>
+    <script src="charts/poly-chart.js"></script>
     <script src="test/data.test.js"></script>
     <link href="styles.css" rel="stylesheet" type="text/css">
     <meta http-equiv="content-type" content="text/html;charset=utf-8">
@@ -23,14 +24,19 @@
     <div class="chart-area-min" id="c3">
         
     </div>
-    <div class="chart-area-min" id="c4">
-        <div></div>
-        <div></div>
+    <div class="chart-area-min">
+        <div id="c4" class="quarter"></div>
+        <div id="c5" class="quarter"></div>
+        <div id="c6" class="quarter"></div>
+        <div id="c7" class="quarter"></div>
     </div>
 </body>
 <script>
     var scatter = new KCScatterDiagram(dScatter,"c1");
     var line = new KCLineChart(dLine,"c2");
     var ubpmap = new KCUbpMap(dMap,"c3");
+
+    var poly = new KCPolyChart(dPoly, "c6", "haier");
+    var poly2 = new KCPolyChart(dPoly, "c7", "siemens");
 </script>
 </html>

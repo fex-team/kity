@@ -33,7 +33,7 @@
     paper.renderTo(document.body);
     var line = new kity.Line(0, 0, 960, 0).stroke(new kity.Pen().setDashArray([20, 10]).setColor('red'));
 
-    var line2 = new kity.Line(0, 0, 0, 960).stroke(new kity.Pen().setDashArray([20, 10]).setColor('blue'));
+    var line2 = new kity.Line(0, 0, 0, 1600).stroke(new kity.Pen().setDashArray([20, 10]).setColor('blue'));
     paper.addShape(line);
     paper.addShape(line2);
     var touchEffect = new kity.Animator({
@@ -59,8 +59,8 @@
         var pos = e.getPosition();
         var x = pos.x;
         var y = pos.y;
-        line.fxTranslate(0, y - ly, 100);
-        line2.fxTranslate( x - lx, 0, 100);
+        line.fxTranslate(0, y - ly, 500);
+        line2.fxTranslate( x - lx, 0, 500);
         lx = x;
         ly = y;
         e.preventDefault();
