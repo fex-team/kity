@@ -13,17 +13,54 @@ var KCGenderChart = kity.createClass("GenderChart", (function() {
 			var me = this;
 			console.log(me.centerX, me.centerY);
 			var renderPie = function(pMale, pFemale) {
+				var group = new kity.Group();
 				var _paper = me._paper;
 				var _colors = d.colors;
-				var mPie = new kityPie(me.r, me.R, 0, pMale * 360, me.centerX, me.centerY);
-				var fPie = new kityPie(me.r, me.R, pMale * 360, 360, me.centerX, me.centerY);
+				var mPie = new kityPie(me.r, me.R, 0, pMale * 360, 0, 0);
+				var fPie = new kityPie(me.r, me.R, pMale * 360, 360, 0, 0);
 				console.log(pFemale * 360);
 				mPie.fill(_colors[0]).stroke("white");
 				fPie.fill(_colors[1]).stroke("white");
-
-				_paper.addShapes([mPie, fPie]);
+				group.addShapes([mPie, fPie]);
+				group.translate(me.centerX, me.centerY).rotate(-pMale * 360);
+				_paper.addShape(group);
 			};
+			//绘制male图标
+			var drawMale = function(color, x, y) {
+				var _paper = me._paper;
+				var group = new kity.Group();
+				var circle = new kity.Circle(8, 0, 0);
+				var rect1 = new kity.Rect(20, 40, -10, 8, 10);
+				var rect2 = new kity.Rect(10, 40, -5, 30, 5);
+				circle.fill(color);
+				rect1.fill(color);
+				rect2.fill(color);
+				group.addShapes([circle, rect1, rect2]);
+				group.translate(x, y);
+				_paper.addShape(group);
+			};
+			//绘制female图标
+			var drawFemale = function(color, x, y) {
+				var _paper = me._paper;
+				var group = new kity.Group();
+				var circle = new kity.Circle(8, 0, 0);
+				var rect1 = new kity.Rect(20, 40, -10, 8, 10);
+				var rect2 = new kity.Rect(10, 40, -5, 30, 5);
+				var polygon = new kity.Polygon([
+					(new kity.Point(0, 20)), (new kity.Point(-20, 50)), (new kity.Point(20, 50))
+				]);
+				circle.fill(color);
+				rect1.fill(color);
+				rect2.fill(color);
+				polygon.fill(color);
+				group.addShapes([circle, rect1, rect2, polygon]);
+				group.translate(x, y);
+				_paper.addShape(group);
+			};
+
 			renderPie(genderDis.male, genderDis.female);
+			drawMale(d.colors[0], 280, 120);
+			drawFemale(d.colors[1], 220, 120);
 		}
 	};
 })());
