@@ -9,6 +9,7 @@ var dScatter = {
 	data: {
 		series: [{
 			color: "orange",
+			index: "travel",
 			r: 50,
 			x: 0.4,
 			y: 0.5,
@@ -20,12 +21,14 @@ var dScatter = {
 			x: 1.2,
 			y: 0,
 			label: "零售",
+			index: "sell",
 			percent: 0.1
 		}, {
 			color: "orange",
 			r: 40,
 			x: 0.1,
 			y: 1,
+			index: "game",
 			"label": "网游",
 			percent: 0.5,
 		}, {
@@ -34,6 +37,7 @@ var dScatter = {
 			x: 0.8,
 			y: 0.8,
 			label: "教育",
+			index: "edu",
 			percent: 0.8
 		}, {
 			color: "pink",
@@ -41,6 +45,7 @@ var dScatter = {
 			x: 0.4,
 			y: 0.45,
 			label: "金融",
+			index: "chem",
 			percent: 0.16,
 		}, {
 			color: "pink",
@@ -48,6 +53,7 @@ var dScatter = {
 			x: 0.92,
 			y: 0.4,
 			label: "IT消费电子",
+			index: "it",
 			percent: 0.27
 		}, {
 			color: "orange",
@@ -62,6 +68,7 @@ var dScatter = {
 			x: 0.7,
 			y: 0.5,
 			label: "汽车",
+			index: "car",
 			percent: 0.45
 		}, {
 			color: "pink",

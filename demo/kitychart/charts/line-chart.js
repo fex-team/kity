@@ -3,25 +3,42 @@ var KCLineChart = kity.createClass("lineChart", (function() {
 	p.add('alix-text', new kity.Color('black').inc('l', '50'));
 	return {
 		constructor: function(data, target) {
+			this.graphMargin = {
+				top: 9.5,
+				right: 19.5,
+				left: 20.5,
+				bottom: 39.5
+			};
 			this._paper = new kity.Paper(target);
 			this.renderData(data);
 			this.interact(data);
 		},
 		renderData: function(d) {
 			var me = this;
-			var duraction = 27;
 			var _paper = this._paper;
+			var container = _paper.getContainer();
+			var margin = this.graphMargin;
+			this.paperWidth = container.clientWidth;
+			this.paperHeight = container.clientHeight;
+			_paper.setViewBox(0, 0, container.clientWidth, container.clientHeight).setWidth(container.clientWidth).setHeight(container.clientHeight);
+			_paper.setWidth(container.clientWidth).setHeight(container.clientHeight);
+			var drawArea = {
+				top: margin.top,
+				right: me.paperWidth - margin.right,
+				bottom: me.paperHeight - margin.bottom,
+				left: margin.left
+			}
+			var duraction = (drawArea.right - drawArea.left) / 18;
+
 			var renderAxis = function() {
 				var _paper = me._paper;
-				_paper.setViewBox(0, 0, 500, 300);
-				_paper.setWidth(500).setHeight(300);
 				var labels = d.axis.cateX;
 				_paper.addShape(new kity.Path().pipe(function() {
 					var dr = this.getDrawer();
-					dr.moveTo(20, 250.5).lineTo(480, 250.5);
+					dr.moveTo(drawArea.left, drawArea.bottom).lineTo(drawArea.right, drawArea.bottom);
 					for (var i = 0; i < 18; i++) {
-						var vX = 20.5 + i * duraction;
-						dr.moveTo(vX, 250).lineTo(vX, 253);
+						var vX = drawArea.left + i * duraction;
+						dr.moveTo(vX, drawArea.bottom).lineTo(vX, drawArea.bottom + 3);
 					}
 					this.stroke("#C0D0E0", 1);
 				}));
@@ -30,7 +47,7 @@ var KCLineChart = kity.createClass("lineChart", (function() {
 					var vX = 10.5 + j * duraction;
 					var _label = new kity.Text(labels[j]);
 					_label
-						.setX(vX).setY(280).setSize(5).setStyle("font-family", "Arial").fill(p.get('alix-text'));
+						.setX(vX).setY(drawArea.bottom + 20).setSize(5).setStyle("font-family", "Arial").fill(p.get('alix-text'));
 					_paper.addShape(_label);
 					_label.rotate(-60);
 				}
@@ -40,8 +57,9 @@ var KCLineChart = kity.createClass("lineChart", (function() {
 				//将传入的坐标转换成绘制坐标
 				var map = function(step, x, y) {
 					var areaY = top - base;
-					var mapped_y = 260.5 - ((y - base) * 250 / areaY);
-					var mapped_x = 20 + 27 * step + duraction * x / 10;
+					var mapped_y = drawArea.bottom - ((drawArea.bottom - drawArea.top) * (y - base) / areaY);
+					var mapped_x = drawArea.left + duraction * step + duraction * x / 10;
+					console.log(mapped_y);
 					return [mapped_x, mapped_y];
 				};
 				var lineData = d.series;
@@ -71,7 +89,15 @@ var KCLineChart = kity.createClass("lineChart", (function() {
 			renderPolyLine(d, 10000, 20000);
 		},
 		interact: function(data) {
-			var xRuler = new kity.Line(0, 0, 0, 250).stroke('orange').translate(-10);
+			var me = this;
+			var margin = this.graphMargin;
+			var drawArea = {
+				top: margin.top,
+				right: me.paperWidth - margin.right,
+				bottom: me.paperHeight - margin.bottom,
+				left: margin.left
+			}
+			var xRuler = new kity.Line(0.5, drawArea.top, 0.5, drawArea.bottom).stroke("#C0D0E0").translate(-10);
 			this._paper.addShape(xRuler);
 			var pointIndex = (function(origin) {
 				var series = [];
