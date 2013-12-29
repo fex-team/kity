@@ -71,7 +71,7 @@ var KCLineChart = kity.createClass("lineChart", (function() {
 			renderPolyLine(d, 10000, 20000);
 		},
 		interact: function(data) {
-			var xRuler = new kity.Line(0, 0, 0, 250).stroke('orange').translate(-10);
+			var xRuler = new kity.Line(-0.5, 0, -0.5, 250).stroke('orange').translate(-10);
 			this._paper.addShape(xRuler);
 			var pointIndex = (function(origin) {
 				var series = [];
@@ -106,7 +106,7 @@ var KCLineChart = kity.createClass("lineChart", (function() {
 
 			var iDots = [];
 			for (var i = 0; i < data.colors.length; i++) {
-				var circle = new kity.Circle(3, 0, 0).translate(-10).fill(new kity.Color(data.colors[i]).dec('l', 20));
+				var circle = new kity.Circle(3.5, 0, 0).translate(-10).fill(new kity.Color(data.colors[i]).dec('l', 20));
 				iDots.push(circle);
 				this._paper.addShape(circle);
 			}
@@ -120,7 +120,7 @@ var KCLineChart = kity.createClass("lineChart", (function() {
 				var x = e.getPosition().x;
 				x = Math.max(20, Math.min(480, x));
 				var points = findNearestPoint(x);
-				x = points[0];
+				x = Math.floor(points[0]);
 				xRuler.setTransform(new kity.Matrix().translate(x, 0));
 				for (var i = 1; i < points.length; i++) {
 					iDots[i - 1].setTransform(new kity.Matrix().translate(x, points[i]));
