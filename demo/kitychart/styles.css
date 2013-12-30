@@ -1,4 +1,4 @@
-body { margin: 0; padding: 0;}
+body { margin: 0; padding: 0;-webkit-user-select: none; -webkit-tap-highlight-color: transparent;}
 .chart-area-min{
 	float: left;
 	width: 540px;
