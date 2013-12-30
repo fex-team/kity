@@ -110,6 +110,8 @@ var KCScatterDiagram = kity.createClass("scatterDiagram", (function() {
 				Round.addShape(label);
 				Round.setOpacity(0.9);
 				Round.dot = dot;
+				Round.vX = vX;
+				Round.vY = vY;
 				Round.translate(vX, vY);
 				return Round;
 			};
@@ -120,8 +122,10 @@ var KCScatterDiagram = kity.createClass("scatterDiagram", (function() {
 				var vX = mapXY[0];
 				var vY = mapXY[1];
 				Dot.node.setAttribute("transform", null);
-				//Dot.translate(vX, vY);
-				Dot.fxTranslate(vX, vY);
+				Dot.translate(Dot.vX, Dot.vY);
+				Dot.fxTranslate(vX - Dot.vX, vY - Dot.vY, 1000, 'easeOutExpo');
+				Dot.vX = vX;
+				Dot.vY = vY;
 			}
 			renderAxis();
 			var dots = d.data.series;
