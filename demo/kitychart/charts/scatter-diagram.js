@@ -62,7 +62,7 @@ var KCScatterDiagram = kity.createClass("scatterDiagram", (function() {
 						}
 						var txtX = (new kity.Text(d.axis.cateX[i / 2])).fill(p.get('alix-text'));
 						txtX.setStyle('font-family', 'Arial');
-						txtX.setSize(9);
+						txtX.setSize(12);
 						group.addShape(txtX, "labelX" + i);
 						txtX.setY(drawArea.bottom + 20);
 						txtX.setX(curX - 10);
@@ -72,7 +72,7 @@ var KCScatterDiagram = kity.createClass("scatterDiagram", (function() {
 						dr.moveTo(drawArea.left, curY).lineTo(drawArea.left - 3, curY);
 						var txtY = (new kity.Text(d.axis.cateY[j])).fill(p.get('alix-text'));
 						txtY.setStyle('font-family', 'Arial');
-						txtY.setSize(9);
+						txtY.setSize(12);
 						group.addShape(txtY, "labelY" + j);
 						var _txtWidthY = txtY.shapeNode.clientWidth;
 						txtY.setY(curY + 5);
@@ -102,9 +102,9 @@ var KCScatterDiagram = kity.createClass("scatterDiagram", (function() {
 				pie.fill(dot.color);
 				var label_val = new kity.Text((dot.percent * 100).toFixed(2) + "%");
 				label_val
-					.fill("#333").setX(0).setY(0).setSize((dot.r / 3 > 9 ? dot.r / 3 : 9)).setStyle('font-family', 'Arial');
+					.fill("#333").setX(0).setY(0).setSize((dot.r / 3 > 12 ? dot.r / 3 : 12)).setStyle('font-family', 'Arial');
 				var label = new kity.Text(dot.label);
-				label.fill(dot.color).setSize(9).setX(dot.r).setY(0 - 12);
+				label.fill(dot.color).setSize(12).setX(dot.r).setY(0 - 12);
 				Round.addShape(circle);
 				Round.addShape(pie);
 				Round.addShape(label_val);

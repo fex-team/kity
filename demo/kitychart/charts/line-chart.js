@@ -43,7 +43,7 @@ var KCLineChart = kity.createClass("lineChart", (function() {
 				top: 9.5,
 				right: 19.5,
 				left: 20.5,
-				bottom: 39.5
+				bottom: 49.5
 			};
 			this._paper = new kity.Paper(target);
 			this.renderData(data);
@@ -83,7 +83,7 @@ var KCLineChart = kity.createClass("lineChart", (function() {
 					var vX = 10.5 + j * duraction;
 					var _label = new kity.Text(labels[j]);
 					_label
-						.setX(vX).setY(drawArea.bottom + 20).setSize(5).setStyle("font-family", "Arial").fill(p.get('alix-text'));
+						.setX(vX).setY(drawArea.bottom + 30).setSize(12).setStyle("font-family", "Arial").fill(p.get('alix-text'));
 					_paper.addShape(_label);
 					_label.rotate(-60);
 				}
