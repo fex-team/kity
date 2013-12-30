@@ -1,9 +1,13 @@
+function snapToSharp(number) {
+	return (number | 0) + 0.5;
+}
+
 var MarkDot = kity.createClass("MarkDot", {
 	base: kity.Group,
 	constructor: function(size, color) {
 		this.callBase();
 		this.addShape(new kity.Circle(size || 1).fill(color));
-		this.addShape(this.rect = new kity.Rect().fill('white').setOpacity(0.9).stroke(color).setRadius(3));
+		this.addShape(this.rect = new kity.Rect().fill('white').setOpacity(0.95).stroke(color, 2).setRadius(3));
 		this.addShape(this.text = new kity.Text().fill(color));
 	},
 	setText: function(content) {
@@ -24,8 +28,9 @@ var MarkDot = kity.createClass("MarkDot", {
 		}
 		ty = -rb.height / 2;
 		this.text.setTransform(new kity.Matrix().translate(tx, ty + rb.height));
-		this.rect.setPosition(tx - 5, ty - 5);
-		this.rect.setSize(rb.width + 10, rb.height + 10);
+		var f = snapToSharp;
+		this.rect.setPosition(f(tx) - 5, f(ty) - 5);
+		this.rect.setSize((rb.width | 0) + 10, (rb.height | 0) + 10);
 	}
 });
 
@@ -164,7 +169,7 @@ var KCLineChart = kity.createClass("lineChart", (function() {
 
 			var iDots = [];
 			for (var i = 0; i < data.colors.length; i++) {
-				var dot = new MarkDot(3.5, new kity.Color(data.colors[i]).dec('l', 20));
+				var dot = new MarkDot(3.5, new kity.Color(data.colors[i]).dec('l', 10));
 				dot.translate(-10);
 				iDots.push(dot);
 				this._paper.addShape(dot);
