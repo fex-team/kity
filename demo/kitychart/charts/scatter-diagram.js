@@ -83,7 +83,7 @@ var KCScatterDiagram = kity.createClass("scatterDiagram", (function() {
 				group.addShape(createLine(drawArea.left, drawArea.bottom, drawArea.right, drawArea.top, "#666"));
 				var linePos = (drawArea.bottom - drawArea.top) * (0.54 + 0.4) / 2;
 				group.addShape(createLine(drawArea.left, linePos, drawArea.right, linePos, "#666", [5, 2]));
-				var linePos2 = (drawArea.right - drawArea.left) * (0.24 + 0.4) / 2;
+				var linePos2 = drawArea.left + (0.24 + 0.4) * ((drawArea.right - drawArea.left - 10) / 9) / 0.5;
 				group.addShape(createLine(linePos2, drawArea.top, linePos2, drawArea.bottom, "#666", [5, 2]));
 				_paper.addShape(group);
 			};
@@ -110,6 +110,8 @@ var KCScatterDiagram = kity.createClass("scatterDiagram", (function() {
 				Round.addShape(label);
 				Round.setOpacity(0.9);
 				Round.dot = dot;
+				Round.vX = vX;
+				Round.vY = vY;
 				Round.translate(vX, vY);
 				return Round;
 			};
@@ -120,8 +122,10 @@ var KCScatterDiagram = kity.createClass("scatterDiagram", (function() {
 				var vX = mapXY[0];
 				var vY = mapXY[1];
 				Dot.node.setAttribute("transform", null);
-				//Dot.translate(vX, vY);
-				Dot.fxTranslate(vX, vY);
+				Dot.translate(Dot.vX, Dot.vY);
+				Dot.fxTranslate(vX - Dot.vX, vY - Dot.vY, 1000, 'easeOutExpo');
+				Dot.vX = vX;
+				Dot.vY = vY;
 			}
 			renderAxis();
 			var dots = d.data.series;
