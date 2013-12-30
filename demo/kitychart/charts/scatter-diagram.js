@@ -83,7 +83,7 @@ var KCScatterDiagram = kity.createClass("scatterDiagram", (function() {
 				group.addShape(createLine(drawArea.left, drawArea.bottom, drawArea.right, drawArea.top, "#666"));
 				var linePos = (drawArea.bottom - drawArea.top) * (0.54 + 0.4) / 2;
 				group.addShape(createLine(drawArea.left, linePos, drawArea.right, linePos, "#666", [5, 2]));
-				var linePos2 = (drawArea.right - drawArea.left) * (0.24 + 0.4) / 2;
+				var linePos2 = drawArea.left + (0.24 + 0.4) * ((drawArea.right - drawArea.left - 10) / 9) / 0.5;
 				group.addShape(createLine(linePos2, drawArea.top, linePos2, drawArea.bottom, "#666", [5, 2]));
 				_paper.addShape(group);
 			};
