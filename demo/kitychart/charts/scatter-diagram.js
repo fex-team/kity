@@ -81,8 +81,10 @@ var KCScatterDiagram = kity.createClass("scatterDiagram", (function() {
 					this.stroke("#C0D0E0", 1);
 				}));
 				group.addShape(createLine(drawArea.left, drawArea.bottom, drawArea.right, drawArea.top, "#666"));
-				var linePos = (drawArea.bottom - drawArea.top) / 2;
+				var linePos = (drawArea.bottom - drawArea.top) * (0.54 + 0.4) / 2;
 				group.addShape(createLine(drawArea.left, linePos, drawArea.right, linePos, "#666", [5, 2]));
+				var linePos2 = (drawArea.right - drawArea.left) * (0.24 + 0.4) / 2;
+				group.addShape(createLine(linePos2, drawArea.top, linePos2, drawArea.bottom, "#666", [5, 2]));
 				_paper.addShape(group);
 			};
 
@@ -118,7 +120,8 @@ var KCScatterDiagram = kity.createClass("scatterDiagram", (function() {
 				var vX = mapXY[0];
 				var vY = mapXY[1];
 				Dot.node.setAttribute("transform", null);
-				Dot.translate(vX, vY);
+				//Dot.translate(vX, vY);
+				Dot.fxTranslate(vX, vY);
 			}
 			renderAxis();
 			var dots = d.data.series;
@@ -139,6 +142,8 @@ var KCScatterDiagram = kity.createClass("scatterDiagram", (function() {
 				dotGroup.name = "dots";
 				_paper.addShape(dotGroup);
 			} else {
+				dotgroup.remove();
+				_paper.addShape(dotgroup);
 				//调整散点的位置
 				for (var _i = 0; _i < dotgroup.items.length; _i++) {
 					transDot(dotgroup.items[_i]);

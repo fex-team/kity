@@ -16,7 +16,7 @@ var dScatter = {
 			label: "旅游",
 			percent: 0.7
 		}, {
-			color: "pink",
+			color: "#fc4b00",
 			r: 40,
 			x: 1.2,
 			y: 0,
@@ -40,7 +40,7 @@ var dScatter = {
 			index: "edu",
 			percent: 0.8
 		}, {
-			color: "pink",
+			color: "#fc4b00",
 			r: 30,
 			x: 0.4,
 			y: 0.45,
@@ -48,7 +48,7 @@ var dScatter = {
 			index: "chem",
 			percent: 0.16,
 		}, {
-			color: "pink",
+			color: "#fc4b00",
 			r: 20,
 			x: 0.92,
 			y: 0.4,
@@ -63,7 +63,7 @@ var dScatter = {
 			label: "日化",
 			percent: 0.8
 		}, {
-			color: "pink",
+			color: "#fc4b00",
 			r: 10,
 			x: 0.7,
 			y: 0.5,
@@ -71,14 +71,14 @@ var dScatter = {
 			index: "car",
 			percent: 0.45
 		}, {
-			color: "pink",
+			color: "#fc4b00",
 			r: 8,
 			x: 0.5,
 			y: 0.3,
 			label: "食品饮料",
 			percent: 0.12
 		}, {
-			color: "pink",
+			color: "#fc4b00",
 			r: 10,
 			x: 0.5,
 			y: 0.45,
@@ -159,7 +159,7 @@ var dMap = {
 		label: "美的",
 		data: [{
 			x: 160,
-			y: 210,
+			y: 280,
 			hot: 50
 		}, {
 			x: 230,
@@ -180,11 +180,11 @@ var dMap = {
 	}, {
 		label: "西门子",
 		data: [{
-			x: 280,
-			y: 100,
+			x: 360,
+			y: 340,
 			hot: 50
 		}, {
-			x: 200,
+			x: 290,
 			y: 150,
 			hot: 30
 		}]

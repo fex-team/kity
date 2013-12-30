@@ -2,8 +2,9 @@ var KCUbpMap = kity.createClass("KCUbpMap", (function() {
 	return {
 		constructor: function(data, target) {
 			this._paper = new kity.Paper(target);
-			this._paper.setWidth(500).setHeight(300);
-			var chinaMap = (new ChinaMap()).setWidth(350);
+			var container = this._paper.getContainer();
+			this._paper.setWidth(container.clientWidth).setHeight(container.clientHeight);
+			var chinaMap = (new ChinaMap()).setWidth(container.clientWidth - 40);
 			this._paper.addShape(chinaMap);
 			this.drawData(data);
 		},
@@ -20,6 +21,10 @@ var KCUbpMap = kity.createClass("KCUbpMap", (function() {
 					return 5;
 				}
 			};
+			var drawLegend = function(d) {
+				var group = new kity.Group();
+				me._paper.addShape(group);
+			}
 			var drawDots = function(d) {
 				var ds = d.series;
 				var _paper = me._paper;
