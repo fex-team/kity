@@ -54,8 +54,8 @@ var KCGenderChart = kity.createClass("GenderChart", (function() {
 				fPie.fill(_colors[1]).stroke("white");
 				group.addShapes([mPie, fPie]);
 				var _rotate = -pMale * 180 - 45;
-				group.translate(me.centerX, me.centerY).rotate(_rotate);
 				_paper.addShape(group);
+				group.translate(me.centerX, me.centerY).rotate(_rotate);
 				drawCross(_colors[1], -225);
 				drawArrow(_colors[0], -45);
 			};
