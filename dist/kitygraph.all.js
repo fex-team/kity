@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kitygraph - v1.0.0 - 2013-12-26
+ * kitygraph - v1.0.0 - 2013-12-30
  * https://github.com/kitygraph/kity
  * GitHub: https://github.com/kitygraph/kity.git 
  * Copyright (c) 2013 Baidu UEditor Group; Licensed MIT
@@ -428,7 +428,7 @@ define("animate/scaleanimator", [ "animate/animator", "animate/timeline", "anima
                     var delta = timeline.getDelta();
                     var kx = Math.pow(sx, delta);
                     var ky = Math.pow(sy, delta);
-                    target.scale(ky, kx, ax, ay);
+                    target.scale(ky, kx);
                 }
             });
         }
@@ -437,9 +437,6 @@ define("animate/scaleanimator", [ "animate/animator", "animate/timeline", "anima
     require("core/class").extendClass(Shape, {
         fxScale: function(sx, sy, duration, easing, delay, callback) {
             return this.animate(new ScaleAnimator(sx, sy), duration, easing, delay, callback);
-        },
-        fxScaleAnchor: function(sx, sy, ax, ay, duration, easing, delay, callback) {
-            return this.animate(new ScaleAnimator(sx, sy, ax, ay), duration, easing, delay, callback);
         }
     });
     return ScaleAnimator;
@@ -448,8 +445,12 @@ define("animate/timeline", [ "graphic/color", "core/utils", "graphic/standardcol
     var Color = require("graphic/color");
     var Matrix = require("graphic/matrix");
     var EventHandler = require("graphic/eventhandler");
-    var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
-    var cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame || window.webkitCancelAnimationFrame || window.msCancelAnimationFrame;
+    var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || function(fn) {
+        return setTimeout(fn, 16);
+    };
+    var cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame || window.webkitCancelAnimationFrame || window.msCancelAnimationFrame || function(reqId) {
+        return clearTimeout(reqId);
+    };
     var globalFrameAction = [];
     var frameRequests = [];
     var frameRequestId = 0;
@@ -2228,6 +2229,20 @@ define("graphic/ellipse", [ "core/utils", "core/class", "core/config", "graphic/
  * kity event 实现
  */
 define("graphic/eventhandler", [ "core/utils", "graphic/shapeevent", "graphic/matrix", "core/class", "core/config" ], function(require, exports, module) {
+    // polyfill
+    (function() {
+        function CustomEvent(event, params) {
+            params = params || {
+                bubbles: false,
+                cancelable: false,
+                detail: undefined
+            };
+            var evt = document.createEvent("CustomEvent");
+            evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
+            return evt;
+        }
+        window.CustomEvent = window.CustomEvent || CustomEvent;
+    })();
     var Utils = require("core/utils"), ShapeEvent = require("graphic/shapeevent");
     // 内部处理器缓存
     var INNER_HANDLER_CACHE = {}, // 用户处理器缓存
@@ -2283,6 +2298,7 @@ define("graphic/eventhandler", [ "core/utils", "graphic/shapeevent", "graphic/ma
             INNER_HANDLER_CACHE[eid][type] = function(e) {
                 e = new ShapeEvent(e || window.event);
                 Utils.each(USER_HANDLER_CACHE[eid][type], function(fn) {
+                    var result;
                     if (fn) {
                         result = fn.call(targetObject, e);
                         //once 绑定， 执行完后删除
@@ -3507,6 +3523,7 @@ define("graphic/shape", [ "graphic/svg", "core/utils", "graphic/eventhandler", "
         },
         setOpacity: function(value) {
             this.node.setAttribute("opacity", value);
+            return this;
         },
         getOpacity: function() {
             return +this.node.getAttribute("opacity") || 1;
@@ -3531,7 +3548,7 @@ define("graphic/shape", [ "graphic/svg", "core/utils", "graphic/eventhandler", "
         mergeTransform: function(matrix) {
             return this.setTransform(this.getTransform().mergeMatrix(matrix));
         },
-        getAnchor: function(ax, ay) {
+        getAnchor: function() {
             if (this.anchor && this.anchor.x !== undefined) {
                 return this.anchor;
             }

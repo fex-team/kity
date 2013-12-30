@@ -93,8 +93,8 @@ var KCGenderChart = kity.createClass("GenderChart", (function() {
 			};
 
 			renderPie(genderDis.male, genderDis.female);
-			drawMale(d.colors[0], this.centerX + 30, this.centerY - 30);
-			drawFemale(d.colors[1], this.centerX - 30, this.centerY - 30);
+			drawMale(d.colors[0], this.centerX + this.r * 0.4, this.centerY - 30);
+			drawFemale(d.colors[1], this.centerX - this.r * 0.4, this.centerY - 30);
 		}
 	};
 })());

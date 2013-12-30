@@ -72,6 +72,7 @@ define(function(require, exports, module) {
         },
         setOpacity: function(value) {
             this.node.setAttribute('opacity', value);
+            return this;
         },
         getOpacity: function() {
             return +this.node.getAttribute('opacity') || 1;

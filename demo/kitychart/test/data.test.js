@@ -9,23 +9,26 @@ var dScatter = {
 	data: {
 		series: [{
 			color: "orange",
+			index: "travel",
 			r: 50,
 			x: 0.4,
 			y: 0.5,
 			label: "旅游",
 			percent: 0.7
 		}, {
-			color: "pink",
+			color: "#fc4b00",
 			r: 40,
 			x: 1.2,
 			y: 0,
 			label: "零售",
+			index: "sell",
 			percent: 0.1
 		}, {
 			color: "orange",
 			r: 40,
 			x: 0.1,
 			y: 1,
+			index: "game",
 			"label": "网游",
 			percent: 0.5,
 		}, {
@@ -34,20 +37,23 @@ var dScatter = {
 			x: 0.8,
 			y: 0.8,
 			label: "教育",
+			index: "edu",
 			percent: 0.8
 		}, {
-			color: "pink",
+			color: "#fc4b00",
 			r: 30,
 			x: 0.4,
 			y: 0.45,
 			label: "金融",
+			index: "chem",
 			percent: 0.16,
 		}, {
-			color: "pink",
+			color: "#fc4b00",
 			r: 20,
 			x: 0.92,
 			y: 0.4,
 			label: "IT消费电子",
+			index: "it",
 			percent: 0.27
 		}, {
 			color: "orange",
@@ -57,21 +63,22 @@ var dScatter = {
 			label: "日化",
 			percent: 0.8
 		}, {
-			color: "pink",
+			color: "#fc4b00",
 			r: 10,
 			x: 0.7,
 			y: 0.5,
 			label: "汽车",
+			index: "car",
 			percent: 0.45
 		}, {
-			color: "pink",
+			color: "#fc4b00",
 			r: 8,
 			x: 0.5,
 			y: 0.3,
 			label: "食品饮料",
 			percent: 0.12
 		}, {
-			color: "pink",
+			color: "#fc4b00",
 			r: 10,
 			x: 0.5,
 			y: 0.45,
@@ -152,7 +159,7 @@ var dMap = {
 		label: "美的",
 		data: [{
 			x: 160,
-			y: 210,
+			y: 280,
 			hot: 50
 		}, {
 			x: 230,
@@ -173,11 +180,11 @@ var dMap = {
 	}, {
 		label: "西门子",
 		data: [{
-			x: 280,
-			y: 100,
+			x: 360,
+			y: 340,
 			hot: 50
 		}, {
-			x: 200,
+			x: 290,
 			y: 150,
 			hot: 30
 		}]

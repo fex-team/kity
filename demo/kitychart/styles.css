@@ -5,15 +5,40 @@ body { margin: 0; padding: 0;}
 	margin: 2.5%;
 	border-radius: 5px;
 	box-shadow: 0 0 10px #ccc;
+	height: 420px;
+}
+
+.chart-area-large{
+	position: absolute;
+	width: 1080px;
+	height: 840px;
+	left: 50%;
+	margin-left: -540px;
+	top: 15px;
+	border-radius: 5px;
+	box-shadow: 0 0 10px #ccc;
+	z-index: 1;
+	display: none;
+}
+
+.chart-area-large.active{
+	display: block
 }
 .chart-area-full{
 	z-index: 2
-}
-.mask{
-	z-index: 3
 }
 .quarter {
     float: left;
     width: 260px;
     height: 200px;
+}
+.icon-large:before{
+	content:"+";
+	float:right;
+	font-size: 50px;
+	font-weight: bold;
+	padding: 5px;
+	text-shadow:0 0 5px #333;
+	color: white;
+	font-style: normal;
 }
