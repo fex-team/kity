@@ -42,8 +42,8 @@ var dScatter = {
 		}, {
 			color: "#fc4b00",
 			r: 30,
-			x: 0.4,
-			y: 0.45,
+			x: 0.1,
+			y: 0.1,
 			label: "金融",
 			index: "chem",
 			percent: 0.16,
@@ -59,7 +59,7 @@ var dScatter = {
 			color: "orange",
 			r: 10,
 			x: 0.2,
-			y: 0.3,
+			y: -0.3,
 			label: "日化",
 			percent: 0.8
 		}, {
@@ -80,8 +80,8 @@ var dScatter = {
 		}, {
 			color: "#fc4b00",
 			r: 10,
-			x: 0.5,
-			y: 0.45,
+			x: -0.1,
+			y: -0.1,
 			label: "服饰",
 			percent: 0.28
 		}],
