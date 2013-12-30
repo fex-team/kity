@@ -8,7 +8,7 @@ var MarkDot = kity.createClass("MarkDot", {
 		this.callBase();
 		this.addShape(new kity.Circle(size || 1).fill(color));
 		this.addShape(this.rect = new kity.Rect().fill('white').setOpacity(0.95).stroke(color, 2).setRadius(3));
-		this.addShape(this.text = new kity.Text().fill(color));
+		this.addShape(this.text = new kity.Text().fill(color).setStyle('font-family', 'Arial'));
 	},
 	setText: function(content) {
 		this.text.setContent(content);
@@ -17,7 +17,7 @@ var MarkDot = kity.createClass("MarkDot", {
 		this.setTransform(new kity.Matrix().translate(x, y));
 
 		var rb = this.text.getRenderBox();
-		var tx, ty, margin = 10;
+		var tx, ty, margin = 15;
 
 		if (x + rb.width > bx) {
 			// 右边越界，放在左方
@@ -27,7 +27,7 @@ var MarkDot = kity.createClass("MarkDot", {
 			tx = margin;
 		}
 		ty = -rb.height / 2;
-		this.text.setTransform(new kity.Matrix().translate(tx, ty + rb.height));
+		this.text.setTransform(new kity.Matrix().translate(tx, ty + rb.height - 2));
 		var f = snapToSharp;
 		this.rect.setPosition(f(tx) - 5, f(ty) - 5);
 		this.rect.setSize((rb.width | 0) + 10, (rb.height | 0) + 10);
@@ -95,7 +95,6 @@ var KCLineChart = kity.createClass("lineChart", (function() {
 					var areaY = top - base;
 					var mapped_y = drawArea.bottom - ((drawArea.bottom - drawArea.top) * (y - base) / areaY);
 					var mapped_x = drawArea.left + duraction * step + duraction * x / 10;
-					console.log(mapped_y);
 					return [mapped_x, mapped_y];
 				};
 				var lineData = d.series;

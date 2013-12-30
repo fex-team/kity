@@ -137,7 +137,7 @@ var dLine = {
 		data: (function() {
 			var items = [];
 			for (var i = 0; i < 17; i++) {
-				items.push(randData(14000 + i * 200, 14000 + i * 300, 2));
+				items.push(randData(14000 + i * 200, 14000 + i * 250, 1.8));
 			}
 			return items;
 		})()

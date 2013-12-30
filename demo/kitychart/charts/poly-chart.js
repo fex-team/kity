@@ -39,7 +39,7 @@ var KCPolyChart = kity.createClass('PolyChart', {
 				var x = Math.floor(xStep * i + 20);
 				xlabel.setContent(data.xAlis[i]);
 				xlabel.setTextAnchor('middle');
-				xlabel.setSize(6);
+				xlabel.setSize(12);
 				xlabel.setX(x).setY(13);
 				xlabel.fill('gray');
 				this.addShape(xlabel);
@@ -55,7 +55,7 @@ var KCPolyChart = kity.createClass('PolyChart', {
 				var yLabel = new kity.Text();
 				yLabel.setContent(data.yAlis[j]);
 				yLabel.setTextAnchor('end');
-				yLabel.setSize(6);
+				yLabel.setSize(12);
 				yLabel.setX(-5).setY(3 - data.yAlis[j]);
 				yLabel.fill('gray');
 				this.addShape(yLabel);
@@ -76,7 +76,7 @@ var KCPolyChart = kity.createClass('PolyChart', {
 			}));
 
 			this.addShape(new kity.Rect(80, 25, -20, -yLength - 40, 6).fill('#f0f0f0'));
-			this.addShape(new kity.Text('喜好度(TGI)').setX(-12).setY(-yLength - 23).setSize(6));
+			this.addShape(new kity.Text('喜好度(TGI)').setX(-12).setY(-yLength - 23).setSize(12));
 		});
 		this.addShape(alis);
 	},
