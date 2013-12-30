@@ -43,8 +43,9 @@ class Kiss
             base:'".$basePath."'
         } );
         </script>\n";
+        print "<script type='text/javascript' src='../../dev-lib/exports.js' ></script>\n";
+
         print "<script type='text/javascript' src='../exports.js' ></script>\n";
-        print "<script type='text/javascript' src='../../dev-lib/dev-start.js' ></script>\n";
         /*load ua*/
         print "<script type='text/javascript' src='./js/UserAction.js' ></script>\n";
         /* load case source*/
