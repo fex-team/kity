@@ -101,7 +101,7 @@ var KCScatterDiagram = kity.createClass("scatterDiagram", (function() {
 				pie.fill(dot.color);
 				var label_val = new kity.Text((dot.percent * 100).toFixed(2) + "%");
 				label_val
-					.fill("#333").setX(0).setY(0).setSize(dot.r / 6).setStyle('font-family', 'Arial');
+					.fill("#333").setX(0).setY(0).setSize((dot.r / 3 > 9 ? dot.r / 3 : 9)).setStyle('font-family', 'Arial');
 				var label = new kity.Text(dot.label);
 				label.fill(dot.color).setSize(9).setX(dot.r).setY(0 - 12);
 				Round.addShape(circle);
