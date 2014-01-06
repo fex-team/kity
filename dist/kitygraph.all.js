@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kitygraph - v1.0.0 - 2014-01-02
+ * kitygraph - v1.0.0 - 2014-01-03
  * https://github.com/kitygraph/kity
  * GitHub: https://github.com/kitygraph/kity.git 
  * Copyright (c) 2014 Baidu UEditor Group; Licensed MIT
@@ -813,13 +813,8 @@ define("core/class", [ "core/config" ], function(require, exports) {
         }
     }
     var KITY_INHERIT_FLAG = "__KITY_INHERIT_FLAG_" + +new Date();
-    function inherit(constructor, BaseClass) {
-        var KityClass = function(__inherit__flag) {
-            if (__inherit__flag != KITY_INHERIT_FLAG) {
-                KityClass.__KityConstructor.apply(this, arguments);
-            }
-            this.__KityClassName = KityClass.__KityClassName;
-        };
+    function inherit(constructor, BaseClass, classname) {
+        var KityClass = eval("(function Kity" + classname + "( __inherit__flag ) {" + "if( __inherit__flag != KITY_INHERIT_FLAG ) {" + "KityClass.__KityConstructor.apply(this, arguments);" + "}" + "this.__KityClassName = KityClass.__KityClassName;" + "})");
         KityClass.__KityConstructor = constructor;
         KityClass.prototype = new BaseClass(KITY_INHERIT_FLAG);
         for (var methodName in BaseClass.prototype) {
@@ -885,7 +880,7 @@ define("core/class", [ "core/config" ], function(require, exports) {
                 this.callMixin.apply(this, arguments);
             };
         }
-        NewClass = inherit(constructor, BaseClass);
+        NewClass = inherit(constructor, BaseClass, classname);
         NewClass = mixin(NewClass, defines.mixins);
         NewClass.__KityClassName = constructor.__KityClassName = classname;
         NewClass.__KityBaseClass = constructor.__KityBaseClass = BaseClass;

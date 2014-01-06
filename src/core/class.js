@@ -13,9 +13,9 @@
 define( function ( require, exports ) {
 
     // just to bind context
-    Function.prototype.bind = Function.prototype.bind || function(thisObj) {
-        var args = Array.prototype.slice.call(arguments, 1);
-        return this.apply(thisObj, args);
+    Function.prototype.bind = Function.prototype.bind || function ( thisObj ) {
+        var args = Array.prototype.slice.call( arguments, 1 );
+        return this.apply( thisObj, args );
     };
 
     var config = require( 'core/config' );
@@ -53,7 +53,7 @@ define( function ( require, exports ) {
     Class.prototype.mixin = function ( name ) {
         var caller = arguments.callee.caller;
         var mixins = caller.__KityMethodClass.__KityMixins;
-        if(!mixins) {
+        if ( !mixins ) {
             return this;
         }
         var method = mixins[ name ];
@@ -64,7 +64,7 @@ define( function ( require, exports ) {
         var caller = arguments.callee.caller;
         var methodName = caller.__KityMethodName;
         var mixins = caller.__KityMethodClass.__KityMixins;
-        if(!mixins) {
+        if ( !mixins ) {
             return this;
         }
         var method = mixins[ methodName ];
@@ -78,14 +78,14 @@ define( function ( require, exports ) {
         }
     };
 
-    Class.prototype.pipe = function(fn) {
-        if(typeof(fn) =='function') {
-            fn.call(this, this);
+    Class.prototype.pipe = function ( fn ) {
+        if ( typeof ( fn ) == 'function' ) {
+            fn.call( this, this );
         }
         return this;
     };
 
-    Class.prototype.getType = function() {
+    Class.prototype.getType = function () {
         return this.__KityClassName;
     };
 
@@ -105,23 +105,22 @@ define( function ( require, exports ) {
         }
     }
 
-    var KITY_INHERIT_FLAG = '__KITY_INHERIT_FLAG_' + (+new Date());
+    var KITY_INHERIT_FLAG = '__KITY_INHERIT_FLAG_' + ( +new Date() );
 
-    function inherit( constructor, BaseClass ) {
-
-        var KityClass = function( __inherit__flag ) {
-            if( __inherit__flag != KITY_INHERIT_FLAG ) {
-                KityClass.__KityConstructor.apply(this, arguments);
-            }
-            this.__KityClassName = KityClass.__KityClassName;
-        };
+    function inherit( constructor, BaseClass, classname ) {
+        var KityClass = eval( '(function Kity' + classname + '( __inherit__flag ) {' +
+            'if( __inherit__flag != KITY_INHERIT_FLAG ) {' +
+            'KityClass.__KityConstructor.apply(this, arguments);' +
+            '}' +
+            'this.__KityClassName = KityClass.__KityClassName;' +
+            '})' );
         KityClass.__KityConstructor = constructor;
 
-        KityClass.prototype = new BaseClass(KITY_INHERIT_FLAG);
+        KityClass.prototype = new BaseClass( KITY_INHERIT_FLAG );
 
-        for(var methodName in BaseClass.prototype) {
-            if(BaseClass.prototype.hasOwnProperty(methodName) && methodName.indexOf('__Kity') !== 0) {
-                KityClass.prototype[methodName] = BaseClass.prototype[methodName];
+        for ( var methodName in BaseClass.prototype ) {
+            if ( BaseClass.prototype.hasOwnProperty( methodName ) && methodName.indexOf( '__Kity' ) !== 0 ) {
+                KityClass.prototype[ methodName ] = BaseClass.prototype[ methodName ];
             }
         }
 
@@ -135,24 +134,25 @@ define( function ( require, exports ) {
             return NewClass;
         }
 
-        var i, length = mixins.length, proto, method;
+        var i, length = mixins.length,
+            proto, method;
 
         NewClass.__KityMixins = {
             constructor: []
         };
 
         for ( i = 0; i < length; i++ ) {
-            proto = mixins[i].prototype;
+            proto = mixins[ i ].prototype;
 
-            for( method in proto ) {
-                if( false === proto.hasOwnProperty(method) || method.indexOf('__Kity') === 0) {
+            for ( method in proto ) {
+                if ( false === proto.hasOwnProperty( method ) || method.indexOf( '__Kity' ) === 0 ) {
                     continue;
                 }
-                if( method === 'constructor' ) {
+                if ( method === 'constructor' ) {
                     // constructor 特殊处理
-                    NewClass.__KityMixins.constructor.push( proto[method] );
+                    NewClass.__KityMixins.constructor.push( proto[ method ] );
                 } else {
-                    NewClass.prototype[method] = NewClass.__KityMixins[method] = proto[method];
+                    NewClass.prototype[ method ] = NewClass.__KityMixins[ method ] = proto[ method ];
                 }
             }
         }
@@ -161,13 +161,13 @@ define( function ( require, exports ) {
     }
 
     function extend( BaseClass, extension ) {
-        if(extension.__KityClassName) {
+        if ( extension.__KityClassName ) {
             extension = extension.prototype;
         }
-        for(var methodName in extension) {
-            if(extension.hasOwnProperty(methodName) &&
-                methodName.indexOf('__Kity') &&
-                methodName != 'constructor') {
+        for ( var methodName in extension ) {
+            if ( extension.hasOwnProperty( methodName ) &&
+                methodName.indexOf( '__Kity' ) &&
+                methodName != 'constructor' ) {
                 var method = BaseClass.prototype[ methodName ] = extension[ methodName ];
                 method.__KityMethodClass = BaseClass;
                 method.__KityMethodName = methodName;
@@ -179,8 +179,8 @@ define( function ( require, exports ) {
     exports.createClass = function ( classname, defines ) {
         var constructor, NewClass, BaseClass;
 
-        if(arguments.length === 1) {
-            defines = arguments[0];
+        if ( arguments.length === 1 ) {
+            defines = arguments[ 0 ];
             classname = 'AnonymousClass';
         }
 
@@ -193,12 +193,12 @@ define( function ( require, exports ) {
             }
         } else {
             constructor = function () {
-                this.callBase.apply(this, arguments);
-                this.callMixin.apply(this, arguments);
+                this.callBase.apply( this, arguments );
+                this.callMixin.apply( this, arguments );
             };
         }
 
-        NewClass = inherit( constructor, BaseClass );
+        NewClass = inherit( constructor, BaseClass, classname );
         NewClass = mixin( NewClass, defines.mixins );
 
         NewClass.__KityClassName = constructor.__KityClassName = classname;
