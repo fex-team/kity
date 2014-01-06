@@ -20,7 +20,9 @@ define(function(require, exports, module) {
             this.node.setAttribute('x', x);
             return this;
         },
-
+        setPosition: function(x,y){
+            return this.setX(x).setY(y)
+        },
         setY: function(y) {
             this.node.setAttribute('y', y);
             return this;
