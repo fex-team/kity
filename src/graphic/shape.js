@@ -25,7 +25,17 @@ define(function(require, exports, module) {
             return this.node;
         },
         getBoundaryBox: function() {
-            var box = this.node.getBBox();
+            var box;
+            try {
+                box = this.node.getBBox();
+            } catch (e) {
+                box = {
+                    x: this.node.clientLeft,
+                    y: this.node.clientTop,
+                    width: this.node.clientWidth,
+                    height: this.node.clientHeight
+                };
+            }
             return box;
         },
         getRenderBox: function() {

@@ -12,7 +12,7 @@ define(function(require, exports, module) {
     return require('core/class').createClass({
         base: Group,
         mixins: [Draggable],
-        constructor: function( innerRadius, outerRadius, trackCount, trackPieCount, initSaturation) {
+        constructor: function(innerRadius, outerRadius, trackCount, trackPieCount, initSaturation) {
             this.callBase();
             this.innerRadius = innerRadius || 200;
             this.outerRadius = outerRadius || 400;
@@ -31,101 +31,103 @@ define(function(require, exports, module) {
             this.generateLabels();
         },
         generateCircle: function() {
-            this.circle = new Circle( this.innerRadius );
+            this.circle = new Circle(this.innerRadius);
             this.circle.stroke(new Pen('white', 5));
             this.circle.setStyle('cursor', 'move');
             this.addShape(this.circle);
         },
         generateTracks: function() {
             this.pies = new Group();
-            for(var trackNumber = 0; trackNumber < this.trackCount; trackNumber++) {
-                this.pies.addShapes( this.generateTrackPies( trackNumber ) );
+            for (var trackNumber = 0; trackNumber < this.trackCount; trackNumber++) {
+                this.pies.addShapes(this.generateTrackPies(trackNumber));
             }
             this.addShape(this.pies.rotate(-this.angleStep / 2));
         },
-        generateTrackPies: function( trackNumber ) {
+        generateTrackPies: function(trackNumber) {
             var trackInnerRadius = this.innerRadius + this.trackHeight * trackNumber,
                 trackOuterRadius = trackInnerRadius + this.trackHeight;
             var h,
                 s = this.saturation,
-                l = this.getTrackLightness( trackNumber );
+                l = this.getTrackLightness(trackNumber);
             var color, pie;
             var hStep = 360 / this.trackPieCount;
             var trackPies = [];
 
-            for(h = 0; h < 360; h += hStep ) {
+            for (h = 0; h < 360; h += hStep) {
                 color = Color.createHSL(h, s, l);
                 pie = new Pie(trackInnerRadius + 1, trackOuterRadius, h + 0.2, h + hStep - 0.2);
-                pie.fill( pie.color = color );
+                pie.fill(pie.color = color);
                 trackPies.push(pie);
             }
             return trackPies;
         },
-        getTrackLightness: function( trackNumber ) {
-            var lMin = 20, lMax = 95;
+        getTrackLightness: function(trackNumber) {
+            var lMin = 20,
+                lMax = 95;
             return lMin + trackNumber / this.trackCount * (lMax - lMin);
         },
         generateLabels: function() {
             var fontSize = this.innerRadius / 6;
-            this.rgbLabel = new Text().setAnchor('center').setSize(fontSize).setY(-this.innerRadius / 8);
-            this.hslLabel = new Text().setAnchor('center').setSize(fontSize).setY(this.innerRadius / 4);
+            this.rgbLabel = new Text().setTextAnchor('center').setSize(fontSize).setY(-this.innerRadius / 8);
+            this.hslLabel = new Text().setTextAnchor('center').setSize(fontSize).setY(this.innerRadius / 4);
             this.addShape(this.rgbLabel);
             this.addShape(this.hslLabel);
         },
         control: function() {
             var ring = this;
-            this.on('mouseover', function( e ) {
+            this.on('mouseover', function(e) {
                 var pie = e.targetShape;
-                if( pie instanceof Pie ) {
+                if (pie instanceof Pie) {
                     var color = pie.color;
 
                     pie.scale(2);
                     pie.stroke('white');
 
-                    ring.setCircleColor( color );
+                    ring.setCircleColor(color);
                     ring.bringFront(pie);
                 }
             });
-            this.on('mouseout', function( e ) {
+            this.on('mouseout', function(e) {
                 var pie = e.targetShape;
-                if( pie instanceof Pie ) {
+                if (pie instanceof Pie) {
                     pie.resetTransform();
                     pie.stroke('none');
                     ring.showSelected();
                 }
             });
-            this.on('click', function( e ) {
+            this.on('click', function(e) {
                 var pie = e.targetShape;
-                if( pie instanceof Pie ) {
-                    ring.selectedPie( pie );
+                if (pie instanceof Pie) {
+                    ring.selectedPie(pie);
                 }
             });
         },
-        selectedPie: function( pie ) {
-            if(this.selected) {
+        selectedPie: function(pie) {
+            if (this.selected) {
                 this.selected.stroke('none');
             }
             this.selected = pie;
         },
         showSelected: function() {
-            var pie = this.selected, pen;
-            if( pie ) {
+            var pie = this.selected,
+                pen;
+            if (pie) {
                 pen = new Pen().setWidth(5).setColor('white');
-                pie.stroke( pen );
-                this.bringFront( pie );
-                this.setCircleColor( pie.color );
+                pie.stroke(pen);
+                this.bringFront(pie);
+                this.setCircleColor(pie.color);
             }
         },
         setCircleColor: function(color) {
             this.circle.color = color;
-            this.circle.fill( color );
+            this.circle.fill(color);
             var labelColor = color.get('l') >= 50 ?
                 color.dec('l', 50).set('s', 10) :
                 color.inc('l', 50).set('s', 10);
-            this.rgbLabel.setContent( color.toRGB() ).fill( labelColor );
-            this.hslLabel.setContent( color.toHSL() ).fill( labelColor );
+            this.rgbLabel.setContent(color.toRGB()).fill(labelColor);
+            this.hslLabel.setContent(color.toHSL()).fill(labelColor);
         },
-        bringFront: function( obj ) {
+        bringFront: function(obj) {
             obj.container.removeShape(obj).addShape(obj);
         },
         updateSaturation: function(s) {
@@ -133,7 +135,7 @@ define(function(require, exports, module) {
             this.pies.eachItem(function(index, pie) {
                 pie.fill(pie.color.set('s', s));
             });
-            if(this.circle.color) {
+            if (this.circle.color) {
                 this.setCircleColor(this.circle.color.set('s', s));
             }
         },
@@ -142,24 +144,24 @@ define(function(require, exports, module) {
                 min: -this.outerRadius * 0.8,
                 max: this.outerRadius * 0.8,
                 length: this.outerRadius * 1.6,
-                value : 0
+                value: 0
             };
             return this.pan;
         },
         drag: function() {
-            return this.callMixin( {
+            return this.callMixin({
                 target: this.circle,
                 move: function(e) {
                     var pan = this.getPan();
                     pan.value += e.delta.x;
                     pan.value = Math.min(pan.value, pan.max);
                     pan.value = Math.max(pan.value, pan.min);
-                    this.updateSaturation( 100 * (pan.value - pan.min) / pan.length );
+                    this.updateSaturation(100 * (pan.value - pan.min) / pan.length);
                     this.updatePosition(pan.value);
                 }
             });
         },
-        updatePosition: function( x ) {
+        updatePosition: function(x) {
             this.setTransform(new Matrix().translate(x, 0));
         }
     });
