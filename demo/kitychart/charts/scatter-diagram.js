@@ -100,14 +100,13 @@ var KCScatterDiagram = kity.createClass("scatterDiagram", (function() {
 				//draw percent
 				var pie = new kityPie(0, dot.r, 0, dot.percent * 360, 0, 0);
 				pie.fill(dot.color);
-				var label_val = new kity.Text((dot.percent * 100).toFixed(2) + "%");
-				label_val
-					.fill("#333").setX(0).setY(0).setSize((dot.r / 3 > 12 ? dot.r / 3 : 12)).setStyle('font-family', 'Arial');
-				var label = new kity.Text(dot.label);
+				//var label_val = new kity.Text((dot.percent * 100).toFixed(2) + "%");
+				//label_val.fill("#333").setX(0).setY(0).setSize((dot.r / 3 > 12 ? dot.r / 3 : 12)).setStyle('font-family', 'Arial');
+				var label = new kity.Text(dot.label + (dot.percent * 100).toFixed(2) + "%");
 				label.fill(dot.color).setSize(12).setX(dot.r).setY(0 - 12);
 				Round.addShape(circle);
 				Round.addShape(pie);
-				Round.addShape(label_val);
+				//Round.addShape(label_val);
 				Round.addShape(label);
 				Round.setOpacity(0.9);
 				Round.dot = dot;

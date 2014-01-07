@@ -1,9 +1,9 @@
 /*!
  * ====================================================
- * kitygraph - v1.0.0 - 2013-12-30
+ * kitygraph - v1.0.0 - 2014-01-03
  * https://github.com/kitygraph/kity
  * GitHub: https://github.com/kitygraph/kity.git 
- * Copyright (c) 2013 Baidu UEditor Group; Licensed MIT
+ * Copyright (c) 2014 Baidu UEditor Group; Licensed MIT
  * ====================================================
  */
 
@@ -354,7 +354,7 @@ define("animate/easing", [], function(require, exports, module) {
     };
     return easings;
 });
-define("animate/opacityanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/matrix", "core/utils", "core/config", "graphic/svg", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/pen" ], function(require, exports, module) {
+define("animate/opacityanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/matrix", "core/utils", "graphic/vector", "core/config", "graphic/svg", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/pen" ], function(require, exports, module) {
     var Animator = require("animate/animator");
     var Matrix = require("graphic/matrix");
     var OpacityAnimator = require("core/class").createClass("OpacityAnimator", {
@@ -388,7 +388,7 @@ define("animate/opacityanimator", [ "animate/animator", "animate/timeline", "ani
     });
     return OpacityAnimator;
 });
-define("animate/rotateanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/matrix", "core/utils", "core/config", "graphic/svg", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/pen" ], function(require, exports, module) {
+define("animate/rotateanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/matrix", "core/utils", "graphic/vector", "core/config", "graphic/svg", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/pen" ], function(require, exports, module) {
     var Animator = require("animate/animator");
     var Matrix = require("graphic/matrix");
     var RotateAnimator = require("core/class").createClass("RotateAnimator", {
@@ -415,7 +415,7 @@ define("animate/rotateanimator", [ "animate/animator", "animate/timeline", "anim
     });
     return RotateAnimator;
 });
-define("animate/scaleanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/matrix", "core/utils", "core/config", "graphic/svg", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/pen" ], function(require, exports, module) {
+define("animate/scaleanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/matrix", "core/utils", "graphic/vector", "core/config", "graphic/svg", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/pen" ], function(require, exports, module) {
     var Animator = require("animate/animator");
     var Matrix = require("graphic/matrix");
     var ScaleAnimator = require("core/class").createClass("ScaleAnimator", {
@@ -441,7 +441,7 @@ define("animate/scaleanimator", [ "animate/animator", "animate/timeline", "anima
     });
     return ScaleAnimator;
 });
-define("animate/timeline", [ "graphic/color", "core/utils", "graphic/standardcolor", "core/class", "graphic/matrix", "graphic/eventhandler", "graphic/shapeevent", "core/config" ], function(require, exports, module) {
+define("animate/timeline", [ "graphic/color", "core/utils", "graphic/standardcolor", "core/class", "graphic/matrix", "graphic/vector", "graphic/eventhandler", "graphic/shapeevent", "core/config" ], function(require, exports, module) {
     var Color = require("graphic/color");
     var Matrix = require("graphic/matrix");
     var EventHandler = require("graphic/eventhandler");
@@ -693,7 +693,7 @@ define("animate/timeline", [ "graphic/color", "core/utils", "graphic/standardcol
     });
     return Timeline;
 });
-define("animate/translateanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/matrix", "core/utils", "core/config", "graphic/svg", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/pen" ], function(require, exports, module) {
+define("animate/translateanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/matrix", "core/utils", "graphic/vector", "core/config", "graphic/svg", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/pen" ], function(require, exports, module) {
     var Animator = require("animate/animator");
     var Matrix = require("graphic/matrix");
     var TranslateAnimator = require("core/class").createClass("TranslateAnimator", {
@@ -813,13 +813,8 @@ define("core/class", [ "core/config" ], function(require, exports) {
         }
     }
     var KITY_INHERIT_FLAG = "__KITY_INHERIT_FLAG_" + +new Date();
-    function inherit(constructor, BaseClass) {
-        var KityClass = function(__inherit__flag) {
-            if (__inherit__flag != KITY_INHERIT_FLAG) {
-                KityClass.__KityConstructor.apply(this, arguments);
-            }
-            this.__KityClassName = KityClass.__KityClassName;
-        };
+    function inherit(constructor, BaseClass, classname) {
+        var KityClass = eval("(function Kity" + classname + "( __inherit__flag ) {" + "if( __inherit__flag != KITY_INHERIT_FLAG ) {" + "KityClass.__KityConstructor.apply(this, arguments);" + "}" + "this.__KityClassName = KityClass.__KityClassName;" + "})");
         KityClass.__KityConstructor = constructor;
         KityClass.prototype = new BaseClass(KITY_INHERIT_FLAG);
         for (var methodName in BaseClass.prototype) {
@@ -885,7 +880,7 @@ define("core/class", [ "core/config" ], function(require, exports) {
                 this.callMixin.apply(this, arguments);
             };
         }
-        NewClass = inherit(constructor, BaseClass);
+        NewClass = inherit(constructor, BaseClass, classname);
         NewClass = mixin(NewClass, defines.mixins);
         NewClass.__KityClassName = constructor.__KityClassName = classname;
         NewClass.__KityBaseClass = constructor.__KityBaseClass = BaseClass;
@@ -2608,9 +2603,10 @@ define("graphic/mask", [ "core/class", "core/config", "graphic/shape", "graphic/
     });
     return Mask;
 });
-define("graphic/matrix", [ "core/utils", "core/class", "core/config" ], function(require, exports, module) {
+define("graphic/matrix", [ "core/utils", "graphic/vector", "core/class", "core/config" ], function(require, exports, module) {
     var utils = require("core/utils");
     var mPattern = /matrix\((.+)\)/i;
+    var Vector = require("graphic/vector");
     // 注意，合并的结果是先执行m2，再执行m1的结果
     function mergeMatrixData(m2, m1) {
         return {
@@ -2710,6 +2706,9 @@ define("graphic/matrix", [ "core/utils", "core/class", "core/config" ], function
         toString: function() {
             var m = this.m;
             return "matrix(" + [ m.a, m.b, m.c, m.d, m.e, m.f ].join(", ") + ")";
+        },
+        transformPoint: function(x, y) {
+            return Matrix.transformPoint(x, y, this.m);
         }
     });
     Matrix.parse = function(str) {
@@ -2729,10 +2728,7 @@ define("graphic/matrix", [ "core/utils", "core/class", "core/config" ], function
         return new Matrix();
     };
     Matrix.transformPoint = function(x, y, m) {
-        return {
-            x: m.a * x + m.c * y + m.e,
-            y: m.b * x + m.d * y + m.f
-        };
+        return new Vector(m.a * x + m.c * y + m.e, m.b * x + m.d * y + m.f);
     };
     return Matrix;
 });
@@ -2839,7 +2835,7 @@ define("graphic/palette", [ "graphic/standardcolor", "graphic/color", "core/util
     });
     return Palette;
 });
-define("graphic/paper", [ "core/class", "core/config", "core/utils", "graphic/svg", "graphic/container", "graphic/shapecontainer", "graphic/shape", "graphic/viewbox", "graphic/eventhandler", "graphic/shapeevent", "graphic/styled", "graphic/matrix", "graphic/data", "graphic/pen" ], function(require, exports, module) {
+define("graphic/paper", [ "core/class", "core/config", "core/utils", "graphic/svg", "graphic/container", "graphic/shapecontainer", "graphic/shape", "graphic/viewbox", "graphic/eventhandler", "graphic/shapeevent", "graphic/styled", "graphic/matrix", "graphic/vector", "graphic/data", "graphic/pen" ], function(require, exports, module) {
     var Class = require("core/class");
     var utils = require("core/utils");
     var svg = require("graphic/svg");
@@ -3458,7 +3454,7 @@ define("graphic/rect", [ "core/utils", "core/class", "core/config", "graphic/pat
         }
     });
 });
-define("graphic/shape", [ "graphic/svg", "core/utils", "graphic/eventhandler", "graphic/shapeevent", "core/class", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen", "graphic/color", "core/config" ], function(require, exports, module) {
+define("graphic/shape", [ "graphic/svg", "core/utils", "graphic/eventhandler", "graphic/shapeevent", "core/class", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/vector", "graphic/pen", "graphic/color", "core/config" ], function(require, exports, module) {
     var svg = require("graphic/svg");
     var utils = require("core/utils");
     var EventHandler = require("graphic/eventhandler");
@@ -3765,7 +3761,7 @@ define("graphic/shapecontainer", [ "graphic/container", "core/class", "core/conf
 /*
  * 图形事件包装类
  * */
-define("graphic/shapeevent", [ "graphic/matrix", "core/utils", "core/class", "core/config" ], function(require, exprots, module) {
+define("graphic/shapeevent", [ "graphic/matrix", "core/utils", "graphic/vector", "core/class", "core/config" ], function(require, exprots, module) {
     var Matrix = require("graphic/matrix"), Utils = require("core/utils");
     return require("core/class").createClass("ShapeEvent", {
         constructor: function(event) {
