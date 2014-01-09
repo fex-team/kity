@@ -27,9 +27,9 @@ var KCGenderChart = kity.createClass("GenderChart", (function() {
 				var rect2 = new kity.Rect(30, me.R * 0.2, -25, -me.R * 0.1, 0);
 				polygon1.fill(color);
 				rect2.fill(color);
+				_paper.addShape(group);
 				group.addShapes([polygon1, rect2]);
 				group.translate(me.centerX + me.R + 10, me.centerY).setAnchor(me.centerX, me.centerY).rotate(rotate);
-				_paper.addShape(group);
 			};
 			//绘制十字
 			var drawCross = function(color, rotate) {
