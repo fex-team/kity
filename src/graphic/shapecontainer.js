@@ -1,9 +1,11 @@
 define(function(require, exports, module) {
     var Container = require('graphic/container');
+    var utils = require('core/utils');
 
     var ShapeContainer = require('core/class').createClass('ShapeContainer', {
         base: Container,
 
+        isShapeContainer:true,
         /* private */
         handleAdd: function(shape, index) {
             var parent = this.getShapeNode();
@@ -90,6 +92,24 @@ define(function(require, exports, module) {
 
         getShapes: function() {
             return this.getItems();
+        },
+
+        getShapesByType:function(name){
+            var shapes = [];
+            function getShapes(shape){
+                utils.each(shape.getShapes(),function(n){
+                    if(n.isShapeContainer){
+                        getShapes(n)
+                    }else{
+                        if(name.toLowerCase() == n.getType().toLowerCase()){
+                            shapes.push(n)
+                        }
+                    }
+
+                });
+            }
+            getShapes(this);
+            return shapes;
         },
 
         /* public */
