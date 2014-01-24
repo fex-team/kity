@@ -53,6 +53,9 @@
 
                 return this;
             },
+            setHeight:function(height){
+                this.height = height;
+            },
             setHide:function(){
                 clearInterval(this.timer);
                 this.setStyle('display','none');
@@ -94,6 +97,7 @@
         var Receiver = kity.createClass('Receiver',{
             clear : function(){
                 this.$container.html('');
+                this.index = 0;
                 return this;
             },
             constructor : function(){
@@ -101,18 +105,24 @@
                 this.$container.appendTo(document.body);
                 this.$container.on('keydown keypress keyup', $.proxy(this.keyboardEvents,this));
                 this.timer = null;
+                this.index = 0;
             },
-            setPosition : function(nodeOffset,textShapeOffset){
+            setPosition : function(textShapeOffset){
                 this.$container.css({
-                    top:nodeOffset.x,
-                    left:nodeOffset.y
+                    top:textShapeOffset.x,
+                    left:textShapeOffset.y
                 });
                 this.textShape.setPosition(textShapeOffset.x,textShapeOffset.y + this.textShape.getSize());
                 return this;
             },
             setRange : function(range,index){
-                this.index = index || 0;
-                range.setStart(this.$container.get(0), this.index).collapse(true);
+
+                this.index = index || this.index;
+
+                var text = this.$container[0].firstChild;
+                console.log(text)
+                console.log(this.index)
+                range.setStart(text || this.$container[0], this.index).collapse(true);
                 setTimeout(function(){
                     range.select()
                 });
@@ -129,6 +139,9 @@
                 this.textShape.setSize(size);
                 return this;
             },
+            getTextShapeHeight:function(){
+                return this.textShape.getRenderBox().height;
+            },
             appendTextShapeToPaper:function(paper){
                 paper.addShape(this.textShape);
                 return this;
@@ -139,12 +152,11 @@
                 switch(e.type){
                     case 'keyup':
                         this.textShape.setContent(this.$container.text().replace(/\u200b/g,''));
-
                         this.updateTextData();
                         this.updateCursor();
                         this.timer = setTimeout(function(){
                             me.cursor.setShow()
-                        },500)
+                        },500);
                         break;
                     case 'keypress':
                     case 'keyup':
@@ -152,10 +164,11 @@
             },
             updateTextData : function(){
                 this.textShape.textData =  this.getTextOffsetData();
-                this.index++;
+                this.index = this.index + 1;
             },
             setCursor : function(cursor){
                 this.cursor = cursor;
+                return this;
             },
             updateCursor : function(){
                 this.cursor.setShowHold();
@@ -171,9 +184,18 @@
                         y : this.textData.getY()
                     })
                 }else{
+                    if(this.index + 1 == this.textData.length){
+                        var lastChar = this.textData[this.index];
+                        this.cursor.setPosition({
+                            x : lastChar.x + lastChar.width,
+                            y : lastChar.y
+                        })
+                    }else{
+                        this.cursor.setPosition(this.textData[this.index])
+                    }
 
-                    this.cursor.setPosition(this.textData[this.index+1])
                 }
+                return this;
             },
             getTextOffsetData:function(){
                 var text = this.textShape.getContent();
@@ -181,7 +203,7 @@
 //                this.textShape.clearContent();
 
                 for(var i= 0,l = text.length;i<l;i++){
-                    var box = this.textShape.getNode().getExtentOfChar(i);
+                    var box = this.textShape.getExtentOfChar(i);
                     this.textData.push({
                         x:box.x,
                         y:box.y,
@@ -191,6 +213,30 @@
                 }
 
 
+                return this;
+            },
+            setCurrentIndex:function(offset){
+                var me = this;
+                this.getTextOffsetData();
+                var hadChanged = false;
+                $.each(this.textData,function(i,v){
+                    if(offset.x >= v.x && offset.x <= v.x + v.width){
+                        if(offset.x  - v.x > v.width/2){
+                            me.index = i + 1;
+
+                        }else {
+                            me.index = i
+
+                        }
+                        hadChanged = true;
+                        return false;
+                    }
+                })
+                return this;
+
+            },
+            setCursorHeight:function(){
+                this.cursor.setHeight(this.getTextShapeHeight())
                 return this;
             }
         });
@@ -237,8 +283,10 @@
         var paper = new kity.Paper(document.body).setHeight(500);
         paper.addShape(cursor)
             .setStyle('border','1px solid #ccc')
+                .setStyle('cursor','text')
             .on('click',function(e){
                 var originEvent = e.originEvent;
+                var position = e.getPosition();
                 if(e.targetShape.getType() != 'Text'){
                     var offset = e.getPosition();
                     cursor.setShow().setPosition(offset);
@@ -246,11 +294,16 @@
                             .setTextShape()
                             .setTextShapeSize(cursor.height)
                             .appendTextShapeToPaper(paper)
-                            .setPosition({x:originEvent.clientX,y:originEvent.clientY}, e.getPosition())
+                            .setPosition(position)
                             .setRange(range,0)
                             .setCursor(cursor)
                 }else{
-
+                    receiver.setCursor(cursor)
+                            .setTextShape(e.targetShape)
+                            .setCursorHeight()
+                            .setCurrentIndex(position)
+                            .updateCursor()
+                            .setRange(range)
 
                 }
 

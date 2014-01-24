@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kitygraph - v1.0.0 - 2014-01-03
+ * kitygraph - v1.0.0 - 2014-01-24
  * https://github.com/kitygraph/kity
  * GitHub: https://github.com/kitygraph/kity.git 
  * Copyright (c) 2014 Baidu UEditor Group; Licensed MIT
@@ -2427,7 +2427,7 @@ define("graphic/gradientbrush", [ "graphic/svg", "graphic/defbrush", "core/class
         }
     });
 });
-define("graphic/group", [ "graphic/shapecontainer", "graphic/container", "core/class", "graphic/shape", "core/config", "graphic/svg", "core/utils", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen" ], function(require, exports, module) {
+define("graphic/group", [ "graphic/shapecontainer", "graphic/container", "core/utils", "core/class", "graphic/shape", "core/config", "graphic/svg", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen" ], function(require, exports, module) {
     var ShapeContainer = require("graphic/shapecontainer");
     return require("core/class").createClass("Group", {
         mixins: [ ShapeContainer ],
@@ -3072,7 +3072,7 @@ define("graphic/path", [ "core/utils", "core/class", "core/config", "graphic/sha
         }
     });
 });
-define("graphic/patternbrush", [ "graphic/defbrush", "graphic/svg", "core/class", "graphic/shapecontainer", "graphic/container", "graphic/shape", "core/config" ], function(require, exports, module) {
+define("graphic/patternbrush", [ "graphic/defbrush", "graphic/svg", "core/class", "graphic/shapecontainer", "graphic/container", "core/utils", "graphic/shape", "core/config" ], function(require, exports, module) {
     var DefBrush = require("graphic/defbrush");
     var ShapeContainer = require("graphic/shapecontainer");
     var svg = require("graphic/svg");
@@ -3480,7 +3480,17 @@ define("graphic/shape", [ "graphic/svg", "core/utils", "graphic/eventhandler", "
             return this.node;
         },
         getBoundaryBox: function() {
-            var box = this.node.getBBox();
+            var box;
+            try {
+                box = this.node.getBBox();
+            } catch (e) {
+                box = {
+                    x: this.node.clientLeft,
+                    y: this.node.clientTop,
+                    width: this.node.clientWidth,
+                    height: this.node.clientHeight
+                };
+            }
             return box;
         },
         getRenderBox: function() {
@@ -3630,10 +3640,12 @@ define("graphic/shape", [ "graphic/svg", "core/utils", "graphic/eventhandler", "
         }
     });
 });
-define("graphic/shapecontainer", [ "graphic/container", "core/class", "core/config", "graphic/shape", "graphic/svg", "core/utils", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen" ], function(require, exports, module) {
+define("graphic/shapecontainer", [ "graphic/container", "core/class", "core/utils", "core/config", "graphic/shape", "graphic/svg", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen" ], function(require, exports, module) {
     var Container = require("graphic/container");
+    var utils = require("core/utils");
     var ShapeContainer = require("core/class").createClass("ShapeContainer", {
         base: Container,
+        isShapeContainer: true,
         /* private */
         handleAdd: function(shape, index) {
             var parent = this.getShapeNode();
@@ -3708,6 +3720,22 @@ define("graphic/shapecontainer", [ "graphic/container", "core/class", "core/conf
         },
         getShapes: function() {
             return this.getItems();
+        },
+        getShapesByType: function(name) {
+            var shapes = [];
+            function getShapes(shape) {
+                utils.each(shape.getShapes(), function(n) {
+                    if (n.isShapeContainer) {
+                        getShapes(n);
+                    } else {
+                        if (name.toLowerCase() == n.getType().toLowerCase()) {
+                            shapes.push(n);
+                        }
+                    }
+                });
+            }
+            getShapes(this);
+            return shapes;
         },
         /* public */
         getShapeById: function(id) {
@@ -4055,7 +4083,7 @@ define("graphic/svg", [], function(require, exports, module) {
     };
     return svg;
 });
-define("graphic/text", [ "graphic/textcontent", "graphic/shape", "core/class", "graphic/shapecontainer", "graphic/container", "graphic/svg", "core/config" ], function(require, exports, module) {
+define("graphic/text", [ "graphic/textcontent", "graphic/shape", "core/class", "graphic/shapecontainer", "graphic/container", "core/utils", "graphic/svg", "core/config" ], function(require, exports, module) {
     var TextContent = require("graphic/textcontent");
     var ShapeContainer = require("graphic/shapecontainer");
     var svg = require("graphic/svg");
@@ -4071,6 +4099,9 @@ define("graphic/text", [ "graphic/textcontent", "graphic/shape", "core/class", "
         setX: function(x) {
             this.node.setAttribute("x", x);
             return this;
+        },
+        setPosition: function(x, y) {
+            return this.setX(x).setY(y);
         },
         setY: function(y) {
             this.node.setAttribute("y", y);
@@ -4269,7 +4300,7 @@ define("graphic/vector", [ "core/class", "core/config" ], function(require, expo
     };
     return Vector;
 });
-define("graphic/view", [ "graphic/shapecontainer", "graphic/container", "core/class", "graphic/shape", "graphic/viewbox", "core/config", "graphic/view" ], function(require, exports, module) {
+define("graphic/view", [ "graphic/shapecontainer", "graphic/container", "core/utils", "core/class", "graphic/shape", "graphic/viewbox", "core/config", "graphic/view" ], function(require, exports, module) {
     var ShapeContainer = require("graphic/shapecontainer");
     var ViewBox = require("graphic/viewbox");
     return require("core/class").createClass("View", {
