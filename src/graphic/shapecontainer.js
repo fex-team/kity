@@ -97,16 +97,14 @@ define(function(require, exports, module) {
         getShapesByType:function(name){
             var shapes = [];
             function getShapes(shape){
-                utils.each(shape.getShapes(),function(n){
-                    if(n.isShapeContainer){
+                if(name.toLowerCase() == shape.getType().toLowerCase()){
+                    shapes.push(shape)
+                }
+                if(shape.isShapeContainer){
+                    utils.each(shape.getShapes(),function(n){
                         getShapes(n)
-                    }else{
-                        if(name.toLowerCase() == n.getType().toLowerCase()){
-                            shapes.push(n)
-                        }
-                    }
-
-                });
+                    });
+                }
             }
             getShapes(this);
             return shapes;

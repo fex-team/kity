@@ -10,6 +10,7 @@ describe( "ShapeContainer", function () {
     text.appendShape(new kity.TextSpan());
     text.appendShape(new kity.TextSpan());
     group.appendShape(text);
+    text.appendShape(new kity.Text());
     it( "一层的查询", function () {
 
         expect(group.getShapesByType('rect').length).toBe(1);
@@ -19,5 +20,7 @@ describe( "ShapeContainer", function () {
     it( "多层的查询", function () {
         expect(group.getShapesByType('textspan').length).toBe(2);
     } );
-
+    it("多层text嵌套",function(){
+        expect(group.getShapesByType('text').length).toBe(2);
+    })
 } );
