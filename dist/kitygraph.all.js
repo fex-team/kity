@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kitygraph - v1.0.0 - 2014-01-24
+ * kitygraph - v1.0.0 - 2014-02-04
  * https://github.com/kitygraph/kity
  * GitHub: https://github.com/kitygraph/kity.git 
  * Copyright (c) 2014 Baidu UEditor Group; Licensed MIT
@@ -3724,15 +3724,14 @@ define("graphic/shapecontainer", [ "graphic/container", "core/class", "core/util
         getShapesByType: function(name) {
             var shapes = [];
             function getShapes(shape) {
-                utils.each(shape.getShapes(), function(n) {
-                    if (n.isShapeContainer) {
+                if (name.toLowerCase() == shape.getType().toLowerCase()) {
+                    shapes.push(shape);
+                }
+                if (shape.isShapeContainer) {
+                    utils.each(shape.getShapes(), function(n) {
                         getShapes(n);
-                    } else {
-                        if (name.toLowerCase() == n.getType().toLowerCase()) {
-                            shapes.push(n);
-                        }
-                    }
-                });
+                    });
+                }
             }
             getShapes(this);
             return shapes;
