@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kitygraph - v1.0.0 - 2014-02-04
+ * kitygraph - v1.0.0 - 2014-02-12
  * https://github.com/kitygraph/kity
  * GitHub: https://github.com/kitygraph/kity.git 
  * Copyright (c) 2014 Baidu UEditor Group; Licensed MIT
@@ -1847,6 +1847,9 @@ define("graphic/container", [ "core/class", "core/config" ], function(require, e
         },
         addItem: function(item, pos, noEvent) {
             var items = this.getItems(), length = items.length, before, after;
+            if (~items.indexOf(item)) {
+                return this;
+            }
             if (!(pos >= 0 && pos < length)) {
                 pos = length;
             }
@@ -1881,19 +1884,11 @@ define("graphic/container", [ "core/class", "core/config" ], function(require, e
             if (typeof pos !== "number") {
                 return this.removeItem(this.indexOf(pos));
             }
-            var items = this.getItems(), length = items.length, item = items[pos], before, after;
+            var items = this.getItems(), length = items.length, item = items[pos];
             if (item === undefined) {
                 return this;
             }
-            if (pos === 0) {
-                items.shift();
-            } else if (pos == length - 1) {
-                items.pop();
-            } else {
-                before = items.slice(0, pos);
-                after = items.slice(pos + 1);
-                this.items = before.concat(after);
-            }
+            items.splice(pos, 1);
             if (item.container) {
                 delete item.container;
             }
@@ -3637,6 +3632,22 @@ define("graphic/shape", [ "graphic/svg", "core/utils", "graphic/eventhandler", "
                 this.node.setAttribute("fill", brush);
             }
             return this;
+        },
+        setAttr: function(a, v) {
+            var me = this;
+            if (utils.isObject(a)) {
+                utils.each(a, function(val, key) {
+                    me.setAttr(key, val);
+                });
+            }
+            if (v === undefined || v === null || v === "") {
+                this.node.removeAttribute(a);
+            } else {
+                this.node.setAttribute(a, v);
+            }
+        },
+        getAttr: function(a) {
+            return this.node.getAttribute(a);
         }
     });
 });
