@@ -2898,13 +2898,6 @@ define("graphic/paper", [ "core/class", "core/config", "core/utils", "graphic/sv
             }
             zoom = zoom || 1;
             box = this.getViewBox();
-            viewport = this.viewport = {
-                center: {
-                    x: cx,
-                    y: cy
-                },
-                zoom: zoom
-            };
             var matrix = new Matrix();
             var dx = box.x + box.width / 2 - cx, dy = box.y + box.height / 2 - cy;
             matrix.translate(-cx, -cy);
@@ -2912,6 +2905,17 @@ define("graphic/paper", [ "core/class", "core/config", "core/utils", "graphic/sv
             matrix.translate(cx, cy);
             matrix.translate(dx, dy);
             this.shapeNode.setAttribute("transform", matrix);
+            this.viewport = {
+                center: {
+                    x: cx,
+                    y: cy
+                },
+                offset: {
+                    x: dx,
+                    y: dy
+                },
+                zoom: zoom
+            };
             return this;
         },
         getViewPort: function() {
@@ -2922,6 +2926,10 @@ define("graphic/paper", [ "core/class", "core/config", "core/utils", "graphic/sv
                     center: {
                         x: box.x + box.width / 2,
                         y: box.y + box.height / 2
+                    },
+                    offset: {
+                        x: 0,
+                        y: 0
                     }
                 };
             }
@@ -3843,10 +3851,10 @@ define("graphic/shapeevent", [ "graphic/matrix", "core/utils", "graphic/vector",
             var eventClient = this.originEvent.touches ? this.originEvent.touches[touch_index || 0] : this.originEvent;
             var clientX = eventClient.clientX, clientY = eventClient.clientY, paper = this.targetShape.getPaper(), //转换过后的点
             transPoint = Matrix.transformPoint(clientX, clientY, paper.node.getScreenCTM().inverse());
-            var zoom = paper.getViewPort().zoom;
+            var viewport = paper.getViewPort();
             return {
-                x: transPoint.x / zoom,
-                y: transPoint.y / zoom
+                x: transPoint.x / viewport.zoom - viewport.offset.x,
+                y: transPoint.y / viewport.zoom - viewport.offset.y
             };
         },
         stopPropagation: function() {
