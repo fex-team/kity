@@ -30,8 +30,8 @@ define( function ( require, exports, module ) {
         },
         addItem: function ( item, pos, noEvent ) {
             var items = this.getItems(),
-                length = items.length,
-                before, after;
+                length = items.length;
+
             if ( ~items.indexOf( item ) ) {
                 return this;
             }
@@ -57,6 +57,7 @@ define( function ( require, exports, module ) {
             return this;
         },
         setItems: function ( items ) {
+            // TODO: Optimize
             return this.clear().addItems( items );
         },
         appendItem: function ( item ) {
@@ -77,9 +78,7 @@ define( function ( require, exports, module ) {
             if ( item === undefined ) {
                 return this;
             }
-
             items.splice( pos, 1 );
-
             if ( item.container ) {
                 delete item.container;
             }

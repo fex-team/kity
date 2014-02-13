@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kitygraph - v1.0.0 - 2014-02-12
+ * kitygraph - v1.0.0 - 2014-02-13
  * https://github.com/kitygraph/kity
  * GitHub: https://github.com/kitygraph/kity.git 
  * Copyright (c) 2014 Baidu UEditor Group; Licensed MIT
@@ -1846,7 +1846,7 @@ define("graphic/container", [ "core/class", "core/config" ], function(require, e
             return this;
         },
         addItem: function(item, pos, noEvent) {
-            var items = this.getItems(), length = items.length, before, after;
+            var items = this.getItems(), length = items.length;
             if (~items.indexOf(item)) {
                 return this;
             }
@@ -1872,6 +1872,7 @@ define("graphic/container", [ "core/class", "core/config" ], function(require, e
             return this;
         },
         setItems: function(items) {
+            // TODO: Optimize
             return this.clear().addItems(items);
         },
         appendItem: function(item) {
