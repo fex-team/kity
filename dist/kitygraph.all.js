@@ -1846,7 +1846,7 @@ define("graphic/container", [ "core/class", "core/config" ], function(require, e
             return this;
         },
         addItem: function(item, pos, noEvent) {
-            var items = this.getItems(), length = items.length, before, after;
+            var items = this.getItems(), length = items.length;
             if (~items.indexOf(item)) {
                 return this;
             }
@@ -1872,6 +1872,7 @@ define("graphic/container", [ "core/class", "core/config" ], function(require, e
             return this;
         },
         setItems: function(items) {
+            // TODO: Optimize
             return this.clear().addItems(items);
         },
         appendItem: function(item) {
