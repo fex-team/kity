@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kitygraph - v1.0.0 - 2014-02-13
+ * kitygraph - v1.0.0 - 2014-02-14
  * https://github.com/kitygraph/kity
  * GitHub: https://github.com/kitygraph/kity.git 
  * Copyright (c) 2014 Baidu UEditor Group; Licensed MIT
@@ -3761,20 +3761,8 @@ define("graphic/shapecontainer", [ "graphic/container", "core/class", "core/util
         getShapeById: function(id) {
             return this.getShapeNode().getElementById(id).shape;
         },
-        bringTo: function(shape, index) {
+        arrangeShape: function(shape, index) {
             return this.removeShape(shape).addShape(shape, index);
-        },
-        bringFront: function(shape) {
-            return this.bringTo(shape, this.indexOf(shape) + 1);
-        },
-        bringBack: function(shape) {
-            return this.bringTo(shape, this.indexOf(shape) - 1);
-        },
-        bringTop: function(shape) {
-            return this.removeShape(shape).addShape(shape);
-        },
-        bringRear: function(shape) {
-            return this.removeShape(shape).addShape(shape, 0);
         },
         /* protected */
         getShapeNode: function() {
@@ -3784,23 +3772,42 @@ define("graphic/shapecontainer", [ "graphic/container", "core/class", "core/util
     var Shape = require("graphic/shape");
     require("core/class").extendClass(Shape, {
         bringTo: function(index) {
-            this.container.bringTo(this, index);
+            this.container.arrangeShape(this, index);
             return this;
         },
         bringFront: function() {
-            this.container.bringFront(this);
-            return this;
+            return this.bringTo(this.container.indexOf(this) + 1);
         },
         bringBack: function() {
-            this.container.bringBack(this);
-            return this;
+            return this.bringTo(this.container.indexOf(this) - 1);
         },
         bringTop: function() {
-            this.container.bringTop(this);
+            this.container.removeShape(this).addShape(this);
             return this;
         },
         bringRear: function() {
-            this.container.bringRear(this);
+            return this.bringTo(0);
+        },
+        bringRefer: function(referShape, offset) {
+            if (referShape.container) {
+                if (this.remove) {
+                    this.remove();
+                }
+                referShape.container.addShape(this, referShape.container.indexOf(referShape) + (offset || 0));
+            }
+            return this;
+        },
+        bringAbove: function(referShape) {
+            return this.bringRefer(referShape);
+        },
+        bringBelow: function(referShape) {
+            return this.bringRefer(referShape, 1);
+        },
+        replaceBy: function(newShape) {
+            if (this.container) {
+                newShape.bringAbove(this);
+                this.remove();
+            }
             return this;
         }
     });
