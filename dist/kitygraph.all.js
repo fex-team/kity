@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kitygraph - v1.0.0 - 2014-02-14
+ * kitygraph - v1.0.0 - 2014-02-16
  * https://github.com/kitygraph/kity
  * GitHub: https://github.com/kitygraph/kity.git 
  * Copyright (c) 2014 Baidu UEditor Group; Licensed MIT
@@ -576,8 +576,14 @@ define("animate/timeline", [ "graphic/color", "core/utils", "graphic/standardcol
         getPlayTime: function() {
             return this.rollbacking ? this.duration - this.time : this.time;
         },
+        getTimeProportion: function() {
+            return this.getPlayTime() / this.duration;
+        },
+        getValueProportion: function() {
+            return this.easing(this.getPlayTime(), 0, 1, this.duration);
+        },
         getValue: function() {
-            var b = this.beginVal, f = this.finishVal, p = this.easing(this.getPlayTime(), 0, 1, this.duration), v;
+            var b = this.beginVal, f = this.finishVal, p = this.getValueProportion(), v;
             switch (this.valueType) {
               case "color":
                 b = b.getValues();

@@ -163,10 +163,16 @@ define(function(require, exports, module) {
         getPlayTime: function() {
             return this.rollbacking ? this.duration - this.time : this.time;
         },
+        getTimeProportion: function() {
+            return this.getPlayTime() / this.duration;
+        },
+        getValueProportion: function() {
+            return this.easing(this.getPlayTime(), 0, 1, this.duration);
+        },
         getValue: function() {
             var b = this.beginVal,
                 f = this.finishVal,
-                p = this.easing(this.getPlayTime(), 0, 1, this.duration),
+                p = this.getValueProportion(),
                 v;
 
             switch (this.valueType) {
