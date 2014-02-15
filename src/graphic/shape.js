@@ -65,7 +65,11 @@ define( function ( require, exports, module ) {
                 y: yMin,
                 width: xMax - xMin,
                 height: yMax - yMin,
-                closurePoints: rps
+                closurePoints: rps,
+                left: xMin,
+                right: xMax,
+                top: yMin,
+                bottom: yMax
             };
         },
         getWidth: function () {
