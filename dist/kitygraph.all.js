@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kitygraph - v1.0.0 - 2014-02-16
+ * kitygraph - v1.0.0 - 2014-02-18
  * https://github.com/kitygraph/kity
  * GitHub: https://github.com/kitygraph/kity.git 
  * Copyright (c) 2014 Baidu UEditor Group; Licensed MIT
@@ -2711,6 +2711,9 @@ define("graphic/matrix", [ "core/utils", "graphic/vector", "core/class", "core/c
         },
         transformPoint: function(x, y) {
             return Matrix.transformPoint(x, y, this.m);
+        },
+        transformBox: function(box) {
+            return Matrix.transformBox(box, this.m);
         }
     });
     Matrix.parse = function(str) {
@@ -2731,6 +2734,30 @@ define("graphic/matrix", [ "core/utils", "graphic/vector", "core/class", "core/c
     };
     Matrix.transformPoint = function(x, y, m) {
         return new Vector(m.a * x + m.c * y + m.e, m.b * x + m.d * y + m.f);
+    };
+    Matrix.transformBox = function(box, matrix) {
+        var xMin = Number.MAX_VALUE, xMax = -Number.MAX_VALUE, yMin = Number.MAX_VALUE, yMax = -Number.MAX_VALUE;
+        var bps = [ [ box.x, box.y ], [ box.x + box.width, box.y ], [ box.x, box.y + box.height ], [ box.x + box.width, box.y + box.height ] ];
+        var bp, rp, rps = [];
+        while (bp = bps.pop()) {
+            rp = Matrix.transformPoint(bp[0], bp[1], matrix);
+            rps.push(rp);
+            xMin = Math.min(xMin, rp.x);
+            xMax = Math.max(xMax, rp.x);
+            yMin = Math.min(yMin, rp.y);
+            yMax = Math.max(yMax, rp.y);
+        }
+        return {
+            x: xMin,
+            y: yMin,
+            width: xMax - xMin,
+            height: yMax - yMin,
+            closurePoints: rps,
+            left: xMin,
+            right: xMax,
+            top: yMin,
+            bottom: yMax
+        };
     };
     return Matrix;
 });
@@ -3504,30 +3531,9 @@ define("graphic/shape", [ "graphic/svg", "core/utils", "graphic/eventhandler", "
             return box;
         },
         getRenderBox: function() {
-            var b = this.getBoundaryBox();
-            var xMin = Number.MAX_VALUE, xMax = -Number.MAX_VALUE, yMin = Number.MAX_VALUE, yMax = -Number.MAX_VALUE;
-            var bps = [ [ b.x, b.y ], [ b.x + b.width, b.y ], [ b.x, b.y + b.height ], [ b.x + b.width, b.y + b.height ] ];
-            var matrix = this.getTransform().getMatrix();
-            var bp, rp, rps = [];
-            while (bp = bps.pop()) {
-                rp = Matrix.transformPoint(bp[0], bp[1], matrix);
-                rps.push(rp);
-                xMin = Math.min(xMin, rp.x);
-                xMax = Math.max(xMax, rp.x);
-                yMin = Math.min(yMin, rp.y);
-                yMax = Math.max(yMax, rp.y);
-            }
-            return {
-                x: xMin,
-                y: yMin,
-                width: xMax - xMin,
-                height: yMax - yMin,
-                closurePoints: rps,
-                left: xMin,
-                right: xMax,
-                top: yMin,
-                bottom: yMax
-            };
+            var box = this.getBoundaryBox();
+            var matrix = this.getTransform();
+            return matrix.transformBox(box);
         },
         getWidth: function() {
             return this.getRenderBox().width;

@@ -39,38 +39,9 @@ define( function ( require, exports, module ) {
             return box;
         },
         getRenderBox: function () {
-            var b = this.getBoundaryBox();
-            var xMin = Number.MAX_VALUE,
-                xMax = -Number.MAX_VALUE,
-                yMin = Number.MAX_VALUE,
-                yMax = -Number.MAX_VALUE;
-            var bps = [
-                [ b.x, b.y ],
-                [ b.x + b.width, b.y ],
-                [ b.x, b.y + b.height ],
-                [ b.x + b.width, b.y + b.height ]
-            ];
-            var matrix = this.getTransform().getMatrix();
-            var bp, rp, rps = [];
-            while ( ( bp = bps.pop() ) ) {
-                rp = Matrix.transformPoint( bp[ 0 ], bp[ 1 ], matrix );
-                rps.push( rp );
-                xMin = Math.min( xMin, rp.x );
-                xMax = Math.max( xMax, rp.x );
-                yMin = Math.min( yMin, rp.y );
-                yMax = Math.max( yMax, rp.y );
-            }
-            return {
-                x: xMin,
-                y: yMin,
-                width: xMax - xMin,
-                height: yMax - yMin,
-                closurePoints: rps,
-                left: xMin,
-                right: xMax,
-                top: yMin,
-                bottom: yMax
-            };
+            var box = this.getBoundaryBox();
+            var matrix = this.getTransform();
+            return matrix.transformBox( box );
         },
         getWidth: function () {
             return this.getRenderBox().width;
