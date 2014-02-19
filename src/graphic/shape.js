@@ -38,9 +38,28 @@ define( function ( require, exports, module ) {
             }
             return box;
         },
-        getRenderBox: function () {
+        getRenderBox: function ( refer ) {
+            function isAncestorOf( container, shape ) {
+                var parent = shape.container;
+                while ( parent && parent != container ) {
+                    parent = parent.container;
+                }
+                return !!parent;
+            }
+            if ( refer === undefined ) {
+                refer = this;
+            } else if ( refer === 'top' || refer === 'paper' ) {
+                refer = this.getPaper() || this;
+            } else if ( !isAncestorOf( refer, this ) ) {
+                refer = this;
+            }
             var box = this.getBoundaryBox();
-            var matrix = this.getTransform();
+            var current = this;
+            var matrix = current.getTransform();
+            while ( current != refer ) {
+                current = current.container;
+                matrix = matrix.merge( current.getTransform() );
+            }
             return matrix.transformBox( box );
         },
         getWidth: function () {

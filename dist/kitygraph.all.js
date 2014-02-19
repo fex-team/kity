@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kitygraph - v1.0.0 - 2014-02-18
+ * kitygraph - v1.0.0 - 2014-02-19
  * https://github.com/kitygraph/kity
  * GitHub: https://github.com/kitygraph/kity.git 
  * Copyright (c) 2014 Baidu UEditor Group; Licensed MIT
@@ -2705,6 +2705,9 @@ define("graphic/matrix", [ "core/utils", "graphic/vector", "core/class", "core/c
         mergeMatrix: function(matrix) {
             return new Matrix(mergeMatrixData(this.m, matrix.m));
         },
+        merge: function(matrix) {
+            return this.mergeMatrix(matrix);
+        },
         toString: function() {
             var m = this.m;
             return "matrix(" + [ m.a, m.b, m.c, m.d, m.e, m.f ].join(", ") + ")";
@@ -2968,6 +2971,9 @@ define("graphic/paper", [ "core/class", "core/config", "core/utils", "graphic/sv
                 };
             }
             return this.viewport;
+        },
+        getTransform: function() {
+            return Matrix.parse(this.shapeNode.getAttribute("transform"));
         },
         addResource: function(resource) {
             this.resources.appendItem(resource);
@@ -3530,9 +3536,28 @@ define("graphic/shape", [ "graphic/svg", "core/utils", "graphic/eventhandler", "
             }
             return box;
         },
-        getRenderBox: function() {
+        getRenderBox: function(refer) {
+            function isAncestorOf(container, shape) {
+                var parent = shape.container;
+                while (parent && parent != container) {
+                    parent = parent.container;
+                }
+                return !!parent;
+            }
+            if (refer === undefined) {
+                refer = this;
+            } else if (refer === "top" || refer === "paper") {
+                refer = this.getPaper() || this;
+            } else if (!isAncestorOf(refer, this)) {
+                refer = this;
+            }
             var box = this.getBoundaryBox();
-            var matrix = this.getTransform();
+            var current = this;
+            var matrix = current.getTransform();
+            while (current != refer) {
+                current = current.container;
+                matrix = matrix.merge(current.getTransform());
+            }
             return matrix.transformBox(box);
         },
         getWidth: function() {

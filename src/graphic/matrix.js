@@ -111,6 +111,10 @@ define( function ( require, exports, module ) {
             return new Matrix( mergeMatrixData( this.m, matrix.m ) );
         },
 
+        merge: function ( matrix ) {
+            return this.mergeMatrix( matrix );
+        },
+
         toString: function () {
             var m = this.m;
             return 'matrix(' + [ m.a, m.b, m.c, m.d, m.e, m.f ].join( ', ' ) + ')';
@@ -120,7 +124,7 @@ define( function ( require, exports, module ) {
             return Matrix.transformPoint( x, y, this.m );
         },
 
-        transformBox: function( box ) {
+        transformBox: function ( box ) {
             return Matrix.transformBox( box, this.m );
         }
     } );
