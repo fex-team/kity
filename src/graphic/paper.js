@@ -124,10 +124,6 @@ define( function ( require, exports, module ) {
             return this.viewport;
         },
 
-        getTransform: function() {
-            return Matrix.parse( this.shapeNode.getAttribute( "transform" ) );
-        },
-
         addResource: function ( resource ) {
             this.resources.appendItem( resource );
             if ( resource.node ) {

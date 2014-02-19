@@ -2972,9 +2972,6 @@ define("graphic/paper", [ "core/class", "core/config", "core/utils", "graphic/sv
             }
             return this.viewport;
         },
-        getTransform: function() {
-            return Matrix.parse(this.shapeNode.getAttribute("transform"));
-        },
         addResource: function(resource) {
             this.resources.appendItem(resource);
             if (resource.node) {
@@ -3546,7 +3543,7 @@ define("graphic/shape", [ "graphic/svg", "core/utils", "graphic/eventhandler", "
             }
             if (refer === undefined) {
                 refer = this;
-            } else if (refer === "top" || refer === "paper") {
+            } else if (refer === "top") {
                 refer = this.getPaper() || this;
             } else if (!isAncestorOf(refer, this)) {
                 refer = this;
@@ -3556,7 +3553,9 @@ define("graphic/shape", [ "graphic/svg", "core/utils", "graphic/eventhandler", "
             var matrix = current.getTransform();
             while (current != refer) {
                 current = current.container;
-                matrix = matrix.merge(current.getTransform());
+                if (current.getTransform) {
+                    matrix = matrix.merge(current.getTransform());
+                }
             }
             return matrix.transformBox(box);
         },

@@ -48,7 +48,7 @@ define( function ( require, exports, module ) {
             }
             if ( refer === undefined ) {
                 refer = this;
-            } else if ( refer === 'top' || refer === 'paper' ) {
+            } else if ( refer === 'top' ) {
                 refer = this.getPaper() || this;
             } else if ( !isAncestorOf( refer, this ) ) {
                 refer = this;
@@ -58,7 +58,9 @@ define( function ( require, exports, module ) {
             var matrix = current.getTransform();
             while ( current != refer ) {
                 current = current.container;
-                matrix = matrix.merge( current.getTransform() );
+                if( current.getTransform ) {
+                    matrix = matrix.merge( current.getTransform() );
+                }
             }
             return matrix.transformBox( box );
         },
