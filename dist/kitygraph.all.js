@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kitygraph - v1.0.0 - 2014-02-19
+ * kitygraph - v1.0.0 - 2014-02-23
  * https://github.com/kitygraph/kity
  * GitHub: https://github.com/kitygraph/kity.git 
  * Copyright (c) 2014 Baidu UEditor Group; Licensed MIT
@@ -820,7 +820,7 @@ define("core/class", [ "core/config" ], function(require, exports) {
     }
     var KITY_INHERIT_FLAG = "__KITY_INHERIT_FLAG_" + +new Date();
     function inherit(constructor, BaseClass, classname) {
-        var KityClass = eval("(function Kity" + classname + "( __inherit__flag ) {" + "if( __inherit__flag != KITY_INHERIT_FLAG ) {" + "KityClass.__KityConstructor.apply(this, arguments);" + "}" + "this.__KityClassName = KityClass.__KityClassName;" + "})");
+        var KityClass = eval("(function " + classname + "( __inherit__flag ) {" + "if( __inherit__flag != KITY_INHERIT_FLAG ) {" + "KityClass.__KityConstructor.apply(this, arguments);" + "}" + "this.__KityClassName = KityClass.__KityClassName;" + "})");
         KityClass.__KityConstructor = constructor;
         KityClass.prototype = new BaseClass(KITY_INHERIT_FLAG);
         for (var methodName in BaseClass.prototype) {

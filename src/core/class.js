@@ -108,7 +108,7 @@ define( function ( require, exports ) {
     var KITY_INHERIT_FLAG = '__KITY_INHERIT_FLAG_' + ( +new Date() );
 
     function inherit( constructor, BaseClass, classname ) {
-        var KityClass = eval( '(function Kity' + classname + '( __inherit__flag ) {' +
+        var KityClass = eval( '(function ' + classname + '( __inherit__flag ) {' +
             'if( __inherit__flag != KITY_INHERIT_FLAG ) {' +
             'KityClass.__KityConstructor.apply(this, arguments);' +
             '}' +
