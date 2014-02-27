@@ -12,7 +12,7 @@
 
             // core
             Utils: require( "core/utils" ),
-
+            Browser:require("core/browser"),
             // shape
             Bezier: require( 'graphic/bezier' ),
             BezierPoint: require( 'graphic/bezierpoint' ),
