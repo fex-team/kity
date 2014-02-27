@@ -2608,7 +2608,7 @@ define("graphic/mask", [ "core/class", "core/config", "graphic/shape", "graphic/
 });
 define("graphic/matrix", [ "core/utils", "graphic/vector", "core/class", "core/config" ], function(require, exports, module) {
     var utils = require("core/utils");
-    var mPattern = /matrix\((\d+)[\s,]+(\d+)[\s,]+(\d+)[\s,]+(\d+)[\s,]+(\d+)[\s,]+(\d+)\)/i;
+    var mPattern = /matrix\((.+)\)/i;
     var Vector = require("graphic/vector");
     // 注意，合并的结果是先执行m2，再执行m1的结果
     function mergeMatrixData(m2, m1) {
@@ -2724,13 +2724,17 @@ define("graphic/matrix", [ "core/utils", "graphic/vector", "core/class", "core/c
         var match;
         var f = parseFloat;
         if (match = mPattern.exec(str)) {
+            var values = match[1].split(",");
+            if (values.length != 6) {
+                values = match[1].split(" ");
+            }
             return new Matrix({
-                a: f(match[1]),
-                b: f(match[2]),
-                c: f(match[3]),
-                d: f(match[4]),
-                e: f(match[5]),
-                f: f(match[6])
+                a: f(values[0]),
+                b: f(values[1]),
+                c: f(values[2]),
+                d: f(values[3]),
+                e: f(values[4]),
+                f: f(values[5])
             });
         }
         return new Matrix();
@@ -3209,7 +3213,7 @@ define("graphic/pen", [ "graphic/color", "core/utils", "graphic/standardcolor", 
         },
         stroke: function(shape) {
             var node = shape.node;
-            node.setAttribute("stroke", this.getColor());
+            node.setAttribute("stroke", this.getColor().toString());
             node.setAttribute("stroke-width", this.getWidth());
             if (this.getOpacity() < 1) {
                 node.setAttribute("stroke-opacity", this.getOpacity());
@@ -3583,7 +3587,7 @@ define("graphic/shape", [ "graphic/svg", "core/utils", "graphic/eventhandler", "
             return Matrix.parse(this.node.getAttribute("transform"));
         },
         setTransform: function(matrix) {
-            this.node.setAttribute("transform", matrix);
+            this.node.setAttribute("transform", matrix.toString());
             this.trigger("shapeupdate", {
                 type: "transform"
             });
@@ -3667,7 +3671,7 @@ define("graphic/shape", [ "graphic/svg", "core/utils", "graphic/eventhandler", "
                 pen.stroke(this);
             } else {
                 // 字符串或重写了 toString 的对象
-                this.node.setAttribute("stroke", pen);
+                this.node.setAttribute("stroke", pen.toString());
                 if (width) {
                     this.node.setAttribute("stroke-width", width);
                 }
@@ -3679,7 +3683,7 @@ define("graphic/shape", [ "graphic/svg", "core/utils", "graphic/eventhandler", "
                 brush.fill(this);
             } else {
                 // 字符串或重写了 toString 的对象
-                this.node.setAttribute("fill", brush);
+                this.node.setAttribute("fill", brush.toString());
             }
             return this;
         },
@@ -3870,7 +3874,7 @@ define("graphic/shapeevent", [ "graphic/matrix", "core/utils", "graphic/vector",
                     target = target.correspondingUseElement;
                 }
                 this.originEvent = event;
-                this.targetShape = target.shape || target.paper;
+                this.targetShape = target.shape || target.paper || event.currentTarget && (event.currentTarget.shape || event.currentTarget.paper);
                 if (event.__kity_param) {
                     Utils.extend(this, event.__kity_param);
                 }
@@ -4107,7 +4111,7 @@ define("graphic/standardcolor", [], {
 });
 define("graphic/styled", [ "core/class", "core/config" ], function(require, exports, module) {
     // polyfill for ie
-    var ClassList = kity.createClass("ClassList", {
+    var ClassList = require("core/class").createClass("ClassList", {
         constructor: function(node) {
             this._node = node;
             this._list = node.className.toString().split(" ");

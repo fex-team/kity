@@ -88,7 +88,7 @@ define( function ( require, exports, module ) {
             return Matrix.parse( this.node.getAttribute( "transform" ) );
         },
         setTransform: function ( matrix ) {
-            this.node.setAttribute( "transform", matrix );
+            this.node.setAttribute( "transform", matrix.toString() );
             this.trigger( 'shapeupdate', {
                 type: 'transform'
             } );
@@ -172,7 +172,7 @@ define( function ( require, exports, module ) {
                 pen.stroke( this );
             } else {
                 // 字符串或重写了 toString 的对象
-                this.node.setAttribute( 'stroke', pen );
+                this.node.setAttribute( 'stroke', pen.toString() );
                 if ( width ) {
                     this.node.setAttribute( 'stroke-width', width );
                 }
@@ -184,7 +184,7 @@ define( function ( require, exports, module ) {
                 brush.fill( this );
             } else {
                 // 字符串或重写了 toString 的对象
-                this.node.setAttribute( 'fill', brush );
+                this.node.setAttribute( 'fill', brush.toString() );
             }
             return this;
         },

@@ -86,6 +86,8 @@ define(function(require, exports, module) {
                     ring.setCircleColor(color);
                     ring.bringFront(pie);
                 }
+                e.stopPropagation();
+                e.preventDefault();
             });
             this.on('mouseout', function(e) {
                 var pie = e.targetShape;

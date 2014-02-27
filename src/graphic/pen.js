@@ -97,7 +97,7 @@ define( function ( require, exports, module ) {
 
         stroke: function ( shape ) {
             var node = shape.node;
-            node.setAttribute( 'stroke', this.getColor() );
+            node.setAttribute( 'stroke', this.getColor().toString() );
             node.setAttribute( 'stroke-width', this.getWidth() );
             if ( this.getOpacity() < 1 ) {
                 node.setAttribute( 'stroke-opacity', this.getOpacity() );

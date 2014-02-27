@@ -18,7 +18,7 @@ define( function ( require, exprots, module ) {
 
                 this.type = event.type;
 
-                target = event.currentTarget || event.target;
+                target = event.target;
 
                 // use标签有特殊属性， 需要区别对待
                 if ( target.correspondingUseElement ) {
@@ -28,7 +28,7 @@ define( function ( require, exprots, module ) {
                 }
 
                 this.originEvent = event;
-                this.targetShape = target.shape || target.paper;
+                this.targetShape = target.shape || target.paper || event.currentTarget && (event.currentTarget.shape || event.currentTarget.paper);
 
                 if ( event.__kity_param ) {
 
