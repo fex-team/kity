@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kitygraph - v1.0.0 - 2014-02-23
+ * kitygraph - v1.0.0 - 2014-02-27
  * https://github.com/kitygraph/kity
  * GitHub: https://github.com/kitygraph/kity.git 
  * Copyright (c) 2014 Baidu UEditor Group; Licensed MIT
@@ -2238,7 +2238,8 @@ define("graphic/eventhandler", [ "core/utils", "graphic/shapeevent", "graphic/ma
             evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
             return evt;
         }
-        window.CustomEvent = window.CustomEvent || CustomEvent;
+        CustomEvent.prototype = window.Event.prototype;
+        window.CustomEvent = CustomEvent;
     })();
     var Utils = require("core/utils"), ShapeEvent = require("graphic/shapeevent");
     // 内部处理器缓存
@@ -2607,7 +2608,7 @@ define("graphic/mask", [ "core/class", "core/config", "graphic/shape", "graphic/
 });
 define("graphic/matrix", [ "core/utils", "graphic/vector", "core/class", "core/config" ], function(require, exports, module) {
     var utils = require("core/utils");
-    var mPattern = /matrix\((.+)\)/i;
+    var mPattern = /matrix\((\d+)[\s,]+(\d+)[\s,]+(\d+)[\s,]+(\d+)[\s,]+(\d+)[\s,]+(\d+)\)/i;
     var Vector = require("graphic/vector");
     // 注意，合并的结果是先执行m2，再执行m1的结果
     function mergeMatrixData(m2, m1) {
@@ -2723,14 +2724,13 @@ define("graphic/matrix", [ "core/utils", "graphic/vector", "core/class", "core/c
         var match;
         var f = parseFloat;
         if (match = mPattern.exec(str)) {
-            var values = match[1].split(",");
             return new Matrix({
-                a: f(values[0]),
-                b: f(values[1]),
-                c: f(values[2]),
-                d: f(values[3]),
-                e: f(values[4]),
-                f: f(values[5])
+                a: f(match[1]),
+                b: f(match[2]),
+                c: f(match[3]),
+                d: f(match[4]),
+                e: f(match[5]),
+                f: f(match[6])
             });
         }
         return new Matrix();
@@ -4106,17 +4106,47 @@ define("graphic/standardcolor", [], {
     EXTEND_STANDARD: {}
 });
 define("graphic/styled", [ "core/class", "core/config" ], function(require, exports, module) {
+    // polyfill for ie
+    var ClassList = kity.createClass("ClassList", {
+        constructor: function(node) {
+            this._node = node;
+            this._list = node.className.toString().split(" ");
+        },
+        _update: function() {
+            this._node.className = this._list.join(" ");
+        },
+        add: function(name) {
+            this._list.push(name);
+            this._update();
+        },
+        remove: function(name) {
+            var index = this._list.indexOf(name);
+            if (~index) {
+                this._list.splice(index, 1);
+            }
+            this._update();
+        },
+        contains: function(name) {
+            return ~this._list.indexOf(name);
+        }
+    });
+    function getClassList(node) {
+        if (!node.classList) {
+            node.classList = new ClassList(node);
+        }
+        return node.classList;
+    }
     return require("core/class").createClass("Styled", {
         addClass: function(name) {
-            this.node.classList.add(name);
+            getClassList(this.node).add(name);
             return this;
         },
         removeClass: function(name) {
-            this.node.classList.remove(name);
+            getClassList(this.node).remove(name);
             return this;
         },
         hasClass: function(name) {
-            return this.node.classList.contains(name);
+            return getClassList(this.node).contains(name);
         },
         setStyle: function(styles) {
             if (arguments.length == 2) {

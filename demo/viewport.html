@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html style="height: 100%;">
 <head>
     <title>Viewport</title>
     <script src="../dev-lib/sea.js"></script>
@@ -49,7 +49,7 @@
                 e.preventDefault();
             });
             paper.on('click', function(e) {
-                console.log("down", e.getPosition());
+                console.log("down", e.getPosition().x, e.getPosition().y);
                 e.preventDefault();
             });
             document.body.addEventListener('mousewheel', function(e) {
@@ -73,6 +73,6 @@
         }
     </style>
 </head>
-<body>
+<body style="height: 100%;">
 </body>
 </html>

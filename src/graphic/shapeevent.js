@@ -18,7 +18,7 @@ define( function ( require, exprots, module ) {
 
                 this.type = event.type;
 
-                target = event.target;
+                target = event.currentTarget || event.target;
 
                 // use标签有特殊属性， 需要区别对待
                 if ( target.correspondingUseElement ) {

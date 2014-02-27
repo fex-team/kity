@@ -16,7 +16,9 @@ define(function(require, exports, module) {
             return evt;
         }
 
-        window.CustomEvent = window.CustomEvent || CustomEvent;
+        CustomEvent.prototype = window.Event.prototype;
+
+        window.CustomEvent = CustomEvent;
     })();
 
     var Utils = require("core/utils"),

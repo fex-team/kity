@@ -1,6 +1,6 @@
 define( function ( require, exports, module ) {
     var utils = require( 'core/utils' );
-    var mPattern = /matrix\((.+)\)/i;
+    var mPattern = /matrix\((\d+)[\s,]+(\d+)[\s,]+(\d+)[\s,]+(\d+)[\s,]+(\d+)[\s,]+(\d+)\)/i;
     var Vector = require( 'graphic/vector' );
 
     // 注意，合并的结果是先执行m2，再执行m1的结果
@@ -133,14 +133,13 @@ define( function ( require, exports, module ) {
         var match;
         var f = parseFloat;
         if ( ( match = mPattern.exec( str ) ) ) {
-            var values = match[ 1 ].split( ',' );
             return new Matrix( {
-                a: f( values[ 0 ] ),
-                b: f( values[ 1 ] ),
-                c: f( values[ 2 ] ),
-                d: f( values[ 3 ] ),
-                e: f( values[ 4 ] ),
-                f: f( values[ 5 ] )
+                a: f( match[ 1 ] ),
+                b: f( match[ 2 ] ),
+                c: f( match[ 3 ] ),
+                d: f( match[ 4 ] ),
+                e: f( match[ 5 ] ),
+                f: f( match[ 6 ] )
             } );
         }
         return new Matrix();
