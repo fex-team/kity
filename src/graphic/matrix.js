@@ -107,6 +107,14 @@ define( function ( require, exports, module ) {
             return utils.clone( this.m );
         },
 
+        getTranslate: function () {
+            var m = this.m;
+            return {
+                x: m.e / m.a,
+                y: m.f / m.d
+            };
+        },
+
         mergeMatrix: function ( matrix ) {
             return new Matrix( mergeMatrixData( this.m, matrix.m ) );
         },
@@ -134,8 +142,8 @@ define( function ( require, exports, module ) {
         var f = parseFloat;
         if ( ( match = mPattern.exec( str ) ) ) {
             var values = match[ 1 ].split( ',' );
-            if(values.length != 6) {
-                values = match[1].split(' '); //ie
+            if ( values.length != 6 ) {
+                values = match[ 1 ].split( ' ' ); //ie
             }
             return new Matrix( {
                 a: f( values[ 0 ] ),

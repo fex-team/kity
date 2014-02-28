@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kitygraph - v1.0.0 - 2014-02-27
+ * kitygraph - v1.0.0 - 2014-02-28
  * https://github.com/kitygraph/kity
  * GitHub: https://github.com/kitygraph/kity.git 
  * Copyright (c) 2014 Baidu UEditor Group; Licensed MIT
@@ -2743,6 +2743,13 @@ define("graphic/matrix", [ "core/utils", "graphic/vector", "core/class", "core/c
         },
         getMatrix: function() {
             return utils.clone(this.m);
+        },
+        getTranslate: function() {
+            var m = this.m;
+            return {
+                x: m.e / m.a,
+                y: m.f / m.d
+            };
         },
         mergeMatrix: function(matrix) {
             return new Matrix(mergeMatrixData(this.m, matrix.m));
