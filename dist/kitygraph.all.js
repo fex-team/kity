@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kitygraph - v1.0.0 - 2014-03-03
+ * kitygraph - v1.0.0 - 2014-03-04
  * https://github.com/kitygraph/kity
  * GitHub: https://github.com/kitygraph/kity.git 
  * Copyright (c) 2014 Baidu UEditor Group; Licensed MIT
@@ -3119,6 +3119,17 @@ define("graphic/path", [ "core/utils", "core/class", "core/config", "graphic/sha
             return this;
         }
     });
+    function flatten(arr) {
+        var result = [], length = arr.length;
+        for (var i = 0; i < length; i++) {
+            if (arr[i] instanceof Array) {
+                result = result.concat(flatten(arr[i]));
+            } else {
+                result.push(arr[i]);
+            }
+        }
+        return result;
+    }
     return createClass("Path", {
         base: Shape,
         constructor: function(data) {
@@ -3132,6 +3143,10 @@ define("graphic/path", [ "core/utils", "core/class", "core/config", "graphic/sha
         setPathData: function(data) {
             if (!data) {
                 return;
+            }
+            // add support for path segment
+            if (data instanceof Array) {
+                data = flatten(data).join(" ");
             }
             this.pathdata = data;
             var path = this;
