@@ -7,8 +7,8 @@ define(function(require, exports, module) {
                 return {
                     x: 0,
                     y: 0,
-                    width: this.node.clientWidth,
-                    height: this.node.clientHeight
+                    width: this.node.clientWidth || this.node.parentNode.clientWidth,
+                    height: this.node.clientHeight || this.node.parentNode.clientHeight
                 };
             } else {
                 attr = attr.split(' ');

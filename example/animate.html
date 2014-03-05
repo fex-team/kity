@@ -49,7 +49,7 @@
             }
             var rect = new Rect(50, 150, 0, 50);
             paper.addResource(rect);
-            for(var i = 0; i < 5; i++) {
+            for(var i = 0; i < 10; i++) {
                 var color = Color.createHSL(i * 30, 80, 50);
                 var copy = rect.use().translate( i * 50, 0 );
                 copy.color = color;
@@ -61,7 +61,7 @@
                 colorChanger.start(copy, 500, 'linear').repeat(true, true);
 
                 copy.fxTranslate(0, 300, '1s', 'easeInQuad', Math.random() * 5000);
-                copy.fxTranslate(-100, -100, '0.1s', 'easeOutQuad');
+                copy.fxTranslate(100, -100, '0.1s', 'easeOutQuad');
                 copy.fxRotate(1080, '2s', 'linear', 500);
                 copy.fxScale(.5, .5, '0.8s', 'easeInElastic');
                 copy.fxTranslate(100, -200, '0.8s', 'easeOutElastic');
