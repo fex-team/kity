@@ -4,6 +4,10 @@ define(function(require, exports, module) {
         getViewBox: function() {
             var attr = this.node.getAttribute('viewBox');
             if (attr === null) {
+                // firefox:
+                // 1. viewBox 没有设置过的时候获得的是 null
+                // 2. svg 标签没有指定绝对大小的时候 clientWidth 和 clientHeigt 为 0，需要在父容器上查找
+                // TODO: 第 2 条取得的不准确（假如有 padding 之类的）
                 return {
                     x: 0,
                     y: 0,

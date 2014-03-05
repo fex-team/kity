@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kitygraph - v1.0.0 - 2014-02-28
+ * kitygraph - v1.0.0 - 2014-03-04
  * https://github.com/kitygraph/kity
  * GitHub: https://github.com/kitygraph/kity.git 
  * Copyright (c) 2014 Baidu UEditor Group; Licensed MIT
@@ -3119,6 +3119,17 @@ define("graphic/path", [ "core/utils", "core/class", "core/config", "graphic/sha
             return this;
         }
     });
+    function flatten(arr) {
+        var result = [], length = arr.length;
+        for (var i = 0; i < length; i++) {
+            if (arr[i] instanceof Array) {
+                result = result.concat(flatten(arr[i]));
+            } else {
+                result.push(arr[i]);
+            }
+        }
+        return result;
+    }
     return createClass("Path", {
         base: Shape,
         constructor: function(data) {
@@ -3132,6 +3143,10 @@ define("graphic/path", [ "core/utils", "core/class", "core/config", "graphic/sha
         setPathData: function(data) {
             if (!data) {
                 return;
+            }
+            // add support for path segment
+            if (data instanceof Array) {
+                data = flatten(data).join(" ");
             }
             this.pathdata = data;
             var path = this;
@@ -4465,11 +4480,15 @@ define("graphic/viewbox", [ "core/class", "core/config" ], function(require, exp
         getViewBox: function() {
             var attr = this.node.getAttribute("viewBox");
             if (attr === null) {
+                // firefox:
+                // 1. viewBox 没有设置过的时候获得的是 null
+                // 2. svg 标签没有指定绝对大小的时候 clientWidth 和 clientHeigt 为 0，需要在父容器上查找
+                // TODO: 第 2 条取得的不准确（假如有 padding 之类的）
                 return {
                     x: 0,
                     y: 0,
-                    width: this.node.clientWidth,
-                    height: this.node.clientHeight
+                    width: this.node.clientWidth || this.node.parentNode.clientWidth,
+                    height: this.node.clientHeight || this.node.parentNode.clientHeight
                 };
             } else {
                 attr = attr.split(" ");
