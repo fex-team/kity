@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kitygraph - v1.0.0 - 2014-03-04
+ * kitygraph - v1.0.0 - 2014-03-06
  * https://github.com/kitygraph/kity
  * GitHub: https://github.com/kitygraph/kity.git 
  * Copyright (c) 2014 Baidu UEditor Group; Licensed MIT
@@ -4429,11 +4429,12 @@ define("graphic/vector", [ "core/class", "core/config" ], function(require, expo
         var factor = l / p.length();
         return new Vector(p.x * factor, p.y * factor);
     };
+    // 顺时针
     Vector.verticalVector = function(p) {
         return new Vector(p.y, -p.x);
     };
-    Vector.verticalNormalize = function(p) {
-        return Vector.normalize(Vector.verticalVector(p));
+    Vector.verticalNormalize = function(p, l) {
+        return Vector.normalize(Vector.verticalVector(p, l));
     };
     Vector.multipy = function(p, s) {
         return new Vector(p.x * s, p.y * s);
