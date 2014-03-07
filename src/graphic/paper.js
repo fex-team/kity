@@ -109,7 +109,7 @@ define( function ( require, exports, module ) {
         getViewPort: function () {
             if ( !this.viewport ) {
                 var box = this.getViewBox();
-                this.viewport = {
+                return {
                     zoom: 1,
                     center: {
                         x: box.x + box.width / 2,

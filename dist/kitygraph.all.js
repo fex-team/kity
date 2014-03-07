@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kitygraph - v1.0.0 - 2014-03-03
+ * kitygraph - v1.0.0 - 2014-03-07
  * https://github.com/kitygraph/kity
  * GitHub: https://github.com/kitygraph/kity.git 
  * Copyright (c) 2014 Baidu UEditor Group; Licensed MIT
@@ -3010,7 +3010,7 @@ define("graphic/paper", [ "core/class", "core/config", "core/utils", "graphic/sv
         getViewPort: function() {
             if (!this.viewport) {
                 var box = this.getViewBox();
-                this.viewport = {
+                return {
                     zoom: 1,
                     center: {
                         x: box.x + box.width / 2,
