@@ -22,11 +22,12 @@ define( function (require, exports, module) {
         var factor = l / p.length();
         return new Vector( p.x * factor, p.y * factor );
     };
+    // 顺时针
     Vector.verticalVector = function( p ) {
         return new Vector( p.y, -p.x );
     };
-    Vector.verticalNormalize = function( p ) {
-        return Vector.normalize( Vector.verticalVector(p) );
+    Vector.verticalNormalize = function( p, l ) {
+        return Vector.normalize( Vector.verticalVector(p, l) );
     };
     Vector.multipy = function( p, s ) {
         return new Vector( p.x * s, p.y * s );

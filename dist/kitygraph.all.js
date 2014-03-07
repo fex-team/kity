@@ -3119,6 +3119,17 @@ define("graphic/path", [ "core/utils", "core/class", "core/config", "graphic/sha
             return this;
         }
     });
+    function flatten(arr) {
+        var result = [], length = arr.length;
+        for (var i = 0; i < length; i++) {
+            if (arr[i] instanceof Array) {
+                result = result.concat(flatten(arr[i]));
+            } else {
+                result.push(arr[i]);
+            }
+        }
+        return result;
+    }
     return createClass("Path", {
         base: Shape,
         constructor: function(data) {
@@ -3132,6 +3143,10 @@ define("graphic/path", [ "core/utils", "core/class", "core/config", "graphic/sha
         setPathData: function(data) {
             if (!data) {
                 return;
+            }
+            // add support for path segment
+            if (data instanceof Array) {
+                data = flatten(data).join(" ");
             }
             this.pathdata = data;
             var path = this;
@@ -4414,11 +4429,12 @@ define("graphic/vector", [ "core/class", "core/config" ], function(require, expo
         var factor = l / p.length();
         return new Vector(p.x * factor, p.y * factor);
     };
+    // 顺时针
     Vector.verticalVector = function(p) {
         return new Vector(p.y, -p.x);
     };
-    Vector.verticalNormalize = function(p) {
-        return Vector.normalize(Vector.verticalVector(p));
+    Vector.verticalNormalize = function(p, l) {
+        return Vector.normalize(Vector.verticalVector(p, l));
     };
     Vector.multipy = function(p, s) {
         return new Vector(p.x * s, p.y * s);
