@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kitygraph - v1.0.0 - 2014-03-07
+ * kitygraph - v1.0.0 - 2014-04-23
  * https://github.com/kitygraph/kity
  * GitHub: https://github.com/kitygraph/kity.git 
  * Copyright (c) 2014 Baidu UEditor Group; Licensed MIT
@@ -2481,6 +2481,30 @@ define("graphic/group", [ "graphic/shapecontainer", "graphic/container", "core/u
         }
     });
 });
+define("graphic/hyperlink", [ "graphic/shapecontainer", "graphic/container", "core/utils", "core/class", "graphic/shape", "core/config", "graphic/svg", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen" ], function(require, exports, module) {
+    var ShapeContainer = require("graphic/shapecontainer");
+    return require("core/class").createClass("HyperLink", {
+        mixins: [ ShapeContainer ],
+        base: require("graphic/shape"),
+        constructor: function() {
+            this.callBase("a");
+        },
+        setHref: function(href) {
+            this.node.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", href);
+            return this;
+        },
+        getHref: function() {
+            return this.node.getAttributeNS("xlink:href");
+        },
+        setTarget: function(target) {
+            this.node.setAttribute("target", target);
+            return this;
+        },
+        getTarget: function() {
+            return this.node.getAttribute("target");
+        }
+    });
+});
 define("graphic/image", [ "core/class", "core/config", "graphic/shape", "graphic/svg", "core/utils", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen" ], function(require, exports, module) {
     return require("core/class").createClass("Image", {
         base: require("graphic/shape"),
@@ -4532,6 +4556,7 @@ define("graphic/viewbox", [ "core/class", "core/config" ], function(require, exp
             Curve: require( 'graphic/curve' ),
             Ellipse: require( 'graphic/ellipse' ),
             GradientBrush: require( 'graphic/gradientbrush' ),
+            HyperLink: require( 'graphic/hyperlink' ),
             Group: require( 'graphic/group' ),
             Image: require( 'graphic/image' ),
             Line: require( 'graphic/line' ),
