@@ -22,6 +22,7 @@
             Curve: require( 'graphic/curve' ),
             Ellipse: require( 'graphic/ellipse' ),
             GradientBrush: require( 'graphic/gradientbrush' ),
+            HyperLink: require( 'graphic/hyperlink' ),
             Group: require( 'graphic/group' ),
             Image: require( 'graphic/image' ),
             Line: require( 'graphic/line' ),

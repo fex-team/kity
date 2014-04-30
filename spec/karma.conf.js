@@ -2,6 +2,7 @@
 // Generated on Wed Oct 09 2013 19:20:49 GMT+0800 (中国标准时间)
 
 module.exports = function(config) {
+    var base_path = '../';
   config.set({
 
     // base path, that will be used to resolve files and exclude
@@ -14,26 +15,13 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-//todo 顺序
-        './dev-lib/dev-define.js'
-       , './spec/karmaConfig.js'
-
-        ,'./spec/exports.js'
-        ,'./dev-lib/dev-start.js',
-//        './spec/tools/lib/seajs-2.1.1/sea-debug.js',
-        './src/core/config.js',
-        './src/core/class.js',
-        './src/core/kity.js',
-        './src/core/utils.js',
-        './src/graphic/*.js',
-        './src/filter/*.js',
-        './src/filter/effect/*.js',
-        './src/animate/*.js',
-        './spec/tools/js/UserAction.js',
-        './spec/SpecHelper.js'
-        ,'./spec/core/*.js'
-        ,'./spec/graphic/*.js'
-//        ,'./spec/graphic/colorBrush.js'
+//        base_path+'dev-lib/kitygraph.all.js',
+//        base_path+'dev-lib/kity-formula.all.js',
+        base_path+'dist/kitygraph.all.js',
+        base_path+'spec/tools/js/UserAction.js',
+        base_path+'spec/SpecHelper.js'
+        ,base_path+'spec/core/*.js'
+        ,base_path+'spec/graphic/*.js'
     ],
 
 
@@ -73,8 +61,7 @@ module.exports = function(config) {
     // - Safari (only Mac)
     // - PhantomJS
     // - IE (only Windows)
-    browsers: ['Chrome'],
-//      browsers: ['Chrome','Firefox','IE'],
+    browsers: ['Firefox','Chrome'],//,'Chrome'
 
 
     // If browser does not capture in given timeout [ms], kill it
@@ -85,26 +72,18 @@ module.exports = function(config) {
     // if true, it capture browsers, run tests and exit
     singleRun: true,
     //coverage
-//    reporters: ['progress', 'coverage'],
-//    preprocessors: {
-//        './src/core/*.js': ['coverage']
-//    ,'./src/graphic/*.js': ['coverage']},
-//    coverageReporter: {
-//          type: 'html',
-//          dir: './spec/coverage/'
-//    }
-//      ,
-      reporters: ['progress','dots', 'junit', 'coverage'],
-      junitReporter: {
-          outputFile: 'test-results.xml'
-      }
-  , preprocessors: {
-        './src/core/*.js': ['coverage']
-    ,'./src/graphic/*.js': ['coverage']
-      },
+      reporters: ['progress', 'coverage','junit'],
+          preprocessors: {
+              '../dist/kitygraph.all.js': ['coverage']
+          }
+      ,
     coverageReporter: {
-          type: 'html',
-          dir: './spec/_coverage/'
+          type: 'text',
+          dir: './coverage/json_files/'
     }
+//      ,
+//      junitReporter: {
+//          outputFile: 'test-results.xml'
+//      }
   });
 };
