@@ -55,12 +55,12 @@ define( function ( require, exports, module ) {
             }
             var box = this.getBoundaryBox();
             var current = this;
-            var matrix = current.getTransform();
+            var matrix = new Matrix();
             while ( current != refer ) {
-                current = current.container;
                 if( current.getTransform ) {
                     matrix = matrix.merge( current.getTransform() );
                 }
+                current = current.container;
             }
             return matrix.transformBox( box );
         },
