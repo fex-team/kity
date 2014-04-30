@@ -12,7 +12,7 @@
 
             // core
             Utils: require( "core/utils" ),
-            Browser:require("core/browser"),
+            Browser: require( "core/browser" ),
             // shape
             Bezier: require( 'graphic/bezier' ),
             BezierPoint: require( 'graphic/bezierpoint' ),
@@ -23,11 +23,13 @@
             Ellipse: require( 'graphic/ellipse' ),
             GradientBrush: require( 'graphic/gradientbrush' ),
             Group: require( 'graphic/group' ),
+            HyperLink: require( 'graphic/hyperlink' ),
             Image: require( 'graphic/image' ),
             Line: require( 'graphic/line' ),
             LinearGradientBrush: require( 'graphic/lineargradientbrush' ),
             Mask: require( 'graphic/mask' ),
             Matrix: require( 'graphic/matrix' ),
+            Marker: require( 'graphic/marker' ),
             Palette: require( 'graphic/palette' ),
             Paper: require( 'graphic/paper' ),
             Path: require( 'graphic/path' ),
@@ -36,10 +38,13 @@
             Point: require( 'graphic/point' ),
             Polygon: require( 'graphic/polygon' ),
             Polyline: require( 'graphic/polyline' ),
+            Pie: require( 'graphic/pie' ),
             RadialGradientBrush: require( 'graphic/radialgradientbrush' ),
             Rect: require( 'graphic/rect' ),
+            Ring: require( 'graphic/ring' ),
             Shape: require( 'graphic/shape' ),
             ShapePoint: require( 'graphic/shapepoint' ),
+            Sweep: require( 'graphic/sweep' ),
             Text: require( 'graphic/text' ),
             TextSpan: require( 'graphic/textspan' ),
             Use: require( 'graphic/use' ),
@@ -74,7 +79,6 @@
     // build环境中才含有use
     try {
         use( 'kity.start' );
-    } catch ( e ) {
-    }
+    } catch ( e ) {}
 
 } )( this );

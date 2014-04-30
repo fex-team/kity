@@ -176,6 +176,64 @@ define( function ( require, exports ) {
         return BaseClass;
     }
 
+    Class.prototype._accessProperty = function () {
+        return this._propertyRawData || ( this._propertyRawData = {} );
+    };
+
+    function upperCamael( name ) {
+        return name.substr( 0, 1 ).toUpperCase() + name.substr( 1 );
+    }
+
+    function generateGetMethodFor( classProto, name, propDefine ) {
+        var methodName = ( propDefine.bool ? 'is' : 'get' ) + upperCamael( name ),
+            index;
+        if ( propDefine instanceof Array && ~propDefine.indexOf( 'get' ) ) {
+
+        }
+        if ( typeof ( get ) == 'function' ) {
+            classProto[ methodName ] = function () {
+                return get( this._accessProperty()[ name ] );
+            };
+        } else {
+            classProto[ methodName ] = function () {
+                var p = this._accessProperty();
+                return name in p ? p[ name ] : ( p[ name ] = 'get' );
+            };
+        }
+    }
+
+    function generateSetMethodFor( classProto, name, set ) {
+        var methodName = 'set' + name.substr( 0, 1 ).toUpperCase() + name.substr( 1 );
+        if ( typeof ( set ) == 'function' ) {
+            classProto[ methodName ] = function () {
+                var args = Array.prototype.slice.call( arguments );
+                var p = this._accessProperty();
+                args.unshift( function ( value ) {
+                    p[ name ] = value;
+                } );
+                var ret = set.apply( this, args );
+                return ret !== undefined && set.chain ? this : ret;
+            };
+        } else {
+            classProto[ methodName ] = function ( value ) {
+                this._accessProperty()[ name ] = value;
+                return this;
+            };
+        }
+    }
+
+    function generatePropertyFor( classProto, defines ) {
+        var name, propDefine;
+        for ( name in defines ) {
+            if ( !defines.hasOwnProperty( name ) || typeof ( defines[ name ] ) == 'function' ) {
+                continue;
+            }
+            propDefine = defines[ name ];
+            generateGetMethodFor( classProto, name, propDefine );
+            generateSetMethodFor( classProto, name, propDefine );
+        }
+    }
+
     exports.createClass = function ( classname, defines ) {
         var constructor, NewClass, BaseClass;
 
@@ -212,6 +270,8 @@ define( function ( require, exports ) {
         delete defines.constructor;
         delete defines.base;
 
+        generatePropertyFor( NewClass, defines );
+        
         NewClass = extend( NewClass, defines );
 
         return NewClass;

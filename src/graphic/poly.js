@@ -46,13 +46,13 @@ define( function ( require, exports, module ) {
                 return this;
             }
 
-            drawer.moveTo( points[0].getX(), points[0].getY() );
+            drawer.moveTo( points[0] );
 
             for ( var i = 1, point, len = points.length; i < len; i++ ) {
 
                 point = points[ i ];
 
-                drawer.lineTo( point.getX(), point.getY() );
+                drawer.lineTo( point );
 
             }
 

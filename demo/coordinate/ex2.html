@@ -1,0 +1,61 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+    <title> 坐标系 </title>
+    <script src="../../dist/kitygraph.all.js"></script>
+    <script src="coordinate.js"></script>
+    <style>
+        body, div, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+</body>
+<script>
+    function boxString (box) {
+        return [box.x, box.y, box.width, box.height].join(', ');
+    }
+
+    var paper = new kity.Paper(document.body).pipe(function() {
+        var width = 500, height = 300;
+        this.setWidth(500).setHeight(300);
+        this.setViewBox(-40.5, -40.5, width, height)
+
+        this.addShape(new Coordinate('black', [-3, 39], [-3, 19]).pipe(function() {
+            this.addShape(new kity.Text('参照坐标系')
+                .setVerticalAlign('bottom')
+                .setX(5).setY(-5));
+        }));
+    });
+
+
+    var rect = new Coordinate('red', [-2, 10], [-2, 10]).pipe(function() {
+        this.addShape(new kity.Text('自身坐标系')
+            .fill('red')
+            .setVerticalAlign('bottom')
+            .setX(5).setY(-5));
+
+        this.addShape(this.body = new kity.Rect(50, 50, 0, 0)
+            .fill('rgba(255, 0, 0, 0.5)')
+            .stroke('red'));
+    });
+
+    paper.addShape(rect);
+    rect.setTranslate(30, 40);
+
+    paper.addShape(new kity.Text()
+        .setContent("getBoundaryBox: " + boxString(rect.body.getBoundaryBox()))
+        .fill('red')
+        .setVerticalAlign('top')
+        .setX(150).setY(20));
+
+    paper.addShape(new kity.Text()
+        .setContent("getRenderBox: " + boxString(rect.body.getRenderBox(paper)))
+        .setVerticalAlign('bottom')
+        .setX(150).setY(-5));
+</script>
+</html>

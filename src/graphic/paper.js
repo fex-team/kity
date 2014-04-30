@@ -157,6 +157,27 @@ define( function ( require, exports, module ) {
                 parent = parent.container;
             }
             return parent;
+        },
+        whenPaperReady: function ( fn ) {
+            var me = this;
+
+            function check() {
+                var paper = me.getPaper();
+                if ( paper && fn ) {
+                    fn.call( me, paper );
+                }
+                return paper;
+            }
+
+            if ( !check() ) {
+                this.on( 'add treeadd', function listen() {
+                    if ( check() ) {
+                        me.off( 'add', listen );
+                        me.off( 'treeadd', listen );
+                    }
+                } );
+            }
+            return this;
         }
     } );
     return Paper;

@@ -16,26 +16,19 @@ define( function ( require, exports, module ) {
 
         setX: function ( x ) {
 
-            this.callBase( x );
-
-            this.update();
-
-            return this;
+            return this.setPoint(x, this.y);
 
         },
 
         setY: function ( y ) {
 
-            this.callBase( y );
-
-            this.update();
-
-            return this;
+            return this.setPoint(this.x, y);
         },
 
         setPoint: function ( x, y ) {
 
-            this.callBase( x, y );
+            this.x = x;
+            this.y = y;
 
             this.update();
 

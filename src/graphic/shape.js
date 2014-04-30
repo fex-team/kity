@@ -6,12 +6,19 @@ define( function ( require, exports, module ) {
     var Data = require( 'graphic/data' );
     var Matrix = require( 'graphic/matrix' );
     var Pen = require( 'graphic/pen' );
+    var slice = Array.prototype.slice;
 
-    return require( 'core/class' ).createClass( 'Shape', {
+    var Shape = require( 'core/class' ).createClass( 'Shape', {
         mixins: [ EventHandler, Styled, Data ],
         constructor: function ( tagName ) {
             this.node = svg.createNode( tagName );
             this.node.shape = this;
+            this.transform = {
+                translate: null,
+                rotate: null,
+                scale: null,
+                matrix: null
+            };
             this.callMixin();
         },
         getId: function () {
@@ -39,29 +46,8 @@ define( function ( require, exports, module ) {
             return box;
         },
         getRenderBox: function ( refer ) {
-            function isAncestorOf( container, shape ) {
-                var parent = shape.container;
-                while ( parent && parent != container ) {
-                    parent = parent.container;
-                }
-                return !!parent;
-            }
-            if ( refer === undefined ) {
-                refer = this;
-            } else if ( refer === 'top' ) {
-                refer = this.getPaper() || this;
-            } else if ( !isAncestorOf( refer, this ) ) {
-                refer = this;
-            }
             var box = this.getBoundaryBox();
-            var current = this;
-            var matrix = current.getTransform();
-            while ( current != refer ) {
-                current = current.container;
-                if( current.getTransform ) {
-                    matrix = matrix.merge( current.getTransform() );
-                }
-            }
+            var matrix = this.getTransform( refer );
             return matrix.transformBox( box );
         },
         getWidth: function () {
@@ -84,88 +70,120 @@ define( function ( require, exports, module ) {
             var opacity = this.node.getAttribute( 'opacity' );
             return opacity ? +opacity : 1;
         },
-        getTransform: function () {
-            return Matrix.parse( this.node.getAttribute( "transform" ) );
-        },
-        setTransform: function ( matrix ) {
-            this.node.setAttribute( "transform", matrix.toString() );
-            this.trigger( 'shapeupdate', {
-                type: 'transform'
-            } );
-            return this;
-        },
-        resetTransform: function () {
-            this.node.removeAttribute( 'transform' );
-            this.trigger( 'shapeupdate', {
-                type: 'transform'
-            } );
-            return this;
-        },
-        mergeTransform: function ( matrix ) {
-            return this.setTransform( this.getTransform().mergeMatrix( matrix ) );
-        },
-        getAnchor: function () {
-            if ( this.anchor && this.anchor.x !== undefined ) {
-                return this.anchor;
-            }
-            var anchor = anchor || 'center';
-            var rbox = this.getRenderBox();
-            var value = {
-                x: rbox.x + rbox.width / 2,
-                y: rbox.y + rbox.height / 2
-            };
-            if ( ~anchor.indexOf( 'left' ) ) {
-                value.x = rbox.x;
-            }
-            if ( ~anchor.indexOf( 'right' ) ) {
-                value.x = rbox.x + rbox.width;
-            }
-            if ( ~anchor.indexOf( 'top' ) ) {
-                value.y = rbox.y;
-            }
-            if ( ~anchor.indexOf( 'bottom' ) ) {
-                value.y = rbox.y + rbox.height;
-            }
-            return value;
-        },
-        setAnchor: function ( ax, ay ) {
-            if ( arguments.length === 1 ) {
-                this.anchor = ax;
+        setVisible: function ( value ) {
+            if ( value ) {
+                this.node.removeAttribute( 'display' );
             } else {
-                this.anchor = {
-                    x: ax,
-                    y: ay
-                };
+                this.node.setAttribute( 'display', 'none' );
             }
             return this;
         },
-        resetAnchor: function () {
-            delete this.anchor;
+        getVisible: function () {
+            this.node.getAttribute( 'display' );
+        },
+        hasAncestor: function ( node ) {
+            var parent = this.container;
+            while ( parent ) {
+                if ( parent === node ) {
+                    return true;
+                }
+                parent = parent.container;
+            }
+            return false;
+        },
+        getTransform: function ( refer ) {
+            var ctm;
+            refer = refer || 'parent';
+
+            if ( refer == 'screen' ) {
+                ctm = this.node.getScreenCTM();
+            } else if ( refer == 'doc' || refer == 'paper' ) {
+                ctm = this.node.getCTM();
+            } else if ( refer == 'parent' ) {
+                ctm = this.node.getTransformToElement( this.container.shapeNode|| this.container.node );
+            } else if ( refer == 'view' || refer == 'top' ) {
+                ctm = this.node.getTransformToElement( this.getPaper().shapeNode );
+            } else if ( refer.node) {
+                ctm = this.node.getTransformToElement( refer.shapeNode || refer.node );
+            }
+
+            return new Matrix( ctm.a, ctm.b, ctm.c, ctm.d, ctm.e, ctm.f );
+        },
+        clearTransform: function () {
+            this.node.removeAttribute( 'transform' );
+            this.transform = {
+                translate: null,
+                rotate: null,
+                scale: null,
+                matrix: null
+            };
+            this.trigger( 'shapeupdate', {
+                type: 'transform'
+            } );
             return this;
+        },
+        _applyTransform: function () {
+            var t = this.transform,
+                result = [];
+            if ( t.translate ) {
+                result.push( [ 'translate(', t.translate, ')' ] );
+            }
+            if ( t.rotate ) {
+                result.push( [ 'rotate(', t.rotate, ')' ] );
+            }
+            if ( t.scale ) {
+                result.push( [ 'scale(', t.scale, ')' ] );
+            }
+            if ( t.matrix ) {
+                result.push( [ 'matrix(', t.matrix, ')' ] );
+            }
+            this.node.setAttribute( 'transform', utils.flatten( result ).join( ' ' ) );
+            return this;
+        },
+        setMatrix: function () {
+            this.transform.matrix = slice.call( arguments );
+            return this._applyTransform();
+        },
+        setTranslate: function () {
+            this.transform.translate = slice.call( arguments );
+            return this._applyTransform();
+        },
+        setRotate: function () {
+            this.transform.rotate = slice.call( arguments );
+            return this._applyTransform();
+        },
+        setScale: function () {
+            this.transform.scale = slice.call( arguments );
+            return this._applyTransform();
         },
         translate: function ( dx, dy ) {
+            var m = this.transform.matrix || new Matrix();
             if ( dy === undefined ) {
                 dy = 0;
             }
-            return this.mergeTransform( new Matrix().translate( dx, dy ) );
+            this.transform.matrix = m.translate( dx, dy );
+            return this._applyTransform();
         },
         rotate: function ( deg ) {
-            var a = this.getAnchor();
-            return this.mergeTransform( new Matrix().translate( -a.x, -a.y ).rotate( deg ).translate( a.x, a.y ) );
+            var m = this.transform.matrix || new Matrix();
+            this.transform.matrix = m.rotate( deg );
+            return this._applyTransform();
         },
         scale: function ( sx, sy ) {
-            var a = this.getAnchor();
+            var m = this.transform.matrix || new Matrix();
             if ( sy === undefined ) {
                 sy = sx;
             }
-            return this.mergeTransform( new Matrix().translate( -a.x, -a.y ).scale( sx, sy ).translate( a.x, a.y ) );
+            this.transform.matrix = m.scale( sx, sy );
+            return this._applyTransform();
         },
         skew: function ( sx, sy ) {
-            var a = this.getAnchor();
+            var m = this.transform.matrix || new Matrix();
             if ( sy === undefined ) {
                 sy = sx;
             }
-            return this.mergeTransform( new Matrix().translate( -a.x, -a.y ).skew( sx, sy ).translate( a.x, a.y ) );
+            this.transform.matrix = m.skew( sx, sy );
+            return this._applyTransform();
         },
         stroke: function ( pen, width ) {
             if ( pen && pen.stroke ) {
@@ -180,20 +198,16 @@ define( function ( require, exports, module ) {
             return this;
         },
         fill: function ( brush ) {
-            if ( brush && brush.fill ) {
-                brush.fill( this );
-            } else {
-                // 字符串或重写了 toString 的对象
-                this.node.setAttribute( 'fill', brush.toString() );
-            }
+            // 字符串或重写了 toString 的对象
+            this.node.setAttribute( 'fill', brush.toString() );
             return this;
         },
         setAttr: function ( a, v ) {
             var me = this;
             if ( utils.isObject( a ) ) {
                 utils.each( a, function ( val, key ) {
-                    me.setAttr( key, val )
-                } )
+                    me.setAttr( key, val );
+                } );
             }
             if ( v === undefined || v === null || v === '' ) {
                 this.node.removeAttribute( a );
@@ -202,7 +216,9 @@ define( function ( require, exports, module ) {
             }
         },
         getAttr: function ( a ) {
-            return this.node.getAttribute( a )
+            return this.node.getAttribute( a );
         }
     } );
+
+    return Shape;
 } );

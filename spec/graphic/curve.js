@@ -22,8 +22,8 @@ describe("Kity.Curve", function () {
             curve.addPoint(new Point(10, 10));
         });
         it("添加点到曲线的关键点集合里", function () {
-            expect(curve.getFirstItem().getX()).toBe(10);
-            expect(curve.getFirstItem().getY()).toBe(10);
+            expect(curve.getFirstItem().x).toBe(10);
+            expect(curve.getFirstItem().y).toBe(10);
         });
         it("curve 的 pathdata 发生了相应的改变", function () {
             expect(curve.getPathData()).toHaveSubString("10 10");
@@ -38,10 +38,10 @@ describe("Kity.Curve", function () {
             curve.removePoint(1);
         });
         it("should remove a key point from the curve in given position", function () {
-            expect(curve.getFirstPoint().getX()).toBe(10);
-            expect(curve.getFirstPoint().getY()).toBe(10);
-            expect(curve.getLastPoint().getX()).toBe(30);
-            expect(curve.getLastPoint().getY()).toBe(30);
+            expect(curve.getFirstPoint().x).toBe(10);
+            expect(curve.getFirstPoint().y).toBe(10);
+            expect(curve.getLastPoint().x).toBe(30);
+            expect(curve.getLastPoint().y).toBe(30);
         });
     });
 

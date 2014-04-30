@@ -5,7 +5,8 @@
 define( function ( require, exprots, module ) {
 
     var Matrix = require( "graphic/matrix" ),
-        Utils = require( "core/utils" );
+        Utils = require( "core/utils" ),
+        Point = require( 'graphic/point' );
 
     return require( 'core/class' ).createClass( 'ShapeEvent', {
 
@@ -28,7 +29,7 @@ define( function ( require, exprots, module ) {
                 }
 
                 this.originEvent = event;
-                this.targetShape = target.shape || target.paper || event.currentTarget && (event.currentTarget.shape || event.currentTarget.paper);
+                this.targetShape = target.shape || target.paper || event.currentTarget && ( event.currentTarget.shape || event.currentTarget.paper );
 
                 if ( event.__kity_param ) {
 
@@ -89,10 +90,10 @@ define( function ( require, exprots, module ) {
 
             var viewport = paper.getViewPort();
 
-            return {
-                x: transPoint.x / viewport.zoom - viewport.offset.x,
-                y: transPoint.y / viewport.zoom - viewport.offset.y
-            };
+            return new Point(
+                transPoint.x / viewport.zoom - viewport.offset.x,
+                transPoint.y / viewport.zoom - viewport.offset.y
+            );
 
         },
 

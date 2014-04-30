@@ -5,56 +5,68 @@ define( function ( require, exports, module ) {
     var svg = require( 'graphic/svg' );
     var config = require( 'core/config' );
 
+    var slice = Array.prototype.slice,
+        flatten = Utils.flatten;
+
     var PathDrawer = createClass( 'PathDrawer', {
         constructor: function ( path ) {
+            this.segment = [];
             this.path = path;
             this.__clear = false;
         },
-        appendData: function ( data ) {
+        getPath: function () {
+            return this.path;
+        },
+        pushSegment: function () {
+            var segment = slice.call( arguments );
             var originData = this.path.getPathData();
             if ( this.__clear ) {
                 originData = '';
                 this.__clear = false;
             }
+            segment = flatten( segment );
             if ( originData ) {
-                this.path.setPathData( originData + ' ' + data.join( ' ' ) );
+                this.path.setPathData( originData + ' ' + segment.join( ' ' ) );
             } else {
-                this.path.setPathData( data.join( ' ' ) );
+                this.path.setPathData( segment.join( ' ' ) );
             }
             return this;
         },
+        push: function ( command, args ) {
+            return this.pushSegment( [ command, slice.call( args ) ] );
+        },
         moveTo: function ( x, y ) {
-            return this.appendData( [ 'M', x, y ] );
+            return this.push( 'M', arguments );
         },
         moveBy: function ( dx, dy ) {
-            return this.appendData( [ 'm', dx, dy ] );
+            return this.push( 'm', arguments );
         },
         lineTo: function ( x, y ) {
-            return this.appendData( [ 'L', x, y ] );
+            return this.push( 'L', arguments );
         },
         lineBy: function ( dx, dy ) {
-            return this.appendData( [ 'l', dx, dy ] );
+            return this.push( 'k', arguments );
         },
         arcTo: function ( rx, ry, xr, laf, sf, x, y ) {
-            return this.appendData( [ 'A', rx, ry, xr, laf, sf, x, y ] );
+            return this.push( 'A', arguments );
         },
         arcBy: function ( rx, ry, xr, laf, sf, dx, dy ) {
-            return this.appendData( [ 'a', rx, ry, xr, laf, sf, dx, dy ] );
+            return this.push( 'a', arguments );
         },
-        carcTo: function ( r, x, y, laf, sf ) {
-            return this.arcTo( r, r, 0, laf || 0, sf || 0, x, y );
+        carcTo: function ( r, laf, sf, x, y ) {
+            return this.push( 'A', [ r, r, 0 ].concat( slice.call( arguments, 1 ) ) );
         },
-        carcBy: function ( r, dx, dy, laf, sf ) {
-            return this.arcBy( r, r, 0, laf || 0, sf || 0, dx, dy );
+        carcBy: function ( r, laf, sf, dx, dy ) {
+            return this.push( 'a', [ r, r, 0 ].concat( slice.call( arguments, 1 ) ) );
         },
         bezierTo: function ( x1, y1, x2, y2, x, y ) {
-            return this.appendData( [ 'C', x1, y1, x2, y2, x, y ] );
+            return this.push( 'C', arguments );
         },
         bezierBy: function ( dx1, dy1, dx2, dy2, dx, dy ) {
-            return this.appendData( [ 'c', dx1, dy1, dx2, dy2, dx, dy ] );
+            return this.push( 'c', arguments );
         },
         close: function () {
-            return this.appendData( [ 'z' ] );
+            return this.pushSegment( [ 'z' ] );
         },
         clear: function () {
             this.__clear = true;
@@ -63,18 +75,6 @@ define( function ( require, exports, module ) {
         }
     } );
 
-    function flatten( arr ) {
-        var result = [],
-            length = arr.length;
-        for ( var i = 0; i < length; i++ ) {
-            if ( arr[ i ] instanceof Array ) {
-                result = result.concat( flatten( arr[ i ] ) );
-            } else {
-                result.push( arr[ i ] );
-            }
-        }
-        return result;
-    }
 
     return createClass( 'Path', {
         base: Shape,
@@ -97,25 +97,13 @@ define( function ( require, exports, module ) {
             }
 
             this.pathdata = data;
-            var path = this;
 
-            if ( config.debug ) {
+            this.node.setAttribute( 'd', data );
 
-                path.node.setAttribute( 'd', data );
+            this.trigger( 'shapeupdate', {
+                type: 'pathdata'
+            } );
 
-                this.trigger( 'shapeupdate', {
-                    type: 'pathdata'
-                } );
-            } else {
-                // lazy dump data attribute
-                clearTimeout( this.lazyDumpId );
-                this.lazyDumpId = setTimeout( function () {
-                    path.node.setAttribute( 'd', data );
-                    this.trigger( 'shapeupdate', {
-                        type: 'pathdata'
-                    } );
-                } );
-            }
             return this;
         },
         getPathData: function () {

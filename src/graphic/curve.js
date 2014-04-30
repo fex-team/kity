@@ -42,8 +42,8 @@ define(function (require, exports, module) {
 
                 //计算中点坐标
                 centerPoints[ key ] = {
-                    x: ( points[ i ].getX() + points[ j ].getX() ) / 2,
-                    y: ( points[ i ].getY() + points[ j ].getY() ) / 2
+                    x: ( points[ i ].x + points[ j ].y ) / 2,
+                    y: ( points[ i ].x + points[ j ].y ) / 2
                 };
 
 
@@ -126,15 +126,15 @@ define(function (require, exports, module) {
 
                     //移动距离
                     distance = {
-                        x: center.x - point.getX(),
-                        y: center.y - point.getY()
+                        x: center.x - point.x,
+                        y: center.y - point.y
                     };
 
                 var currentResult = result[ index ] = {
                     points: [],
                     center: {
-                        x: point.getX(),
-                        y: point.getY()
+                        x: point.x,
+                        y: point.y
                     }
                 };
 
@@ -220,7 +220,7 @@ define(function (require, exports, module) {
 
             } else {
 
-                drawer.moveTo( points[0].getX(), points[0].getY() );
+                drawer.moveTo( points[0] );
 
             }
 
@@ -232,7 +232,7 @@ define(function (require, exports, module) {
 
             if ( points.length === 2 ) {
 
-                drawer.lineTo( points[1].getX(), points[1].getY() );
+                drawer.lineTo( points[1] );
 
                 return this;
 

@@ -1,7 +1,8 @@
-define(function(require, exports, module) {
+define( function ( require, exports, module ) {
 
     var RectUtils = {},
-        Utils = require( 'core/utils' );
+        Utils = require( 'core/utils' ),
+        Point = require( 'graphic/point' );
 
     Utils.extend( RectUtils, {
 
@@ -9,7 +10,7 @@ define(function(require, exports, module) {
         //获取最适合的radius值
         formatRadius: function ( width, height, radius ) {
 
-            var minValue = Math.floor( Math.min( width/2, height/2 ) );
+            var minValue = Math.floor( Math.min( width / 2, height / 2 ) );
 
             return Math.min( minValue, radius );
 
@@ -31,7 +32,7 @@ define(function(require, exports, module) {
                     ' Z'
                 ];
 
-            //圆角
+                //圆角
             } else {
 
                 width -= 2 * radius;
@@ -60,11 +61,11 @@ define(function(require, exports, module) {
 
     } );
 
-    return require('core/class').createClass( 'Rect', {
+    return require( 'core/class' ).createClass( 'Rect', {
 
         base: require( 'graphic/path' ),
 
-        constructor: function( width, height, x, y, radius ) {
+        constructor: function ( width, height, x, y, radius ) {
 
             this.callBase();
 
@@ -117,13 +118,18 @@ define(function(require, exports, module) {
         },
 
         getPosition: function () {
-            return {
-                x: this.x,
-                y: this.y
-            };
+            return new Point(
+                this.x,
+                this.y
+            );
         },
 
         setPosition: function ( x, y ) {
+            if ( arguments.length == 1 ) {
+                var p = Point.parse( arguments[ 0 ] );
+                y = p.y;
+                x = p.x;
+            }
             this.x = x;
             this.y = y;
 
@@ -156,8 +162,8 @@ define(function(require, exports, module) {
             return this.update();
         }
 
-    });
+    } );
 
 
 
-});
+} );

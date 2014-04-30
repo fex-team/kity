@@ -33,7 +33,7 @@ define( function ( require, exports, module ) {
         /* private */
         notifyTreeModification: function ( type, container ) {
             this.eachItem( function ( index, shape ) {
-                if ( shape instanceof ShapeContainer ) {
+                if ( shape.notifyTreeModification ) {
                     shape.notifyTreeModification( type, container );
                 }
                 shape.trigger( type, {

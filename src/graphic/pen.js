@@ -4,30 +4,28 @@ define( function ( require, exports, module ) {
 
     return require( 'core/class' ).createClass( 'Pen', {
 
-        constructor: function ( color, width ) {
+        constructor: function ( brush, width ) {
 
-            this.color = color instanceof Color ? color : new Color(color);
+            this.brush = brush;
             this.width = width || 1;
             this.linecap = null;
             this.linejoin = null;
             this.dashArray = null;
-            this.opacity = this.color.get( 'a' );
+            this.opacity = 1;
 
         },
 
-        getColor: function () {
+        getBrush: function () {
             return this.color;
         },
 
-        setColor: function ( color ) {
-            if(typeof(color) == 'string') {
-                color = new Color(color);
-            }
-            this.color = color;
-            this.opacity = this.color.get( 'a' );
-
+        setBrush: function ( brush ) {
+            this.brush = brush;
             return this;
+        },
 
+        setColor: function( color ) {
+            return this.setBrush( color );
         },
 
         getWidth: function () {
@@ -97,7 +95,7 @@ define( function ( require, exports, module ) {
 
         stroke: function ( shape ) {
             var node = shape.node;
-            node.setAttribute( 'stroke', this.getColor().toString() );
+            node.setAttribute( 'stroke', this.brush.toString() );
             node.setAttribute( 'stroke-width', this.getWidth() );
             if ( this.getOpacity() < 1 ) {
                 node.setAttribute( 'stroke-opacity', this.getOpacity() );

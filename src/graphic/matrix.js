@@ -1,7 +1,7 @@
 define( function ( require, exports, module ) {
     var utils = require( 'core/utils' );
     var mPattern = /matrix\((.+)\)/i;
-    var Vector = require( 'graphic/vector' );
+    var Point = require( 'graphic/point' );
 
     // 注意，合并的结果是先执行m2，再执行m1的结果
     function mergeMatrixData( m2, m1 ) {
@@ -124,12 +124,16 @@ define( function ( require, exports, module ) {
         },
 
         toString: function () {
-            var m = this.m;
-            return 'matrix(' + [ m.a, m.b, m.c, m.d, m.e, m.f ].join( ', ' ) + ')';
+            return this.valueOf().join(' ');
         },
 
-        transformPoint: function ( x, y ) {
-            return Matrix.transformPoint( x, y, this.m );
+        valueOf: function () {
+            var m = this.m;
+            return [ m.a, m.b, m.c, m.d, m.e, m.f ];
+        },
+
+        transformPoint: function () {
+            return Matrix.transformPoint.apply( null, [].slice.call( arguments ).concat( [ this.m ] ) );
         },
 
         transformBox: function ( box ) {
@@ -158,7 +162,12 @@ define( function ( require, exports, module ) {
     };
 
     Matrix.transformPoint = function ( x, y, m ) {
-        return new Vector(
+        if ( arguments.length === 2 ) {
+            m = y;
+            x = x.x;
+            y = x.y;
+        }
+        return new Point(
             m.a * x + m.c * y + m.e,
             m.b * x + m.d * y + m.f
         );

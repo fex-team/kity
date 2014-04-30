@@ -1,12 +1,13 @@
-define(function(require, exports, module) {
+define( function ( require, exports, module ) {
 
-    var Utils = require( 'core/utils' );
+    var Utils = require( 'core/utils' ),
+        Point = require( 'graphic/point' );
 
-    return require('core/class').createClass( 'Ellipse', {
+    return require( 'core/class' ).createClass( 'Ellipse', {
 
         base: require( 'graphic/path' ),
 
-        constructor: function( rx, ry, cx, cy ) {
+        constructor: function ( rx, ry, cx, cy ) {
             this.callBase();
             this.rx = rx || 0;
             this.ry = ry || 0;
@@ -17,15 +18,15 @@ define(function(require, exports, module) {
 
         update: function () {
             var rx = this.rx,
-                ry = this.ry
+                ry = this.ry,
                 x1 = this.cx + rx,
                 x2 = this.cx - rx,
                 y = this.cy;
             var drawer = this.getDrawer();
             drawer.clear();
-            drawer.moveTo(x1, y);
-            drawer.arcTo(rx, ry, 0, 1, 1, x2, y);
-            drawer.arcTo(rx, ry, 0, 1, 1, x1, y);
+            drawer.moveTo( x1, y );
+            drawer.arcTo( rx, ry, 0, 1, 1, x2, y );
+            drawer.arcTo( rx, ry, 0, 1, 1, x1, y );
             return this;
         },
 
@@ -45,10 +46,10 @@ define(function(require, exports, module) {
         },
 
         getCenter: function () {
-            return {
-                x: this.cx,
-                y: this.cy
-            };
+            return new Point(
+                this.cx,
+                this.cy
+            );
         },
 
         getCenterX: function () {
@@ -76,6 +77,11 @@ define(function(require, exports, module) {
         },
 
         setCenter: function ( cx, cy ) {
+            if ( arguments.length == 1 ) {
+                var p = Point.parse( arguments[ 0 ] );
+                cx = p.x;
+                cy = p.y;
+            }
             this.cx = cx;
             this.cy = cy;
             return this.update();
@@ -92,5 +98,5 @@ define(function(require, exports, module) {
         }
 
 
-    });
-});
+    } );
+} );

@@ -1,45 +1,45 @@
-define(function (require, exports, module) {
+define( function ( require, exports, module ) {
 
     var utils = {
-        each: function (obj, iterator, context) {
-            if (obj === null) {
+        each: function ( obj, iterator, context ) {
+            if ( obj === null ) {
                 return;
             }
-            if (obj.length === +obj.length) {
-                for (var i = 0, l = obj.length; i < l; i++) {
-                    if (iterator.call(context, obj[i], i, obj) === false) {
+            if ( obj.length === +obj.length ) {
+                for ( var i = 0, l = obj.length; i < l; i++ ) {
+                    if ( iterator.call( context, obj[ i ], i, obj ) === false ) {
                         return false;
                     }
                 }
             } else {
-                for (var key in obj) {
-                    if (obj.hasOwnProperty(key)) {
-                        if (iterator.call(context, obj[key], key, obj) === false) {
+                for ( var key in obj ) {
+                    if ( obj.hasOwnProperty( key ) ) {
+                        if ( iterator.call( context, obj[ key ], key, obj ) === false ) {
                             return false;
                         }
                     }
                 }
             }
         },
-        extend: function (t, s) {
+        extend: function ( t, s ) {
             var a = arguments,
-                notCover = this.isBoolean(a[a.length - 1]) ? a[a.length - 1] : false,
-                len = this.isBoolean(a[a.length - 1]) ? a.length - 1 : a.length;
-            for (var i = 1; i < len; i++) {
-                var x = a[i];
-                for (var k in x) {
-                    if (!notCover || !t.hasOwnProperty(k)) {
-                        t[k] = x[k];
+                notCover = this.isBoolean( a[ a.length - 1 ] ) ? a[ a.length - 1 ] : false,
+                len = this.isBoolean( a[ a.length - 1 ] ) ? a.length - 1 : a.length;
+            for ( var i = 1; i < len; i++ ) {
+                var x = a[ i ];
+                for ( var k in x ) {
+                    if ( !notCover || !t.hasOwnProperty( k ) ) {
+                        t[ k ] = x[ k ];
                     }
                 }
             }
             return t;
         },
-        clone: function (obj) {
+        clone: function ( obj ) {
             var cloned = {};
-            for (var m in obj) {
-                if (obj.hasOwnProperty(m)) {
-                    cloned[m] = obj[m];
+            for ( var m in obj ) {
+                if ( obj.hasOwnProperty( m ) ) {
+                    cloned[ m ] = obj[ m ];
                 }
             }
             return cloned;
@@ -49,14 +49,28 @@ define(function (require, exports, module) {
 
             return value !== undefined ? value : defaultValue;
 
+        },
+
+        flatten: function ( arr ) {
+            var result = [],
+                length = arr.length,
+                i;
+            for ( i = 0; i < length; i++ ) {
+                if ( arr[ i ] instanceof Array ) {
+                    result = result.concat( utils.flatten( arr[ i ] ) );
+                } else {
+                    result.push( arr[ i ] );
+                }
+            }
+            return result;
         }
     };
 
-    utils.each(['String', 'Function', 'Array', 'Number', 'RegExp', 'Object', 'Boolean'], function (v) {
-        utils['is' + v] = function (obj) {
-            return Object.prototype.toString.apply(obj) == '[object ' + v + ']';
+    utils.each( [ 'String', 'Function', 'Array', 'Number', 'RegExp', 'Object', 'Boolean' ], function ( v ) {
+        utils[ 'is' + v ] = function ( obj ) {
+            return Object.prototype.toString.apply( obj ) == '[object ' + v + ']';
         };
-    });
+    } );
 
     return utils;
-});
+} );
