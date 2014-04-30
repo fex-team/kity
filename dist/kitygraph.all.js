@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kitygraph - v1.0.0 - 2014-04-28
+ * kitygraph - v1.0.0 - 2014-04-30
  * https://github.com/kitygraph/kity
  * GitHub: https://github.com/kitygraph/kity.git 
  * Copyright (c) 2014 Baidu UEditor Group; Licensed MIT
@@ -1041,6 +1041,11 @@ define("core/utils", [], function(require, exports, module) {
                 }
             }
             return cloned;
+        },
+        copy: function(obj) {
+            if (typeof obj !== "object") return obj;
+            if (typeof obj === "function") return null;
+            return JSON.parse(JSON.stringify(obj));
         },
         getValue: function(value, defaultValue) {
             return value !== undefined ? value : defaultValue;
@@ -2543,8 +2548,9 @@ define("graphic/hyperlink", [ "graphic/shapecontainer", "graphic/container", "co
     return require("core/class").createClass("HyperLink", {
         mixins: [ ShapeContainer ],
         base: require("graphic/shape"),
-        constructor: function() {
+        constructor: function(url) {
             this.callBase("a");
+            this.setHref(url);
         },
         setHref: function(href) {
             this.node.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", href);
@@ -3895,7 +3901,7 @@ define("graphic/shape", [ "graphic/svg", "core/utils", "graphic/eventhandler", "
             refer = refer || "parent";
             if (refer == "screen") {
                 ctm = this.node.getScreenCTM();
-            } else if (refer == "doc") {
+            } else if (refer == "doc" || refer == "paper") {
                 ctm = this.node.getCTM();
             } else if (refer == "parent") {
                 ctm = this.node.getTransformToElement(this.container.shapeNode || this.container.node);
@@ -3921,9 +3927,6 @@ define("graphic/shape", [ "graphic/svg", "core/utils", "graphic/eventhandler", "
         },
         _applyTransform: function() {
             var t = this.transform, result = [];
-            if (t.matrix) {
-                result.push([ "matrix(", t.matrix, ")" ]);
-            }
             if (t.translate) {
                 result.push([ "translate(", t.translate, ")" ]);
             }
@@ -3932,6 +3935,9 @@ define("graphic/shape", [ "graphic/svg", "core/utils", "graphic/eventhandler", "
             }
             if (t.scale) {
                 result.push([ "scale(", t.scale, ")" ]);
+            }
+            if (t.matrix) {
+                result.push([ "matrix(", t.matrix, ")" ]);
             }
             this.node.setAttribute("transform", utils.flatten(result).join(" "));
             return this;
@@ -4972,6 +4978,7 @@ define("graphic/viewbox", [ "core/class", "core/config" ], function(require, exp
             Curve: require( 'graphic/curve' ),
             Ellipse: require( 'graphic/ellipse' ),
             GradientBrush: require( 'graphic/gradientbrush' ),
+            HyperLink: require( 'graphic/hyperlink' ),
             Group: require( 'graphic/group' ),
             HyperLink: require( 'graphic/hyperlink' ),
             Image: require( 'graphic/image' ),
@@ -5031,4 +5038,5 @@ define("graphic/viewbox", [ "core/class", "core/config" ], function(require, exp
         use( 'kity.start' );
     } catch ( e ) {}
 
-} )( this );})();
+} )( this );
+})();

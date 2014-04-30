@@ -45,6 +45,12 @@ define( function ( require, exports, module ) {
             return cloned;
         },
 
+        copy: function(obj){
+            if(typeof obj !== 'object') return obj;
+            if(typeof obj === 'function') return null;
+            return JSON.parse(JSON.stringify(obj));
+        },
+
         getValue: function ( value, defaultValue ) {
 
             return value !== undefined ? value : defaultValue;

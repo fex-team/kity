@@ -4,8 +4,9 @@ define( function ( require, exports, module ) {
         mixins: [ ShapeContainer ],
         base: require( 'graphic/shape' ),
 
-        constructor: function () {
+        constructor: function ( url ) {
             this.callBase( 'a' );
+            this.setHref( url );
         },
 
         setHref: function ( href ) {
