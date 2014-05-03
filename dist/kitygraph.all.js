@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kitygraph - v1.0.0 - 2014-04-30
+ * kitygraph - v1.0.0 - 2014-05-03
  * https://github.com/kitygraph/kity
  * GitHub: https://github.com/kitygraph/kity.git 
  * Copyright (c) 2014 Baidu UEditor Group; Licensed MIT
@@ -85,7 +85,7 @@ function use ( id ) {
     return require( id );
 
 }
-define("animate/animator", [ "animate/timeline", "graphic/color", "graphic/matrix", "graphic/eventhandler", "core/class", "animate/easing", "core/config", "graphic/shape", "graphic/svg", "core/utils", "graphic/styled", "graphic/data", "graphic/pen" ], function(require, exports, module) {
+define("animate/animator", [ "animate/timeline", "graphic/color", "graphic/matrix", "graphic/eventhandler", "animate/frame", "core/utils", "core/class", "animate/easing", "core/config", "graphic/shape", "graphic/svg", "graphic/styled", "graphic/data", "graphic/pen" ], function(require, exports, module) {
     function parseTime(str) {
         var value = parseFloat(str, 10);
         if (/ms/.test(str)) {
@@ -105,12 +105,12 @@ define("animate/animator", [ "animate/timeline", "graphic/color", "graphic/matri
         constructor: function(beginValue, finishValue, setter) {
             if (arguments.length == 1) {
                 var opt = arguments[0];
-                this.beginVal = opt.beginValue;
-                this.finishVal = opt.finishValue;
+                this.beginValue = opt.beginValue;
+                this.finishValue = opt.finishValue;
                 this.setter = opt.setter;
             } else {
-                this.beginVal = beginValue;
-                this.finishVal = finishValue;
+                this.beginValue = beginValue;
+                this.finishValue = finishValue;
                 this.setter = setter;
             }
         },
@@ -144,7 +144,7 @@ define("animate/animator", [ "animate/timeline", "graphic/color", "graphic/matri
             return timeline;
         },
         reverse: function() {
-            return new Animator(this.finishVal, this.beginVal, this.setter);
+            return new Animator(this.finishValue, this.beginValue, this.setter);
         }
     });
     Animator.DEFAULT_DURATION = 300;
@@ -354,6 +354,114 @@ define("animate/easing", [], function(require, exports, module) {
     };
     return easings;
 });
+define("animate/frame", [], function(require, exports, module) {
+    // 原生动画帧方法 polyfill
+    var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || function(fn) {
+        return setTimeout(fn, 1e3 / 60);
+    };
+    // 等待执行的帧的集合，这些帧的方法将在下个动画帧同步执行
+    var pendingFrames = [];
+    /**
+     * 添加一个帧到等待集合中
+     *
+     * 如果添加的帧是序列的第一个，至少有一个帧需要被执行，则下一个动画帧需要执行
+     */
+    function pushFrame(frame) {
+        if (pendingFrames.push(frame) === 1) {
+            requestAnimationFrame(executePendingFrames);
+        }
+    }
+    /**
+     * 执行所有等待帧
+     */
+    function executePendingFrames() {
+        var frames = pendingFrames;
+        pendingFrames = [];
+        while (frames.length) {
+            executeFrame(frames.pop());
+        }
+    }
+    /**
+     * 请求一个帧，执行指定的动作。动作回调提供一些有用的信息
+     *
+     * @param {Function} action
+     *
+     *     要执行的动作，该动作回调有一个参数 frame，其中：
+     *
+     *     frame.time
+     *         动作执行时的时间戳（ms）
+     *
+     *     frame.index
+     *         当前执行的帧的编号（首帧为 0）
+     *
+     *     frame.dur
+     *         上一帧至今经过的时间，单位 ms
+     *
+     *     frame.elapsed
+     *         从首帧开始到当前帧经过的时间
+     *
+     *     frame.action
+     *         指向当前的帧处理函数
+     *
+     *     frame.next()
+     *         表示下一帧继续执行。如果不调用该方法，将不会执行下一帧。
+     *
+     */
+    function requestFrame(action) {
+        var frame = initFrame(action);
+        pushFrame(frame);
+        return frame;
+    }
+    /**
+     * 释放一个已经请求过的帧，如果该帧在等待集合里，将移除，下个动画帧不会执行释放的帧
+     */
+    function releaseFrame(frame) {
+        var index = pendingFrames.indexOf(frame);
+        if (~index) {
+            pendingFrames.splice(index, 1);
+        }
+    }
+    /**
+     * 初始化一个帧，主要用于后续计算
+     */
+    function initFrame(action) {
+        var frame = {
+            index: 0,
+            time: +new Date(),
+            elapsed: 0,
+            action: action,
+            next: function() {
+                pushFrame(frame);
+            }
+        };
+        return frame;
+    }
+    /**
+     * 执行一个帧动作
+     */
+    function executeFrame(frame) {
+        // 当前帧时间错
+        var time = +new Date();
+        // 当上一帧到当前帧经过的时间
+        var dur = time - frame.time;
+        // 
+        // http://stackoverflow.com/questions/13133434/requestanimationframe-detect-stop
+        // 浏览器最小化或切换标签，requestAnimationFrame 不会执行。
+        // 检测时间超过 200 ms（频率小于 5Hz ） 判定为计时器暂停，重置为一帧长度
+        // 
+        if (dur > 200) {
+            dur = 1e3 / 60;
+        }
+        frame.dur = dur;
+        frame.elapsed += dur;
+        frame.time = time;
+        frame.action.call(null, frame);
+        frame.index++;
+    }
+    // 暴露
+    exports.requestFrame = requestFrame;
+    exports.releaseFrame = releaseFrame;
+});
 define("animate/opacityanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/matrix", "core/utils", "graphic/point", "core/config", "graphic/svg", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/pen" ], function(require, exports, module) {
     var Animator = require("animate/animator");
     var Matrix = require("graphic/matrix");
@@ -420,7 +528,7 @@ define("animate/scaleanimator", [ "animate/animator", "animate/timeline", "anima
     var Matrix = require("graphic/matrix");
     var ScaleAnimator = require("core/class").createClass("ScaleAnimator", {
         base: Animator,
-        constructor: function(sx, sy, ax, ay) {
+        constructor: function(sx, sy) {
             this.callBase({
                 beginValue: 0,
                 finishValue: 1,
@@ -441,67 +549,20 @@ define("animate/scaleanimator", [ "animate/animator", "animate/timeline", "anima
     });
     return ScaleAnimator;
 });
-define("animate/timeline", [ "graphic/color", "core/utils", "graphic/standardcolor", "core/class", "graphic/matrix", "graphic/point", "graphic/eventhandler", "graphic/shapeevent", "core/config" ], function(require, exports, module) {
+define("animate/timeline", [ "graphic/color", "core/utils", "graphic/standardcolor", "core/class", "graphic/matrix", "graphic/point", "graphic/eventhandler", "graphic/shapeevent", "animate/frame", "core/config" ], function(require, exports, module) {
     var Color = require("graphic/color");
     var Matrix = require("graphic/matrix");
     var EventHandler = require("graphic/eventhandler");
-    var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || function(fn) {
-        return setTimeout(fn, 16);
-    };
-    var cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame || window.webkitCancelAnimationFrame || window.msCancelAnimationFrame || function(reqId) {
-        return clearTimeout(reqId);
-    };
-    var globalFrameAction = [];
-    var frameRequests = [];
-    var frameRequestId = 0;
-    function requestFrame(id) {
-        if (!~frameRequests.indexOf(id)) {
-            frameRequests.push(id);
-        }
-        if (frameRequests.length === 1) {
-            frameRequestId = execGlobalFrameAction();
-        }
-    }
-    function releaseFrame(id) {
-        var index = frameRequests.indexOf(id);
-        if (index !== -1) {
-            frameRequests.splice(index, 1);
-        }
-        if (frameRequests.length === 0) {
-            cancelAnimationFrame(frameRequestId);
-        }
-    }
-    function execGlobalFrameAction() {
-        var pending = globalFrameAction;
-        globalFrameAction = [];
-        while (pending.length) {
-            pending.shift()();
-        }
-        if (frameRequests.length > 0) {
-            frameRequestId = requestAnimationFrame(execGlobalFrameAction);
-        }
-    }
-    function paralle(v1, v2, op) {
-        if (false === isNaN(parseFloat(v1))) {
-            return op(v1, v2);
-        }
-        var value = {};
-        for (var n in v1) {
-            if (v1.hasOwnProperty(n)) {
-                value[n] = paralle(v1[n], v2[n], op);
-            }
-        }
-        return value;
-    }
-    function getDelta(v1, v2) {
-        return paralle(v1, v2, function(v1, v2) {
-            return v2 - v1;
+    var frame = require("animate/frame");
+    var utils = require("core/utils");
+    function getPercentValue(b, f, p) {
+        return utils.paralle(b, f, function(b, f) {
+            return b + (f - b) * p;
         });
     }
-    // 不会深度遍历
-    function getPercentValue(b, f, p) {
-        return paralle(b, f, function(b, f) {
-            return b + (f - b) * p;
+    function getDelta(v1, v2) {
+        return utils.paralle(v1, v2, function(v1, v2) {
+            return v2 - v1;
         });
     }
     function TimelineEvent(timeline, type, param) {
@@ -514,64 +575,30 @@ define("animate/timeline", [ "graphic/color", "core/utils", "graphic/standardcol
             }
         }
     }
-    var timelineId = 0;
     var Timeline = require("core/class").createClass("Timeline", {
         mixins: [ EventHandler ],
         constructor: function(animator, target, duration, easing) {
             this.callMixin();
+            this.target = target;
             this.time = 0;
             this.duration = duration;
-            this.target = target;
             this.easing = easing;
-            this.status = "ready";
             this.animator = animator;
-            this.beginVal = animator.beginVal;
-            this.finishVal = animator.finishVal;
+            this.beginValue = animator.beginValue;
+            this.finishValue = animator.finishValue;
             this.setter = animator.setter;
-            this.id = timelineId++;
+            this.status = "ready";
         },
-        guessValueType: function() {
-            var value = this.beginVal;
-            if (parseFloat(value)) {
-                this.valueType = "number";
-                return;
-            }
-            // string as color
-            if (typeof value == "string" || value instanceof Color) {
-                this.valueType = "color";
-                return;
-            }
-            if (value.x && value.y) {
-                this.valueType = "point";
-                return;
-            }
-            if (value instanceof Matrix) {
-                this.valueType = "matrix";
-            }
-        },
-        nextFrame: function() {
+        nextFrame: function(frame) {
             if (this.status != "playing") {
                 return;
             }
-            var ts = +new Date(), lts = this.lastFrameTS || 0, elapsed = ts - lts;
-            var target = this.target, setter = this.setter;
-            // 
-            // 1. 首次播放 lts 为 0，则修正 elapsed 为一帧的长度
-            // 
-            // 2. 浏览器最小化或切换标签，requestAnimationFrame 不会执行。
-            //    检测时间超过 200 ms（频率小于 5Hz ） 判定为计时器暂停，重置为一帧长度
-            //    
-            //    ref: http://stackoverflow.com/questions/13133434/requestanimationframe-detect-stop
-            if (elapsed > 200) {
-                elapsed = 1e3 / 60;
-            }
-            this.time += elapsed;
+            this.time += frame.dur;
             this.setValue(this.getValue());
-            this.lastFrameTS = ts;
             if (this.time >= this.duration) {
                 this.timeUp();
             }
-            globalFrameAction.push(this.nextFrame.bind(this));
+            frame.next();
         },
         getPlayTime: function() {
             return this.rollbacking ? this.duration - this.time : this.time;
@@ -583,32 +610,19 @@ define("animate/timeline", [ "graphic/color", "core/utils", "graphic/standardcol
             return this.easing(this.getPlayTime(), 0, 1, this.duration);
         },
         getValue: function() {
-            var b = this.beginVal, f = this.finishVal, p = this.getValueProportion(), v;
-            switch (this.valueType) {
-              case "color":
-                b = b.getValues();
-                f = f.getValues();
-                v = getPercentValue(b, f, p);
-                return Color.createRGBA(v.r, v.g, v.b, v.a);
-
-              case "matrix":
-                b = b.getMatrix();
-                f = f.getMatrix();
-                v = getPercentValue(b, f, p);
-                return new Matrix(v);
-
-              default:
-                return getPercentValue(b, f, p);
-            }
+            var b = this.beginValue;
+            var f = this.finishValue;
+            var p = this.getValueProportion();
+            return getPercentValue(b, f, p);
         },
-        getDelta: function() {
-            this.lastValue = this.lastValue || this.beginVal;
-            return getDelta(this.lastValue, this.currentValue);
-        },
-        setValue: function(value, lastValue) {
+        setValue: function(value) {
+            this.lastValue = this.currentValue;
             this.currentValue = value;
             this.setter.call(this.target, this.target, value, this);
-            this.lastValue = value;
+        },
+        getDelta: function() {
+            this.lastValue = this.lastValue === undefined ? this.beginValue : this.lastValue;
+            return getDelta(this.lastValue, this.currentValue);
         },
         play: function() {
             var ctx = this.context;
@@ -617,45 +631,43 @@ define("animate/timeline", [ "graphic/color", "core/utils", "graphic/standardcol
             this.status = "playing";
             switch (lastStatus) {
               case "ready":
-                this.beginVal = typeof this.beginVal == "function" ? this.beginVal.call(this.target, this.target) : this.beginVal;
-                this.finishVal = typeof this.finishVal == "function" ? this.finishVal.call(this.target, this.target) : this.finishVal;
+                if (utils.isFunction(this.beginValue)) {
+                    this.beginValue = this.beginValue.call(this.target, this.target);
+                }
+                if (utils.isFunction(this.finishValue)) {
+                    this.finishValue = this.finishValue.call(this.target, this.target);
+                }
                 this.time = 0;
-                this.guessValueType();
-                this.nextFrame();
+                this.frame = frame.requestFrame(this.nextFrame.bind(this));
                 break;
 
               case "finished":
               case "stoped":
                 this.time = 0;
-                this.nextFrame();
+                this.frame = frame.requestFrame(this.nextFrame.bind(this));
                 break;
 
               case "paused":
-                this.lastFrameTS = 0;
-                this.nextFrame();
+                this.frame.next();
             }
             this.fire("play", new TimelineEvent(this, "play", {
                 lastStatus: lastStatus
             }));
-            requestFrame(this.id);
             return this;
         },
         pause: function() {
             this.status = "paused";
             this.fire("pause", new TimelineEvent(this, "pause"));
-            releaseFrame(this.id);
+            frame.releaseFrame(this.frame);
             return this;
         },
         stop: function() {
             this.status = "stoped";
-            this.setValue(this.finishVal);
+            this.setValue(this.finishValue);
             this.rollbacking = false;
             this.fire("stop", new TimelineEvent(this, "stop"));
-            releaseFrame(this.id);
+            frame.releaseFrame(this.frame);
             return this;
-        },
-        reset: function() {
-            this.setValue(this.beginVal);
         },
         timeUp: function() {
             if (this.repeatOption) {
@@ -681,10 +693,10 @@ define("animate/timeline", [ "graphic/color", "core/utils", "graphic/standardcol
             }
         },
         finish: function() {
-            this.setValue(this.finishVal);
+            this.setValue(this.finishValue);
             this.status = "finished";
             this.fire("finish", new TimelineEvent(this, "finish"));
-            releaseFrame(this.id);
+            frame.releaseFrame(this.frame);
         },
         decreaseRepeat: function() {
             if (this.repeatOption !== true) {
@@ -697,6 +709,8 @@ define("animate/timeline", [ "graphic/color", "core/utils", "graphic/standardcol
             return this;
         }
     });
+    Timeline.requestFrame = frame.requestFrame;
+    Timeline.releaseFrame = frame.releaseFrame;
     return Timeline;
 });
 define("animate/translateanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/matrix", "core/utils", "graphic/point", "core/config", "graphic/svg", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/pen" ], function(require, exports, module) {
@@ -844,6 +858,9 @@ define("core/class", [ "core/config" ], function(require, exports) {
     };
     Class.prototype.getType = function() {
         return this.__KityClassName;
+    };
+    Class.prototype.getClass = function() {
+        return this.constructor;
     };
     // 检查基类是否调用了父类的构造函数
     // 该检查是弱检查，假如调用的代码被注释了，同样能检查成功（这个特性可用于知道建议调用，但是出于某些原因不想调用的情况）
@@ -1060,6 +1077,62 @@ define("core/utils", [], function(require, exports, module) {
                 }
             }
             return result;
+        },
+        /**
+         * 平行地对 v1 和 v2 进行指定的操作
+         *
+         *    如果 v1 是数字，那么直接进行 op 操作
+         *    如果 v1 是对象，那么返回一个对象，其元素是 v1 和 v2 同名的每个元素平行地进行 op 操作的结果
+         *    如果 v1 是数组，那么返回一个数组，其元素是 v1 和 v2 同索引的每个元素平行地进行 op 操作的结果
+         *
+         * @param  {Number|Object|Array} v1
+         * @param  {Number|Object|Array} v2
+         * @param  {Function} op
+         * @return {Number|Object|Array}
+         */
+        paralle: function(v1, v2, op) {
+            var Class, field, index, value;
+            // 是否数字
+            if (false === isNaN(parseFloat(v1))) {
+                return op(v1, v2);
+            }
+            // 数组
+            if (v1 instanceof Array) {
+                value = [];
+                for (index = 0; index < v1.length; index++) {
+                    value.push(utils.paralle(v1[index], v2[index], op));
+                }
+                return value;
+            }
+            // 对象
+            if (v1 instanceof Object) {
+                value = {};
+                // 如果值是一个支持原始表示的实例，获取其原始表示
+                Class = v1.getClass && v1.getClass();
+                if (Class && Class.parse) {
+                    v1 = v1.valueOf();
+                    v2 = v2.valueOf();
+                }
+                for (field in v1) {
+                    if (v1.hasOwnProperty(field) && v2.hasOwnProperty(field)) {
+                        value[field] = utils.paralle(v1[field], v2[field], op);
+                    }
+                }
+                // 如果值是一个支持原始表示的实例，用其原始表示的结果重新封箱
+                if (Class && Class.parse) {
+                    value = Class.parse(value);
+                }
+                return value;
+            }
+            return value;
+        },
+        /**
+         * 创建 op 操作的一个平行化版本
+         */
+        parallelize: function(op) {
+            return function(v1, v2) {
+                return utils.paralle(v1, v2, op);
+            };
         }
     };
     utils.each([ "String", "Function", "Array", "Number", "RegExp", "Object", "Boolean" ], function(v) {
@@ -1659,6 +1732,9 @@ define("graphic/color", [ "core/utils", "graphic/standardcolor", "core/class", "
         getValues: function() {
             return Utils.clone(this._color);
         },
+        valueOf: function() {
+            return this.getValues();
+        },
         toRGB: function() {
             return ColorUtils.toString(this._color, "rgb");
         },
@@ -1713,7 +1789,13 @@ define("graphic/color", [ "core/utils", "graphic/standardcolor", "core/class", "
         L: "l",
         A: "a",
         parse: function(valStr) {
-            var rgbValue = ColorUtils.parseToValue(valStr);
+            var rgbValue;
+            if (Utils.isString(valStr)) {
+                rgbValue = ColorUtils.parseToValue(valStr);
+            }
+            if (Utils.isObject(valStr) && "r" in valStr) {
+                rgbValue = valStr;
+            }
             //解析失败， 返回一个默认color实例
             if (rgbValue === null) {
                 return new Color();
@@ -4907,6 +4989,14 @@ define("graphic/vector", [ "graphic/point", "core/class", "graphic/matrix", "cor
         },
         reverse: function() {
             return this.multipy(-1);
+        }
+    });
+    Vector.fromPoints = function(p1, p2) {
+        return new Vector(p2.x - p1.x, p2.y - p1.y);
+    };
+    require("core/class").extendClass(Point, {
+        asVector: function() {
+            return new Vector(this.x, this.y);
         }
     });
     return Vector;

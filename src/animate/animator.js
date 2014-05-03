@@ -22,12 +22,12 @@ define(function(require, exports, module) {
         constructor: function(beginValue, finishValue, setter) {
             if (arguments.length == 1) {
                 var opt = arguments[0];
-                this.beginVal = opt.beginValue;
-                this.finishVal = opt.finishValue;
+                this.beginValue = opt.beginValue;
+                this.finishValue = opt.finishValue;
                 this.setter = opt.setter;
             } else {
-                this.beginVal = beginValue;
-                this.finishVal = finishValue;
+                this.beginValue = beginValue;
+                this.finishValue = finishValue;
                 this.setter = setter;
             }
         },
@@ -68,7 +68,7 @@ define(function(require, exports, module) {
         },
 
         reverse: function() {
-            return new Animator(this.finishVal, this.beginVal, this.setter);
+            return new Animator(this.finishValue, this.beginValue, this.setter);
         }
 
     });

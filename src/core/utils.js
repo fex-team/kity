@@ -45,10 +45,10 @@ define( function ( require, exports, module ) {
             return cloned;
         },
 
-        copy: function(obj){
-            if(typeof obj !== 'object') return obj;
-            if(typeof obj === 'function') return null;
-            return JSON.parse(JSON.stringify(obj));
+        copy: function ( obj ) {
+            if ( typeof obj !== 'object' ) return obj;
+            if ( typeof obj === 'function' ) return null;
+            return JSON.parse( JSON.stringify( obj ) );
         },
 
         getValue: function ( value, defaultValue ) {
@@ -69,6 +69,72 @@ define( function ( require, exports, module ) {
                 }
             }
             return result;
+        },
+
+        /**
+         * 平行地对 v1 和 v2 进行指定的操作
+         *
+         *    如果 v1 是数字，那么直接进行 op 操作
+         *    如果 v1 是对象，那么返回一个对象，其元素是 v1 和 v2 同名的每个元素平行地进行 op 操作的结果
+         *    如果 v1 是数组，那么返回一个数组，其元素是 v1 和 v2 同索引的每个元素平行地进行 op 操作的结果
+         *
+         * @param  {Number|Object|Array} v1
+         * @param  {Number|Object|Array} v2
+         * @param  {Function} op
+         * @return {Number|Object|Array}
+         */
+        paralle: function ( v1, v2, op ) {
+            var Class, field, index, value;
+
+            // 是否数字
+            if ( false === isNaN( parseFloat( v1 ) ) ) {
+                return op( v1, v2 );
+            }
+
+            // 数组
+            if ( v1 instanceof Array ) {
+                value = [];
+                for ( index = 0; index < v1.length; index++ ) {
+                    value.push( utils.paralle( v1[ index ], v2[ index ], op ) );
+                }
+                return value;
+            }
+
+            // 对象
+            if ( v1 instanceof Object ) {
+                value = {};
+
+                // 如果值是一个支持原始表示的实例，获取其原始表示
+                Class = v1.getClass && v1.getClass();
+                if ( Class && Class.parse ) {
+                    v1 = v1.valueOf();
+                    v2 = v2.valueOf();
+                }
+
+                for ( field in v1 ) {
+                    if ( v1.hasOwnProperty( field ) && v2.hasOwnProperty( field ) ) {
+                        value[ field ] = utils.paralle( v1[ field ], v2[ field ], op );
+                    }
+                }
+
+                // 如果值是一个支持原始表示的实例，用其原始表示的结果重新封箱
+                if ( Class && Class.parse ) {
+                    value = Class.parse( value );
+                }
+
+                return value;
+            }
+
+            return value;
+        },
+
+        /**
+         * 创建 op 操作的一个平行化版本
+         */
+        parallelize: function ( op ) {
+            return function ( v1, v2 ) {
+                return utils.paralle( v1, v2, op );
+            };
         }
     };
 

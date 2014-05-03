@@ -4,7 +4,7 @@ define(function(require, exports, module) {
 
     var ScaleAnimator = require('core/class').createClass('ScaleAnimator', {
         base: Animator,
-        constructor: function(sx, sy, ax, ay) {
+        constructor: function(sx, sy) {
             this.callBase({
                 beginValue: 0,
                 finishValue: 1,

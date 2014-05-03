@@ -1,14 +1,14 @@
-define(function(require, exports, module) {
+define( function ( require, exports, module ) {
 
-    var Utils = require('core/utils'),
+    var Utils = require( 'core/utils' ),
 
         StandardColor = require( "graphic/standardcolor" ),
 
         ColorUtils = {},
 
-        Color = require('core/class').createClass( "Color", {
+        Color = require( 'core/class' ).createClass( "Color", {
 
-            constructor: function() {
+            constructor: function () {
 
                 var colorValue = null;
 
@@ -35,9 +35,9 @@ define(function(require, exports, module) {
                 } else {
 
                     colorValue = {
-                        r: arguments[0] | 0,
-                        g: arguments[1] | 0,
-                        b: arguments[2] | 0,
+                        r: arguments[ 0 ] | 0,
+                        g: arguments[ 1 ] | 0,
+                        b: arguments[ 2 ] | 0,
                         //alpha 默认为1
                         a: parseFloat( arguments[ 3 ] ) || 1
                     };
@@ -66,10 +66,10 @@ define(function(require, exports, module) {
                     value = Math.floor( value );
                 }
 
-                if(name == 'h') {
-                    value = (value + 360) % 360;
+                if ( name == 'h' ) {
+                    value = ( value + 360 ) % 360;
                 }
-                this._color[ name ] = Math.max( Color._MIN_VALUE[ name ], Math.min( Color._MAX_VALUE[name], value ) );
+                this._color[ name ] = Math.max( Color._MIN_VALUE[ name ], Math.min( Color._MAX_VALUE[ name ], value ) );
 
                 if ( 'rgb'.indexOf( name ) !== -1 ) {
 
@@ -88,10 +88,9 @@ define(function(require, exports, module) {
 
                 value = this.get( name ) + value;
 
-                if(name == 'h') {
-                    value = (value + 360) % 360;
-                }
-                else {
+                if ( name == 'h' ) {
+                    value = ( value + 360 ) % 360;
+                } else {
                     value = Math.min( Color._MAX_VALUE[ name ], value );
                     value = Math.max( Color._MIN_VALUE[ name ], value );
                 }
@@ -122,8 +121,12 @@ define(function(require, exports, module) {
 
             },
 
-            getValues: function() {
-                return Utils.clone(this._color);
+            getValues: function () {
+                return Utils.clone( this._color );
+            },
+
+            valueOf: function () {
+                return this.getValues();
             },
 
             toRGB: function () {
@@ -195,7 +198,15 @@ define(function(require, exports, module) {
 
         parse: function ( valStr ) {
 
-            var rgbValue = ColorUtils.parseToValue( valStr );
+            var rgbValue;
+
+            if ( Utils.isString( valStr ) ) {
+                rgbValue = ColorUtils.parseToValue( valStr );
+            }
+
+            if ( Utils.isObject( valStr ) && 'r' in valStr ) {
+                rgbValue = valStr;
+            }
 
             //解析失败， 返回一个默认color实例
             if ( rgbValue === null ) {
@@ -288,7 +299,7 @@ define(function(require, exports, module) {
 
                     } else {
 
-                        result[ key ] = ColorUtils.toNumber( hexStr[ index*2 ] + hexStr[ index*2+1 ] );
+                        result[ key ] = ColorUtils.toNumber( hexStr[ index * 2 ] + hexStr[ index * 2 + 1 ] );
 
                     }
 
@@ -317,7 +328,7 @@ define(function(require, exports, module) {
 
                 hasAlpha = RegExp.$1.length === 4;
 
-                rgbaStr = rgbaStr.replace( /^rgba?/i, '' ).replace( /\s+/g, '').replace( /[^0-9,.]/g, '').split( "," );
+                rgbaStr = rgbaStr.replace( /^rgba?/i, '' ).replace( /\s+/g, '' ).replace( /[^0-9,.]/g, '' ).split( "," );
 
                 Utils.each( keys, function ( key, index ) {
 
@@ -348,7 +359,7 @@ define(function(require, exports, module) {
 
                 hasAlpha = RegExp.$1.length === 4;
 
-                hslaStr = hslaStr.replace( /^hsla?/i, '' ).replace( /\s+/g, '').replace( /[^0-9,.]/g, '').split( "," );
+                hslaStr = hslaStr.replace( /^hsla?/i, '' ).replace( /\s+/g, '' ).replace( /[^0-9,.]/g, '' ).split( "," );
 
                 //记录hsl值
                 result.h = hslaStr[ 0 ] | 0;
@@ -415,7 +426,7 @@ define(function(require, exports, module) {
 
             return result;
 
-            function trans ( v1, v2, vH ) {
+            function trans( v1, v2, vH ) {
 
                 if ( vH < 0 ) {
                     vH += 1;
@@ -489,7 +500,7 @@ define(function(require, exports, module) {
 
             } else if ( result.l > 0 && result.l <= 0.5 ) {
 
-                result.s = ( max - min ) / ( max + min ) ;
+                result.s = ( max - min ) / ( max + min );
 
             } else {
 
@@ -528,7 +539,7 @@ define(function(require, exports, module) {
 
                 } );
 
-                return ( type+'(' + vals.join( ', ' ) + ')' ).toLowerCase();
+                return ( type + '(' + vals.join( ', ' ) + ')' ).toLowerCase();
 
             } else {
 
@@ -544,7 +555,7 @@ define(function(require, exports, module) {
 
         //16进制的2个数字转化为10进制， 如果转化失败， 返回0
         toNumber: function ( value ) {
-            return Number( '0x'+value ) | 0;
+            return Number( '0x' + value ) | 0;
         },
 
         toHexValue: function ( value ) {
@@ -582,4 +593,4 @@ define(function(require, exports, module) {
 
     return Color;
 
-});
+} );
