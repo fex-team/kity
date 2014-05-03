@@ -4340,6 +4340,9 @@ define("graphic/shapepoint", [ "core/class", "core/config", "graphic/point" ], f
             this.update();
             return this;
         },
+        getPoint: function() {
+            return this;
+        },
         update: function() {
             if (this.container && this.container.update) {
                 this.container.update();
