@@ -107,8 +107,12 @@ define( function ( require, exports, module ) {
             } else if ( refer == 'doc' || refer == 'paper' ) {
                 ctm = this.node.getCTM();
             } else if ( refer == 'parent' ) {
-                ctm = this.node.getTransformToElement( this.node.parentNode );
-            } else if ( ( refer == 'view' || refer == 'top' ) && this.node.getPaper() ) {
+                if ( this.node.parentNode ) {
+                    ctm = this.node.getTransformToElement( this.node.parentNode );
+                } else {
+                    console && console.warn( '获取没有父元素的元素的变换可能导致不合理的结果' );
+                }
+            } else if ( ( refer == 'view' || refer == 'top' ) && this.getPaper() ) {
                 ctm = this.node.getTransformToElement( this.getPaper().shapeNode );
             } else if ( refer.node ) {
                 ctm = this.node.getTransformToElement( refer.shapeNode || refer.node );
