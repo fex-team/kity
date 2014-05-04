@@ -12,6 +12,10 @@ define( function ( require, exports, module ) {
         },
 
         offset: function ( dx, dy ) {
+            if(arguments.length == 1) {
+                dy = dx.y;
+                dx = dx.x;
+            }
             return new Point( this.x + dx, this.y + dy );
         },
 
