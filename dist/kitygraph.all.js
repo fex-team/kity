@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kitygraph - v1.0.0 - 2014-05-03
+ * kitygraph - v1.0.0 - 2014-05-04
  * https://github.com/kitygraph/kity
  * GitHub: https://github.com/kitygraph/kity.git 
  * Copyright (c) 2014 Baidu UEditor Group; Licensed MIT
@@ -3556,6 +3556,10 @@ define("graphic/point", [ "core/class", "core/config" ], function(require, expor
             this.y = y || 0;
         },
         offset: function(dx, dy) {
+            if (arguments.length == 1) {
+                dy = dx.y;
+                dx = dx.x;
+            }
             return new Point(this.x + dx, this.y + dy);
         },
         valueOf: function() {
@@ -3823,10 +3827,17 @@ define("graphic/regularpolygon", [ "graphic/point", "core/class", "core/config",
     var Point = require("graphic/point");
     return require("core/class").createClass("RegularPolygon", {
         base: require("graphic/path"),
-        constructor: function(side, radius) {
+        constructor: function(side, radius, x, y) {
             this.callBase();
             this.radius = radius || 0;
             this.side = Math.max(side || 3, 3);
+            if (arguments.length > 2) {
+                if (arguments.length == 3) {
+                    y = x.y;
+                    x = x.x;
+                }
+            }
+            this.center = new Point(x, y);
             this.draw();
         },
         getSide: function() {
@@ -3846,10 +3857,11 @@ define("graphic/regularpolygon", [ "graphic/point", "core/class", "core/config",
         draw: function() {
             var radius = this.radius, side = this.side, step = Math.PI * 2 / side, drawer = this.getDrawer(), i;
             drawer.clear();
-            drawer.moveTo(Point.fromPolar(radius, Math.PI / 2));
+            drawer.moveTo(Point.fromPolar(radius, Math.PI / 2, "rad").offset(this.center));
             for (i = 0; i <= side; i++) {
-                drawer.lineTo(Point.fromPolar(radius, step * i + Math.PI / 2));
+                drawer.lineTo(Point.fromPolar(radius, step * i + Math.PI / 2, "rad").offset(this.center));
             }
+            drawer.close();
             return this;
         }
     });
@@ -5068,7 +5080,6 @@ define("graphic/viewbox", [ "core/class", "core/config" ], function(require, exp
             Curve: require( 'graphic/curve' ),
             Ellipse: require( 'graphic/ellipse' ),
             GradientBrush: require( 'graphic/gradientbrush' ),
-            HyperLink: require( 'graphic/hyperlink' ),
             Group: require( 'graphic/group' ),
             HyperLink: require( 'graphic/hyperlink' ),
             Image: require( 'graphic/image' ),
@@ -5088,10 +5099,12 @@ define("graphic/viewbox", [ "core/class", "core/config" ], function(require, exp
             Pie: require( 'graphic/pie' ),
             RadialGradientBrush: require( 'graphic/radialgradientbrush' ),
             Rect: require( 'graphic/rect' ),
+            RegularPolygon: require('graphic/regularpolygon'),
             Ring: require( 'graphic/ring' ),
             Shape: require( 'graphic/shape' ),
             ShapePoint: require( 'graphic/shapepoint' ),
             Sweep: require( 'graphic/sweep' ),
+            Star: require('graphic/star'),
             Text: require( 'graphic/text' ),
             TextSpan: require( 'graphic/textspan' ),
             Use: require( 'graphic/use' ),
