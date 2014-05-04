@@ -92,7 +92,14 @@ define( function ( require, exports, module ) {
             return false;
         },
         getTransform: function ( refer ) {
-            var ctm;
+            var ctm = {
+                a: 1,
+                b: 0,
+                c: 0,
+                d: 1,
+                e: 0,
+                f: 0
+            };
             refer = refer || 'parent';
 
             if ( refer == 'screen' ) {
@@ -100,10 +107,14 @@ define( function ( require, exports, module ) {
             } else if ( refer == 'doc' || refer == 'paper' ) {
                 ctm = this.node.getCTM();
             } else if ( refer == 'parent' ) {
-                ctm = this.node.getTransformToElement( this.container.shapeNode|| this.container.node );
-            } else if ( refer == 'view' || refer == 'top' ) {
+                if ( this.node.parentNode ) {
+                    ctm = this.node.getTransformToElement( this.node.parentNode );
+                } else {
+                    console && console.warn( '获取没有父元素的元素的变换可能导致不合理的结果' );
+                }
+            } else if ( ( refer == 'view' || refer == 'top' ) && this.getPaper() ) {
                 ctm = this.node.getTransformToElement( this.getPaper().shapeNode );
-            } else if ( refer.node) {
+            } else if ( refer.node ) {
                 ctm = this.node.getTransformToElement( refer.shapeNode || refer.node );
             }
 

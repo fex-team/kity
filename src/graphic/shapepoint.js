@@ -35,6 +35,10 @@ define( function ( require, exports, module ) {
             return this;
         },
 
+        getPoint: function() {
+            return this;
+        },
+
         update: function () {
 
             if ( this.container && this.container.update ) {
