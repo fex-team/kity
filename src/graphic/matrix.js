@@ -1,5 +1,6 @@
 define( function ( require, exports, module ) {
     var utils = require( 'core/utils' );
+    var Box = require( 'graphic/box' );
     var mPattern = /matrix\((.+)\)/i;
     var Point = require( 'graphic/point' );
 
@@ -87,6 +88,30 @@ define( function ( require, exports, module ) {
             return this;
         },
 
+        /**
+         * 获得反转矩阵
+         *
+         * 这是我解方程算出来的
+         */
+        inverse: function () {
+            var m = this.m,
+                a = m.a,
+                b = m.b,
+                c = m.c,
+                d = m.d,
+                e = m.e,
+                f = m.f,
+                k, aa, bb, cc, dd, ee, ff;
+            k = a * d - b * c;
+            aa = d / k;
+            bb = -b / k;
+            cc = -c / k;
+            dd = a / k;
+            ee = ( c * f - e * d ) / k;
+            ff = ( b * e - a * f ) / k;
+            return new Matrix( aa, bb, cc, dd, ee, ff );
+        },
+
         setMatrix: function ( a, b, c, d, e, f ) {
             if ( arguments.length === 1 ) {
                 this.m = utils.clone( arguments[ 0 ] );
@@ -124,7 +149,7 @@ define( function ( require, exports, module ) {
         },
 
         toString: function () {
-            return this.valueOf().join(' ');
+            return this.valueOf().join( ' ' );
         },
 
         valueOf: function () {
@@ -164,8 +189,8 @@ define( function ( require, exports, module ) {
     Matrix.transformPoint = function ( x, y, m ) {
         if ( arguments.length === 2 ) {
             m = y;
-            x = x.x;
             y = x.y;
+            x = x.x;
         }
         return new Point(
             m.a * x + m.c * y + m.e,
@@ -193,17 +218,71 @@ define( function ( require, exports, module ) {
             yMin = Math.min( yMin, rp.y );
             yMax = Math.max( yMax, rp.y );
         }
-        return {
+        var box = new Box( {
             x: xMin,
             y: yMin,
             width: xMax - xMin,
-            height: yMax - yMin,
+            height: yMax - yMin
+        } );
+        utils.extend( box, {
             closurePoints: rps,
             left: xMin,
             right: xMax,
             top: yMin,
             bottom: yMax
+        } );
+        return box;
+    };
+
+    // 获得从 node 到 refer 的变换矩阵
+    Matrix.getCTM = function ( target, refer ) {
+        var ctm = {
+            a: 1,
+            b: 0,
+            c: 0,
+            d: 1,
+            e: 0,
+            f: 0
         };
+        refer = refer || 'parent';
+
+        // 根据参照坐标系选区的不一样，返回不同的结果
+        switch ( refer ) {
+
+        case 'screen':
+            // 以浏览器屏幕为参照坐标系
+            ctm = target.node.getScreenCTM();
+            break;
+
+        case 'doc':
+        case 'paper':
+            // 以文档（Paper）为参照坐标系
+            ctm = target.node.getCTM();
+            break;
+
+        case 'view':
+        case 'top':
+            // 以顶层绘图容器（视野）为参照坐标系
+            if ( target.getPaper() ) {
+                ctm = target.node.getTransformToElement( target.getPaper().shapeNode );
+            }
+            break;
+
+        case 'parent':
+            // 以父容器为参照坐标系
+            if ( target.node.parentNode ) {
+                ctm = target.node.getTransformToElement( target.node.parentNode );
+            }
+            break;
+
+        default:
+            // 其他情况，指定参照物
+            if ( refer.node ) {
+                ctm = target.node.getTransformToElement( refer.shapeNode || refer.node );
+            }
+        }
+
+        return new Matrix( ctm.a, ctm.b, ctm.c, ctm.d, ctm.e, ctm.f );
     };
 
     return Matrix;

@@ -18,10 +18,10 @@
 <script>
     var paper = new kity.Paper(document.body).pipe(function() {
         var width = 500, height = 300;
-        this.setWidth(500).setHeight(300);
+        this.setWidth(500).setHeight(400);
         this.setViewBox(-80.5, -80.5, width, height)
 
-        this.addShape(new Coordinate('black', [-8, 39], [-8, 19])).pipe(function() {
+        this.addShape(new Coordinate('black', [-8, 20], [-8, 23])).pipe(function() {
             this.addShape(new kity.Rect(30, 30, 0, 0)
                 .fill('rgba(0, 0, 0, 0.3)')
                 .stroke('black'));

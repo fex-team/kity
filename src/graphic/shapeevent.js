@@ -72,7 +72,7 @@ define( function ( require, exprots, module ) {
         },
 
         //当前鼠标事件在用户坐标系中点击的点的坐标位置
-        getPosition: function ( touch_index ) {
+        getPosition: function ( refer, touch_index ) {
 
             if ( !this.originEvent ) {
                 return null;
@@ -84,16 +84,13 @@ define( function ( require, exprots, module ) {
 
             var clientX = eventClient.clientX,
                 clientY = eventClient.clientY,
-                paper = this.targetShape.getPaper(),
-                //转换过后的点
-                transPoint = Matrix.transformPoint( clientX, clientY, paper.node.getScreenCTM().inverse() );
+                node = this.targetShape.shapeNode || this.targetShape.node,
 
-            var viewport = paper.getViewPort();
+                // 鼠标位置在目标对象上的坐标
+                // 基于屏幕坐标算
+                point = Matrix.transformPoint( clientX, clientY, node.getScreenCTM().inverse() );
 
-            return new Point(
-                transPoint.x / viewport.zoom - viewport.offset.x,
-                transPoint.y / viewport.zoom - viewport.offset.y
-            );
+            return Matrix.getCTM( this.targetShape, refer || 'view' ).transformPoint( point );
 
         },
 
