@@ -82,8 +82,8 @@ define( function ( require, exprots, module ) {
                 this.originEvent.touches[ touch_index || 0 ] :
                 this.originEvent;
 
-            var clientX = eventClient.clientX,
-                clientY = eventClient.clientY,
+            var clientX = eventClient && eventClient.clientX || 0,
+                clientY = eventClient && eventClient.clientY || 0,
                 node = this.targetShape.shapeNode || this.targetShape.node,
 
                 // 鼠标位置在目标对象上的坐标
