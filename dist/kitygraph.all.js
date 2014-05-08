@@ -4151,7 +4151,7 @@ define("graphic/shape", [ "graphic/svg", "core/utils", "graphic/eventhandler", "
             return this;
         },
         setMatrix: function(m) {
-            this.transform.matrix = m !== null && slice.call(arguments) || null;
+            this.transform.matrix = m;
             return this._applyTransform();
         },
         setTranslate: function(t) {
