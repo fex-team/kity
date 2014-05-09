@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kitygraph - v1.0.0 - 2014-05-08
+ * kitygraph - v1.0.0 - 2014-05-09
  * https://github.com/kitygraph/kity
  * GitHub: https://github.com/kitygraph/kity.git 
  * Copyright (c) 2014 Baidu UEditor Group; Licensed MIT
@@ -3317,14 +3317,14 @@ define("graphic/paper", [ "core/class", "core/config", "core/utils", "graphic/sv
             return this.container;
         },
         getWidth: function() {
-            return +this.node.getAttribute("width");
+            return this.node.clientWidth;
         },
         setWidth: function(width) {
             this.node.setAttribute("width", width);
             return this;
         },
         getHeight: function() {
-            return +this.node.getAttribute("height");
+            return this.node.clientHeight;
         },
         setHeight: function(height) {
             this.node.setAttribute("height", height);
