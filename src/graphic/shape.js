@@ -47,9 +47,6 @@ define( function ( require, exports, module ) {
             return new Box( box );
         },
         getRenderBox: function ( refer ) {
-            if ( !this.getPaper() ) {
-                return new Box();
-            }
             var box = this.getBoundaryBox();
             var matrix = this.getTransform( refer );
             return matrix.transformBox( box );
