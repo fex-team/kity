@@ -3479,7 +3479,7 @@ define("graphic/path", [ "core/utils", "core/class", "core/config", "graphic/sha
             return this.push("L", arguments);
         },
         lineBy: function(dx, dy) {
-            return this.push("k", arguments);
+            return this.push("l", arguments);
         },
         arcTo: function(rx, ry, xr, laf, sf, x, y) {
             return this.push("A", arguments);
