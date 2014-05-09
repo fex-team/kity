@@ -55,7 +55,7 @@ define( function ( require, exports, module ) {
         },
 
         getWidth: function () {
-            return +this.node.getAttribute( 'width' );
+            return this.node.clientWidth;
         },
 
         setWidth: function ( width ) {
@@ -64,7 +64,7 @@ define( function ( require, exports, module ) {
         },
 
         getHeight: function () {
-            return +this.node.getAttribute( 'height' );
+            return this.node.clientHeight;
         },
 
         setHeight: function ( height ) {
