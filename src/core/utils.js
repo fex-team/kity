@@ -35,6 +35,27 @@ define( function ( require, exports, module ) {
             }
             return t;
         },
+
+        deepExtend : function( t, s ){
+            var a = arguments,
+                notCover = this.isBoolean( a[ a.length - 1 ] ) ? a[ a.length - 1 ] : false,
+                len = this.isBoolean( a[ a.length - 1 ] ) ? a.length - 1 : a.length;
+            for ( var i = 1; i < len; i++ ) {
+                var x = a[ i ];
+                for ( var k in x ) {
+                    if ( !notCover || !t.hasOwnProperty( k ) ) {
+                        if( this.isObject( t[ k ] ) && this.isObject( x[ k ] ) ){
+                            this.deepExtend( t[ k ], x[ k ], notCover );
+                        }else{
+                            t[ k ] = x[ k ];
+                        }
+                        
+                    }
+                }
+            }
+            return t;
+        },
+
         clone: function ( obj ) {
             var cloned = {};
             for ( var m in obj ) {
@@ -49,6 +70,22 @@ define( function ( require, exports, module ) {
             if ( typeof obj !== 'object' ) return obj;
             if ( typeof obj === 'function' ) return null;
             return JSON.parse( JSON.stringify( obj ) );
+        },
+
+        queryPath: function(path, obj){
+            var arr = path.split('.');
+            var i = 0, tmp = obj, l = arr.length;
+            while(i < l){
+                if(arr[i] in tmp){
+                    tmp = tmp[arr[i]];
+                    i++;
+                    if(i >= l || tmp === undefined){
+                        return tmp;
+                    }
+                }else{
+                    return undefined;
+                }
+            }
         },
 
         getValue: function ( value, defaultValue ) {
