@@ -55,7 +55,7 @@ define( function ( require, exports, module ) {
         },
 
         getWidth: function () {
-            return +this.node.getAttribute( 'width' );
+            return this.node.clientWidth;
         },
 
         setWidth: function ( width ) {
@@ -64,7 +64,7 @@ define( function ( require, exports, module ) {
         },
 
         getHeight: function () {
-            return +this.node.getAttribute( 'height' );
+            return this.node.clientHeight;
         },
 
         setHeight: function ( height ) {
@@ -90,7 +90,7 @@ define( function ( require, exports, module ) {
             matrix.scale( zoom );
             matrix.translate( cx, cy );
             matrix.translate( dx, dy );
-            this.shapeNode.setAttribute( 'transform', matrix );
+            this.shapeNode.setAttribute( 'transform', 'matrix(' + matrix + ')' );
 
             this.viewport = {
                 center: {
@@ -122,6 +122,15 @@ define( function ( require, exports, module ) {
                 };
             }
             return this.viewport;
+        },
+
+        getViewPortTransform: function() {
+            var m = this.shapeNode.getCTM();
+            return new Matrix(m.a, m.b, m.c, m.d, m.e, m.f);
+        },
+
+        getTransform: function() {
+            return this.getViewPortTransform().reverse();
         },
 
         addResource: function ( resource ) {

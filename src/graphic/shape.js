@@ -7,6 +7,7 @@ define( function ( require, exports, module ) {
     var Matrix = require( 'graphic/matrix' );
     var Pen = require( 'graphic/pen' );
     var slice = Array.prototype.slice;
+    var Box = require( 'graphic/box' );
 
     var Shape = require( 'core/class' ).createClass( 'Shape', {
         mixins: [ EventHandler, Styled, Data ],
@@ -43,7 +44,7 @@ define( function ( require, exports, module ) {
                     height: this.node.clientHeight
                 };
             }
-            return box;
+            return new Box( box );
         },
         getRenderBox: function ( refer ) {
             var box = this.getBoundaryBox();
@@ -92,33 +93,7 @@ define( function ( require, exports, module ) {
             return false;
         },
         getTransform: function ( refer ) {
-            var ctm = {
-                a: 1,
-                b: 0,
-                c: 0,
-                d: 1,
-                e: 0,
-                f: 0
-            };
-            refer = refer || 'parent';
-
-            if ( refer == 'screen' ) {
-                ctm = this.node.getScreenCTM();
-            } else if ( refer == 'doc' || refer == 'paper' ) {
-                ctm = this.node.getCTM();
-            } else if ( refer == 'parent' ) {
-                if ( this.node.parentNode ) {
-                    ctm = this.node.getTransformToElement( this.node.parentNode );
-                } else {
-                    console && console.warn( '获取没有父元素的元素的变换可能导致不合理的结果' );
-                }
-            } else if ( ( refer == 'view' || refer == 'top' ) && this.getPaper() ) {
-                ctm = this.node.getTransformToElement( this.getPaper().shapeNode );
-            } else if ( refer.node ) {
-                ctm = this.node.getTransformToElement( refer.shapeNode || refer.node );
-            }
-
-            return new Matrix( ctm.a, ctm.b, ctm.c, ctm.d, ctm.e, ctm.f );
+            return Matrix.getCTM( this, refer );
         },
         clearTransform: function () {
             this.node.removeAttribute( 'transform' );
@@ -151,20 +126,20 @@ define( function ( require, exports, module ) {
             this.node.setAttribute( 'transform', utils.flatten( result ).join( ' ' ) );
             return this;
         },
-        setMatrix: function () {
-            this.transform.matrix = slice.call( arguments );
+        setMatrix: function ( m ) {
+            this.transform.matrix = m;
             return this._applyTransform();
         },
-        setTranslate: function () {
-            this.transform.translate = slice.call( arguments );
+        setTranslate: function ( t ) {
+            this.transform.translate = t !== null && slice.call( arguments ) || null;
             return this._applyTransform();
         },
-        setRotate: function () {
-            this.transform.rotate = slice.call( arguments );
+        setRotate: function ( r ) {
+            this.transform.rotate = r !== null && slice.call( arguments ) || null;
             return this._applyTransform();
         },
-        setScale: function () {
-            this.transform.scale = slice.call( arguments );
+        setScale: function ( s ) {
+            this.transform.scale = s != null && slice.call( arguments ) || null;
             return this._applyTransform();
         },
         translate: function ( dx, dy ) {

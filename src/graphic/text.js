@@ -6,7 +6,8 @@ define( function ( require, exports, module ) {
     var offsetHash = {};
 
     function getTextBoundOffset( text ) {
-        var font = window.getComputedStyle( text.node ).font;
+        var style = window.getComputedStyle( text.node );
+        var font = [ style.fontFamily, style.fontSize, style.fontStretch, style.fontStyle, style.fontVariant, style.fontWeight ].join( '-' );
 
         if ( offsetHash[ font ] ) {
             return offsetHash[ font ];
@@ -34,9 +35,6 @@ define( function ( require, exports, module ) {
             if ( content !== undefined ) {
                 this.setContent( content );
             }
-            this.whenPaperReady( function () {
-                this.setVerticalAlign( this.verticalAlign );
-            } );
         },
 
         setX: function ( x ) {
@@ -74,21 +72,23 @@ define( function ( require, exports, module ) {
 
         // top/bottom/middle/baseline
         setVerticalAlign: function ( align ) {
-            var dy;
-            switch ( align ) {
-            case 'top':
-                dy = getTextBoundOffset( this ).top;
-                break;
-            case 'bottom':
-                dy = getTextBoundOffset( this ).bottom;
-                break;
-            case 'middle':
-                dy = getTextBoundOffset( this ).middle;
-                break;
-            default:
-                dy = 0;
-            }
-            this.node.setAttribute( 'dy', dy );
+            this.whenPaperReady( function () {
+                var dy;
+                switch ( align ) {
+                case 'top':
+                    dy = getTextBoundOffset( this ).top;
+                    break;
+                case 'bottom':
+                    dy = getTextBoundOffset( this ).bottom;
+                    break;
+                case 'middle':
+                    dy = getTextBoundOffset( this ).middle;
+                    break;
+                default:
+                    dy = 0;
+                }
+                this.node.setAttribute( 'dy', dy );
+            } );
             this.verticalAlign = align;
             return this;
         },
