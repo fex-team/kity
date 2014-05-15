@@ -2,7 +2,7 @@
  * Effect所用的container
  */
 
-define(function() {
+define(function(require) {
 
     return require('core/class').createClass('EffectContainer', {
 

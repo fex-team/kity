@@ -5,7 +5,7 @@
 (function(global) {
 
     define('kity.start_forTest', function(require) {
-        require('kity.start');
+            require('kity.start');
         require('core/utils').extend(global.kity, {
             //add
             Container: require('graphic/container'),

@@ -16,7 +16,7 @@ define(function(require, exports, module) {
         },
 
         getBrush: function() {
-            return this.color;
+            return this.brush;
         },
 
         setBrush: function(brush) {
@@ -26,6 +26,10 @@ define(function(require, exports, module) {
 
         setColor: function(color) {
             return this.setBrush(color);
+        },
+
+        getColor: function() {
+            return (this.brush instanceof Color) ? this.brush : null;
         },
 
         getWidth: function() {

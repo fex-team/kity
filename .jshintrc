@@ -27,7 +27,6 @@
     "browser": true,
     "predef" : [
         "define",
-        "require",
         "describe",
         "expect",
         "beforeEach",

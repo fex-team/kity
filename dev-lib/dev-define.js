@@ -2,7 +2,7 @@
  * cmd 内部定义
  */
 
-( function ( global ) {
+(function(global) {
 
     var _modules = {},
         loaded = {};
@@ -11,49 +11,49 @@
 
         base: '',
 
-        config: function ( options ) {
+        config: function(options) {
 
             this.base = options.base || '';
 
         },
 
-        use: function ( id ) {
+        use: function(id) {
 
-            return require( id );
+            return require(id);
 
         },
 
-        remove: function ( node ) {
+        remove: function(node) {
 
-            node.parentNode.removeChild( node );
+            node.parentNode.removeChild(node);
 
         }
 
     };
 
-    global.define = function ( id, deps, f ) {
+    global.define = function(id, deps, f) {
 
         var argLen = arguments.length,
             module = null;
 
-        switch ( argLen ) {
+        switch (argLen) {
 
             case 1:
-                var scriptNode = document.getElementsByTagName( 'script' );
+                var scriptNode = document.getElementsByTagName('script');
                 f = id;
-                id = scriptNode[ scriptNode.length - 1 ].getAttribute( "data-id" );
+                id = scriptNode[scriptNode.length - 1].getAttribute("data-id");
                 break;
 
             case 2:
-                if ( typeof id === 'string' ) {
+                if (typeof id === 'string') {
 
                     f = deps;
 
                 } else {
 
-                    var scriptNode = document.getElementsByTagName( 'script' );
+                    var scriptNode = document.getElementsByTagName('script');
                     f = deps;
-                    id = scriptNode[ scriptNode.length - 1 ].getAttribute( "data-id" );
+                    id = scriptNode[scriptNode.length - 1].getAttribute("data-id");
 
                 }
 
@@ -61,7 +61,7 @@
 
         }
 
-        module = _modules[ id ] = {
+        module = _modules[id] = {
 
             exports: {},
             value: null,
@@ -69,9 +69,9 @@
 
         };
 
-        loadDeps( f );
+        loadDeps(f);
 
-        if ( typeof f === 'function' ) {
+        if (typeof f === 'function') {
 
             module.factory = f;
 
@@ -83,20 +83,20 @@
 
     }
 
-    function require ( id ) {
+    function require(id) {
 
         var exports = {},
-            module = _modules[ id ];
+            module = _modules[id];
 
-        if ( module.value ) {
+        if (module.value) {
 
             return module.value;
 
         }
 
-        exports = module.factory( require, module.exports, module );
+        exports = module.factory(require, module.exports, module);
 
-        if ( exports ) {
+        if (exports) {
 
             module.exports = exports;
 
@@ -110,25 +110,25 @@
 
     }
 
-    function loadDeps ( factory ) {
+    function loadDeps(factory) {
 
         var deps = null,
             pathname = location.pathname,
             uri = location.protocol + '//' + location.host;
 
-        pathname = pathname.split( '/');
+        pathname = pathname.split('/');
 
-        if ( pathname[ pathname.length - 1 ] !== '' ) {
+        if (pathname[pathname.length - 1] !== '') {
 
-            pathname[ pathname.length - 1 ] = '';
+            pathname[pathname.length - 1] = '';
 
         }
 
-        uri += pathname.join( '/' );
+        uri += pathname.join('/');
 
-        if ( typeof factory === 'function' ) {
+        if (typeof factory === 'function') {
 
-            deps = loadDepsByFunction( factory );
+            deps = loadDepsByFunction(factory);
 
         } else {
 
@@ -137,32 +137,32 @@
 
         }
 
-        for ( var i = 0, len = deps.length; i < len; i++ ) {
+        for (var i = 0, len = deps.length; i < len; i++) {
 
-            var key = deps[ i ];
+            var key = deps[i];
 
-            if ( loaded[ key ] ) {
+            if (loaded[key]) {
                 continue;
             }
 
-            loaded[ key ] = true;
+            loaded[key] = true;
 
-            document.write( '<script src="'+ uri + inc.base + '/' + key +'.js" onload="inc.remove(this)" data-id="'+ key +'"></script>' );
+            document.write('<script src="' + uri + inc.base + '/' + key + '.js" onload="inc.remove(this)" data-id="' + key + '"></script>');
 
         }
 
     }
 
-    function loadDepsByFunction ( factory ) {
+    function loadDepsByFunction(factory) {
 
         var content = factory.toString(),
             match = null,
             deps = [],
             pattern = /require\s*\(\s*([^)]+?)\s*\)/g;
 
-        while ( match = pattern.exec( content ) ) {
+        while (match = pattern.exec(content)) {
 
-            deps.push( match[ 1 ].replace( /'|"/g, '' ) );
+            deps.push(match[1].replace(/'|"/g, ''));
 
         }
 
@@ -170,4 +170,4 @@
 
     }
 
-} )( this );
+})(this);
