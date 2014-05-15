@@ -2,120 +2,123 @@
  * 投影滤镜
  */
 
-define( function ( require, exports, module ) {
+define(function(require, exports, module) {
 
-    var GaussianblurEffect = require( "filter/effect/gaussianblureffect" ),
-        Effect = require( "filter/effect/effect" ),
-        ColorMatrixEffect = require( "filter/effect/colormatrixeffect" ),
-        Color = require( "graphic/color" ),
-        Utils = require( "core/utils" ),
-        CompositeEffect = require( "filter/effect/compositeeffect" ),
-        OffsetEffect = require( "filter/effect/offseteffect" );
+    var GaussianblurEffect = require('filter/effect/gaussianblureffect'),
+        Effect = require('filter/effect/effect'),
+        ColorMatrixEffect = require('filter/effect/colormatrixeffect'),
+        Color = require('graphic/color'),
+        Utils = require('core/utils'),
+        CompositeEffect = require('filter/effect/compositeeffect'),
+        OffsetEffect = require('filter/effect/offseteffect');
 
-    return require( "core/class" ).createClass( 'ProjectionFilter', {
+    return require('core/class').createClass('ProjectionFilter', {
 
-        base: require( "filter/filter" ),
+        base: require('filter/filter'),
 
-        constructor: function ( stdDeviation, dx, dy ) {
+        constructor: function(stdDeviation, dx, dy) {
 
             this.callBase();
 
-            this.gaussianblurEffect = new GaussianblurEffect( stdDeviation, Effect.INPUT_SOURCE_ALPHA );
-            this.gaussianblurEffect.set( 'result', 'gaussianblur' );
-            this.addEffect( this.gaussianblurEffect );
+            this.gaussianblurEffect = new GaussianblurEffect(stdDeviation, Effect.INPUT_SOURCE_ALPHA);
+            this.gaussianblurEffect.set('result', 'gaussianblur');
+            this.addEffect(this.gaussianblurEffect);
 
-            this.offsetEffect = new OffsetEffect( dx, dy, this.gaussianblurEffect );
-            this.offsetEffect.set( 'result', 'offsetBlur' );
-            this.addEffect( this.offsetEffect );
+            this.offsetEffect = new OffsetEffect(dx, dy, this.gaussianblurEffect);
+            this.offsetEffect.set('result', 'offsetBlur');
+            this.addEffect(this.offsetEffect);
 
-            this.colorMatrixEffect = new ColorMatrixEffect( ColorMatrixEffect.TYPE_MATRIX, this.offsetEffect );
-            this.colorMatrixEffect.set( 'values', ColorMatrixEffect.MATRIX_ORIGINAL );
-            this.colorMatrixEffect.set( 'result', 'colorOffsetBlur' );
-            this.addEffect( this.colorMatrixEffect );
+            this.colorMatrixEffect = new ColorMatrixEffect(ColorMatrixEffect.TYPE_MATRIX, this.offsetEffect);
+            this.colorMatrixEffect.set('values', ColorMatrixEffect.MATRIX_ORIGINAL);
+            this.colorMatrixEffect.set('result', 'colorOffsetBlur');
+            this.addEffect(this.colorMatrixEffect);
 
-            this.compositeEffect = new CompositeEffect( CompositeEffect.OPERATOR_OVER, Effect.INPUT_SOURCE_GRAPHIC, this.colorMatrixEffect );
-            this.addEffect( this.compositeEffect );
+            this.compositeEffect = new CompositeEffect(
+                CompositeEffect.OPERATOR_OVER,
+                Effect.INPUT_SOURCE_GRAPHIC,
+                this.colorMatrixEffect);
+            this.addEffect(this.compositeEffect);
 
         },
 
         // 设置投影颜色
-        setColor: function ( color ) {
+        setColor: function(color) {
 
             var matrix = null,
                 originMatrix = null,
                 colorValue = [];
 
-            if ( Utils.isString( color ) ) {
+            if (Utils.isString(color)) {
 
-                color = Color.parse( color );
+                color = Color.parse(color);
 
             }
 
-            if ( !color ) {
+            if (!color) {
                 return this;
             }
 
-            matrix = ColorMatrixEffect.MATRIX_EMPTY.split( " " );
+            matrix = ColorMatrixEffect.MATRIX_EMPTY.split(' ');
 
-            colorValue.push( color.get( 'r' ) );
-            colorValue.push( color.get( 'g' ) );
-            colorValue.push( color.get( 'b' ) );
+            colorValue.push(color.get('r'));
+            colorValue.push(color.get('g'));
+            colorValue.push(color.get('b'));
 
             // rgb 分量更改
-            for ( var i = 0, len = colorValue.length; i < len; i++ ) {
+            for (var i = 0, len = colorValue.length; i < len; i++) {
 
-                matrix[ i * 5 + 3 ] = colorValue[ i ] / 255;
+                matrix[i * 5 + 3] = colorValue[i] / 255;
 
             }
 
             // alpha 分量更改
-            matrix[ 18 ] = color.get( 'a' );
+            matrix[18] = color.get('a');
 
-            this.colorMatrixEffect.set( 'values', matrix.join( " " ) );
+            this.colorMatrixEffect.set('values', matrix.join(' '));
 
             return this;
 
         },
 
         // 设置投影透明度
-        setOpacity: function ( opacity ) {
+        setOpacity: function(opacity) {
 
-            var matrix = this.colorMatrixEffect.get( 'values' ).split( " " );
+            var matrix = this.colorMatrixEffect.get('values').split(' ');
 
-            matrix[ 18 ] = opacity;
+            matrix[18] = opacity;
 
-            this.colorMatrixEffect.set( 'values', matrix.join( " " ) );
+            this.colorMatrixEffect.set('values', matrix.join(' '));
 
             return this;
 
         },
-        
+
         // 设置阴影偏移量
-        setOffset: function ( dx, dy ) {
+        setOffset: function(dx, dy) {
 
-            this.setOffsetX( dx );
-            this.setOffsetY( dy );
-
-        },
-
-        setOffsetX: function ( dx ) {
-
-            this.offsetEffect.set( 'dx', dx );
+            this.setOffsetX(dx);
+            this.setOffsetY(dy);
 
         },
 
-        setOffsetY: function ( dy ) {
+        setOffsetX: function(dx) {
 
-            this.offsetEffect.set( 'dy', dy );
+            this.offsetEffect.set('dx', dx);
 
         },
 
-        setDeviation: function ( deviation ) {
+        setOffsetY: function(dy) {
 
-            this.gaussianblurEffect.set( 'stdDeviation', deviation );
+            this.offsetEffect.set('dy', dy);
+
+        },
+
+        setDeviation: function(deviation) {
+
+            this.gaussianblurEffect.set('stdDeviation', deviation);
 
         }
 
-    } );
+    });
 
-} );
+});

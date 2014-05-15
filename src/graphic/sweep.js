@@ -1,11 +1,11 @@
-define( function ( require, exports, module ) {
-    var Point = require( 'graphic/point' );
+define(function(require, exports, module) {
+    var Point = require('graphic/point');
 
-    return require( 'core/class' ).createClass( 'Sweep', {
+    return require('core/class').createClass('Sweep', {
 
-        base: require( 'graphic/path' ),
+        base: require('graphic/path'),
 
-        constructor: function ( sectionArray, angle, angleOffset ) {
+        constructor: function(sectionArray, angle, angleOffset) {
             this.callBase();
             this.sectionArray = sectionArray || [];
             this.angle = angle || 0;
@@ -13,66 +13,66 @@ define( function ( require, exports, module ) {
             this.draw();
         },
 
-        getSectionArray: function () {
+        getSectionArray: function() {
             return this.sectionArray;
         },
 
-        setSectionArray: function ( value ) {
+        setSectionArray: function(value) {
             this.sectionArray = value;
             return this.draw();
         },
 
-        getAngle: function () {
+        getAngle: function() {
             return this.angle;
         },
 
-        setAngle: function ( value ) {
+        setAngle: function(value) {
             this.angle = value;
             return this.draw();
         },
 
-        getAngleOffset: function () {
+        getAngleOffset: function() {
             return this.angleOffset;
         },
 
-        setAngleOffset: function ( value ) {
+        setAngleOffset: function(value) {
             this.angleOffset = value;
             return this.draw();
         },
 
-        draw: function () {
+        draw: function() {
             var sectionArray = this.sectionArray,
                 i;
-            for ( i = 0; i < sectionArray.length; i += 2 ) {
-                this.drawSection( sectionArray[ i ], sectionArray[ i + 1 ] );
+            for (i = 0; i < sectionArray.length; i += 2) {
+                this.drawSection(sectionArray[i], sectionArray[i + 1]);
             }
             return this;
         },
 
-        drawSection: function ( from, to ) {
-            var angleLength = this.angle && ( this.angle % 360 ? this.angle % 360 : 360 ),
+        drawSection: function(from, to) {
+            var angleLength = this.angle && (this.angle % 360 ? this.angle % 360 : 360),
                 angleStart = this.angleOffset,
                 angleHalf = angleStart + angleLength / 2,
                 angleEnd = angleStart + angleLength,
                 drawer = this.getDrawer();
 
-            drawer.moveTo( Point.fromPolar( from, angleStart ) );
+            drawer.moveTo(Point.fromPolar(from, angleStart));
 
-            drawer.lineTo( Point.fromPolar( to, angleStart ) );
+            drawer.lineTo(Point.fromPolar(to, angleStart));
 
-            if ( to ) {
-                drawer.carcTo( to, 0, 1, Point.fromPolar( to, angleHalf ) );
-                drawer.carcTo( to, 0, 1, Point.fromPolar( to, angleEnd ) );
+            if (to) {
+                drawer.carcTo(to, 0, 1, Point.fromPolar(to, angleHalf));
+                drawer.carcTo(to, 0, 1, Point.fromPolar(to, angleEnd));
             }
 
-            drawer.lineTo( Point.fromPolar( from, angleEnd ) );
+            drawer.lineTo(Point.fromPolar(from, angleEnd));
 
-            if ( from ) {
-                drawer.carcTo( from, 0, 1, Point.fromPolar( from, angleHalf ) );
-                drawer.carcTo( from, 0, 1, Point.fromPolar( from, angleStart ) );
+            if (from) {
+                drawer.carcTo(from, 0, 1, Point.fromPolar(from, angleHalf));
+                drawer.carcTo(from, 0, 1, Point.fromPolar(from, angleStart));
             }
 
             drawer.close();
         }
-    } );
-} );
+    });
+});

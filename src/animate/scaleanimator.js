@@ -1,6 +1,5 @@
-define(function(require, exports, module) {
+define(function(require) {
     var Animator = require('animate/animator');
-    var Matrix = require('graphic/matrix');
 
     var ScaleAnimator = require('core/class').createClass('ScaleAnimator', {
         base: Animator,

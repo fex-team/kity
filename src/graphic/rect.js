@@ -1,34 +1,34 @@
-define( function ( require, exports, module ) {
+define(function(require, exports, module) {
 
     var RectUtils = {},
-        Utils = require( 'core/utils' ),
-        Point = require( 'graphic/point' );
+        Utils = require('core/utils'),
+        Point = require('graphic/point');
 
-    Utils.extend( RectUtils, {
+    Utils.extend(RectUtils, {
 
         //根据传递进来的width、height和radius属性，
         //获取最适合的radius值
-        formatRadius: function ( width, height, radius ) {
+        formatRadius: function(width, height, radius) {
 
-            var minValue = Math.floor( Math.min( width / 2, height / 2 ) );
+            var minValue = Math.floor(Math.min(width / 2, height / 2));
 
-            return Math.min( minValue, radius );
+            return Math.min(minValue, radius);
 
         },
 
 
-        getPathData: function ( x, y, width, height, radius ) {
+        getPathData: function(x, y, width, height, radius) {
 
             var pathData = null;
 
             //直角
-            if ( radius === 0 ) {
+            if (radius === 0) {
 
                 pathData = [
                     'M ' + x + ',' + y,
                     ' h ' + width,
                     ' v ' + height,
-                    ' h ' + ( -width ),
+                    ' h ' + (-width),
                     ' Z'
                 ];
 
@@ -40,32 +40,32 @@ define( function ( require, exports, module ) {
 
                 pathData = [
 
-                    'M ' + ( x + radius ) + ',' + y,
+                    'M ' + (x + radius) + ',' + y,
                     ' h ' + width,
                     ' a ' + radius + ' ' + radius + ' 0 0 1 ' + radius + ' ' + radius,
                     ' v ' + height,
-                    ' a ' + radius + ' ' + radius + ' 0 0 1 ' + ( -radius ) + ' ' + radius,
-                    ' h ' + ( -width ),
-                    ' a ' + radius + ' ' + radius + ' 0 0 1 ' + ( -radius ) + ' ' + ( -radius ),
-                    ' v ' + ( -height ),
-                    ' a ' + radius + ' ' + radius + ' 0 0 1 ' + radius + ' ' + ( -radius ),
+                    ' a ' + radius + ' ' + radius + ' 0 0 1 ' + (-radius) + ' ' + radius,
+                    ' h ' + (-width),
+                    ' a ' + radius + ' ' + radius + ' 0 0 1 ' + (-radius) + ' ' + (-radius),
+                    ' v ' + (-height),
+                    ' a ' + radius + ' ' + radius + ' 0 0 1 ' + radius + ' ' + (-radius),
                     ' Z'
                 ];
 
             }
 
 
-            return pathData.join( "" );
+            return pathData.join('');
 
         }
 
-    } );
+    });
 
-    return require( 'core/class' ).createClass( 'Rect', {
+    return require('core/class').createClass('Rect', {
 
-        base: require( 'graphic/path' ),
+        base: require('graphic/path'),
 
-        constructor: function ( width, height, x, y, radius ) {
+        constructor: function(width, height, x, y, radius) {
 
             this.callBase();
 
@@ -73,60 +73,60 @@ define( function ( require, exports, module ) {
             this.y = y || 0;
             this.width = width || 0;
             this.height = height || 0;
-            this.radius = RectUtils.formatRadius( this.width, this.height, radius || 0 );
+            this.radius = RectUtils.formatRadius(this.width, this.height, radius || 0);
 
             this.update();
 
         },
 
-        update: function () {
+        update: function() {
 
-            var pathData = RectUtils.getPathData( this.x, this.y, this.width, this.height, this.radius );
+            var pathData = RectUtils.getPathData(this.x, this.y, this.width, this.height, this.radius);
 
-            this.setPathData( pathData );
+            this.setPathData(pathData);
 
             return this;
 
         },
 
-        setWidth: function ( width ) {
+        setWidth: function(width) {
             this.width = width;
 
             return this.update();
         },
 
-        setHeight: function ( height ) {
+        setHeight: function(height) {
             this.height = height;
 
             return this.update();
         },
 
-        setSize: function ( width, height ) {
+        setSize: function(width, height) {
             this.width = width;
             this.height = height;
 
             return this.update();
         },
 
-        getRadius: function () {
+        getRadius: function() {
             return this.radius;
         },
 
-        setRadius: function ( radius ) {
+        setRadius: function(radius) {
             this.radius = radius;
             return this.update();
         },
 
-        getPosition: function () {
+        getPosition: function() {
             return new Point(
                 this.x,
                 this.y
             );
         },
 
-        setPosition: function ( x, y ) {
-            if ( arguments.length == 1 ) {
-                var p = Point.parse( arguments[ 0 ] );
+        setPosition: function(x, y) {
+            if (arguments.length == 1) {
+                var p = Point.parse(arguments[0]);
                 y = p.y;
                 x = p.x;
             }
@@ -136,34 +136,34 @@ define( function ( require, exports, module ) {
             return this.update();
         },
 
-        getWidth: function () {
+        getWidth: function() {
             return this.width;
         },
 
-        getHeight: function () {
+        getHeight: function() {
             return this.height;
         },
 
-        getPositionX: function () {
+        getPositionX: function() {
             return this.x;
         },
 
-        getPositionY: function () {
+        getPositionY: function() {
             return this.y;
         },
 
-        setPositionX: function ( x ) {
+        setPositionX: function(x) {
             this.x = x;
             return this.update();
         },
 
-        setPositionY: function ( y ) {
+        setPositionY: function(y) {
             this.y = y;
             return this.update();
         }
 
-    } );
+    });
 
 
 
-} );
+});

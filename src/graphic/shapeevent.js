@@ -2,38 +2,42 @@
  * 图形事件包装类
  * */
 
-define( function ( require, exprots, module ) {
+define(function(require, exprots, module) {
 
-    var Matrix = require( "graphic/matrix" ),
-        Utils = require( "core/utils" ),
-        Point = require( 'graphic/point' );
+    var Matrix = require('graphic/matrix'),
+        Utils = require('core/utils'),
+        Point = require('graphic/point');
 
-    return require( 'core/class' ).createClass( 'ShapeEvent', {
+    return require('core/class').createClass('ShapeEvent', {
 
-        constructor: function ( event ) {
+        constructor: function(event) {
 
             var target = null;
 
             // dom 事件封装对象
-            if ( !Utils.isObject( event.target ) ) {
+            if (!Utils.isObject(event.target)) {
 
                 this.type = event.type;
 
                 target = event.target;
 
                 // use标签有特殊属性， 需要区别对待
-                if ( target.correspondingUseElement ) {
+                if (target.correspondingUseElement) {
 
                     target = target.correspondingUseElement;
 
                 }
 
                 this.originEvent = event;
-                this.targetShape = target.shape || target.paper || event.currentTarget && ( event.currentTarget.shape || event.currentTarget.paper );
+                this.targetShape =
+                    target.shape ||
+                    target.paper ||
+                    event.currentTarget &&
+                    (event.currentTarget.shape || event.currentTarget.paper);
 
-                if ( event.__kity_param ) {
+                if (event._kityParam) {
 
-                    Utils.extend( this, event.__kity_param );
+                    Utils.extend(this, event._kityParam);
 
                 }
 
@@ -41,21 +45,21 @@ define( function ( require, exprots, module ) {
                 // 普通事件封装对象
             } else {
 
-                Utils.extend( this, event );
+                Utils.extend(this, event);
 
             }
 
         },
 
-        preventDefault: function () {
+        preventDefault: function() {
 
             var evt = this.originEvent;
 
-            if ( !evt ) {
+            if (!evt) {
                 return true;
             }
 
-            if ( evt.preventDefault ) {
+            if (evt.preventDefault) {
 
                 evt.preventDefault();
 
@@ -72,14 +76,14 @@ define( function ( require, exprots, module ) {
         },
 
         //当前鼠标事件在用户坐标系中点击的点的坐标位置
-        getPosition: function ( refer, touch_index ) {
+        getPosition: function(refer, touchIndex) {
 
-            if ( !this.originEvent ) {
+            if (!this.originEvent) {
                 return null;
             }
 
             var eventClient = this.originEvent.touches ?
-                this.originEvent.touches[ touch_index || 0 ] :
+                this.originEvent.touches[touchIndex || 0] :
                 this.originEvent;
 
             var clientX = eventClient && eventClient.clientX || 0,
@@ -88,21 +92,21 @@ define( function ( require, exprots, module ) {
 
                 // 鼠标位置在目标对象上的坐标
                 // 基于屏幕坐标算
-                point = Matrix.transformPoint( clientX, clientY, node.getScreenCTM().inverse() );
+                point = Matrix.transformPoint(clientX, clientY, node.getScreenCTM().inverse());
 
-            return Matrix.getCTM( this.targetShape, refer || 'view' ).transformPoint( point );
+            return Matrix.getCTM(this.targetShape, refer || 'view').transformPoint(point);
 
         },
 
-        stopPropagation: function () {
+        stopPropagation: function() {
 
             var evt = this.originEvent;
 
-            if ( !evt ) {
+            if (!evt) {
                 return true;
             }
 
-            if ( evt.stopPropagation ) {
+            if (evt.stopPropagation) {
 
                 evt.stopPropagation();
 
@@ -114,6 +118,6 @@ define( function ( require, exprots, module ) {
 
         }
 
-    } );
+    });
 
-} );
+});

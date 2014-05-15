@@ -1,35 +1,34 @@
-define( function ( require, exports, module ) {
+define(function(require, exports, module) {
     var Class = require('core/class');
     var Shape = require('graphic/shape');
 
-    var Clip = Class.createClass( "Clip", {
+    var Clip = Class.createClass('Clip', {
 
         base: Shape,
-        mixins: [ require( "graphic/shapecontainer" ) ],
+        mixins: [require('graphic/shapecontainer')],
 
-        constructor: function () {
+        constructor: function() {
 
-            this.callBase( 'clipPath' );
+            this.callBase('clipPath');
 
         },
 
-        clip: function ( shape ) {
+        clip: function(shape) {
 
-            shape.getNode().setAttribute( "clip-path", "url(#"+ this.getId() +")" );
+            shape.getNode().setAttribute('clip-path', 'url(#' + this.getId() + ')');
             return this;
 
         }
 
-    } );
+    });
 
-    Class.extendClass( Shape, {
-        clipWith: function( clip ) {
-            clip.clip( this );
+    Class.extendClass(Shape, {
+        clipWith: function(clip) {
+            clip.clip(this);
             return this;
         }
     });
 
     return Clip;
 
-} );
-
+});

@@ -10,21 +10,21 @@
  * TODO:
  *     Mixin 构造函数调用支持
  */
-define( function ( require, exports ) {
+define(function(require, exports) {
 
     // just to bind context
-    Function.prototype.bind = Function.prototype.bind || function ( thisObj ) {
-        var args = Array.prototype.slice.call( arguments, 1 );
-        return this.apply( thisObj, args );
+    Function.prototype.bind = Function.prototype.bind || function(thisObj) {
+        var args = Array.prototype.slice.call(arguments, 1);
+        return this.apply(thisObj, args);
     };
 
-    var config = require( 'core/config' );
+    var config = require('core/config');
 
     // 方便调试查看
-    if ( config.debug ) {
+    if (config.debug) {
         var origin = Object.prototype.toString;
-        Object.prototype.toString = function () {
-            return this.__KityClassName || origin.call( this );
+        Object.prototype.toString = function() {
+            return this.__KityClassName || origin.call(this);
         };
     }
 
@@ -32,60 +32,56 @@ define( function ( require, exports ) {
     function Class() {}
     Class.__KityClassName = 'Class';
 
-    function getCallerClass( instance, caller ) {
-        var currentClass = instance.constructor;
-    }
-
     // 提供 base 调用支持
-    Class.prototype.base = function ( name ) {
+    Class.prototype.base = function(name) {
         var caller = arguments.callee.caller;
-        var method = caller.__KityMethodClass.__KityBaseClass.prototype[ name ];
-        return method.apply( this, Array.prototype.slice.call( arguments, 1 ) );
+        var method = caller.__KityMethodClass.__KityBaseClass.prototype[name];
+        return method.apply(this, Array.prototype.slice.call(arguments, 1));
     };
 
     // 直接调用 base 类的同名方法
-    Class.prototype.callBase = function () {
+    Class.prototype.callBase = function() {
         var caller = arguments.callee.caller;
-        var method = caller.__KityMethodClass.__KityBaseClass.prototype[ caller.__KityMethodName ];
-        return method.apply( this, arguments );
+        var method = caller.__KityMethodClass.__KityBaseClass.prototype[caller.__KityMethodName];
+        return method.apply(this, arguments);
     };
 
-    Class.prototype.mixin = function ( name ) {
+    Class.prototype.mixin = function(name) {
         var caller = arguments.callee.caller;
         var mixins = caller.__KityMethodClass.__KityMixins;
-        if ( !mixins ) {
+        if (!mixins) {
             return this;
         }
-        var method = mixins[ name ];
-        return method.apply( this, Array.prototype.slice.call( arguments, 1 ) );
+        var method = mixins[name];
+        return method.apply(this, Array.prototype.slice.call(arguments, 1));
     };
 
-    Class.prototype.callMixin = function () {
+    Class.prototype.callMixin = function() {
         var caller = arguments.callee.caller;
         var methodName = caller.__KityMethodName;
         var mixins = caller.__KityMethodClass.__KityMixins;
-        if ( !mixins ) {
+        if (!mixins) {
             return this;
         }
-        var method = mixins[ methodName ];
-        if ( methodName == 'constructor' ) {
-            for ( var i = 0, l = method.length; i < l; i++ ) {
-                method[ i ].call( this );
+        var method = mixins[methodName];
+        if (methodName == 'constructor') {
+            for (var i = 0, l = method.length; i < l; i++) {
+                method[i].call(this);
             }
             return this;
         } else {
-            return method.apply( this, arguments );
+            return method.apply(this, arguments);
         }
     };
 
-    Class.prototype.pipe = function ( fn ) {
-        if ( typeof ( fn ) == 'function' ) {
-            fn.call( this, this );
+    Class.prototype.pipe = function(fn) {
+        if (typeof(fn) == 'function') {
+            fn.call(this, this);
         }
         return this;
     };
 
-    Class.prototype.getType = function () {
+    Class.prototype.getType = function() {
         return this.__KityClassName;
     };
 
@@ -95,36 +91,29 @@ define( function ( require, exports ) {
 
     // 检查基类是否调用了父类的构造函数
     // 该检查是弱检查，假如调用的代码被注释了，同样能检查成功（这个特性可用于知道建议调用，但是出于某些原因不想调用的情况）
-    function checkBaseConstructorCall( targetClass, classname ) {
+    function checkBaseConstructorCall(targetClass, classname) {
         var code = targetClass.toString();
-        if ( !/this\.callBase/.test( code ) ) {
-            throw new Error( classname + ' : 类构造函数没有调用父类的构造函数！为了安全，请调用父类的构造函数' );
+        if (!/this\.callBase/.test(code)) {
+            throw new Error(classname + ' : 类构造函数没有调用父类的构造函数！为了安全，请调用父类的构造函数');
         }
     }
 
-    function checkMixinConstructorCall( targetClass, classname ) {
-        var code = targetClass.toString();
-        if ( !/this\.callMixin/.test( code ) ) {
-            throw new Error( classname + ' : 类构造函数没有调用父类的构造函数！为了安全，请调用父类的构造函数' );
-        }
-    }
+    var KITY_INHERIT_FLAG = '__KITY_INHERIT_FLAG_' + (+new Date());
 
-    var KITY_INHERIT_FLAG = '__KITY_INHERIT_FLAG_' + ( +new Date() );
-
-    function inherit( constructor, BaseClass, classname ) {
-        var KityClass = eval( '(function ' + classname + '( __inherit__flag ) {' +
+    function inherit(constructor, BaseClass, classname) {
+        var KityClass = eval('(function ' + classname + '( __inherit__flag ) {' +
             'if( __inherit__flag != KITY_INHERIT_FLAG ) {' +
             'KityClass.__KityConstructor.apply(this, arguments);' +
             '}' +
             'this.__KityClassName = KityClass.__KityClassName;' +
-            '})' );
+            '})');
         KityClass.__KityConstructor = constructor;
 
-        KityClass.prototype = new BaseClass( KITY_INHERIT_FLAG );
+        KityClass.prototype = new BaseClass(KITY_INHERIT_FLAG);
 
-        for ( var methodName in BaseClass.prototype ) {
-            if ( BaseClass.prototype.hasOwnProperty( methodName ) && methodName.indexOf( '__Kity' ) !== 0 ) {
-                KityClass.prototype[ methodName ] = BaseClass.prototype[ methodName ];
+        for (var methodName in BaseClass.prototype) {
+            if (BaseClass.prototype.hasOwnProperty(methodName) && methodName.indexOf('__Kity') !== 0) {
+                KityClass.prototype[methodName] = BaseClass.prototype[methodName];
             }
         }
 
@@ -133,8 +122,8 @@ define( function ( require, exports ) {
         return KityClass;
     }
 
-    function mixin( NewClass, mixins ) {
-        if ( false === mixins instanceof Array ) {
+    function mixin(NewClass, mixins) {
+        if (false === mixins instanceof Array) {
             return NewClass;
         }
 
@@ -145,18 +134,18 @@ define( function ( require, exports ) {
             constructor: []
         };
 
-        for ( i = 0; i < length; i++ ) {
-            proto = mixins[ i ].prototype;
+        for (i = 0; i < length; i++) {
+            proto = mixins[i].prototype;
 
-            for ( method in proto ) {
-                if ( false === proto.hasOwnProperty( method ) || method.indexOf( '__Kity' ) === 0 ) {
+            for (method in proto) {
+                if (false === proto.hasOwnProperty(method) || method.indexOf('__Kity') === 0) {
                     continue;
                 }
-                if ( method === 'constructor' ) {
+                if (method === 'constructor') {
                     // constructor 特殊处理
-                    NewClass.__KityMixins.constructor.push( proto[ method ] );
+                    NewClass.__KityMixins.constructor.push(proto[method]);
                 } else {
-                    NewClass.prototype[ method ] = NewClass.__KityMixins[ method ] = proto[ method ];
+                    NewClass.prototype[method] = NewClass.__KityMixins[method] = proto[method];
                 }
             }
         }
@@ -164,15 +153,15 @@ define( function ( require, exports ) {
         return NewClass;
     }
 
-    function extend( BaseClass, extension ) {
-        if ( extension.__KityClassName ) {
+    function extend(BaseClass, extension) {
+        if (extension.__KityClassName) {
             extension = extension.prototype;
         }
-        for ( var methodName in extension ) {
-            if ( extension.hasOwnProperty( methodName ) &&
-                methodName.indexOf( '__Kity' ) &&
-                methodName != 'constructor' ) {
-                var method = BaseClass.prototype[ methodName ] = extension[ methodName ];
+        for (var methodName in extension) {
+            if (extension.hasOwnProperty(methodName) &&
+                methodName.indexOf('__Kity') &&
+                methodName != 'constructor') {
+                var method = BaseClass.prototype[methodName] = extension[methodName];
                 method.__KityMethodClass = BaseClass;
                 method.__KityMethodName = methodName;
             }
@@ -180,88 +169,34 @@ define( function ( require, exports ) {
         return BaseClass;
     }
 
-    Class.prototype._accessProperty = function () {
-        return this._propertyRawData || ( this._propertyRawData = {} );
+    Class.prototype._accessProperty = function() {
+        return this._propertyRawData || (this._propertyRawData = {});
     };
 
-    function upperCamael( name ) {
-        return name.substr( 0, 1 ).toUpperCase() + name.substr( 1 );
-    }
-
-    function generateGetMethodFor( classProto, name, propDefine ) {
-        var methodName = ( propDefine.bool ? 'is' : 'get' ) + upperCamael( name ),
-            index;
-        if ( propDefine instanceof Array && ~propDefine.indexOf( 'get' ) ) {
-
-        }
-        if ( typeof ( get ) == 'function' ) {
-            classProto[ methodName ] = function () {
-                return get( this._accessProperty()[ name ] );
-            };
-        } else {
-            classProto[ methodName ] = function () {
-                var p = this._accessProperty();
-                return name in p ? p[ name ] : ( p[ name ] = 'get' );
-            };
-        }
-    }
-
-    function generateSetMethodFor( classProto, name, set ) {
-        var methodName = 'set' + name.substr( 0, 1 ).toUpperCase() + name.substr( 1 );
-        if ( typeof ( set ) == 'function' ) {
-            classProto[ methodName ] = function () {
-                var args = Array.prototype.slice.call( arguments );
-                var p = this._accessProperty();
-                args.unshift( function ( value ) {
-                    p[ name ] = value;
-                } );
-                var ret = set.apply( this, args );
-                return ret !== undefined && set.chain ? this : ret;
-            };
-        } else {
-            classProto[ methodName ] = function ( value ) {
-                this._accessProperty()[ name ] = value;
-                return this;
-            };
-        }
-    }
-
-    function generatePropertyFor( classProto, defines ) {
-        var name, propDefine;
-        for ( name in defines ) {
-            if ( !defines.hasOwnProperty( name ) || typeof ( defines[ name ] ) == 'function' ) {
-                continue;
-            }
-            propDefine = defines[ name ];
-            generateGetMethodFor( classProto, name, propDefine );
-            generateSetMethodFor( classProto, name, propDefine );
-        }
-    }
-
-    exports.createClass = function ( classname, defines ) {
+    exports.createClass = function(classname, defines) {
         var constructor, NewClass, BaseClass;
 
-        if ( arguments.length === 1 ) {
-            defines = arguments[ 0 ];
+        if (arguments.length === 1) {
+            defines = arguments[0];
             classname = 'AnonymousClass';
         }
 
         BaseClass = defines.base || Class;
 
-        if ( defines.hasOwnProperty( 'constructor' ) ) {
+        if (defines.hasOwnProperty('constructor')) {
             constructor = defines.constructor;
-            if ( BaseClass != Class ) {
-                checkBaseConstructorCall( constructor, classname );
+            if (BaseClass != Class) {
+                checkBaseConstructorCall(constructor, classname);
             }
         } else {
-            constructor = function () {
-                this.callBase.apply( this, arguments );
-                this.callMixin.apply( this, arguments );
+            constructor = function() {
+                this.callBase.apply(this, arguments);
+                this.callMixin.apply(this, arguments);
             };
         }
 
-        NewClass = inherit( constructor, BaseClass, classname );
-        NewClass = mixin( NewClass, defines.mixins );
+        NewClass = inherit(constructor, BaseClass, classname);
+        NewClass = mixin(NewClass, defines.mixins);
 
         NewClass.__KityClassName = constructor.__KityClassName = classname;
         NewClass.__KityBaseClass = constructor.__KityBaseClass = BaseClass;
@@ -274,13 +209,11 @@ define( function ( require, exports ) {
         delete defines.constructor;
         delete defines.base;
 
-        generatePropertyFor( NewClass, defines );
-        
-        NewClass = extend( NewClass, defines );
+        NewClass = extend(NewClass, defines);
 
         return NewClass;
     };
 
     exports.extendClass = extend;
 
-} );
+});

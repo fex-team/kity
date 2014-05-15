@@ -1,13 +1,13 @@
-define( function ( require, exports, module ) {
+define(function(require, exports, module) {
 
-    var Utils = require( 'core/utils' ),
-        Point = require( 'graphic/point' );
+    var Utils = require('core/utils'),
+        Point = require('graphic/point');
 
-    return require( 'core/class' ).createClass( 'Ellipse', {
+    return require('core/class').createClass('Ellipse', {
 
-        base: require( 'graphic/path' ),
+        base: require('graphic/path'),
 
-        constructor: function ( rx, ry, cx, cy ) {
+        constructor: function(rx, ry, cx, cy) {
             this.callBase();
             this.rx = rx || 0;
             this.ry = ry || 0;
@@ -16,7 +16,7 @@ define( function ( require, exports, module ) {
             this.update();
         },
 
-        update: function () {
+        update: function() {
             var rx = this.rx,
                 ry = this.ry,
                 x1 = this.cx + rx,
@@ -24,61 +24,61 @@ define( function ( require, exports, module ) {
                 y = this.cy;
             var drawer = this.getDrawer();
             drawer.clear();
-            drawer.moveTo( x1, y );
-            drawer.arcTo( rx, ry, 0, 1, 1, x2, y );
-            drawer.arcTo( rx, ry, 0, 1, 1, x1, y );
+            drawer.moveTo(x1, y);
+            drawer.arcTo(rx, ry, 0, 1, 1, x2, y);
+            drawer.arcTo(rx, ry, 0, 1, 1, x1, y);
             return this;
         },
 
-        getRadius: function () {
+        getRadius: function() {
             return {
                 x: this.rx,
                 y: this.ry
             };
         },
 
-        getRadiusX: function () {
+        getRadiusX: function() {
             return this.rx;
         },
 
-        getRadiusY: function () {
+        getRadiusY: function() {
             return this.ry;
         },
 
-        getCenter: function () {
+        getCenter: function() {
             return new Point(
                 this.cx,
                 this.cy
             );
         },
 
-        getCenterX: function () {
+        getCenterX: function() {
             return this.cx;
         },
 
-        getCenterY: function () {
+        getCenterY: function() {
             return this.cy;
         },
 
-        setRadius: function ( rx, ry ) {
+        setRadius: function(rx, ry) {
             this.rx = rx;
             this.ry = ry;
             return this.update();
         },
 
-        setRadiusX: function ( rx ) {
+        setRadiusX: function(rx) {
             this.rx = rx;
             return this.update();
         },
 
-        setRadiusY: function ( ry ) {
+        setRadiusY: function(ry) {
             this.ry = ry;
             return this.update();
         },
 
-        setCenter: function ( cx, cy ) {
-            if ( arguments.length == 1 ) {
-                var p = Point.parse( arguments[ 0 ] );
+        setCenter: function(cx, cy) {
+            if (arguments.length == 1) {
+                var p = Point.parse(arguments[0]);
                 cx = p.x;
                 cy = p.y;
             }
@@ -87,16 +87,16 @@ define( function ( require, exports, module ) {
             return this.update();
         },
 
-        setCenterX: function ( cx ) {
+        setCenterX: function(cx) {
             this.cx = cx;
             return this.update();
         },
 
-        setCenterY: function ( cy ) {
+        setCenterY: function(cy) {
             this.cy = cy;
             return this.update();
         }
 
 
-    } );
-} );
+    });
+});

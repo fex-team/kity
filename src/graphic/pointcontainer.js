@@ -2,77 +2,77 @@
  * 点集合容器
  */
 
-define( function ( require, exports, module ) {
+define(function(require, exports, module) {
 
 
-    return require( "core/class" ).createClass( 'PointContainer', {
+    return require('core/class').createClass('PointContainer', {
 
-        base: require( "graphic/container" ),
+        base: require('graphic/container'),
 
-        constructor: function () {
+        constructor: function() {
             this.callBase();
         },
 
-        addPoint: function ( point, pos ) {
+        addPoint: function(point, pos) {
 
-            return this.addItem.apply( this, arguments );
-
-        },
-
-        prependPoint: function () {
-
-            return this.prependItem.apply( this, arguments );
+            return this.addItem.apply(this, arguments);
 
         },
 
-        appendPoint: function () {
+        prependPoint: function() {
 
-            return this.appendItem.apply( this, arguments );
-
-        },
-
-        removePoint: function ( pos ) {
-
-            return this.removeItem.apply( this, arguments );
+            return this.prependItem.apply(this, arguments);
 
         },
 
-        addPoints: function () {
+        appendPoint: function() {
 
-            return this.addItems.apply( this, arguments );
-
-        },
-
-        setPoints: function () {
-
-            return this.setItems.apply( this, arguments );
+            return this.appendItem.apply(this, arguments);
 
         },
 
-        getPoint: function () {
+        removePoint: function(pos) {
 
-            return this.getItem.apply( this, arguments );
-
-        },
-
-        getPoints: function () {
-
-            return this.getItems.apply( this, arguments );
+            return this.removeItem.apply(this, arguments);
 
         },
 
-        getFirstPoint: function () {
+        addPoints: function() {
 
-            return this.getFirstItem.apply( this, arguments );
+            return this.addItems.apply(this, arguments);
 
         },
 
-        getLastPoint: function () {
+        setPoints: function() {
 
-            return this.getLastItem.apply( this, arguments );
+            return this.setItems.apply(this, arguments);
+
+        },
+
+        getPoint: function() {
+
+            return this.getItem.apply(this, arguments);
+
+        },
+
+        getPoints: function() {
+
+            return this.getItems.apply(this, arguments);
+
+        },
+
+        getFirstPoint: function() {
+
+            return this.getFirstItem.apply(this, arguments);
+
+        },
+
+        getLastPoint: function() {
+
+            return this.getLastItem.apply(this, arguments);
 
         }
 
-    } );
+    });
 
-} );
+});

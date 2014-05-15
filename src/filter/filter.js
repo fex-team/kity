@@ -2,40 +2,40 @@
  * Filter 基类
  */
 
-define( function ( require, exports, module ) {
+define(function(require, exports, module) {
 
-    var svg = require( "graphic/svg" );
-    var Class = require( 'core/class' );
+    var svg = require('graphic/svg');
+    var Class = require('core/class');
 
-    var Filter = Class.createClass( "Filter", {
+    var Filter = Class.createClass('Filter', {
 
-        mixins: [ require( "filter/effectcontainer" ) ],
+        mixins: [require('filter/effectcontainer')],
 
-        constructor: function ( x, y, width, height ) {
+        constructor: function(x, y, width, height) {
 
-            this.node = svg.createNode( 'filter' );
+            this.node = svg.createNode('filter');
 
-            if ( x !== undefined ) {
-                this.set( 'x', x );
+            if (x !== undefined) {
+                this.set('x', x);
             }
-            if ( y !== undefined ) {
-                this.set( 'y', y );
+            if (y !== undefined) {
+                this.set('y', y);
             }
-            if ( width !== undefined ) {
-                this.set( 'width', width );
+            if (width !== undefined) {
+                this.set('width', width);
             }
-            if ( height !== undefined ) {
-                this.set( 'height', height );
+            if (height !== undefined) {
+                this.set('height', height);
             }
         },
 
-        getId: function () {
+        getId: function() {
 
             return this.id;
 
         },
 
-        setId: function ( id ) {
+        setId: function(id) {
 
             this.node.id = id;
 
@@ -43,40 +43,40 @@ define( function ( require, exports, module ) {
 
         },
 
-        set: function ( key, value ) {
+        set: function(key, value) {
 
-            this.node.setAttribute( key, value );
+            this.node.setAttribute(key, value);
 
             return this;
 
         },
 
-        get: function ( key ) {
+        get: function(key) {
 
-            return this.node.getAttribute( key );
+            return this.node.getAttribute(key);
 
         },
 
-        getNode: function () {
+        getNode: function() {
 
             return this.node;
 
         }
 
-    } );
-    
+    });
+
     var Shape = require('graphic/shape');
 
     Class.extendClass(Shape, {
-        applyFilter: function( filter ) {
-            var filterId = filter.get( 'id' );
+        applyFilter: function(filter) {
+            var filterId = filter.get('id');
 
-            if ( filterId ) {
-                this.node.setAttribute( "filter", 'url(#' + filterId + ')' );
+            if (filterId) {
+                this.node.setAttribute('filter', 'url(#' + filterId + ')');
             }
             return this;
         }
     });
 
     return Filter;
-} );
+});

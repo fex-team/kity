@@ -1,6 +1,5 @@
-define(function(require, exports, module) {
+define(function(require) {
     var Animator = require('animate/animator');
-    var Matrix = require('graphic/matrix');
 
     var OpacityAnimator = require('core/class').createClass('OpacityAnimator', {
         base: Animator,

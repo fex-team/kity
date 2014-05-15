@@ -2,51 +2,51 @@
  * 点对象抽象
  */
 
-define( function ( require, exports, module ) {
+define(function(require, exports, module) {
 
-    var Point = require( 'core/class' ).createClass( 'Point', {
+    var Point = require('core/class').createClass('Point', {
 
-        constructor: function ( x, y ) {
+        constructor: function(x, y) {
             this.x = x || 0;
             this.y = y || 0;
         },
 
-        offset: function ( dx, dy ) {
-            if(arguments.length == 1) {
+        offset: function(dx, dy) {
+            if (arguments.length == 1) {
                 dy = dx.y;
                 dx = dx.x;
             }
-            return new Point( this.x + dx, this.y + dy );
+            return new Point(this.x + dx, this.y + dy);
         },
 
-        valueOf: function () {
-            return [ this.x, this.y ];
+        valueOf: function() {
+            return [this.x, this.y];
         },
 
-        toString: function () {
-            return this.valueOf().join( ' ' );
+        toString: function() {
+            return this.valueOf().join(' ');
         }
-    } );
+    });
 
-    Point.fromPolar = function ( radius, angle, unit ) {
-        if ( unit != 'rad' ) {
+    Point.fromPolar = function(radius, angle, unit) {
+        if (unit != 'rad') {
             // deg to rad
             angle = angle / 180 * Math.PI;
         }
-        return new Point( radius * Math.cos( angle ), radius * Math.sin( angle ) );
+        return new Point(radius * Math.cos(angle), radius * Math.sin(angle));
     };
 
-    Point.parse = function ( unknown ) {
-        if ( unknown instanceof Point ) {
+    Point.parse = function(unknown) {
+        if (unknown instanceof Point) {
             return unknown;
         }
-        if ( typeof ( unknown ) == 'string' ) {
-            return Point.parse( unknown.split( /\s*[\s,]\s*/ ) );
+        if (typeof(unknown) == 'string') {
+            return Point.parse(unknown.split(/\s*[\s,]\s*/));
         }
-        if ( '0' in unknown && '1' in unknown ) {
-            return new Point( unknown[ 0 ], unknown[ 1 ] );
+        if ('0' in unknown && '1' in unknown) {
+            return new Point(unknown[0], unknown[1]);
         }
     };
 
     return Point;
-} );
+});

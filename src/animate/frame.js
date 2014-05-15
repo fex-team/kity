@@ -1,4 +1,4 @@
-define( function ( require, exports, module ) {
+define(function(require, exports) {
 
     // 原生动画帧方法 polyfill
     var requestAnimationFrame =
@@ -6,8 +6,8 @@ define( function ( require, exports, module ) {
         window.mozRequestAnimationFrame ||
         window.webkitRequestAnimationFrame ||
         window.msRequestAnimationFrame ||
-            function ( fn ) {
-                return setTimeout( fn, 1000 / 60 );
+        function(fn) {
+            return setTimeout(fn, 1000 / 60);
         };
 
     // 等待执行的帧的集合，这些帧的方法将在下个动画帧同步执行
@@ -18,9 +18,9 @@ define( function ( require, exports, module ) {
      *
      * 如果添加的帧是序列的第一个，至少有一个帧需要被执行，则下一个动画帧需要执行
      */
-    function pushFrame( frame ) {
-        if ( pendingFrames.push( frame ) === 1 ) {
-            requestAnimationFrame( executePendingFrames );
+    function pushFrame(frame) {
+        if (pendingFrames.push(frame) === 1) {
+            requestAnimationFrame(executePendingFrames);
         }
     }
 
@@ -30,8 +30,8 @@ define( function ( require, exports, module ) {
     function executePendingFrames() {
         var frames = pendingFrames;
         pendingFrames = [];
-        while ( frames.length ) {
-            executeFrame( frames.pop() );
+        while (frames.length) {
+            executeFrame(frames.pop());
         }
     }
 
@@ -61,33 +61,33 @@ define( function ( require, exports, module ) {
      *         表示下一帧继续执行。如果不调用该方法，将不会执行下一帧。
      *
      */
-    function requestFrame( action ) {
-        var frame = initFrame( action );
-        pushFrame( frame );
+    function requestFrame(action) {
+        var frame = initFrame(action);
+        pushFrame(frame);
         return frame;
     }
 
     /**
      * 释放一个已经请求过的帧，如果该帧在等待集合里，将移除，下个动画帧不会执行释放的帧
      */
-    function releaseFrame( frame ) {
-        var index = pendingFrames.indexOf( frame );
-        if ( ~index ) {
-            pendingFrames.splice( index, 1 );
+    function releaseFrame(frame) {
+        var index = pendingFrames.indexOf(frame);
+        if (~index) {
+            pendingFrames.splice(index, 1);
         }
     }
 
     /**
      * 初始化一个帧，主要用于后续计算
      */
-    function initFrame( action ) {
+    function initFrame(action) {
         var frame = {
             index: 0,
             time: +new Date(),
             elapsed: 0,
             action: action,
-            next: function () {
-                pushFrame( frame );
+            next: function() {
+                pushFrame(frame);
             }
         };
         return frame;
@@ -96,30 +96,30 @@ define( function ( require, exports, module ) {
     /**
      * 执行一个帧动作
      */
-    function executeFrame( frame ) {
+    function executeFrame(frame) {
         // 当前帧时间错
         var time = +new Date();
 
         // 当上一帧到当前帧经过的时间
         var dur = time - frame.time;
 
-        // 
+        //
         // http://stackoverflow.com/questions/13133434/requestanimationframe-detect-stop
         // 浏览器最小化或切换标签，requestAnimationFrame 不会执行。
         // 检测时间超过 200 ms（频率小于 5Hz ） 判定为计时器暂停，重置为一帧长度
-        // 
-        if ( dur > 200 ) {
+        //
+        if (dur > 200) {
             dur = 1000 / 60;
         }
 
         frame.dur = dur;
         frame.elapsed += dur;
         frame.time = time;
-        frame.action.call( null, frame );
+        frame.action.call(null, frame);
         frame.index++;
     }
 
     // 暴露
     exports.requestFrame = requestFrame;
     exports.releaseFrame = releaseFrame;
-} );
+});

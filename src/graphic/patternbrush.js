@@ -1,4 +1,4 @@
-define(function (require, exports, module) {
+define(function(require, exports, module) {
     var DefBrush = require('graphic/defbrush');
     var ShapeContainer = require('graphic/shapecontainer');
     var svg = require('graphic/svg');
@@ -6,7 +6,7 @@ define(function (require, exports, module) {
     return require('core/class').createClass('PatternBrush', {
         base: DefBrush,
         mixins: [ShapeContainer],
-        constructor: function () {
+        constructor: function() {
             this.callBase('pattern');
             this.node.setAttribute('patternUnits', 'userSpaceOnUse');
         },
@@ -20,20 +20,20 @@ define(function (require, exports, module) {
             this.node.setAttribute('y', y);
             return this;
         },
-        setWidth: function (width) {
+        setWidth: function(width) {
             this.width = width;
             this.node.setAttribute('width', width);
             return this;
         },
-        setHeight: function (height) {
+        setHeight: function(height) {
             this.height = height;
             this.node.setAttribute('height', height);
             return this;
         },
-        getWidth: function () {
+        getWidth: function() {
             return this.width;
         },
-        getHeight: function () {
+        getHeight: function() {
             return this.height;
         }
     });

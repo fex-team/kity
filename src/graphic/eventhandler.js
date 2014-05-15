@@ -21,8 +21,8 @@ define(function(require, exports, module) {
         window.CustomEvent = CustomEvent;
     })();
 
-    var Utils = require("core/utils"),
-        ShapeEvent = require("graphic/shapeevent");
+    var Utils = require('core/utils'),
+        ShapeEvent = require('graphic/shapeevent');
 
     // 内部处理器缓存
     var INNER_HANDLER_CACHE = {},
@@ -34,7 +34,7 @@ define(function(require, exports, module) {
     // 添加事件统一入口
     function _addEvent(type, handler, isOnce) {
 
-        isOnce = !! isOnce;
+        isOnce = !!isOnce;
 
         if (Utils.isString(type)) {
             type = type.match(/\S+/g);
@@ -156,7 +156,7 @@ define(function(require, exports, module) {
 
             // 绑定对应类型的事件
             // dom对象利用dom event进行处理， 非dom对象， 由消息分发机制处理
-            if ( !! node) {
+            if (!!node) {
                 bindDomEvent(node, type, INNER_HANDLER_CACHE[eid][type]);
 
             }
@@ -177,7 +177,7 @@ define(function(require, exports, module) {
 
         } else {
 
-            node.attachEvent("on" + type, handler);
+            node.attachEvent('on' + type, handler);
 
         }
 
@@ -206,7 +206,7 @@ define(function(require, exports, module) {
             cancelable: true
         });
 
-        event.__kity_param = params;
+        event._kityParam = params;
 
         node.dispatchEvent(event);
 
@@ -243,7 +243,7 @@ define(function(require, exports, module) {
     }
 
     // 对外接口
-    return require("core/class").createClass("EventHandler", {
+    return require('core/class').createClass('EventHandler', {
 
         constructor: function() {
 

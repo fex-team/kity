@@ -1,14 +1,14 @@
-define( function ( require, exports, module ) {
+define(function(require, exports, module) {
 
-    return require( 'core/class' ).createClass( 'Polyline', {
+    return require('core/class').createClass('Polyline', {
 
-        base: require( 'graphic/poly' ),
+        base: require('graphic/poly'),
 
-        constructor: function ( points ) {
+        constructor: function(points) {
 
-            this.callBase( points );
+            this.callBase(points);
 
         }
 
-    } );
-} );
+    });
+});

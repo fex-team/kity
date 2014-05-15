@@ -2,24 +2,24 @@
  * 通过点来决定图形的公共父类
  */
 
-define( function ( require, exports, module ) {
+define(function(require, exports, module) {
 
-    var Utils = require("core/utils");
+    var Utils = require('core/utils');
 
-    return require( 'core/class' ).createClass( 'Poly', {
+    return require('core/class').createClass('Poly', {
 
-        base: require( 'graphic/path' ),
+        base: require('graphic/path'),
 
-        mixins: [ require("graphic/pointcontainer") ],
+        mixins: [require('graphic/pointcontainer')],
 
-        constructor: function ( points, closeable ) {
+        constructor: function(points, closeable) {
 
             this.callBase();
 
             //是否可闭合
             this.closeable = !!closeable;
 
-            this.setPoints( points || [] );
+            this.setPoints(points || []);
 
             this.changeable = true;
             this.update();
@@ -27,36 +27,36 @@ define( function ( require, exports, module ) {
         },
 
         //当点集合发生变化时采取的动作
-        onContainerChanged: function () {
+        onContainerChanged: function() {
 
-            if ( this.changeable ) {
+            if (this.changeable) {
                 this.update();
             }
 
         },
 
-        update: function () {
+        update: function() {
 
             var drawer = this.getDrawer(),
                 points = this.getPoints();
 
             drawer.clear();
 
-            if ( !points.length ) {
+            if (!points.length) {
                 return this;
             }
 
-            drawer.moveTo( points[0] );
+            drawer.moveTo(points[0]);
 
-            for ( var i = 1, point, len = points.length; i < len; i++ ) {
+            for (var i = 1, point, len = points.length; i < len; i++) {
 
-                point = points[ i ];
+                point = points[i];
 
-                drawer.lineTo( point );
+                drawer.lineTo(point);
 
             }
 
-            if ( this.closeable && points.length > 2 ) {
+            if (this.closeable && points.length > 2) {
                 drawer.close();
             }
 
@@ -64,6 +64,6 @@ define( function ( require, exports, module ) {
 
         }
 
-    } );
+    });
 
-} );
+});

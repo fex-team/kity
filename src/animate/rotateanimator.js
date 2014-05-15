@@ -1,6 +1,5 @@
-define(function (require, exports, module) {
+define(function(require) {
     var Animator = require('animate/animator');
-    var Matrix = require('graphic/matrix');
 
     var RotateAnimator = require('core/class').createClass('RotateAnimator', {
         base: Animator,
@@ -20,12 +19,12 @@ define(function (require, exports, module) {
 
     require('core/class').extendClass(Shape, {
         fxRotate: function(deg, duration, easing, delay, callback) {
-            return this.animate( new RotateAnimator(deg), duration, easing, delay, callback );
+            return this.animate(new RotateAnimator(deg), duration, easing, delay, callback);
         },
         fxRotateAnchor: function(deg, ax, ay, duration, easing, delay, callback) {
-            return this.animate( new RotateAnimator(deg, ax, ay), duration, easing, delay, callback);
+            return this.animate(new RotateAnimator(deg, ax, ay), duration, easing, delay, callback);
         }
     });
 
     return RotateAnimator;
-} );
+});

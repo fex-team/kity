@@ -2,38 +2,37 @@
  * 蒙板
  */
 
-define( function ( require, exports, module ) {
+define(function(require, exports, module) {
 
-    var Class = require( 'core/class' );
-    var Shape = require( 'graphic/shape' );
+    var Class = require('core/class');
+    var Shape = require('graphic/shape');
 
-    var Mask = Class.createClass( "Mask", {
+    var Mask = Class.createClass('Mask', {
 
         base: Shape,
-        mixins: [ require( "graphic/shapecontainer" ) ],
+        mixins: [require('graphic/shapecontainer')],
 
-        constructor: function () {
+        constructor: function() {
 
-            this.callBase( 'mask' );
+            this.callBase('mask');
 
         },
 
-        mask: function ( shape ) {
+        mask: function(shape) {
 
-            shape.getNode().setAttribute( "mask", "url(#"+ this.getId() +")" );
+            shape.getNode().setAttribute('mask', 'url(#' + this.getId() + ')');
             return this;
 
         }
 
-    } );
+    });
 
-    Class.extendClass( Shape, {
-        maskWith: function( mask ) {
+    Class.extendClass(Shape, {
+        maskWith: function(mask) {
             mask.mask(this);
             return this;
         }
     });
 
     return Mask;
-} );
-
+});

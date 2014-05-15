@@ -2,30 +2,30 @@
  * 图形上的点抽象
  */
 
-define( function ( require, exports, module ) {
+define(function(require, exports, module) {
 
-    return require( 'core/class' ).createClass( 'ShapePoint', {
+    return require('core/class').createClass('ShapePoint', {
 
-        base: require( 'graphic/point' ),
+        base: require('graphic/point'),
 
-        constructor: function ( px, py ) {
+        constructor: function(px, py) {
 
-            this.callBase( px, py );
+            this.callBase(px, py);
 
         },
 
-        setX: function ( x ) {
+        setX: function(x) {
 
             return this.setPoint(x, this.y);
 
         },
 
-        setY: function ( y ) {
+        setY: function(y) {
 
             return this.setPoint(this.x, y);
         },
 
-        setPoint: function ( x, y ) {
+        setPoint: function(x, y) {
 
             this.x = x;
             this.y = y;
@@ -39,15 +39,15 @@ define( function ( require, exports, module ) {
             return this;
         },
 
-        update: function () {
+        update: function() {
 
-            if ( this.container && this.container.update ) {
+            if (this.container && this.container.update) {
                 this.container.update();
             }
-            
+
             return this;
         }
 
-    } );
+    });
 
-} );
+});

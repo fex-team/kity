@@ -3,25 +3,25 @@
  * 该类型的对象不存储任何内部属性， 所有操作都是针对该类对象所维护的节点进行的
  */
 
-define( function ( require, exports, module ) {
+define(function(require, exports, module) {
 
-    var svg = require( "graphic/svg"),
+    var svg = require('graphic/svg'),
 
-        Effect = require( "core/class" ).createClass( "Effect", {
+        Effect = require('core/class').createClass('Effect', {
 
-            constructor: function ( type ) {
+            constructor: function(type) {
 
-                this.node = svg.createNode( type );
+                this.node = svg.createNode(type);
 
             },
 
-            getId: function () {
+            getId: function() {
 
                 return this.node.id;
 
             },
 
-            setId: function ( id ) {
+            setId: function(id) {
 
                 this.node.id = id;
 
@@ -29,34 +29,34 @@ define( function ( require, exports, module ) {
 
             },
 
-            set: function ( key, value ) {
+            set: function(key, value) {
 
-                this.node.setAttribute( key, value );
+                this.node.setAttribute(key, value);
 
                 return this;
 
             },
 
-            get: function ( key ) {
+            get: function(key) {
 
-                return this.node.getAttribute( key );
+                return this.node.getAttribute(key);
 
             },
 
-            getNode: function () {
+            getNode: function() {
 
                 return this.node;
 
             },
 
             // 返回该效果的result
-            toString: function () {
-                return this.node.getAttribute( "result" ) || "";
+            toString: function() {
+                return this.node.getAttribute('result') || '';
             }
 
-        } );
+        });
 
-    require( "core/utils" ).extend( Effect, {
+    require('core/utils').extend(Effect, {
 
         // 特效名称常量
         NAME_GAUSSIAN_BLUR: 'feGaussianBlur',
@@ -73,8 +73,8 @@ define( function ( require, exports, module ) {
         INPUT_FILL_PAINT: 'FillPaint',
         INPUT_STROKE_PAINT: 'StrokePaint'
 
-    } );
+    });
 
     return Effect;
 
-} );
+});

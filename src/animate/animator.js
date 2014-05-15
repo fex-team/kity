@@ -1,4 +1,4 @@
-define(function(require, exports, module) {
+define(function(require) {
 
     function parseTime(str) {
         var value = parseFloat(str, 10);

@@ -2,34 +2,34 @@
  * 高斯模糊效果封装
  */
 
-define( function ( require, exports, module ) {
+define(function(require, exports, module) {
 
-    var Effect = require( "filter/effect/effect" ),
-        Utils = require( "core/utils" );
+    var Effect = require('filter/effect/effect'),
+        Utils = require('core/utils');
 
-    var CompositeEffect = require( "core/class" ).createClass( "CompositeEffect", {
+    var CompositeEffect = require('core/class').createClass('CompositeEffect', {
 
         base: Effect,
 
-        constructor: function ( operator, input, input2 ) {
+        constructor: function(operator, input, input2) {
 
-            this.callBase( Effect.NAME_COMPOSITE );
+            this.callBase(Effect.NAME_COMPOSITE);
 
-            this.set( "operator", Utils.getValue( operator, CompositeEffect.OPERATOR_OVER ) );
+            this.set('operator', Utils.getValue(operator, CompositeEffect.OPERATOR_OVER));
 
-            if ( input ) {
-                this.set( 'in', input );
+            if (input) {
+                this.set('in', input);
             }
 
-            if ( input2 ) {
-                this.set( 'in2', input2 );
+            if (input2) {
+                this.set('in2', input2);
             }
 
         }
 
-    } );
+    });
 
-    Utils.extend( CompositeEffect, {
+    Utils.extend(CompositeEffect, {
 
         // operator 常量
         OPERATOR_OVER: 'over',
@@ -39,8 +39,8 @@ define( function ( require, exports, module ) {
         OPERATOR_XOR: 'xor',
         OPERATOR_ARITHMETIC: 'arithmetic'
 
-    } );
+    });
 
     return CompositeEffect;
 
-} );
+});

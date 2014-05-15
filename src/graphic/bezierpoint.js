@@ -2,52 +2,52 @@
  * 贝塞尔点
  */
 
-define( function ( require, exports, module ) {
+define(function(require, exports, module) {
 
-    var ShapePoint = require( 'graphic/shapepoint' );
-    var Vector = require( 'graphic/vector' );
+    var ShapePoint = require('graphic/shapepoint');
+    var Vector = require('graphic/vector');
 
-    var BezierPoint = require( "core/class" ).createClass( 'BezierPoint', {
+    var BezierPoint = require('core/class').createClass('BezierPoint', {
 
-        constructor: function ( x, y, isSmooth ) {
+        constructor: function(x, y, isSmooth) {
 
             //顶点
-            this.vertex = new ShapePoint( x, y );
+            this.vertex = new ShapePoint(x, y);
 
             //控制点
-            this.forward = new ShapePoint( x, y );
-            this.backward = new ShapePoint( x, y );
+            this.forward = new ShapePoint(x, y);
+            this.backward = new ShapePoint(x, y);
 
             //是否平滑
-            this.setSmooth( ( isSmooth === undefined ) || isSmooth);
+            this.setSmooth((isSmooth === undefined) || isSmooth);
 
             this.setSymReflaction(true);
 
         },
 
-        clone: function () {
+        clone: function() {
 
             var newPoint = new BezierPoint(),
                 tmp = null;
 
             tmp = this.getVertex();
-            newPoint.setVertex( tmp.x, tmp.y );
+            newPoint.setVertex(tmp.x, tmp.y);
 
             tmp = this.getForward();
-            newPoint.setForward( tmp.x, tmp.y );
+            newPoint.setForward(tmp.x, tmp.y);
 
             tmp = this.getBackward();
-            newPoint.setBackward( tmp.x, tmp.y );
+            newPoint.setBackward(tmp.x, tmp.y);
 
-            newPoint.setSmooth( newPoint.isSmooth() );
+            newPoint.setSmooth(newPoint.isSmooth());
 
             return newPoint;
 
         },
 
-        setVertex: function ( x, y ) {
+        setVertex: function(x, y) {
 
-            this.vertex.setPoint( x, y );
+            this.vertex.setPoint(x, y);
 
             this.update();
 
@@ -55,7 +55,7 @@ define( function ( require, exports, module ) {
 
         },
 
-        moveTo: function ( x, y ) {
+        moveTo: function(x, y) {
 
             var oldForward = this.forward.getPoint(),
                 oldBackward = this.backward.getPoint(),
@@ -68,20 +68,20 @@ define( function ( require, exports, module ) {
                 };
 
             // 更新
-            this.forward.setPoint( oldForward.x + distance.left, oldForward.y + distance.top );
-            this.backward.setPoint( oldBackward.x + distance.left, oldBackward.y + distance.top );
-            this.vertex.setPoint( x, y );
+            this.forward.setPoint(oldForward.x + distance.left, oldForward.y + distance.top);
+            this.backward.setPoint(oldBackward.x + distance.left, oldBackward.y + distance.top);
+            this.vertex.setPoint(x, y);
 
             this.update();
 
         },
 
-        setForward: function ( x, y ) {
+        setForward: function(x, y) {
 
-            this.forward.setPoint( x, y );
+            this.forward.setPoint(x, y);
 
             //更新后置点
-            if(this.smooth) {
+            if (this.smooth) {
                 this.updateAnother(this.forward, this.backward);
             }
             this.update();
@@ -89,12 +89,12 @@ define( function ( require, exports, module ) {
 
         },
 
-        setBackward: function ( x, y ) {
+        setBackward: function(x, y) {
 
-            this.backward.setPoint( x, y );
+            this.backward.setPoint(x, y);
 
             //更新前置点
-            if(this.smooth) {
+            if (this.smooth) {
                 this.updateAnother(this.backward, this.forward);
             }
 
@@ -103,7 +103,7 @@ define( function ( require, exports, module ) {
 
         },
 
-        setSymReflaction: function( value ) {
+        setSymReflaction: function(value) {
             this.symReflaction = value;
         },
 
@@ -119,7 +119,7 @@ define( function ( require, exports, module ) {
             q.setPoint(v.x + vq.x, v.y + vq.y);
         },
 
-        setSmooth: function ( isSmooth ) {
+        setSmooth: function(isSmooth) {
 
             this.smooth = !!isSmooth;
 
@@ -127,41 +127,41 @@ define( function ( require, exports, module ) {
 
         },
 
-        getVertex: function () {
+        getVertex: function() {
 
             return this.vertex.getPoint();
 
         },
 
-        getForward: function () {
+        getForward: function() {
 
             return this.forward.getPoint();
 
         },
 
-        getBackward: function () {
+        getBackward: function() {
 
             return this.backward.getPoint();
 
         },
 
-        isSmooth: function () {
+        isSmooth: function() {
             return this.smooth;
         },
 
-        update: function () {
+        update: function() {
 
-            if ( !this.container ) {
+            if (!this.container) {
                 return this;
             }
 
             //新增参数 this， 把当前引起变化的点传递过去， 以便有需要的地方可以获取到引起变化的源
-            this.container.update && this.container.update( this );
+            if (this.container.update) this.container.update(this);
 
         }
 
-    } );
+    });
 
     return BezierPoint;
 
-} );
+});

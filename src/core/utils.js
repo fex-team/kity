@@ -1,71 +1,71 @@
-define( function ( require, exports, module ) {
+define(function() {
 
     var utils = {
-        each: function ( obj, iterator, context ) {
-            if ( obj === null ) {
+        each: function(obj, iterator, context) {
+            if (obj === null) {
                 return;
             }
-            if ( obj.length === +obj.length ) {
-                for ( var i = 0, l = obj.length; i < l; i++ ) {
-                    if ( iterator.call( context, obj[ i ], i, obj ) === false ) {
+            if (obj.length === +obj.length) {
+                for (var i = 0, l = obj.length; i < l; i++) {
+                    if (iterator.call(context, obj[i], i, obj) === false) {
                         return false;
                     }
                 }
             } else {
-                for ( var key in obj ) {
-                    if ( obj.hasOwnProperty( key ) ) {
-                        if ( iterator.call( context, obj[ key ], key, obj ) === false ) {
+                for (var key in obj) {
+                    if (obj.hasOwnProperty(key)) {
+                        if (iterator.call(context, obj[key], key, obj) === false) {
                             return false;
                         }
                     }
                 }
             }
         },
-        extend: function ( t, s ) {
+        extend: function(t) {
             var a = arguments,
-                notCover = this.isBoolean( a[ a.length - 1 ] ) ? a[ a.length - 1 ] : false,
-                len = this.isBoolean( a[ a.length - 1 ] ) ? a.length - 1 : a.length;
-            for ( var i = 1; i < len; i++ ) {
-                var x = a[ i ];
-                for ( var k in x ) {
-                    if ( !notCover || !t.hasOwnProperty( k ) ) {
-                        t[ k ] = x[ k ];
+                notCover = this.isBoolean(a[a.length - 1]) ? a[a.length - 1] : false,
+                len = this.isBoolean(a[a.length - 1]) ? a.length - 1 : a.length;
+            for (var i = 1; i < len; i++) {
+                var x = a[i];
+                for (var k in x) {
+                    if (!notCover || !t.hasOwnProperty(k)) {
+                        t[k] = x[k];
                     }
                 }
             }
             return t;
         },
-        clone: function ( obj ) {
+        clone: function(obj) {
             var cloned = {};
-            for ( var m in obj ) {
-                if ( obj.hasOwnProperty( m ) ) {
-                    cloned[ m ] = obj[ m ];
+            for (var m in obj) {
+                if (obj.hasOwnProperty(m)) {
+                    cloned[m] = obj[m];
                 }
             }
             return cloned;
         },
 
-        copy: function ( obj ) {
-            if ( typeof obj !== 'object' ) return obj;
-            if ( typeof obj === 'function' ) return null;
-            return JSON.parse( JSON.stringify( obj ) );
+        copy: function(obj) {
+            if (typeof obj !== 'object') return obj;
+            if (typeof obj === 'function') return null;
+            return JSON.parse(JSON.stringify(obj));
         },
 
-        getValue: function ( value, defaultValue ) {
+        getValue: function(value, defaultValue) {
 
             return value !== undefined ? value : defaultValue;
 
         },
 
-        flatten: function ( arr ) {
+        flatten: function(arr) {
             var result = [],
                 length = arr.length,
                 i;
-            for ( i = 0; i < length; i++ ) {
-                if ( arr[ i ] instanceof Array ) {
-                    result = result.concat( utils.flatten( arr[ i ] ) );
+            for (i = 0; i < length; i++) {
+                if (arr[i] instanceof Array) {
+                    result = result.concat(utils.flatten(arr[i]));
                 } else {
-                    result.push( arr[ i ] );
+                    result.push(arr[i]);
                 }
             }
             return result;
@@ -83,43 +83,43 @@ define( function ( require, exports, module ) {
          * @param  {Function} op
          * @return {Number|Object|Array}
          */
-        paralle: function ( v1, v2, op ) {
+        paralle: function(v1, v2, op) {
             var Class, field, index, value;
 
             // 是否数字
-            if ( false === isNaN( parseFloat( v1 ) ) ) {
-                return op( v1, v2 );
+            if (false === isNaN(parseFloat(v1))) {
+                return op(v1, v2);
             }
 
             // 数组
-            if ( v1 instanceof Array ) {
+            if (v1 instanceof Array) {
                 value = [];
-                for ( index = 0; index < v1.length; index++ ) {
-                    value.push( utils.paralle( v1[ index ], v2[ index ], op ) );
+                for (index = 0; index < v1.length; index++) {
+                    value.push(utils.paralle(v1[index], v2[index], op));
                 }
                 return value;
             }
 
             // 对象
-            if ( v1 instanceof Object ) {
+            if (v1 instanceof Object) {
                 value = {};
 
                 // 如果值是一个支持原始表示的实例，获取其原始表示
                 Class = v1.getClass && v1.getClass();
-                if ( Class && Class.parse ) {
+                if (Class && Class.parse) {
                     v1 = v1.valueOf();
                     v2 = v2.valueOf();
                 }
 
-                for ( field in v1 ) {
-                    if ( v1.hasOwnProperty( field ) && v2.hasOwnProperty( field ) ) {
-                        value[ field ] = utils.paralle( v1[ field ], v2[ field ], op );
+                for (field in v1) {
+                    if (v1.hasOwnProperty(field) && v2.hasOwnProperty(field)) {
+                        value[field] = utils.paralle(v1[field], v2[field], op);
                     }
                 }
 
                 // 如果值是一个支持原始表示的实例，用其原始表示的结果重新封箱
-                if ( Class && Class.parse ) {
-                    value = Class.parse( value );
+                if (Class && Class.parse) {
+                    value = Class.parse(value);
                 }
 
                 return value;
@@ -131,18 +131,18 @@ define( function ( require, exports, module ) {
         /**
          * 创建 op 操作的一个平行化版本
          */
-        parallelize: function ( op ) {
-            return function ( v1, v2 ) {
-                return utils.paralle( v1, v2, op );
+        parallelize: function(op) {
+            return function(v1, v2) {
+                return utils.paralle(v1, v2, op);
             };
         }
     };
 
-    utils.each( [ 'String', 'Function', 'Array', 'Number', 'RegExp', 'Object', 'Boolean' ], function ( v ) {
-        utils[ 'is' + v ] = function ( obj ) {
-            return Object.prototype.toString.apply( obj ) == '[object ' + v + ']';
+    utils.each(['String', 'Function', 'Array', 'Number', 'RegExp', 'Object', 'Boolean'], function(v) {
+        utils['is' + v] = function(obj) {
+            return Object.prototype.toString.apply(obj) == '[object ' + v + ']';
         };
-    } );
+    });
 
     return utils;
-} );
+});
