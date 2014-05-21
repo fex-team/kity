@@ -14,49 +14,6 @@ define(function(require, exports, module) {
 
             return Math.min(minValue, radius);
 
-        },
-
-
-        getPathData: function(x, y, width, height, radius) {
-
-            var pathData = null;
-
-            //直角
-            if (radius === 0) {
-
-                pathData = [
-                    'M ' + x + ',' + y,
-                    ' h ' + width,
-                    ' v ' + height,
-                    ' h ' + (-width),
-                    ' Z'
-                ];
-
-                //圆角
-            } else {
-
-                width -= 2 * radius;
-                height -= 2 * radius;
-
-                pathData = [
-
-                    'M ' + (x + radius) + ',' + y,
-                    ' h ' + width,
-                    ' a ' + radius + ' ' + radius + ' 0 0 1 ' + radius + ' ' + radius,
-                    ' v ' + height,
-                    ' a ' + radius + ' ' + radius + ' 0 0 1 ' + (-radius) + ' ' + radius,
-                    ' h ' + (-width),
-                    ' a ' + radius + ' ' + radius + ' 0 0 1 ' + (-radius) + ' ' + (-radius),
-                    ' v ' + (-height),
-                    ' a ' + radius + ' ' + radius + ' 0 0 1 ' + radius + ' ' + (-radius),
-                    ' Z'
-                ];
-
-            }
-
-
-            return pathData.join('');
-
         }
 
     });
@@ -80,10 +37,42 @@ define(function(require, exports, module) {
         },
 
         update: function() {
+            var x = this.x,
+                y = this.y,
+                w = this.width,
+                h = this.height,
+                r = this.radius;
+            var drawer = this.getDrawer().redraw();
 
-            var pathData = RectUtils.getPathData(this.x, this.y, this.width, this.height, this.radius);
+            if (!r) {
 
-            this.setPathData(pathData);
+                // 直角
+                drawer.push('M', x, y);
+                drawer.push('h', w);
+                drawer.push('v', h);
+                drawer.push('h', -w);
+                drawer.push('z');
+
+            } else {
+
+                //圆角
+                w -= 2 * r;
+                h -= 2 * r;
+
+                drawer.push('M', x + r, y);
+                drawer.push('h', w);
+                drawer.push('a', r, r, 0, 0, 1, r, r);
+                drawer.push('v', h);
+                drawer.push('a', r, r, 0, 0, 1, -r, r);
+                drawer.push('h', -w);
+                drawer.push('a', r, r, 0, 0, 1, -r, -r);
+                drawer.push('v', -h);
+                drawer.push('a', r, r, 0, 0, 1, r, -r);
+                drawer.push('z');
+
+            }
+
+            drawer.done();
 
             return this;
 

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Animate</title>
+    <script src="../dev-lib/sea.js"></script>
+    <script>
+
+seajs.config({
+    base: '../src'
+});
+define('start', function(require) {
+    var Paper = require('graphic/paper');
+    var Path = require('graphic/path');
+    var g = require('graphic/geometry');
+    var pathData = 'M 100 100 L 100 200 h 100 V 100 L 300 100 A 100 100 0 0 0 400 200 C 400 300 400 350 500 300 Z M 800 600 S 550 300 550 200 Q 550 100 400 100 T 250 0';
+
+    var path1 = new Path().stroke('blue');
+    var path2 = new Path().stroke('red', 5).translate(0, 0);
+
+    var paper = new Paper(document.body);
+    paper.addShapes([path1, path2]);
+
+    path1.setPathData(pathData);
+
+    var t = 0;
+    function update() {
+        t += 0.005;
+        var sub = g.subPath(pathData, t, Math.min(Math.max(t - 0.1, 0), 1));
+        path2.setPathData(sub);
+        t < 1 && requestAnimationFrame(update);
+    }
+    update();
+});
+seajs.use('start');
+
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
