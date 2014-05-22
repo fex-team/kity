@@ -1,2 +1,2 @@
 @echo off
-jscoverage.exe --encoding=UTF-8 ../../../src ../../coverage
+jscoverage.exe --encoding=UTF-8 ../../../src ../../jscoverage
