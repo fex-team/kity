@@ -45,6 +45,9 @@ define(function(require, exports, module) {
         },
         reverse: function() {
             return this.multipy(-1);
+        },
+        getAngle: function() {
+            
         }
     });
     Vector.fromPoints = function(p1, p2) {
