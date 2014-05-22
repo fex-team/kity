@@ -2,6 +2,7 @@ define(function(require) {
     var utils = require('core/utils');
     var Point = require('graphic/point');
     var Vector = require('graphic/vector');
+    var Matrix = require('graphic/matrix');
     var g = {};
 
     var pathCommand = /([achlmrqstvz])[\s,]*((-?\d*\.?\d*(?:e[\-+]?\d+)?[\s]*,?\s*)+)/ig,
@@ -19,16 +20,31 @@ define(function(require) {
             z: 0
         };
 
-    function repush(array, item) {
-        for (var i = 0, ii = array.length; i < ii; i++)
-            if (array[i] === item) {
-                return array.push(array.splice(i, 1)[0]);
+    function pathClone(path) {
+        var result, i, j, segment, segmentCopy;
+        result = [];
+        for (i = 0; i < path.length; i++) {
+            segment = path[i];
+            result.push(segmentCopy = []);
+            for (j = 0; j < segment.length; j++) {
+                segmentCopy.push(segment[j]);
             }
+        }
+        if (path.isUniform) result.isUniform = true;
+        if (path.isAbsolute) result.isAbsolute = true;
+        if (path.isCurve) result.isCurve = true;
+        return result;
     }
 
-
     // 缓存函数
+    // from raphael.js
     function cacher(f, scope, postprocessor) {
+        function repush(array, item) {
+            for (var i = 0, ii = array.length; i < ii; i++)
+                if (array[i] === item) {
+                    return array.push(array.splice(i, 1)[0]);
+                }
+        }
         function newf() {
             var arg = Array.prototype.slice.call(arguments, 0),
                 args = arg.join('\u2400'),
@@ -836,21 +852,97 @@ define(function(require) {
     });
 
     // 对比两个路径的关键位置，在合适的位置切割合适的路径，使得两个路径的段数一致
-    // 当前先简单地把
-    var uniformCurveKeyPoint = cacher(function uniform(path1, path2) {
-        var ranges1 = getBezierPathSegmentRanges(path1),
-            ranges2 = getBezierPathSegmentRanges(path2);
+    // TODO: 使用插值算法，使对应点更合理
+    var alignCurve = cacher(function(path1, path2) {
 
-        function binaryCut(path1, path2) {
-            var c1 = path1.length,
-                c2 = path2.length;
+        if (!path1.isCurve) path1 = g.pathToCurve(path1);
+        if (!path2.isCurve) path2 = g.pathToCurve(path2);
 
-            // 路径长度相同，直接返回
-            if (c1 === c2) return [path1, path2];
+        var p1 = pathClone(path1);
+        var p2 = pathClone(path2);
+
+        p1.i = 0;
+        p2.i = 0;
+        p1.o = p2;
+        p2.o = p1;
+
+
+        function command(p, i) {
+            return p[i || p.i] && p[i || p.i][0];
         }
 
-        return binaryCut(path1, path2);
+        function param(p, i) {
+            return p[i || p.i] && p[i || p.i].slice(1);
+        }
+
+        function point(p, i) {
+            var _param = param(p, i);
+            return _param && _param.slice(-2);
+        }
+
+        function fixZ(p) {
+            if (command(p) == 'Z') {
+                p.splice(p.i, 1);
+                return true;
+            }
+            return false;
+        }
+
+        function fixM(p) {
+            if (command(p) == 'M') {
+                p.o.splice(p.o.i, 0, ['M'].concat(point(p.o, p.o.i - 1)));
+                p.i++;
+                p.o.i++;
+                return true;
+            }
+            return false;
+        }
+
+        function fill(p) {
+            var lastPoint;
+            var i = 1;
+
+            while (!lastPoint) {
+                lastPoint = point(p, p.length - i++);
+            }
+            p.o.i = p.i;
+            while (p.length < p.o.length) {
+                if (fixZ(p.o)) continue;
+                if (fixM(p.o)) continue;
+                p.push(['C'].concat(lastPoint).concat(lastPoint).concat(lastPoint));
+                p.i++;
+                p.o.i++;
+            }
+        }
+
+        while (p1.i < p1.length && p2.i < p2.length) {
+
+            if (fixZ(p1) || fixZ(p2)) continue;
+
+            if (command(p1) == command(p2)) {
+                p1.i++;
+                p2.i++;
+                continue;
+            }
+
+            if (fixM(p1) || fixM(p2)) continue;
+
+            p1.i++;
+            p2.i++;
+        }
+
+        if (p1.i == p1.length) fill(p1);
+        if (p2.i == p2.length) fill(p2);
+
+        delete p1.i;
+        delete p1.o;
+        delete p2.i;
+        delete p2.o;
+
+        return [p1, p2];
     });
+
+    g.alignCurve = alignCurve;
 
     /**
      * 获得两个路径的补间结果
@@ -868,13 +960,66 @@ define(function(require) {
      *     补间的结果
      */
     g.pathTween = function(path1, path2, t) {
-        if (t === 0) return path1;
-        if (t === 1) return path2;
-        if (!path1.isCurve) path1 = g.pathToCurve(path1);
-        if (!path2.isCurve) path2 = g.pathToCurve(path2);
+        //if (t === 0) return path1;
+        //if (t === 1) return path2;
 
-        var uniform = uniformCurveKeyPoint(path1, path2);
+        var aligned = alignCurve(path1, path2);
+        var result = [], seg, i, j;
+
+        path1 = aligned[0];
+        path2 = aligned[1];
+
+        for (i = 0; i < path1.length; i++) {
+            result.push(seg = []);
+            seg.push(path1[i][0]);
+            for (j = 1; j < path1[i].length; j++) {
+                seg.push(path1[i][j] + t * (path2[i][j] - path1[i][j]));
+            }
+        }
+
+        result.isUniform = result.isCurve = result.isAbsolute = true;
+        return result;
     };
+
+    /**
+     * 变换指定的路径
+     *
+     * @param  {String|Array} path
+     *     需要变换的路径
+     *
+     * @param  {kity.Matrix} matrix
+     *     使用的变换矩阵
+     *
+     * @return {Array}
+     *     变换后的路径
+     */
+    g.transformPath = cacher(function(path, matrix) {
+        var i, ii, j, result, seg, pair;
+
+        if (!path.isCurve) {
+            path = g.pathToCurve(path);
+        }
+
+        result = [];
+
+        for (i = 0, ii = path.length; i < ii; i++) {
+            result.push(seg = [path[i][0]]);
+            for (j = 1; j < path[i].length; j += 2) {
+                pair = path[i].slice(j, j + 2);
+                pair = matrix.transformPoint(Point.parse(pair));
+                result.push(pair);
+            }
+        }
+
+        return result;
+    });
+
+    // entend
+    require('core/class').extendClass(Matrix, {
+        transformPath: function(path) {
+            return g.transformPath(path, this);
+        }
+    });
 
     return g;
 });
