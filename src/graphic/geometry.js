@@ -661,6 +661,17 @@ define(function(require) {
      *     子路径的 PathSegment
      */
     g.subPath = function(path, t1, t0) {
+        var dt;
+
+        t0 = t0 || 0;
+        dt = t1 - t0;
+        dt = dt - (dt | 0);
+        t0 = t0 - (t0 | 0);
+        t1 = t0 + dt;
+
+        if (t1 > 1) {
+            return g.subPath(path, 1, t0).concat(g.subPath(path, t1 - 1));
+        }
 
         if (!path.isCurve) {
             path = g.pathToCurve(path);
