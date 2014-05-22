@@ -68,7 +68,7 @@ define(function(require) {
 
         },
 
-        itemAddedHandler: function(effectItem, pos) {
+        handleAdd: function(effectItem, pos) {
 
             var count = this.getEffects().length,
                 nextEffectItem = this.getItem(pos + 1);
