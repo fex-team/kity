@@ -33,7 +33,7 @@ class Kiss
     {
 
         if($cov){
-            $basePath =  '../../spec/coverage';
+            $basePath =  '../../spec/jscoverage';
         }
         else{
             $basePath =  '../../src';
