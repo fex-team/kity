@@ -1,5 +1,5 @@
 /*global module:false*/
-module.exports = function (grunt) {
+module.exports = function(grunt) {
 
     // Project configuration.
     grunt.initConfig({
@@ -8,7 +8,7 @@ module.exports = function (grunt) {
         pkg: grunt.file.readJSON('package.json'),
 
         // Task configuration.
-        "transport": {
+        transport: {
 
             options: {
 
@@ -114,12 +114,12 @@ module.exports = function (grunt) {
     });
 
     // These plugins provide necessary tasks.
-    grunt.loadNpmTasks( 'grunt-cmd-transport' );
-    grunt.loadNpmTasks( 'grunt-cmd-concat' );
+    grunt.loadNpmTasks('grunt-cmd-transport');
+    grunt.loadNpmTasks('grunt-cmd-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-clean');
 
     // Default task.
-    grunt.registerTask( 'default', [ 'transport:cmd', 'concat:cmd', 'concat:full', 'uglify:minimize', 'clean:tmp' ] );
+    grunt.registerTask('default', ['transport:cmd', 'concat:cmd', 'concat:full', 'uglify:minimize', 'clean:tmp']);
 
 };

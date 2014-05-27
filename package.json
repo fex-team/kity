@@ -1,16 +1,16 @@
 {
-    "name": "kitygraph",
-    "title": "kitygraph",
+    "name": "kity",
+    "title": "kity",
     "description": "Kity Graphic Library",
     "version": "1.0.0",
-    "homepage": "https://github.com/kitygraph/kity",
+    "homepage": "https://github.com/fex-team/kity",
     "author": {
-        "name": "Baidu UEditor Group",
-        "url": "http://ueditor.baidu.com"
+        "name": "Baidu FEX",
+        "url": "https://github.com/fex-team/kity"
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/kitygraph/kity.git"
+        "url": "https://github.com/fex-team/kity.git"
     },
     "keywords": [
         "kity",
@@ -20,12 +20,12 @@
         "library"
     ],
     "bugs": {
-        "url": "http://www.ueditorbbs.com/forum.php"
+        "url": "https://github.com/fex-team/kity/issues"
     },
     "licenses": [
         {
-            "type": "MIT",
-            "url": "https://github.com/jquery/jquery/blob/master/MIT-LICENSE.txt"
+            "type": "BSD",
+            "url": "https://github.com/fex-team/kity/blob/dev/LICENSE"
         }
     ],
     "dependencies": {},
