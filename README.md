@@ -1,4 +1,4 @@
-Kity
+Kity [![Build Status](https://travis-ci.org/fex-team/kity.svg?branch=dev)](https://travis-ci.org/fex-team/kity)
 =======
 基于 SVG 的图形编辑器，百度前端富应用小组开发
 
