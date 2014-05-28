@@ -1,4 +1,5 @@
 .idea
+.grunt
 *.sublime-project
 *.sublime-workspace
 *.node_module

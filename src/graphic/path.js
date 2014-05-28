@@ -3,7 +3,6 @@ define(function(require, exports, module) {
     var createClass = require('core/class').createClass;
     var Shape = require('graphic/shape');
     var svg = require('graphic/svg');
-    var config = require('core/config');
     var g = require('graphic/geometry');
 
     var slice = Array.prototype.slice,

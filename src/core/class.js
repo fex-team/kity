@@ -18,16 +18,6 @@ define(function(require, exports) {
         return this.apply(thisObj, args);
     };
 
-    var config = require('core/config');
-
-    // 方便调试查看
-    if (config.debug) {
-        var origin = Object.prototype.toString;
-        Object.prototype.toString = function() {
-            return this.__KityClassName || origin.call(this);
-        };
-    }
-
     // 所有类的基类
     function Class() {}
     Class.__KityClassName = 'Class';

@@ -45,7 +45,7 @@ module.exports = function(grunt) {
             cmd: {
 
                 files: {
-                    '.build_tmp/kitygraph-non.js': '.build_tmp/**/*.js'
+                    '.build_tmp/kity-non.js': '.build_tmp/**/*.js'
                 }
 
             },
@@ -71,7 +71,7 @@ module.exports = function(grunt) {
                 },
 
                 files: {
-                    'dist/kitygraph.all.js': [ 'dev-lib/cmd-define.js', '.build_tmp/kitygraph-non.js', 'dev-lib/exports.js' ]
+                    'dist/kity.js': [ 'dev-lib/cmd-define.js', '.build_tmp/kity-non.js', 'dev-lib/exports.js' ]
                 }
 
             }
@@ -98,7 +98,7 @@ module.exports = function(grunt) {
             minimize: {
 
                 files: {
-                    'dist/kitygraph.all.min.js': 'dist/kitygraph.all.js'
+                    'dist/kity.min.js': 'dist/kity.js'
                 }
 
             }
@@ -109,6 +109,30 @@ module.exports = function(grunt) {
 
             tmp: [ '.build_tmp' ]
 
+        },
+
+        jasmine: {
+            kity: {
+                src: ['dev-lib/cmd-define.js', 'dist/kity.js'],
+                options: {
+                    specs: [
+                        'spec/core/*',
+                        'spec/graphic/*'
+                    ],
+                    helpers: 'spec/SpecHelper.js',
+                    host: 'http://127.0.0.1:8000/'
+                }
+            }
+        },
+
+        connect: {
+            kity: {
+                options: {
+                    hostname: '0.0.0.0',
+                    port: 8000,
+                    base: '.'
+                }
+            }
         }
 
     });
@@ -118,8 +142,12 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-cmd-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-contrib-connect');
+    grunt.loadNpmTasks('grunt-contrib-jasmine');
+    grunt.loadNpmTasks('grunt-contrib-connect');
 
     // Default task.
     grunt.registerTask('default', ['transport:cmd', 'concat:cmd', 'concat:full', 'uglify:minimize', 'clean:tmp']);
+    grunt.registerTask('test', ['default', 'connect:kity', 'jasmine:kity']);
 
 };

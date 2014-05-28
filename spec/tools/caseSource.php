@@ -67,7 +67,9 @@ class Kiss
 //            print '<script>define("case_start", function ( require ) {'. $caseContent .'});</script>';
 //            print '<script>seajs.use( "case_start" )</script>';
 //        }
-        print '<script type="text/javascript" src="../' . $this->name . '.js "></script>' . "\n";
+//       
+        $ts = time();
+        print '<script type="text/javascript" src="../' . $this->name . '.js?_='.$ts.'"></script>' . "\n";
 
     }
     public function match( $matcher )

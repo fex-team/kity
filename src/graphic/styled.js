@@ -21,7 +21,7 @@ define(function(require, exports, module) {
             this._update();
         },
         contains: function(name) {
-            return (~this._list.indexOf(name));
+            return !!~this._list.indexOf(name);
         }
     });
 

@@ -30,14 +30,6 @@ $cov = array_key_exists( 'cov' , $_GET );
 
 </head>
 <script type="text/javascript">
-    //todo
-    //     if (parent && parent.brtest) {
-    //            parent.$(parent.brtest).trigger('done', [ new Date().getTime(), {
-    //                failed : args[0],
-    //                passed : args[1],
-    //                detail:args[2]
-    //            }, window._$jscoverage || null ]);
-    //        }
     (function() {
         var jasmineEnv = jasmine.getEnv();
         jasmineEnv.updateInterval = 1000;

@@ -86,7 +86,7 @@ define(function(require) {
         if (typeof(pathSegment) == 'string') return pathSegment;
         if (pathSegment instanceof Array) {
             pathSegment = utils.flatten(pathSegment);
-            return pathSegment.join(' ');//.replace(/,?([achlmqrstvxz]),?/gi, '$1');
+            return pathSegment.join(',').replace(/,?([achlmqrstvxz]),?/gi, '$1');
         }
     };
 

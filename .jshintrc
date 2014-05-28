@@ -30,6 +30,7 @@
         "describe",
         "expect",
         "beforeEach",
-        "it"
+        "it",
+        "kity"
     ]
 }
