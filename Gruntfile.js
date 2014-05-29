@@ -120,7 +120,7 @@ module.exports = function(grunt) {
                         'spec/graphic/*'
                     ],
                     helpers: 'spec/SpecHelper.js',
-                    host: 'http://127.0.0.1:8000/'
+                    host: 'http://127.0.0.1:7777/'
                 }
             }
         },
@@ -129,7 +129,7 @@ module.exports = function(grunt) {
             kity: {
                 options: {
                     hostname: '0.0.0.0',
-                    port: 8000,
+                    port: 7777,
                     base: '.'
                 }
             }

@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kity - v2.0.0 - 2014-05-28
+ * kity - v2.0.0 - 2014-05-29
  * https://github.com/fex-team/kity
  * GitHub: https://github.com/fex-team/kity.git 
  * Copyright (c) 2014 Baidu FEX; Licensed BSD
@@ -6119,6 +6119,6 @@ define("kity", [ "core/utils", "core/class", "core/browser", "graphic/bezier", "
     });
 
     // build 环境中才含有use
-    if (use) use('export');
+    if ('use' in this) use('export');
 
 })(this);})();
