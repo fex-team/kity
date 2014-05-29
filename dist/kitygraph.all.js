@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kitygraph - v1.0.0 - 2014-05-09
+ * kitygraph - v1.0.0 - 2014-05-22
  * https://github.com/kitygraph/kity
  * GitHub: https://github.com/kitygraph/kity.git 
  * Copyright (c) 2014 Baidu UEditor Group; Licensed MIT
@@ -85,7 +85,7 @@ function use ( id ) {
     return require( id );
 
 }
-define("animate/animator", [ "animate/timeline", "graphic/color", "graphic/matrix", "graphic/eventhandler", "animate/frame", "core/utils", "core/class", "animate/easing", "core/config", "graphic/shape", "graphic/svg", "graphic/styled", "graphic/data", "graphic/pen", "graphic/box" ], function(require, exports, module) {
+define("animate/animator", [ "animate/timeline", "graphic/eventhandler", "animate/frame", "core/utils", "core/class", "animate/easing", "core/config", "graphic/shape", "graphic/svg", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen", "graphic/box" ], function(require) {
     function parseTime(str) {
         var value = parseFloat(str, 10);
         if (/ms/.test(str)) {
@@ -184,7 +184,7 @@ define("animate/animator", [ "animate/timeline", "graphic/color", "graphic/matri
 /**
  * Kity Animate Easing modified from jQuery Easing
  * Author: techird
- * Changes: 
+ * Changes:
  *     1. make easing functions standalone
  *     2. remove the 'x' parameter
  */
@@ -259,13 +259,13 @@ define("animate/easing", [], function(require, exports, module) {
             return -c / 2 * (Math.cos(Math.PI * t / d) - 1) + b;
         },
         easeInExpo: function(t, b, c, d) {
-            return t == 0 ? b : c * Math.pow(2, 10 * (t / d - 1)) + b;
+            return t === 0 ? b : c * Math.pow(2, 10 * (t / d - 1)) + b;
         },
         easeOutExpo: function(t, b, c, d) {
             return t == d ? b + c : c * (-Math.pow(2, -10 * t / d) + 1) + b;
         },
         easeInOutExpo: function(t, b, c, d) {
-            if (t == 0) return b;
+            if (t === 0) return b;
             if (t == d) return b + c;
             if ((t /= d / 2) < 1) return c / 2 * Math.pow(2, 10 * (t - 1)) + b;
             return c / 2 * (-Math.pow(2, -10 * --t) + 2) + b;
@@ -284,33 +284,33 @@ define("animate/easing", [], function(require, exports, module) {
             var s = 1.70158;
             var p = 0;
             var a = c;
-            if (t == 0) return b;
+            if (t === 0) return b;
             if ((t /= d) == 1) return b + c;
             if (!p) p = d * .3;
             if (a < Math.abs(c)) {
                 a = c;
-                var s = p / 4;
-            } else var s = p / (2 * Math.PI) * Math.asin(c / a);
+                s = p / 4;
+            } else s = p / (2 * Math.PI) * Math.asin(c / a);
             return -(a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t * d - s) * 2 * Math.PI / p)) + b;
         },
         easeOutElastic: function(t, b, c, d) {
             var s = 1.70158;
             var p = 0;
             var a = c;
-            if (t == 0) return b;
+            if (t === 0) return b;
             if ((t /= d) == 1) return b + c;
             if (!p) p = d * .3;
             if (a < Math.abs(c)) {
                 a = c;
-                var s = p / 4;
-            } else var s = p / (2 * Math.PI) * Math.asin(c / a);
+                s = p / 4;
+            } else s = p / (2 * Math.PI) * Math.asin(c / a);
             return a * Math.pow(2, -10 * t) * Math.sin((t * d - s) * 2 * Math.PI / p) + c + b;
         },
         easeInOutElastic: function(t, b, c, d) {
             var s = 1.70158;
             var p = 0;
             var a = c;
-            if (t == 0) return b;
+            if (t === 0) return b;
             if ((t /= d / 2) == 2) return b + c;
             if (!p) p = d * .3 * 1.5;
             if (a < Math.abs(c)) {
@@ -354,7 +354,7 @@ define("animate/easing", [], function(require, exports, module) {
     };
     return easings;
 });
-define("animate/frame", [], function(require, exports, module) {
+define("animate/frame", [], function(require, exports) {
     // 原生动画帧方法 polyfill
     var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || function(fn) {
         return setTimeout(fn, 1e3 / 60);
@@ -444,11 +444,11 @@ define("animate/frame", [], function(require, exports, module) {
         var time = +new Date();
         // 当上一帧到当前帧经过的时间
         var dur = time - frame.time;
-        // 
+        //
         // http://stackoverflow.com/questions/13133434/requestanimationframe-detect-stop
         // 浏览器最小化或切换标签，requestAnimationFrame 不会执行。
         // 检测时间超过 200 ms（频率小于 5Hz ） 判定为计时器暂停，重置为一帧长度
-        // 
+        //
         if (dur > 200) {
             dur = 1e3 / 60;
         }
@@ -462,9 +462,8 @@ define("animate/frame", [], function(require, exports, module) {
     exports.requestFrame = requestFrame;
     exports.releaseFrame = releaseFrame;
 });
-define("animate/opacityanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/matrix", "core/utils", "graphic/box", "graphic/point", "core/config", "graphic/svg", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/pen" ], function(require, exports, module) {
+define("animate/opacityanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "core/config", "graphic/svg", "core/utils", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen", "graphic/box" ], function(require) {
     var Animator = require("animate/animator");
-    var Matrix = require("graphic/matrix");
     var OpacityAnimator = require("core/class").createClass("OpacityAnimator", {
         base: Animator,
         constructor: function(opacity) {
@@ -496,9 +495,34 @@ define("animate/opacityanimator", [ "animate/animator", "animate/timeline", "ani
     });
     return OpacityAnimator;
 });
-define("animate/rotateanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/matrix", "core/utils", "graphic/box", "graphic/point", "core/config", "graphic/svg", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/pen" ], function(require, exports, module) {
+define("animate/pathanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/geometry", "core/utils", "graphic/point", "graphic/vector", "graphic/matrix", "core/config", "graphic/path", "graphic/svg" ], function(require) {
     var Animator = require("animate/animator");
-    var Matrix = require("graphic/matrix");
+    var g = require("graphic/geometry");
+    var PathAnimator = require("core/class").createClass("OpacityAnimator", {
+        base: Animator,
+        constructor: function(path) {
+            this.callBase({
+                beginValue: function(target) {
+                    this.beginPath = target.getPathData();
+                    return 0;
+                },
+                finishValue: 1,
+                setter: function(target, value) {
+                    target.setPathData(g.pathTween(this.beginPath, path, value));
+                }
+            });
+        }
+    });
+    var Path = require("graphic/path");
+    require("core/class").extendClass(Path, {
+        fxPath: function(path, duration, easing, delay, callback) {
+            return this.animate(new PathAnimator(path), duration, easing, delay, callback);
+        }
+    });
+    return PathAnimator;
+});
+define("animate/rotateanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "core/config", "graphic/svg", "core/utils", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen", "graphic/box" ], function(require) {
+    var Animator = require("animate/animator");
     var RotateAnimator = require("core/class").createClass("RotateAnimator", {
         base: Animator,
         constructor: function(deg, ax, ay) {
@@ -523,9 +547,8 @@ define("animate/rotateanimator", [ "animate/animator", "animate/timeline", "anim
     });
     return RotateAnimator;
 });
-define("animate/scaleanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/matrix", "core/utils", "graphic/box", "graphic/point", "core/config", "graphic/svg", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/pen" ], function(require, exports, module) {
+define("animate/scaleanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "core/config", "graphic/svg", "core/utils", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen", "graphic/box" ], function(require) {
     var Animator = require("animate/animator");
-    var Matrix = require("graphic/matrix");
     var ScaleAnimator = require("core/class").createClass("ScaleAnimator", {
         base: Animator,
         constructor: function(sx, sy) {
@@ -549,9 +572,7 @@ define("animate/scaleanimator", [ "animate/animator", "animate/timeline", "anima
     });
     return ScaleAnimator;
 });
-define("animate/timeline", [ "graphic/color", "core/utils", "graphic/standardcolor", "core/class", "graphic/matrix", "graphic/box", "graphic/point", "graphic/eventhandler", "graphic/shapeevent", "animate/frame", "core/config" ], function(require, exports, module) {
-    var Color = require("graphic/color");
-    var Matrix = require("graphic/matrix");
+define("animate/timeline", [ "graphic/eventhandler", "core/utils", "graphic/shapeevent", "core/class", "animate/frame", "core/config" ], function(require) {
     var EventHandler = require("graphic/eventhandler");
     var frame = require("animate/frame");
     var utils = require("core/utils");
@@ -625,8 +646,6 @@ define("animate/timeline", [ "graphic/color", "core/utils", "graphic/standardcol
             return getDelta(this.lastValue, this.currentValue);
         },
         play: function() {
-            var ctx = this.context;
-            var me = this;
             var lastStatus = this.status;
             this.status = "playing";
             switch (lastStatus) {
@@ -713,9 +732,8 @@ define("animate/timeline", [ "graphic/color", "core/utils", "graphic/standardcol
     Timeline.releaseFrame = frame.releaseFrame;
     return Timeline;
 });
-define("animate/translateanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/matrix", "core/utils", "graphic/box", "graphic/point", "core/config", "graphic/svg", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/pen" ], function(require, exports, module) {
+define("animate/translateanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "core/config", "graphic/svg", "core/utils", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen", "graphic/box" ], function(require) {
     var Animator = require("animate/animator");
-    var Matrix = require("graphic/matrix");
     var TranslateAnimator = require("core/class").createClass("TranslateAnimator", {
         base: Animator,
         constructor: function(x, y) {
@@ -739,9 +757,10 @@ define("animate/translateanimator", [ "animate/animator", "animate/timeline", "a
     });
     return TranslateAnimator;
 });
-define("core/browser", [], function(require, exports, module) {
+define("core/browser", [], function() {
     var browser = function() {
-        var agent = navigator.userAgent.toLowerCase(), opera = window.opera, browser = {
+        var agent = navigator.userAgent.toLowerCase(), opera = window.opera, browser;
+        browser = {
             ie: /(msie\s|trident.*rv:)([\w.]+)/.test(agent),
             opera: !!opera && opera.version,
             webkit: agent.indexOf(" applewebkit/") > -1,
@@ -809,9 +828,6 @@ define("core/class", [ "core/config" ], function(require, exports) {
     // 所有类的基类
     function Class() {}
     Class.__KityClassName = "Class";
-    function getCallerClass(instance, caller) {
-        var currentClass = instance.constructor;
-    }
     // 提供 base 调用支持
     Class.prototype.base = function(name) {
         var caller = arguments.callee.caller;
@@ -870,12 +886,6 @@ define("core/class", [ "core/config" ], function(require, exports) {
             throw new Error(classname + " : 类构造函数没有调用父类的构造函数！为了安全，请调用父类的构造函数");
         }
     }
-    function checkMixinConstructorCall(targetClass, classname) {
-        var code = targetClass.toString();
-        if (!/this\.callMixin/.test(code)) {
-            throw new Error(classname + " : 类构造函数没有调用父类的构造函数！为了安全，请调用父类的构造函数");
-        }
-    }
     var KITY_INHERIT_FLAG = "__KITY_INHERIT_FLAG_" + +new Date();
     function inherit(constructor, BaseClass, classname) {
         var KityClass = eval("(function " + classname + "( __inherit__flag ) {" + "if( __inherit__flag != KITY_INHERIT_FLAG ) {" + "KityClass.__KityConstructor.apply(this, arguments);" + "}" + "this.__KityClassName = KityClass.__KityClassName;" + "})");
@@ -929,53 +939,6 @@ define("core/class", [ "core/config" ], function(require, exports) {
     Class.prototype._accessProperty = function() {
         return this._propertyRawData || (this._propertyRawData = {});
     };
-    function upperCamael(name) {
-        return name.substr(0, 1).toUpperCase() + name.substr(1);
-    }
-    function generateGetMethodFor(classProto, name, propDefine) {
-        var methodName = (propDefine.bool ? "is" : "get") + upperCamael(name), index;
-        if (propDefine instanceof Array && ~propDefine.indexOf("get")) {}
-        if (typeof get == "function") {
-            classProto[methodName] = function() {
-                return get(this._accessProperty()[name]);
-            };
-        } else {
-            classProto[methodName] = function() {
-                var p = this._accessProperty();
-                return name in p ? p[name] : p[name] = "get";
-            };
-        }
-    }
-    function generateSetMethodFor(classProto, name, set) {
-        var methodName = "set" + name.substr(0, 1).toUpperCase() + name.substr(1);
-        if (typeof set == "function") {
-            classProto[methodName] = function() {
-                var args = Array.prototype.slice.call(arguments);
-                var p = this._accessProperty();
-                args.unshift(function(value) {
-                    p[name] = value;
-                });
-                var ret = set.apply(this, args);
-                return ret !== undefined && set.chain ? this : ret;
-            };
-        } else {
-            classProto[methodName] = function(value) {
-                this._accessProperty()[name] = value;
-                return this;
-            };
-        }
-    }
-    function generatePropertyFor(classProto, defines) {
-        var name, propDefine;
-        for (name in defines) {
-            if (!defines.hasOwnProperty(name) || typeof defines[name] == "function") {
-                continue;
-            }
-            propDefine = defines[name];
-            generateGetMethodFor(classProto, name, propDefine);
-            generateSetMethodFor(classProto, name, propDefine);
-        }
-    }
     exports.createClass = function(classname, defines) {
         var constructor, NewClass, BaseClass;
         if (arguments.length === 1) {
@@ -1004,19 +967,18 @@ define("core/class", [ "core/config" ], function(require, exports) {
         delete defines.mixins;
         delete defines.constructor;
         delete defines.base;
-        generatePropertyFor(NewClass, defines);
         NewClass = extend(NewClass, defines);
         return NewClass;
     };
     exports.extendClass = extend;
 });
-define("core/config", [], function(require, exports, module) {
+define("core/config", [], function() {
     return {
         debug: true,
         version: "1.0.0"
     };
 });
-define("core/utils", [], function(require, exports, module) {
+define("core/utils", [], function() {
     var utils = {
         each: function(obj, iterator, context) {
             if (obj === null) {
@@ -1038,13 +1000,29 @@ define("core/utils", [], function(require, exports, module) {
                 }
             }
         },
-        extend: function(t, s) {
+        extend: function(t) {
             var a = arguments, notCover = this.isBoolean(a[a.length - 1]) ? a[a.length - 1] : false, len = this.isBoolean(a[a.length - 1]) ? a.length - 1 : a.length;
             for (var i = 1; i < len; i++) {
                 var x = a[i];
                 for (var k in x) {
                     if (!notCover || !t.hasOwnProperty(k)) {
                         t[k] = x[k];
+                    }
+                }
+            }
+            return t;
+        },
+        deepExtend: function(t, s) {
+            var a = arguments, notCover = this.isBoolean(a[a.length - 1]) ? a[a.length - 1] : false, len = this.isBoolean(a[a.length - 1]) ? a.length - 1 : a.length;
+            for (var i = 1; i < len; i++) {
+                var x = a[i];
+                for (var k in x) {
+                    if (!notCover || !t.hasOwnProperty(k)) {
+                        if (this.isObject(t[k]) && this.isObject(x[k])) {
+                            this.deepExtend(t[k], x[k], notCover);
+                        } else {
+                            t[k] = x[k];
+                        }
                     }
                 }
             }
@@ -1063,6 +1041,21 @@ define("core/utils", [], function(require, exports, module) {
             if (typeof obj !== "object") return obj;
             if (typeof obj === "function") return null;
             return JSON.parse(JSON.stringify(obj));
+        },
+        queryPath: function(path, obj) {
+            var arr = path.split(".");
+            var i = 0, tmp = obj, l = arr.length;
+            while (i < l) {
+                if (arr[i] in tmp) {
+                    tmp = tmp[arr[i]];
+                    i++;
+                    if (i >= l || tmp === undefined) {
+                        return tmp;
+                    }
+                } else {
+                    return undefined;
+                }
+            }
         },
         getValue: function(value, defaultValue) {
             return value !== undefined ? value : defaultValue;
@@ -1296,7 +1289,7 @@ define("filter/effect/offseteffect", [ "filter/effect/effect", "graphic/svg", "c
 /*
  * Effect所用的container
  */
-define("filter/effectcontainer", [ "core/class", "core/config", "graphic/container" ], function(require, exports, module) {
+define("filter/effectcontainer", [ "core/class", "core/config", "graphic/container" ], function(require) {
     return require("core/class").createClass("EffectContainer", {
         base: require("graphic/container"),
         addEffect: function(point, pos) {
@@ -1329,7 +1322,7 @@ define("filter/effectcontainer", [ "core/class", "core/config", "graphic/contain
         getLastEffect: function() {
             return this.getLastItem.apply(this, arguments);
         },
-        itemAddedHandler: function(effectItem, pos) {
+        handleAdd: function(effectItem, pos) {
             var count = this.getEffects().length, nextEffectItem = this.getItem(pos + 1);
             // 最后一个节点， 直接追加
             if (count === pos + 1) {
@@ -1476,7 +1469,7 @@ define("filter/projectionfilter", [ "filter/effect/gaussianblureffect", "filter/
 /**
  * 贝塞尔曲线
  */
-define("graphic/bezier", [ "core/class", "core/config", "graphic/pointcontainer", "graphic/container", "graphic/path", "core/utils", "graphic/shape", "graphic/svg" ], function(require, exports, module) {
+define("graphic/bezier", [ "core/class", "core/config", "graphic/pointcontainer", "graphic/container", "graphic/path", "core/utils", "graphic/shape", "graphic/svg", "graphic/geometry" ], function(require, exports, module) {
     return require("core/class").createClass("Bezier", {
         mixins: [ require("graphic/pointcontainer") ],
         base: require("graphic/path"),
@@ -1613,13 +1606,13 @@ define("graphic/bezierpoint", [ "graphic/shapepoint", "core/class", "graphic/poi
                 return this;
             }
             //新增参数 this， 把当前引起变化的点传递过去， 以便有需要的地方可以获取到引起变化的源
-            this.container.update && this.container.update(this);
+            if (this.container.update) this.container.update(this);
         }
     });
     return BezierPoint;
 });
-define("graphic/box", [], function(require, exports, module) {
-    var Box = kity.createClass("Box", {
+define("graphic/box", [ "core/class", "core/config" ], function(require, exports, module) {
+    var Box = require("core/class").createClass("Box", {
         constructor: function(x, y, width, height) {
             var box = arguments[0];
             if (box && typeof box === "object") {
@@ -1943,6 +1936,21 @@ define("graphic/color", [ "core/utils", "graphic/standardcolor", "core/class", "
         },
         //hsl值对象转换为rgb值对象
         hslValueToRGBValue: function(hslValue) {
+            function trans(v1, v2, vH) {
+                if (vH < 0) {
+                    vH += 1;
+                } else if (vH > 1) {
+                    vH -= 1;
+                }
+                if (6 * vH < 1) {
+                    return v1 + (v2 - v1) * 6 * vH;
+                } else if (2 * vH < 1) {
+                    return v2;
+                } else if (3 * vH < 2) {
+                    return v1 + (v2 - v1) * (2 / 3 - vH) * 6;
+                }
+                return v1;
+            }
             var q = null, p = null, result = {};
             hslValue = Utils.extend({}, hslValue);
             hslValue.h = hslValue.h / 360;
@@ -1966,21 +1974,6 @@ define("graphic/color", [ "core/utils", "graphic/standardcolor", "core/class", "
             result.g = Math.min(Math.round(result.g * 255), 255);
             result.b = Math.min(Math.round(result.b * 255), 255);
             return result;
-            function trans(v1, v2, vH) {
-                if (vH < 0) {
-                    vH += 1;
-                } else if (vH > 1) {
-                    vH -= 1;
-                }
-                if (6 * vH < 1) {
-                    return v1 + (v2 - v1) * 6 * vH;
-                } else if (2 * vH < 1) {
-                    return v2;
-                } else if (3 * vH < 2) {
-                    return v1 + (v2 - v1) * (2 / 3 - vH) * 6;
-                }
-                return v1;
-            }
         },
         //rgb值对象转换为hsl值对象
         rgbValueToHslValue: function(rgbValue) {
@@ -2120,7 +2113,6 @@ define("graphic/container", [ "core/class", "core/config" ], function(require, e
             return this;
         },
         setItems: function(items) {
-            // TODO: Optimize
             return this.clear().addItems(items);
         },
         appendItem: function(item) {
@@ -2168,13 +2160,13 @@ define("graphic/container", [ "core/class", "core/config" ], function(require, e
 /*
  * 曲线
  * */
-define("graphic/curve", [ "core/utils", "core/class", "core/config", "graphic/path", "graphic/shape", "graphic/svg", "graphic/pointcontainer", "graphic/container" ], function(require, exports, module) {
+define("graphic/curve", [ "core/utils", "core/class", "core/config", "graphic/path", "graphic/shape", "graphic/svg", "graphic/geometry", "graphic/pointcontainer", "graphic/container" ], function(require, exports, module) {
     var Utils = require("core/utils"), CurveUtil = {
         /*
-         * 获取由两个以上的点组成的曲线的平移线
-         * @param points 曲线上的点的集合， 集合中的点的数量必须大于2
-         * @return 平移线数组
-         */
+             * 获取由两个以上的点组成的曲线的平移线
+             * @param points 曲线上的点的集合， 集合中的点的数量必须大于2
+             * @return 平移线数组
+             */
         getCurvePanLines: function(points, smoothFactor) {
             //计算原始点的中点坐标
             var centerPoints = CurveUtil.getCenterPoints(points), //注意：计算中点连线的中点坐标， 得出平移线
@@ -2183,9 +2175,9 @@ define("graphic/curve", [ "core/utils", "core/class", "core/config", "graphic/pa
             return CurveUtil.getMovedPanLines(points, panLines, smoothFactor);
         },
         /*
-         * 计算给定点集合的连线的中点
-         * @param points
-         */
+             * 计算给定点集合的连线的中点
+             * @param points
+             */
         getCenterPoints: function(points) {
             var centerPoints = {}, key = null;
             for (var i = 0, j = 0, len = points.length; i < len; i++) {
@@ -2201,10 +2193,10 @@ define("graphic/curve", [ "core/utils", "core/class", "core/config", "graphic/pa
             return centerPoints;
         },
         /*
-         * 对getCenterPoints()接口获取到的数据做处理， 计算出各个顶点对应的平移线数据
-         * @param length 集合中点的个数
-         * @param points 点集合， 该集合应该是getCenterPoints()接口返回的数据
-         */
+             * 对getCenterPoints()接口获取到的数据做处理， 计算出各个顶点对应的平移线数据
+             * @param length 集合中点的个数
+             * @param points 点集合， 该集合应该是getCenterPoints()接口返回的数据
+             */
         getPanLine: function(length, points) {
             var result = {}, //顶点索引
             pointIndex = null;
@@ -2238,10 +2230,10 @@ define("graphic/curve", [ "core/utils", "core/class", "core/config", "graphic/pa
             return result;
         },
         /*
-         * 计算平移线移动到顶点后的位置
-         * @param points 顶点集合
-         * @param panLines 平移线集合
-         */
+             * 计算平移线移动到顶点后的位置
+             * @param points 顶点集合
+             * @param panLines 平移线集合
+             */
         getMovedPanLines: function(points, panLines, smoothFactor) {
             var result = {};
             Utils.each(points, function(point, index) {
@@ -2384,7 +2376,7 @@ define("graphic/defbrush", [ "core/class", "core/config", "graphic/resource", "g
         }
     });
 });
-define("graphic/ellipse", [ "core/utils", "graphic/point", "core/class", "core/config", "graphic/path", "graphic/shape", "graphic/svg" ], function(require, exports, module) {
+define("graphic/ellipse", [ "core/utils", "graphic/point", "core/class", "core/config", "graphic/path", "graphic/shape", "graphic/svg", "graphic/geometry" ], function(require, exports, module) {
     var Utils = require("core/utils"), Point = require("graphic/point");
     return require("core/class").createClass("Ellipse", {
         base: require("graphic/path"),
@@ -2583,7 +2575,7 @@ define("graphic/eventhandler", [ "core/utils", "graphic/shapeevent", "graphic/ma
             bubbles: true,
             cancelable: true
         });
-        event.__kity_param = params;
+        event._kityParam = params;
         node.dispatchEvent(event);
     }
     // 发送消息
@@ -2638,6 +2630,865 @@ define("graphic/eventhandler", [ "core/utils", "graphic/shapeevent", "graphic/ma
             return this;
         }
     });
+});
+define("graphic/geometry", [ "core/utils", "graphic/point", "core/class", "graphic/vector", "graphic/matrix", "graphic/box", "core/config" ], function(require) {
+    var utils = require("core/utils");
+    var Point = require("graphic/point");
+    var Vector = require("graphic/vector");
+    var Matrix = require("graphic/matrix");
+    var g = {};
+    var pathCommand = /([achlmrqstvz])[\s,]*((-?\d*\.?\d*(?:e[\-+]?\d+)?[\s]*,?\s*)+)/gi, pathValues = /(-?\d*\.?\d*(?:e[\-+]?\d+)?)\s*,?\s*/gi, paramCounts = {
+        a: 7,
+        c: 6,
+        h: 1,
+        l: 2,
+        m: 2,
+        q: 4,
+        s: 4,
+        t: 2,
+        v: 1,
+        z: 0
+    };
+    function pathClone(path) {
+        var result, i, j, segment, segmentCopy;
+        result = [];
+        for (i = 0; i < path.length; i++) {
+            segment = path[i];
+            result.push(segmentCopy = []);
+            for (j = 0; j < segment.length; j++) {
+                segmentCopy.push(segment[j]);
+            }
+        }
+        if (path.isUniform) result.isUniform = true;
+        if (path.isAbsolute) result.isAbsolute = true;
+        if (path.isCurve) result.isCurve = true;
+        return result;
+    }
+    // 缓存函数
+    // from raphael.js
+    function cacher(f, scope, postprocessor) {
+        function repush(array, item) {
+            for (var i = 0, ii = array.length; i < ii; i++) if (array[i] === item) {
+                return array.push(array.splice(i, 1)[0]);
+            }
+        }
+        function newf() {
+            var arg = Array.prototype.slice.call(arguments, 0), args = arg.join("␀"), cache = newf.cache = newf.cache || {}, count = newf.count = newf.count || [];
+            if (cache.hasOwnProperty(args)) {
+                repush(count, args);
+                return postprocessor ? postprocessor(cache[args]) : cache[args];
+            }
+            if (count.length >= 1e3) {
+                delete cache[count.shift()];
+            }
+            count.push(args);
+            cache[args] = f.apply(scope, arg);
+            return postprocessor ? postprocessor(cache[args]) : cache[args];
+        }
+        return newf;
+    }
+    /**
+     *
+     * kity.g.pathToString(pathSegment)
+     *
+     * 返回表示 PathSegment 的字符串
+     *
+     * @param  {Array} pathSegment
+     *     要表示的 Path Segment
+     *
+     * @return {String} 表示该 Path 的字符串
+     *
+     * @example
+     *
+     *     var pathSegment = [['M', 0, 0], ['L', 10, 10]]
+     *     var pathString = kity.g.pathToString(pathSegment);
+     *     // 返回 'M0,0L10,10'
+     */
+    g.pathToString = function(pathSegment) {
+        pathSegment = pathSegment || this;
+        if (typeof pathSegment == "string") return pathSegment;
+        if (pathSegment instanceof Array) {
+            pathSegment = utils.flatten(pathSegment);
+            return pathSegment.join(" ");
+        }
+    };
+    /**
+     * kity.g.parsePathString(pathString)
+     *
+     * 解析 Path 字符串成 PathSegment
+     *
+     * @copyright rapheal.js
+     *
+     * @example
+     *
+     *     var seg = kity.g.parsePathString('M10,12l21-23-21.5,11z');
+     *     // 返回: [['M', 10, 12], ['l', 21, -23], ['l', -21.5, 11], ['z']]
+     *
+     * @param  {String} pathString Path 字符串
+     * @return {Array}
+     */
+    g.parsePathString = cacher(function(pathString) {
+        var data = [];
+        pathString.replace(pathCommand, function(a, b, c) {
+            var params = [], name = b.toLowerCase();
+            c.replace(pathValues, function(a, b) {
+                if (b) params.push(+b);
+            });
+            if (name == "m" && params.length > 2) {
+                data.push([ b ].concat(params.splice(0, 2)));
+                name = "l";
+                b = b == "m" ? "l" : "L";
+            }
+            if (name == "r") {
+                data.push([ b ].concat(params));
+            } else {
+                while (params.length >= paramCounts[name]) {
+                    data.push([ b ].concat(params.splice(0, paramCounts[name])));
+                    if (!paramCounts[name]) {
+                        break;
+                    }
+                }
+            }
+        });
+        data.isUniform = true;
+        data.toString = g.pathToString;
+        return data;
+    });
+    /**
+     * kity.g.pathToAbsolute(path)
+     *
+     * 把路径转换为绝对路径的形式
+     *
+     * @param {Array|String} path
+     *     要转换的 path 路径或者数组
+     *
+     * @return {Array}
+     *     转换后的 Path Segment
+     *
+     * @example
+     *
+     *     var path = 'M10,10l50,50';
+     *     var absPath = kity.g.pathToAbsolute(path);
+     *     // 返回 [['M', 10, 10], ['L', 60, 60]]
+     */
+    g.pathToAbsolute = cacher(function(path) {
+        var pathArray = path.isUniform ? path : g.parsePathString(g.pathToString(path));
+        var res = [], x = 0, y = 0, mx = 0, my = 0, start = 0;
+        var r, pa, i, j, k, ii, jj, kk;
+        if (pathArray[0][0] == "M") {
+            x = +pathArray[0][1];
+            y = +pathArray[0][2];
+            mx = x;
+            my = y;
+            start++;
+            res[0] = [ "M", x, y ];
+        }
+        for (r, pa, i = start, ii = pathArray.length; i < ii; i++) {
+            res.push(r = []);
+            pa = pathArray[i];
+            if (pa[0] != pa[0].toUpperCase()) {
+                r[0] = pa[0].toUpperCase();
+                switch (r[0]) {
+                  case "A":
+                    r[1] = pa[1];
+                    r[2] = pa[2];
+                    r[3] = pa[3];
+                    r[4] = pa[4];
+                    r[5] = pa[5];
+                    r[6] = +(pa[6] + x);
+                    r[7] = +(pa[7] + y);
+                    break;
+
+                  case "V":
+                    r[1] = +pa[1] + y;
+                    break;
+
+                  case "H":
+                    r[1] = +pa[1] + x;
+                    break;
+
+                  case "M":
+                    mx = +pa[1] + x;
+                    my = +pa[2] + y;
+                    break;
+
+                  default:
+                    for (j = 1, jj = pa.length; j < jj; j++) {
+                        r[j] = +pa[j] + (j % 2 ? x : y);
+                    }
+                }
+            } else {
+                for (k = 0, kk = pa.length; k < kk; k++) {
+                    r[k] = pa[k];
+                }
+            }
+            switch (r[0]) {
+              case "Z":
+                x = mx;
+                y = my;
+                break;
+
+              case "H":
+                x = r[1];
+                break;
+
+              case "V":
+                y = r[1];
+                break;
+
+              case "M":
+                mx = r[r.length - 2];
+                my = r[r.length - 1];
+                break;
+
+              default:
+                x = r[r.length - 2];
+                y = r[r.length - 1];
+            }
+        }
+        res.isUniform = true;
+        res.isAbsolute = true;
+        res.toString = g.pathToString;
+        return res;
+    });
+    // 把圆弧绘制的曲线转化为对应的三次贝塞尔形式
+    function a2c(x1, y1, rx, ry, angle, laf, sf, x2, y2, recursive) {
+        // copy from raphael.js
+        // for more information of where this math came from visit:
+        // http://www.w3.org/TR/SVG11/implnote.html#ArcImplementationNotes
+        var math = Math, PI = math.PI, abs = Math.abs, _120 = PI * 120 / 180, rad = PI / 180 * (+angle || 0), res = [], xy, rotate = function(x, y, rad) {
+            var X = x * math.cos(rad) - y * math.sin(rad), Y = x * math.sin(rad) + y * math.cos(rad);
+            return {
+                x: X,
+                y: Y
+            };
+        };
+        var cos, sin, h, x, y, rx2, ry2, k, cx, cy, f1, f2, df, f2old, x2old, y2old, c1, s1, c2, s2, t, hx, hy, m1, m2, m3, m4, newres, i, ii;
+        if (!recursive) {
+            xy = rotate(x1, y1, -rad);
+            x1 = xy.x;
+            y1 = xy.y;
+            xy = rotate(x2, y2, -rad);
+            x2 = xy.x;
+            y2 = xy.y;
+            cos = math.cos(PI / 180 * angle);
+            sin = math.sin(PI / 180 * angle);
+            x = (x1 - x2) / 2;
+            y = (y1 - y2) / 2;
+            h = x * x / (rx * rx) + y * y / (ry * ry);
+            if (h > 1) {
+                h = math.sqrt(h);
+                rx = h * rx;
+                ry = h * ry;
+            }
+            rx2 = rx * rx;
+            ry2 = ry * ry;
+            k = (laf == sf ? -1 : 1) * math.sqrt(abs((rx2 * ry2 - rx2 * y * y - ry2 * x * x) / (rx2 * y * y + ry2 * x * x)));
+            cx = k * rx * y / ry + (x1 + x2) / 2;
+            cy = k * -ry * x / rx + (y1 + y2) / 2;
+            f1 = math.asin(((y1 - cy) / ry).toFixed(9));
+            f2 = math.asin(((y2 - cy) / ry).toFixed(9));
+            f1 = x1 < cx ? PI - f1 : f1;
+            f2 = x2 < cx ? PI - f2 : f2;
+            if (f1 < 0) f1 = PI * 2 + f1;
+            if (f2 < 0) f2 = PI * 2 + f2;
+            if (sf && f1 > f2) {
+                f1 = f1 - PI * 2;
+            }
+            if (!sf && f2 > f1) {
+                f2 = f2 - PI * 2;
+            }
+        } else {
+            f1 = recursive[0];
+            f2 = recursive[1];
+            cx = recursive[2];
+            cy = recursive[3];
+        }
+        df = f2 - f1;
+        if (abs(df) > _120) {
+            f2old = f2;
+            x2old = x2;
+            y2old = y2;
+            f2 = f1 + _120 * (sf && f2 > f1 ? 1 : -1);
+            x2 = cx + rx * math.cos(f2);
+            y2 = cy + ry * math.sin(f2);
+            res = a2c(x2, y2, rx, ry, angle, 0, sf, x2old, y2old, [ f2, f2old, cx, cy ]);
+        }
+        df = f2 - f1;
+        c1 = math.cos(f1);
+        s1 = math.sin(f1);
+        c2 = math.cos(f2);
+        s2 = math.sin(f2);
+        t = math.tan(df / 4);
+        hx = 4 / 3 * rx * t;
+        hy = 4 / 3 * ry * t;
+        m1 = [ x1, y1 ];
+        m2 = [ x1 + hx * s1, y1 - hy * c1 ];
+        m3 = [ x2 + hx * s2, y2 - hy * c2 ];
+        m4 = [ x2, y2 ];
+        m2[0] = 2 * m1[0] - m2[0];
+        m2[1] = 2 * m1[1] - m2[1];
+        if (recursive) {
+            return [ m2, m3, m4 ].concat(res);
+        } else {
+            res = [ m2, m3, m4 ].concat(res).join().split(",");
+            newres = [];
+            for (i = 0, ii = res.length; i < ii; i++) {
+                newres[i] = i % 2 ? rotate(res[i - 1], res[i], rad).y : rotate(res[i], res[i + 1], rad).x;
+            }
+            return newres;
+        }
+    }
+    // 把二次贝塞尔曲线参数转化为三次贝塞尔曲线参数
+    function q2c(x1, y1, ax, ay, x2, y2) {
+        // copy from raphael.js
+        var _13 = 1 / 3, _23 = 2 / 3;
+        return [ _13 * x1 + _23 * ax, _13 * y1 + _23 * ay, _13 * x2 + _23 * ax, _13 * y2 + _23 * ay, x2, y2 ];
+    }
+    /**
+     * kity.g.pathToCurve(path)
+     *
+     * 把路径转换为贝塞尔路径
+     *
+     * @param  {Array|String} path
+     *     要转换的 path 路径或数组
+     *
+     * @return {Array}
+     *     转换后的 PathSegment，每一段都是 'C'
+     */
+    g.pathToCurve = cacher(function(path) {
+        var i, command, param;
+        var initPoint, currentPoint, endPoint, shouldClose, lastControlPoint, aussumedControlPoint;
+        var controlPoint1, controlPoint2;
+        var res = [];
+        // 处理的路径要求是一个绝对路径
+        if (!path.isAbsolute) path = g.pathToAbsolute(path);
+        for (i = 0; i < path.length; i++) {
+            command = path[i][0];
+            param = path[i].slice(1);
+            // 画笔移动
+            if (command == "M") {
+                initPoint = lastControlPoint = currentPoint = param;
+                res.push(path[i]);
+                continue;
+            }
+            // 路径闭合
+            if (command == "Z") {
+                shouldClose = true;
+                command = "L";
+                param = initPoint;
+            }
+            // 绘制命令的目的位置
+            endPoint = param.slice(param.length - 2);
+            // 对 'H' 命令的修正
+            if (command == "H") {
+                endPoint = [ param[0], currentPoint[1] ];
+                command = "L";
+            }
+            // 对 'V' 命令的修正
+            if (command == "V") {
+                endPoint = [ currentPoint[0], param[0] ];
+                command = "L";
+            }
+            // 对 'S' 命令求出隐含的控制点位置
+            if (command == "S" || command == "T") {
+                // 隐含控制点是上一个控制点关于当前位置的镜像
+                aussumedControlPoint = [ currentPoint[0] + (currentPoint[0] - lastControlPoint[0]), currentPoint[1] + (currentPoint[1] - lastControlPoint[1]) ];
+            }
+            // 针对不同的命令求控制点
+            switch (command) {
+              case "L":
+                controlPoint1 = currentPoint;
+                controlPoint2 = endPoint;
+                break;
+
+              case "C":
+                controlPoint1 = param.slice(0, 2);
+                controlPoint2 = param.slice(2, 4);
+                break;
+
+              case "S":
+                controlPoint1 = aussumedControlPoint.slice();
+                controlPoint2 = param.slice(0, 2);
+                break;
+
+              case "Q":
+                lastControlPoint = param.slice(0, 2);
+                param = q2c.apply(null, currentPoint.concat(param));
+                controlPoint1 = param.slice(0, 2);
+                controlPoint2 = param.slice(2, 4);
+                break;
+
+              case "T":
+                param = q2c.apply(null, currentPoint.concat(aussumedControlPoint).concat(param));
+                controlPoint1 = param.slice(0, 2);
+                controlPoint2 = param.slice(2, 4);
+                break;
+
+              case "A":
+                param = a2c.apply(null, currentPoint.concat(param));
+                controlPoint1 = param.slice(0, 2);
+                controlPoint2 = param.slice(2, 4);
+                break;
+            }
+            // 写入当前一段曲线
+            res.push([ "C" ].concat(controlPoint1).concat(controlPoint2).concat(endPoint));
+            // 为下次循环准备当前位置
+            currentPoint = endPoint;
+            // 二次贝塞尔曲线自己已经记录了上个控制点的位置，其它的记录控制点 2 的位置
+            if (command != "Q") {
+                lastControlPoint = controlPoint2;
+            }
+            if (shouldClose) {
+                res.push([ "Z" ]);
+                shouldClose = false;
+            }
+        }
+        res.isUniform = true;
+        res.isAbsolute = true;
+        res.isCurve = true;
+        res.toString = g.pathToString;
+        return res;
+    });
+    /**
+     * 将贝塞尔曲线切成两部分
+     *
+     * @see http://stackoverflow.com/questions/18655135/divide-bezier-curve-into-two-equal-halves
+     */
+    function cutBezier(bezierArray, t) {
+        function __(t) {
+            return function(p, q) {
+                return p + t * (q - p);
+            };
+        }
+        var _ = __(t || .5), ba = bezierArray, ax = ba[0], ay = ba[1], bx = ba[2], by = ba[3], cx = ba[4], cy = ba[5], dx = ba[6], dy = ba[7], ex = _(ax, bx), ey = _(ay, by), fx = _(bx, cx), fy = _(by, cy), gx = _(cx, dx), gy = _(cy, dy), hx = _(ex, fx), hy = _(ey, fy), jx = _(fx, gx), jy = _(fy, gy), kx = _(hx, jx), ky = _(hy, jy);
+        return [ [ ax, ay, ex, ey, hx, hy, kx, ky ], [ kx, ky, jx, jy, gx, gy, dx, dy ] ];
+    }
+    /**
+     * kity.g.cutBezier(bezierArray, t)
+     *
+     * 在指定位置把贝塞尔曲线切割为两部分
+     *
+     * @param {Array} bezierArray
+     *     表示贝塞尔曲线的一个数组 [p1x, p1y, c1x, c1y, c2x, c2y, p2x, p2y]
+     *     p1 和 p2 是贝塞尔曲线的起点和终点，c1 和 c2 是两个控制点
+     *
+     * @param {Number} t
+     *     切割的位置（0 到 1）
+     *
+     * @return {Array}
+     *     切割的两个贝塞尔曲线：[
+     *         [p1x1, p1y1, c1x1, c1y1, c2x1, c2y1, p2x1, p2y1],
+     *         [p1x2, p1y2, c1x2, c1y2, c2x2, c2y2, p2x2, p2y2]
+     *     ]
+     *
+     */
+    g.cutBezier = cacher(cutBezier);
+    /**
+     * 求一段贝塞尔曲线的子段
+     *
+     * @param {Array} bezierArray
+     *     长度为 8 的数组，表示 [p1x, p1y, c1x, c1y, c2x, c2y, p2x, p2y]
+     *
+     * @param {Number} t
+     *     子段的结束位置（0 到 1）
+     *
+     * @param {Number} t0
+     *     字段的开始位置（0 到 t），可不传，默认为 0
+     *
+     * @return {Array}
+     *     长度为 8 的数组，表示给定贝塞尔曲线的子段
+     */
+    g.subBezier = function(bezierArray, t, t0) {
+        var b2t = cutBezier(bezierArray, t)[0];
+        return t0 ? cutBezier(b2t, t0 / t)[1] : b2t;
+    };
+    /**
+     * 求贝塞尔曲线上的一个点
+     *
+     * @param {Array} bezierArray
+     *     长度为 8 的数组，表示 [p1x, p1y, c1x, c1y, c2x, c2y, p2x, p2y]
+     *
+     * @param {Number} t
+     *     所求点的开始位置（0 到 1）
+     *
+     * @return {Point} p
+     *     p.x: x 坐标
+     *     p.y: y 坐标
+     *     p.tan: 在 t 处的切线方向（类型为 kity.Vector，模为 1）
+     */
+    g.pointAtBezier = function(bezierArray, t) {
+        var b2t = cutBezier(bezierArray, t)[0];
+        var p = Point.parse(b2t.slice(6)), c = Point.parse(b2t.slice(4, 2));
+        p.tan = Vector.fromPoints(c, p).normalize();
+        return p;
+    };
+    /**
+     * 求贝塞尔曲线的长度
+     *
+     * @param {Array} bezierArray
+     *     长度为 8 的数组，表示 [p1x, p1y, c1x, c1y, c2x, c2y, p2x, p2y]
+     *
+     * @param {Number} tolerate
+     *     允许的误差，默认是 0.1
+     *
+     * @return {Number} 贝塞尔曲线的长度
+     */
+    g.bezierLength = cacher(function bezierLength(bezierArray, tolerate) {
+        // 切割成多少段来计算
+        tolerate = Math.max(tolerate || .1, 1e-9);
+        function len(p, q) {
+            var dx = p[0] - q[0], dy = p[1] - q[1];
+            return Math.sqrt(dx * dx + dy * dy);
+        }
+        var cutted, p, q, m, cuttedLength;
+        cutted = cutBezier(bezierArray);
+        p = bezierArray.slice(0, 2);
+        q = bezierArray.slice(6);
+        m = cutted[1].slice(0, 2);
+        cuttedLength = len(p, m) + len(m, q);
+        if (cuttedLength - len(p, q) < tolerate) return cuttedLength;
+        // 递归计算
+        return bezierLength(cutted[0], tolerate / 2) + bezierLength(cutted[1], tolerate / 3);
+    });
+    // 计算一个 pathSegment 中每一段的在整体中所占的长度范围，以及总长度
+    // 改方法要求每一段都是贝塞尔曲线
+    var getBezierPathSegmentRanges = cacher(function(pathSegment) {
+        var i, ii, segment, position, bezierLength, segmentRanges, totalLength;
+        segmentRanges = [];
+        // 总长度
+        totalLength = 0;
+        for (i = 0, ii = pathSegment.length; i < ii; i++) {
+            segment = pathSegment[i];
+            if (segment[0] == "M") {
+                position = segment.slice(1);
+                segmentRanges.push(null);
+                continue;
+            }
+            if (segment[0] == "Z") {
+                segmentRanges.push(null);
+                continue;
+            }
+            bezierLength = g.bezierLength(position.concat(segment.slice(1)));
+            segmentRanges.push([ totalLength, totalLength + bezierLength ]);
+            totalLength += bezierLength;
+            // 迭代当前位置
+            position = segment.slice(4);
+        }
+        segmentRanges.totalLength = totalLength;
+        return segmentRanges;
+    });
+    /**
+     * 求一段路径的子路径
+     *
+     * @param  {Array|String} path
+     *     原路径
+     *
+     * @param  {Number} t1
+     *     要求的子路径的结束位置（0 到 1）
+     *
+     * @param  {Number} t0
+     *     要求的子路径的开始位置（0 到 t1），可不传，默认为 0
+     *
+     * @return {Array}
+     *     子路径的 PathSegment
+     */
+    g.subPath = function(path, t1, t0) {
+        var dt;
+        t0 = t0 || 0;
+        dt = t1 - t0;
+        dt = dt - (dt | 0);
+        t0 = t0 - (t0 | 0);
+        t1 = t0 + dt;
+        if (t1 > 1) {
+            return g.subPath(path, 1, t0).concat(g.subPath(path, t1 - 1));
+        }
+        if (!path.isCurve) {
+            path = g.pathToCurve(path);
+        }
+        // path 每一段在整体中的长度区间
+        var segmentRanges = getBezierPathSegmentRanges(path);
+        // path 总长度
+        var totalLength = segmentRanges.totalLength;
+        // t1 和 t0 位置命中的长度位置
+        var t1Length = totalLength * t1, t0Length = totalLength * (t0 || 0);
+        // 产生的子路径
+        var subPath = [];
+        // 迭代变量，a 是一段的长度区间左值，b 是右值，d 是区间长度
+        var i, ii, a, b, d;
+        var position;
+        var bezier, subBezier, stared;
+        for (i = 0, ii = path.length; i < ii; i++) {
+            if (path[i][0] == "M") {
+                position = path[i].slice(1);
+                if (stared) {
+                    subPath.push(path[i].slice());
+                }
+                continue;
+            }
+            if (path[i][0] == "Z") {
+                // subpath 路径不闭合
+                continue;
+            }
+            a = segmentRanges[i][0];
+            b = segmentRanges[i][1];
+            d = b - a;
+            bezier = position.concat(path[i].slice(1));
+            if (t0Length > b) {
+                // t0 和 t1 都右溢出
+                // -----------------------------------
+                //            t0   t1
+                // |________|
+                //
+                // 需要跳过当前块
+                position = bezier.slice(bezier.length - 2);
+                continue;
+            } else if (t0Length >= a) {
+                // 命中 t0；t1 可能命中或右溢出
+                // -----------------------------------
+                //            t0   t1
+                //     |______|__|
+                //
+                //     or:  |_|____|__|
+                //
+                // 取当前块 t0 到 t1 的部分
+                subBezier = g.subBezier(bezier, Math.min((t1Length - a) / d, 1), (t0Length - a) / d);
+                stared = true;
+                position = subBezier.slice(0, 2);
+                subPath.push([ "M" ].concat(subBezier.slice(0, 2)));
+                subPath.push([ "C" ].concat(subBezier.slice(2)));
+            } else if (t1Length >= b) {
+                // t0 左溢出；t1 右溢出，整个块是需要的
+                // -----------------------------------
+                //       t0             t1
+                //          |_________|
+                //
+                // 此时取整个块
+                subPath.push(path[i].slice());
+            } else if (t1Length >= a) {
+                // t0 左溢出；t1 命中，取当前块 t1 之前的部分
+                // -----------------------------------
+                //            t0   t1
+                //              |__|______|
+                // 取当前块 t1 之前的部分
+                subBezier = g.subBezier(bezier, (t1Length - a) / d);
+                subPath.push([ "C" ].concat(subBezier.slice(2)));
+                stared = false;
+            } else {
+                // 没有可以再要的了
+                break;
+            }
+            position = bezier.slice(bezier.length - 2);
+        }
+        subPath.isAbsolute = true;
+        subPath.isCurve = true;
+        subPath.isUniform = true;
+        subPath.toString = g.pathToString;
+        return subPath;
+    };
+    /**
+     * 求路径上的一个点
+     *
+     * @param  {Array|String} path
+     *     要求点的路径
+     *
+     * @param  {Number} t
+     *     要求的点的位置（0 到 1）
+     *
+     * @return {Point} p
+     *     p.x: x 坐标
+     *     p.y: y 坐标
+     *     p.tan: 在 t 处的切线方向（类型为 kity.Vector，模为 1）
+     */
+    g.pointAtPath = function(path, t) {
+        if (!path.isCurve) {
+            path = g.pathToCurve(path);
+        }
+        var subPath = g.subPath(path, t);
+        var lastCurve = subPath[subPath.length - 1][0] == "Z" ? subPath[subPath.length - 2] : subPath[subPath.length - 1];
+        // 跳过 'C' 命令，只留参数
+        lastCurve = lastCurve.slice(1);
+        var p = Point.parse(lastCurve.slice(4)), c = Point.parse(lastCurve.slice(2, 4));
+        p.tan = Vector.fromPoints(c, p).normalize();
+        return p;
+    };
+    /**
+     * 求一段路径的长度
+     *
+     * @param  {string|Array} path
+     *     要求的路径
+     *
+     * @return {Number}
+     *     路径的长度
+     */
+    g.pathLength = cacher(function(path) {
+        if (!path.isCurve) {
+            path = g.pathToCurve(path);
+        }
+        // path 每一段在整体中的长度区间
+        var segmentRanges = getBezierPathSegmentRanges(path);
+        return segmentRanges.totalLength;
+    });
+    /**
+     * 求一段路径的关键点
+     *
+     * @param  {string|Array} path
+     *     要求的路径
+     *
+     * @return {Array}
+     *     关键点的集合
+     */
+    g.pathKeyPoints = cacher(function(path) {
+        var i, ii, command, keyPoints;
+        if (!path.isCurve) {
+            path = g.pathToCurve(path);
+        }
+        keyPoints = [];
+        for (i = 0, ii = path.length; i < ii; i++) {
+            if (path[i][0] == "z") continue;
+            keyPoints.push(path[i].slice(path[i].length - 2));
+        }
+        return keyPoints;
+    });
+    // 对比两个路径的关键位置，在合适的位置切割合适的路径，使得两个路径的段数一致
+    // TODO: 使用插值算法，使对应点更合理
+    var alignCurve = cacher(function(path1, path2) {
+        if (!path1.isCurve) path1 = g.pathToCurve(path1);
+        if (!path2.isCurve) path2 = g.pathToCurve(path2);
+        var p1 = pathClone(path1);
+        var p2 = pathClone(path2);
+        p1.i = 0;
+        p2.i = 0;
+        p1.o = p2;
+        p2.o = p1;
+        function command(p, i) {
+            return p[i || p.i] && p[i || p.i][0];
+        }
+        function param(p, i) {
+            return p[i || p.i] && p[i || p.i].slice(1);
+        }
+        function point(p, i) {
+            var _param = param(p, i);
+            return _param && _param.slice(-2);
+        }
+        function fixZ(p) {
+            if (command(p) == "Z") {
+                p.splice(p.i, 1);
+                return true;
+            }
+            return false;
+        }
+        function fixM(p) {
+            if (command(p) == "M") {
+                p.o.splice(p.o.i, 0, [ "M" ].concat(point(p.o, p.o.i - 1)));
+                p.i++;
+                p.o.i++;
+                return true;
+            }
+            return false;
+        }
+        function fill(p) {
+            var lastPoint;
+            var i = 1;
+            while (!lastPoint) {
+                lastPoint = point(p, p.length - i++);
+            }
+            p.o.i = p.i;
+            while (p.length < p.o.length) {
+                if (fixZ(p.o)) continue;
+                if (fixM(p.o)) continue;
+                p.push([ "C" ].concat(lastPoint).concat(lastPoint).concat(lastPoint));
+                p.i++;
+                p.o.i++;
+            }
+        }
+        while (p1.i < p1.length && p2.i < p2.length) {
+            if (fixZ(p1) || fixZ(p2)) continue;
+            if (command(p1) == command(p2)) {
+                p1.i++;
+                p2.i++;
+                continue;
+            }
+            if (fixM(p1) || fixM(p2)) continue;
+            p1.i++;
+            p2.i++;
+        }
+        if (p1.i == p1.length) fill(p1);
+        if (p2.i == p2.length) fill(p2);
+        delete p1.i;
+        delete p1.o;
+        delete p2.i;
+        delete p2.o;
+        return [ p1, p2 ];
+    });
+    g.alignCurve = alignCurve;
+    /**
+     * 获得两个路径的补间结果
+     *
+     * @param  {string|Array} path1
+     *     补间起始路径
+     *
+     * @param  {string|Array} path2
+     *     补间结束路径
+     *
+     * @param  {Number} t
+     *     补间比例，0 返回跟 path1 等效的结果；1 返回跟 path2 等效的结果
+     *
+     * @return {PathSegment}
+     *     补间的结果
+     */
+    g.pathTween = function(path1, path2, t) {
+        //if (t === 0) return path1;
+        //if (t === 1) return path2;
+        var aligned = alignCurve(path1, path2);
+        var result = [], seg, i, j;
+        path1 = aligned[0];
+        path2 = aligned[1];
+        for (i = 0; i < path1.length; i++) {
+            result.push(seg = []);
+            seg.push(path1[i][0]);
+            for (j = 1; j < path1[i].length; j++) {
+                seg.push(path1[i][j] + t * (path2[i][j] - path1[i][j]));
+            }
+        }
+        result.isUniform = result.isCurve = result.isAbsolute = true;
+        return result;
+    };
+    /**
+     * 变换指定的路径
+     *
+     * @param  {String|Array} path
+     *     需要变换的路径
+     *
+     * @param  {kity.Matrix} matrix
+     *     使用的变换矩阵
+     *
+     * @return {Array}
+     *     变换后的路径
+     */
+    g.transformPath = cacher(function(path, matrix) {
+        var i, ii, j, result, seg, pair;
+        if (!path.isCurve) {
+            path = g.pathToCurve(path);
+        }
+        result = [];
+        for (i = 0, ii = path.length; i < ii; i++) {
+            result.push(seg = [ path[i][0] ]);
+            for (j = 1; j < path[i].length; j += 2) {
+                pair = path[i].slice(j, j + 2);
+                pair = matrix.transformPoint(Point.parse(pair));
+                result.push(pair);
+            }
+        }
+        return result;
+    });
+    // entend
+    require("core/class").extendClass(Matrix, {
+        transformPath: function(path) {
+            return g.transformPath(path, this);
+        }
+    });
+    return g;
 });
 define("graphic/gradientbrush", [ "graphic/svg", "graphic/defbrush", "core/class", "graphic/resource", "graphic/color", "core/utils", "graphic/standardcolor", "core/config" ], function(require, exports, module) {
     var svg = require("graphic/svg");
@@ -2759,7 +3610,7 @@ define("graphic/image", [ "core/class", "core/config", "graphic/shape", "graphic
         }
     });
 });
-define("graphic/line", [ "core/class", "core/config", "graphic/path", "core/utils", "graphic/shape", "graphic/svg" ], function(require, exports, module) {
+define("graphic/line", [ "core/class", "core/config", "graphic/path", "core/utils", "graphic/shape", "graphic/svg", "graphic/geometry" ], function(require, exports, module) {
     return require("core/class").createClass("Line", {
         base: require("graphic/path"),
         constructor: function(x1, y1, x2, y2) {
@@ -2843,7 +3694,7 @@ define("graphic/lineargradientbrush", [ "graphic/svg", "graphic/gradientbrush", 
         }
     });
 });
-define("graphic/marker", [ "graphic/point", "core/class", "core/config", "graphic/resource", "graphic/svg", "graphic/shapecontainer", "graphic/container", "core/utils", "graphic/shape", "graphic/viewbox", "graphic/path" ], function(require, exports, module) {
+define("graphic/marker", [ "graphic/point", "core/class", "core/config", "graphic/resource", "graphic/svg", "graphic/shapecontainer", "graphic/container", "core/utils", "graphic/shape", "graphic/viewbox", "graphic/path", "graphic/geometry" ], function(require, exports, module) {
     var Point = require("graphic/point");
     var Marker = require("core/class").createClass("Marker", {
         base: require("graphic/resource"),
@@ -2925,7 +3776,7 @@ define("graphic/mask", [ "core/class", "core/config", "graphic/shape", "graphic/
     });
     return Mask;
 });
-define("graphic/matrix", [ "core/utils", "graphic/box", "graphic/point", "core/class", "core/config" ], function(require, exports, module) {
+define("graphic/matrix", [ "core/utils", "graphic/box", "core/class", "graphic/point", "core/config" ], function(require, exports, module) {
     var utils = require("core/utils");
     var Box = require("graphic/box");
     var mPattern = /matrix\((.+)\)/i;
@@ -3105,7 +3956,7 @@ define("graphic/matrix", [ "core/utils", "graphic/box", "graphic/point", "core/c
             yMin = Math.min(yMin, rp.y);
             yMax = Math.max(yMax, rp.y);
         }
-        var box = new Box({
+        box = new Box({
             x: xMin,
             y: yMin,
             width: xMax - xMin,
@@ -3435,12 +4286,13 @@ define("graphic/paper", [ "core/class", "core/config", "core/utils", "graphic/sv
     });
     return Paper;
 });
-define("graphic/path", [ "core/utils", "core/class", "core/config", "graphic/shape", "graphic/svg", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen", "graphic/box" ], function(require, exports, module) {
+define("graphic/path", [ "core/utils", "core/class", "core/config", "graphic/shape", "graphic/svg", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen", "graphic/box", "graphic/geometry", "graphic/point", "graphic/vector" ], function(require, exports, module) {
     var Utils = require("core/utils");
     var createClass = require("core/class").createClass;
     var Shape = require("graphic/shape");
     var svg = require("graphic/svg");
     var config = require("core/config");
+    var g = require("graphic/geometry");
     var slice = Array.prototype.slice, flatten = Utils.flatten;
     var PathDrawer = createClass("PathDrawer", {
         constructor: function(path) {
@@ -3451,38 +4303,56 @@ define("graphic/path", [ "core/utils", "core/class", "core/config", "graphic/sha
         getPath: function() {
             return this.path;
         },
-        pushSegment: function() {
-            var segment = slice.call(arguments);
-            var originData = this.path.getPathData();
-            if (this.__clear) {
-                originData = "";
-                this.__clear = false;
-            }
-            segment = flatten(segment);
-            if (originData) {
-                this.path.setPathData(originData + " " + segment.join(" "));
-            } else {
-                this.path.setPathData(segment.join(" "));
-            }
+        redraw: function() {
+            this._transation = this._transation || [];
+            return this.clear();
+        },
+        done: function() {
+            var transation = this._transation;
+            this._transation = null;
+            this.push(transation);
             return this;
         },
-        push: function(command, args) {
-            return this.pushSegment([ command, slice.call(args) ]);
+        clear: function() {
+            if (this._transation) {
+                this._transation = [];
+            } else {
+                this.path.setPathData("M 0 0");
+            }
+            this._clear = true;
+            return this;
+        },
+        push: function() {
+            var segment = slice.call(arguments);
+            var originData;
+            if (this._transation) {
+                this._transation.push(segment);
+                return this;
+            }
+            if (this._clear) {
+                originData = "";
+                this._clear = false;
+            } else {
+                originData = this.path.getPathData();
+            }
+            originData = originData || "";
+            this.path.setPathData(originData + g.pathToString(segment));
+            return this;
         },
         moveTo: function(x, y) {
-            return this.push("M", arguments);
+            return this.push("M", slice.call(arguments));
         },
         moveBy: function(dx, dy) {
-            return this.push("m", arguments);
+            return this.push("m", slice.call(arguments));
         },
         lineTo: function(x, y) {
-            return this.push("L", arguments);
+            return this.push("L", slice.call(arguments));
         },
         lineBy: function(dx, dy) {
-            return this.push("l", arguments);
+            return this.push("l", slice.call(arguments));
         },
         arcTo: function(rx, ry, xr, laf, sf, x, y) {
-            return this.push("A", arguments);
+            return this.push("A", slice.call(arguments));
         },
         arcBy: function(rx, ry, xr, laf, sf, dx, dy) {
             return this.push("a", arguments);
@@ -3494,18 +4364,13 @@ define("graphic/path", [ "core/utils", "core/class", "core/config", "graphic/sha
             return this.push("a", [ r, r, 0 ].concat(slice.call(arguments, 1)));
         },
         bezierTo: function(x1, y1, x2, y2, x, y) {
-            return this.push("C", arguments);
+            return this.push("C", slice.call(arguments));
         },
         bezierBy: function(dx1, dy1, dx2, dy2, dx, dy) {
-            return this.push("c", arguments);
+            return this.push("c", slice.call(arguments));
         },
         close: function() {
-            return this.pushSegment([ "z" ]);
-        },
-        clear: function() {
-            this.__clear = true;
-            this.path.setPathData("M 0 0");
-            return this;
+            return this.push("z");
         }
     });
     return createClass("Path", {
@@ -3522,12 +4387,8 @@ define("graphic/path", [ "core/utils", "core/class", "core/config", "graphic/sha
             if (!data) {
                 return;
             }
-            // add support for path segment
-            if (data instanceof Array) {
-                data = flatten(data).join(" ");
-            }
-            this.pathdata = data;
-            this.node.setAttribute("d", data);
+            this.pathdata = g.pathToString(data);
+            this.node.setAttribute("d", this.pathdata);
             this.trigger("shapeupdate", {
                 type: "pathdata"
             });
@@ -3596,7 +4457,7 @@ define("graphic/pen", [ "graphic/color", "core/utils", "graphic/standardcolor", 
             this.opacity = 1;
         },
         getBrush: function() {
-            return this.color;
+            return this.brush;
         },
         setBrush: function(brush) {
             this.brush = brush;
@@ -3604,6 +4465,9 @@ define("graphic/pen", [ "graphic/color", "core/utils", "graphic/standardcolor", 
         },
         setColor: function(color) {
             return this.setBrush(color);
+        },
+        getColor: function() {
+            return this.brush instanceof Color ? this.brush : null;
         },
         getWidth: function() {
             return this.width;
@@ -3759,7 +4623,7 @@ define("graphic/pointcontainer", [ "core/class", "core/config", "graphic/contain
 /*
  * 通过点来决定图形的公共父类
  */
-define("graphic/poly", [ "core/utils", "core/class", "core/config", "graphic/path", "graphic/shape", "graphic/svg", "graphic/pointcontainer", "graphic/container" ], function(require, exports, module) {
+define("graphic/poly", [ "core/utils", "core/class", "core/config", "graphic/path", "graphic/shape", "graphic/svg", "graphic/geometry", "graphic/pointcontainer", "graphic/container" ], function(require, exports, module) {
     var Utils = require("core/utils");
     return require("core/class").createClass("Poly", {
         base: require("graphic/path"),
@@ -3856,7 +4720,7 @@ define("graphic/radialgradientbrush", [ "graphic/gradientbrush", "graphic/svg", 
         }
     });
 });
-define("graphic/rect", [ "core/utils", "graphic/point", "core/class", "core/config", "graphic/path", "graphic/shape", "graphic/svg" ], function(require, exports, module) {
+define("graphic/rect", [ "core/utils", "graphic/point", "core/class", "core/config", "graphic/path", "graphic/shape", "graphic/svg", "graphic/geometry" ], function(require, exports, module) {
     var RectUtils = {}, Utils = require("core/utils"), Point = require("graphic/point");
     Utils.extend(RectUtils, {
         //根据传递进来的width、height和radius属性，
@@ -3864,18 +4728,6 @@ define("graphic/rect", [ "core/utils", "graphic/point", "core/class", "core/conf
         formatRadius: function(width, height, radius) {
             var minValue = Math.floor(Math.min(width / 2, height / 2));
             return Math.min(minValue, radius);
-        },
-        getPathData: function(x, y, width, height, radius) {
-            var pathData = null;
-            //直角
-            if (radius === 0) {
-                pathData = [ "M " + x + "," + y, " h " + width, " v " + height, " h " + -width, " Z" ];
-            } else {
-                width -= 2 * radius;
-                height -= 2 * radius;
-                pathData = [ "M " + (x + radius) + "," + y, " h " + width, " a " + radius + " " + radius + " 0 0 1 " + radius + " " + radius, " v " + height, " a " + radius + " " + radius + " 0 0 1 " + -radius + " " + radius, " h " + -width, " a " + radius + " " + radius + " 0 0 1 " + -radius + " " + -radius, " v " + -height, " a " + radius + " " + radius + " 0 0 1 " + radius + " " + -radius, " Z" ];
-            }
-            return pathData.join("");
         }
     });
     return require("core/class").createClass("Rect", {
@@ -3890,8 +4742,31 @@ define("graphic/rect", [ "core/utils", "graphic/point", "core/class", "core/conf
             this.update();
         },
         update: function() {
-            var pathData = RectUtils.getPathData(this.x, this.y, this.width, this.height, this.radius);
-            this.setPathData(pathData);
+            var x = this.x, y = this.y, w = this.width, h = this.height, r = this.radius;
+            var drawer = this.getDrawer().redraw();
+            if (!r) {
+                // 直角
+                drawer.push("M", x, y);
+                drawer.push("h", w);
+                drawer.push("v", h);
+                drawer.push("h", -w);
+                drawer.push("z");
+            } else {
+                //圆角
+                w -= 2 * r;
+                h -= 2 * r;
+                drawer.push("M", x + r, y);
+                drawer.push("h", w);
+                drawer.push("a", r, r, 0, 0, 1, r, r);
+                drawer.push("v", h);
+                drawer.push("a", r, r, 0, 0, 1, -r, r);
+                drawer.push("h", -w);
+                drawer.push("a", r, r, 0, 0, 1, -r, -r);
+                drawer.push("v", -h);
+                drawer.push("a", r, r, 0, 0, 1, r, -r);
+                drawer.push("z");
+            }
+            drawer.done();
             return this;
         },
         setWidth: function(width) {
@@ -3949,7 +4824,7 @@ define("graphic/rect", [ "core/utils", "graphic/point", "core/class", "core/conf
         }
     });
 });
-define("graphic/regularpolygon", [ "graphic/point", "core/class", "core/config", "graphic/path", "core/utils", "graphic/shape", "graphic/svg" ], function(require, exports, module) {
+define("graphic/regularpolygon", [ "graphic/point", "core/class", "core/config", "graphic/path", "core/utils", "graphic/shape", "graphic/svg", "graphic/geometry" ], function(require, exports, module) {
     var Point = require("graphic/point");
     return require("core/class").createClass("RegularPolygon", {
         base: require("graphic/path"),
@@ -4163,7 +5038,7 @@ define("graphic/shape", [ "graphic/svg", "core/utils", "graphic/eventhandler", "
             return this._applyTransform();
         },
         setScale: function(s) {
-            this.transform.scale = s != null && slice.call(arguments) || null;
+            this.transform.scale = s !== null && slice.call(arguments) || null;
             return this._applyTransform();
         },
         translate: function(dx, dy) {
@@ -4401,8 +5276,8 @@ define("graphic/shapeevent", [ "graphic/matrix", "core/utils", "graphic/box", "g
                 }
                 this.originEvent = event;
                 this.targetShape = target.shape || target.paper || event.currentTarget && (event.currentTarget.shape || event.currentTarget.paper);
-                if (event.__kity_param) {
-                    Utils.extend(this, event.__kity_param);
+                if (event._kityParam) {
+                    Utils.extend(this, event._kityParam);
                 }
             } else {
                 Utils.extend(this, event);
@@ -4422,11 +5297,11 @@ define("graphic/shapeevent", [ "graphic/matrix", "core/utils", "graphic/box", "g
             }
         },
         //当前鼠标事件在用户坐标系中点击的点的坐标位置
-        getPosition: function(refer, touch_index) {
+        getPosition: function(refer, touchIndex) {
             if (!this.originEvent) {
                 return null;
             }
-            var eventClient = this.originEvent.touches ? this.originEvent.touches[touch_index || 0] : this.originEvent;
+            var eventClient = this.originEvent.touches ? this.originEvent.touches[touchIndex || 0] : this.originEvent;
             var clientX = eventClient && eventClient.clientX || 0, clientY = eventClient && eventClient.clientY || 0, node = this.targetShape.shapeNode || this.targetShape.node, // 鼠标位置在目标对象上的坐标
             // 基于屏幕坐标算
             point = Matrix.transformPoint(clientX, clientY, node.getScreenCTM().inverse());
@@ -4632,7 +5507,7 @@ define("graphic/standardcolor", [], {
     //标准扩展
     EXTEND_STANDARD: {}
 });
-define("graphic/star", [ "graphic/point", "core/class", "core/config", "graphic/path", "core/utils", "graphic/shape", "graphic/svg" ], function(require, exports, module) {
+define("graphic/star", [ "graphic/point", "core/class", "core/config", "graphic/path", "core/utils", "graphic/shape", "graphic/svg", "graphic/geometry" ], function(require, exports, module) {
     /**
      * @see http://www.jdawiseman.com/papers/easymath/surds_star_inner_radius.html
      */
@@ -4784,7 +5659,7 @@ define("graphic/svg", [], function(require, exports, module) {
     };
     return svg;
 });
-define("graphic/sweep", [ "graphic/point", "core/class", "core/config", "graphic/path", "core/utils", "graphic/shape", "graphic/svg" ], function(require, exports, module) {
+define("graphic/sweep", [ "graphic/point", "core/class", "core/config", "graphic/path", "core/utils", "graphic/shape", "graphic/svg", "graphic/geometry" ], function(require, exports, module) {
     var Point = require("graphic/point");
     return require("core/class").createClass("Sweep", {
         base: require("graphic/path"),
@@ -5118,7 +5993,8 @@ define("graphic/vector", [ "graphic/point", "core/class", "graphic/matrix", "cor
         },
         reverse: function() {
             return this.multipy(-1);
-        }
+        },
+        getAngle: function() {}
     });
     Vector.fromPoints = function(p1, p2) {
         return new Vector(p2.x - p1.x, p2.y - p1.y);
@@ -5177,86 +6053,86 @@ define("graphic/viewbox", [ "core/class", "core/config" ], function(require, exp
  * 模块暴露
  */
 
-( function ( global ) {
+(function(global) {
 
-    define( 'kity.start', function ( require ) {
+    define('kity.start', function(require) {
 
-        var kity = global.kity = require( 'core/class' );
+        var kity = global.kity = require('core/class');
 
-        require( 'core/utils' ).extend( kity, {
+        require('core/utils').extend(kity, {
 
             // core
-            Utils: require( "core/utils" ),
-            Browser: require( "core/browser" ),
+            Utils: require('core/utils'),
+            Browser: require('core/browser'),
             // shape
-            Bezier: require( 'graphic/bezier' ),
-            BezierPoint: require( 'graphic/bezierpoint' ),
-            Circle: require( 'graphic/circle' ),
-            Clip: require( 'graphic/clip' ),
-            Color: require( 'graphic/color' ),
-            Curve: require( 'graphic/curve' ),
-            Ellipse: require( 'graphic/ellipse' ),
-            GradientBrush: require( 'graphic/gradientbrush' ),
-            Group: require( 'graphic/group' ),
-            HyperLink: require( 'graphic/hyperlink' ),
-            Image: require( 'graphic/image' ),
-            Line: require( 'graphic/line' ),
-            LinearGradientBrush: require( 'graphic/lineargradientbrush' ),
-            Mask: require( 'graphic/mask' ),
-            Matrix: require( 'graphic/matrix' ),
-            Marker: require( 'graphic/marker' ),
-            Palette: require( 'graphic/palette' ),
-            Paper: require( 'graphic/paper' ),
-            Path: require( 'graphic/path' ),
-            PatternBrush: require( 'graphic/patternbrush' ),
-            Pen: require( 'graphic/pen' ),
-            Point: require( 'graphic/point' ),
-            Polygon: require( 'graphic/polygon' ),
-            Polyline: require( 'graphic/polyline' ),
-            Pie: require( 'graphic/pie' ),
-            RadialGradientBrush: require( 'graphic/radialgradientbrush' ),
-            Rect: require( 'graphic/rect' ),
+            Bezier: require('graphic/bezier'),
+            BezierPoint: require('graphic/bezierpoint'),
+            Circle: require('graphic/circle'),
+            Clip: require('graphic/clip'),
+            Color: require('graphic/color'),
+            Curve: require('graphic/curve'),
+            Ellipse: require('graphic/ellipse'),
+            GradientBrush: require('graphic/gradientbrush'),
+            Group: require('graphic/group'),
+            HyperLink: require('graphic/hyperlink'),
+            Image: require('graphic/image'),
+            Line: require('graphic/line'),
+            LinearGradientBrush: require('graphic/lineargradientbrush'),
+            Mask: require('graphic/mask'),
+            Matrix: require('graphic/matrix'),
+            Marker: require('graphic/marker'),
+            Palette: require('graphic/palette'),
+            Paper: require('graphic/paper'),
+            Path: require('graphic/path'),
+            PatternBrush: require('graphic/patternbrush'),
+            Pen: require('graphic/pen'),
+            Point: require('graphic/point'),
+            Polygon: require('graphic/polygon'),
+            Polyline: require('graphic/polyline'),
+            Pie: require('graphic/pie'),
+            RadialGradientBrush: require('graphic/radialgradientbrush'),
+            Rect: require('graphic/rect'),
             RegularPolygon: require('graphic/regularpolygon'),
-            Ring: require( 'graphic/ring' ),
-            Shape: require( 'graphic/shape' ),
-            ShapePoint: require( 'graphic/shapepoint' ),
-            Sweep: require( 'graphic/sweep' ),
+            Ring: require('graphic/ring'),
+            Shape: require('graphic/shape'),
+            ShapePoint: require('graphic/shapepoint'),
+            Sweep: require('graphic/sweep'),
             Star: require('graphic/star'),
-            Text: require( 'graphic/text' ),
-            TextSpan: require( 'graphic/textspan' ),
-            Use: require( 'graphic/use' ),
-            Vector: require( 'graphic/vector' ),
+            Text: require('graphic/text'),
+            TextSpan: require('graphic/textspan'),
+            Use: require('graphic/use'),
+            Vector: require('graphic/vector'),
+            g: require('graphic/geometry'),
 
             // animate
-            Animator: require( 'animate/animator' ),
-            Easing: require( 'animate/easing' ),
-            OpacityAnimator: require( 'animate/opacityanimator' ),
-            RotateAnimator: require( 'animate/rotateanimator' ),
-            ScaleAnimator: require( 'animate/scaleanimator' ),
-            Timeline: require( 'animate/timeline' ),
-            TranslateAnimator: require( 'animate/translateanimator' ),
+            Animator: require('animate/animator'),
+            Easing: require('animate/easing'),
+            OpacityAnimator: require('animate/opacityanimator'),
+            RotateAnimator: require('animate/rotateanimator'),
+            ScaleAnimator: require('animate/scaleanimator'),
+            Timeline: require('animate/timeline'),
+            TranslateAnimator: require('animate/translateanimator'),
 
             // filter
-            Filter: require( 'filter/filter' ),
-            GaussianblurFilter: require( 'filter/gaussianblurfilter' ),
-            ProjectionFilter: require( 'filter/projectionfilter' ),
+            Filter: require('filter/filter'),
+            GaussianblurFilter: require('filter/gaussianblurfilter'),
+            ProjectionFilter: require('filter/projectionfilter'),
 
             // effect
-            ColorMatrixEffect: require( 'filter/effect/colormatrixeffect' ),
-            CompositeEffect: require( 'filter/effect/compositeeffect' ),
-            ConvolveMatrixEffect: require( 'filter/effect/convolvematrixeffect' ),
-            Effect: require( 'filter/effect/effect' ),
-            GaussianblurEffect: require( 'filter/effect/gaussianblureffect' ),
-            OffsetEffect: require( 'filter/effect/offseteffect' )
+            ColorMatrixEffect: require('filter/effect/colormatrixeffect'),
+            CompositeEffect: require('filter/effect/compositeeffect'),
+            ConvolveMatrixEffect: require('filter/effect/convolvematrixeffect'),
+            Effect: require('filter/effect/effect'),
+            GaussianblurEffect: require('filter/effect/gaussianblureffect'),
+            OffsetEffect: require('filter/effect/offseteffect')
 
-        } );
+        });
 
-    } );
+    });
 
     // build环境中才含有use
     try {
-        use( 'kity.start' );
-    } catch ( e ) {}
+        use('kity.start');
+    } catch (e) {}
 
-} )( this );
-})();
+})(this);})();
