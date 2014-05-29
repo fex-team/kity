@@ -113,7 +113,7 @@ module.exports = function(grunt) {
 
         jasmine: {
             kity: {
-                src: ['dev-lib/cmd-define.js', 'dist/kity.js'],
+                src: ['dev-lib/cmd-define.js', 'dist/kity.min.js'],
                 options: {
                     specs: [
                         'spec/core/*',
