@@ -11,6 +11,6 @@
     });
 
     // build 环境中才含有use
-    if (typeof(use) === 'function') use('export');
+    use('export');
 
 })(this);

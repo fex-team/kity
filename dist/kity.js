@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kity - v2.0.0 - 2014-05-29
+ * kity - v2.0.0 - 2014-05-30
  * https://github.com/fex-team/kity
  * GitHub: https://github.com/fex-team/kity.git 
  * Copyright (c) 2014 Baidu FEX; Licensed BSD
@@ -4542,6 +4542,9 @@ define("graphic/point", [ "core/class" ], function(require, exports, module) {
         },
         toString: function() {
             return this.valueOf().join(" ");
+        },
+        spof: function() {
+            return new Point((this.x | 0) + .5, (this.y | 0) + .5);
         }
     });
     Point.fromPolar = function(radius, angle, unit) {
@@ -6119,6 +6122,6 @@ define("kity", [ "core/utils", "core/class", "core/browser", "graphic/bezier", "
     });
 
     // build 环境中才含有use
-    if (typeof(use) === 'function') use('export');
+    use('export');
 
 })(this);})();
