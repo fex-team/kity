@@ -5863,11 +5863,12 @@ define("graphic/textcontent", [ "graphic/shape", "graphic/svg", "core/utils", "g
             });
         },
         setFont: function(font) {
+            var node = this.node;
             [ "family", "size", "weight", "style" ].forEach(function(section) {
                 if (font[section] === null) {
-                    this.node.removeAttribute("font-" + section);
+                    node.removeAttribute("font-" + section);
                 } else if (font[section]) {
-                    this.node.setAttribute("font-" + section, font[section]);
+                    node.setAttribute("font-" + section, font[section]);
                 }
             });
             return this;
