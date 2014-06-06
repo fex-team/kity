@@ -25,6 +25,10 @@ define(function(require, exports, module) {
 
         toString: function() {
             return this.valueOf().join(' ');
+        },
+
+        spof: function() {
+            return new Point((this.x | 0) + 0.5, (this.y | 0) + 0.5);
         }
     });
 
