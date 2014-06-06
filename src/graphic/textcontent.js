@@ -60,18 +60,13 @@ define(function(require, exports, module) {
         },
 
         setFont: function(font) {
-            if (font.family) {
-                this.node.setAttribute('font-family', font.family);
-            }
-            if (font.size) {
-                this.node.setAttribute('font-size', font.size);
-            }
-            if (font.weight) {
-                this.node.setAttribute('font-weight', font.weight);
-            }
-            if (font.style) {
-                this.node.setAttribute('font-style', font.style);
-            }
+            ['family', 'size', 'weight', 'style'].forEach(function(section) {
+                if (font[section] === null) {
+                    this.node.removeAttribute('font-' + section);
+                } else if (font[section]) {
+                    this.node.setAttribute('font-' + section, font[section]);
+                }
+            });
             return this;
         },
 

@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kity - v2.0.0 - 2014-05-29
+ * kity - v2.0.0 - 2014-06-06
  * https://github.com/fex-team/kity
  * GitHub: https://github.com/fex-team/kity.git 
  * Copyright (c) 2014 Baidu FEX; Licensed BSD
@@ -5860,18 +5860,13 @@ define("graphic/textcontent", [ "graphic/shape", "graphic/svg", "core/utils", "g
             });
         },
         setFont: function(font) {
-            if (font.family) {
-                this.node.setAttribute("font-family", font.family);
-            }
-            if (font.size) {
-                this.node.setAttribute("font-size", font.size);
-            }
-            if (font.weight) {
-                this.node.setAttribute("font-weight", font.weight);
-            }
-            if (font.style) {
-                this.node.setAttribute("font-style", font.style);
-            }
+            [ "family", "size", "weight", "style" ].forEach(function(section) {
+                if (font[section] === null) {
+                    this.node.removeAttribute("font-" + section);
+                } else if (font[section]) {
+                    this.node.setAttribute("font-" + section, font[section]);
+                }
+            });
             return this;
         },
         getExtentOfChar: function(index) {
