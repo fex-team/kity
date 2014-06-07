@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kity - v2.0.0 - 2014-06-06
+ * kity - v2.0.0 - 2014-06-07
  * https://github.com/fex-team/kity
  * GitHub: https://github.com/fex-team/kity.git 
  * Copyright (c) 2014 Baidu FEX; Licensed BSD
@@ -3895,6 +3895,10 @@ define("graphic/matrix", [ "core/utils", "graphic/box", "core/class", "graphic/p
         valueOf: function() {
             var m = this.m;
             return [ m.a, m.b, m.c, m.d, m.e, m.f ];
+        },
+        equals: function(matrix) {
+            var m1 = this.m, m2 = matrix.m;
+            return m1.a == m2.a && m1.b == m2.b && m1.c == m2.c && m1.d == m2.d && m1.e == m2.e && m1.f == m2.f;
         },
         transformPoint: function() {
             return Matrix.transformPoint.apply(null, [].slice.call(arguments).concat([ this.m ]));

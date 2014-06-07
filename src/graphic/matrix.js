@@ -157,6 +157,17 @@ define(function(require, exports, module) {
             return [m.a, m.b, m.c, m.d, m.e, m.f];
         },
 
+        equals: function(matrix) {
+            var m1 = this.m,
+                m2 = matrix.m;
+            return m1.a == m2.a &&
+                m1.b == m2.b &&
+                m1.c == m2.c &&
+                m1.d == m2.d &&
+                m1.e == m2.e &&
+                m1.f == m2.f;
+        },
+
         transformPoint: function() {
             return Matrix.transformPoint.apply(null, [].slice.call(arguments).concat([this.m]));
         },
