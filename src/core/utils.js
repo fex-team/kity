@@ -125,11 +125,6 @@ define(function() {
         paralle: function(v1, v2, op) {
             var Class, field, index, value;
 
-            // 是否数字
-            if (false === isNaN(parseFloat(v1))) {
-                return op(v1, v2);
-            }
-
             // 数组
             if (v1 instanceof Array) {
                 value = [];
@@ -141,7 +136,6 @@ define(function() {
 
             // 对象
             if (v1 instanceof Object) {
-                value = {};
 
                 // 如果值是一个支持原始表示的实例，获取其原始表示
                 Class = v1.getClass && v1.getClass();
@@ -150,11 +144,7 @@ define(function() {
                     v2 = v2.valueOf();
                 }
 
-                for (field in v1) {
-                    if (v1.hasOwnProperty(field) && v2.hasOwnProperty(field)) {
-                        value[field] = utils.paralle(v1[field], v2[field], op);
-                    }
-                }
+                value = utils.paralle(v1, v2, op);
 
                 // 如果值是一个支持原始表示的实例，用其原始表示的结果重新封箱
                 if (Class && Class.parse) {
@@ -162,6 +152,11 @@ define(function() {
                 }
 
                 return value;
+            }
+
+            // 是否数字
+            if (false === isNaN(parseFloat(v1))) {
+                return op(v1, v2);
             }
 
             return value;

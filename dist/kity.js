@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kity - v2.0.0 - 2014-06-07
+ * kity - v2.0.0 - 2014-06-08
  * https://github.com/fex-team/kity
  * GitHub: https://github.com/fex-team/kity.git 
  * Copyright (c) 2014 Baidu FEX; Licensed BSD
@@ -1071,10 +1071,6 @@ define("core/utils", [], function() {
          */
         paralle: function(v1, v2, op) {
             var Class, field, index, value;
-            // 是否数字
-            if (false === isNaN(parseFloat(v1))) {
-                return op(v1, v2);
-            }
             // 数组
             if (v1 instanceof Array) {
                 value = [];
@@ -1085,23 +1081,22 @@ define("core/utils", [], function() {
             }
             // 对象
             if (v1 instanceof Object) {
-                value = {};
                 // 如果值是一个支持原始表示的实例，获取其原始表示
                 Class = v1.getClass && v1.getClass();
                 if (Class && Class.parse) {
                     v1 = v1.valueOf();
                     v2 = v2.valueOf();
                 }
-                for (field in v1) {
-                    if (v1.hasOwnProperty(field) && v2.hasOwnProperty(field)) {
-                        value[field] = utils.paralle(v1[field], v2[field], op);
-                    }
-                }
+                value = utils.paralle(v1, v2, op);
                 // 如果值是一个支持原始表示的实例，用其原始表示的结果重新封箱
                 if (Class && Class.parse) {
                     value = Class.parse(value);
                 }
                 return value;
+            }
+            // 是否数字
+            if (false === isNaN(parseFloat(v1))) {
+                return op(v1, v2);
             }
             return value;
         },
@@ -3910,6 +3905,16 @@ define("graphic/matrix", [ "core/utils", "graphic/box", "core/class", "graphic/p
     Matrix.parse = function(str) {
         var match;
         var f = parseFloat;
+        if (str instanceof Array) {
+            return new Matrix({
+                a: str[0],
+                b: str[1],
+                c: str[2],
+                d: str[3],
+                e: str[4],
+                f: str[5]
+            });
+        }
         if (match = mPattern.exec(str)) {
             var values = match[1].split(",");
             if (values.length != 6) {

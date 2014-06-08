@@ -180,6 +180,16 @@ define(function(require, exports, module) {
     Matrix.parse = function(str) {
         var match;
         var f = parseFloat;
+        if (str instanceof Array) {
+            return new Matrix({
+                a: str[0],
+                b: str[1],
+                c: str[2],
+                d: str[3],
+                e: str[4],
+                f: str[5]
+            });
+        }
         if ((match = mPattern.exec(str))) {
             var values = match[1].split(',');
             if (values.length != 6) {
