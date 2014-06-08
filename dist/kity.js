@@ -3962,7 +3962,9 @@ define("graphic/matrix", [ "core/utils", "graphic/box", "core/class", "graphic/p
             left: xMin,
             right: xMax,
             top: yMin,
-            bottom: yMax
+            bottom: yMax,
+            cx: (xMin + xMax) / 2,
+            cy: (yMin + yMax) / 2
         });
         return box;
     };

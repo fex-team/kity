@@ -250,7 +250,9 @@ define(function(require, exports, module) {
             left: xMin,
             right: xMax,
             top: yMin,
-            bottom: yMax
+            bottom: yMax,
+            cx: (xMin + xMax) / 2,
+            cy: (yMin + yMax) / 2
         });
         return box;
     };
