@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kity - v2.0.0 - 2014-06-08
+ * kity - v2.0.0 - 2014-06-09
  * https://github.com/fex-team/kity
  * GitHub: https://github.com/fex-team/kity.git 
  * Copyright (c) 2014 Baidu FEX; Licensed BSD
@@ -1070,7 +1070,7 @@ define("core/utils", [], function() {
          * @return {Number|Object|Array}
          */
         paralle: function(v1, v2, op) {
-            var Class, field, index, value;
+            var Class, field, index, name, value;
             // 数组
             if (v1 instanceof Array) {
                 value = [];
@@ -1086,11 +1086,15 @@ define("core/utils", [], function() {
                 if (Class && Class.parse) {
                     v1 = v1.valueOf();
                     v2 = v2.valueOf();
-                }
-                value = utils.paralle(v1, v2, op);
-                // 如果值是一个支持原始表示的实例，用其原始表示的结果重新封箱
-                if (Class && Class.parse) {
+                    value = utils.paralle(v1, v2, op);
                     value = Class.parse(value);
+                } else {
+                    value = {};
+                    for (name in v1) {
+                        if (v1.hasOwnProperty(name) && v2.hasOwnProperty(name)) {
+                            value[name] = utils.paralle(v1[name], v2[name], op);
+                        }
+                    }
                 }
                 return value;
             }

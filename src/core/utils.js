@@ -123,7 +123,7 @@ define(function() {
          * @return {Number|Object|Array}
          */
         paralle: function(v1, v2, op) {
-            var Class, field, index, value;
+            var Class, field, index, name, value;
 
             // 数组
             if (v1 instanceof Array) {
@@ -139,16 +139,22 @@ define(function() {
 
                 // 如果值是一个支持原始表示的实例，获取其原始表示
                 Class = v1.getClass && v1.getClass();
+
                 if (Class && Class.parse) {
                     v1 = v1.valueOf();
                     v2 = v2.valueOf();
+                    value = utils.paralle(v1, v2, op);
+                    value = Class.parse(value);
                 }
 
-                value = utils.paralle(v1, v2, op);
-
-                // 如果值是一个支持原始表示的实例，用其原始表示的结果重新封箱
-                if (Class && Class.parse) {
-                    value = Class.parse(value);
+                // 否则作为字面量封箱
+                else {
+                    value = {};
+                    for (name in v1) {
+                        if (v1.hasOwnProperty(name) && v2.hasOwnProperty(name)) {
+                            value[name] = utils.paralle(v1[name], v2[name], op);
+                        }
+                    }
                 }
 
                 return value;
