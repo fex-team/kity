@@ -4384,9 +4384,7 @@ define("graphic/path", [ "core/utils", "core/class", "graphic/shape", "graphic/s
             this.node.setAttribute("stroke", svg.defaults.stroke);
         },
         setPathData: function(data) {
-            if (!data) {
-                return;
-            }
+            data = data || "M0,0";
             this.pathdata = g.pathToString(data);
             this.node.setAttribute("d", this.pathdata);
             this.trigger("shapeupdate", {
@@ -5703,6 +5701,11 @@ define("graphic/sweep", [ "graphic/point", "core/class", "graphic/path", "core/u
         },
         drawSection: function(from, to) {
             var angleLength = this.angle && (this.angle % 360 ? this.angle % 360 : 360), angleStart = this.angleOffset, angleHalf = angleStart + angleLength / 2, angleEnd = angleStart + angleLength, drawer = this.getDrawer();
+            drawer.redraw();
+            if (angleLength === 0) {
+                drawer.done();
+                return;
+            }
             drawer.moveTo(Point.fromPolar(from, angleStart));
             drawer.lineTo(Point.fromPolar(to, angleStart));
             if (to) {
@@ -5715,6 +5718,7 @@ define("graphic/sweep", [ "graphic/point", "core/class", "graphic/path", "core/u
                 drawer.carcTo(from, 0, 1, Point.fromPolar(from, angleStart));
             }
             drawer.close();
+            drawer.done();
         }
     });
 });

@@ -56,6 +56,13 @@ define(function(require, exports, module) {
                 angleEnd = angleStart + angleLength,
                 drawer = this.getDrawer();
 
+            drawer.redraw();
+
+            if (angleLength === 0) {
+                drawer.done();
+                return;
+            }
+
             drawer.moveTo(Point.fromPolar(from, angleStart));
 
             drawer.lineTo(Point.fromPolar(to, angleStart));
@@ -73,6 +80,7 @@ define(function(require, exports, module) {
             }
 
             drawer.close();
+            drawer.done();
         }
     });
 });

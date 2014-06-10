@@ -103,9 +103,7 @@ define(function(require, exports, module) {
             this.node.setAttribute('stroke', svg.defaults.stroke);
         },
         setPathData: function(data) {
-            if (!data) {
-                return;
-            }
+            data = data || 'M0,0';
 
             this.pathdata = g.pathToString(data);
 
