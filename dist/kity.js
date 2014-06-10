@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kity - v2.0.0 - 2014-06-09
+ * kity - v2.0.0 - 2014-06-10
  * https://github.com/fex-team/kity
  * GitHub: https://github.com/fex-team/kity.git 
  * Copyright (c) 2014 Baidu FEX; Licensed BSD
@@ -5729,8 +5729,11 @@ define("graphic/text", [ "graphic/textcontent", "graphic/shape", "core/class", "
         if (offsetHash[font]) {
             return offsetHash[font];
         }
+        var textContent = text.getContent();
+        text.setContent("test");
         var bbox = text.getBoundaryBox(), y = text.getY() + +text.node.getAttribute("dy");
         var topOffset = y - bbox.y, bottomOffset = topOffset - bbox.height;
+        text.setContent(textContent);
         return offsetHash[font] = {
             top: topOffset,
             bottom: bottomOffset,

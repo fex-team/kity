@@ -18,11 +18,17 @@ define(function(require, exports, module) {
         if (offsetHash[font]) {
             return offsetHash[font];
         }
+
+        var textContent = text.getContent();
+        text.setContent('test');
+
         var bbox = text.getBoundaryBox(),
-            y = text.getY() + (+text.node.getAttribute('dy'));
+            y = text.getY() + +text.node.getAttribute('dy');
 
         var topOffset = y - bbox.y,
             bottomOffset = topOffset - bbox.height;
+
+        text.setContent(textContent);
 
         return (offsetHash[font] = {
             top: topOffset,
