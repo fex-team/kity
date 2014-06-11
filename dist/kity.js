@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kity - v2.0.0 - 2014-06-10
+ * kity - v2.0.0 - 2014-06-11
  * https://github.com/fex-team/kity
  * GitHub: https://github.com/fex-team/kity.git 
  * Copyright (c) 2014 Baidu FEX; Licensed BSD
@@ -3724,14 +3724,14 @@ define("graphic/marker", [ "graphic/point", "core/class", "graphic/resource", "g
     });
     var Path = require("graphic/path");
     require("core/class").extendClass(Path, {
-        setMarkerStart: function(marker) {
-            this.node.setAttribute("marker-start", marker.toString());
-        },
-        setMarkerMid: function(marker) {
-            this.node.setAttribute("marker-mid", marker.toString());
-        },
-        setMarkerEnd: function(marker) {
-            this.node.setAttribute("marker-end", marker.toString());
+        setMarker: function(marker, pos) {
+            pos = pos || "end";
+            if (!marker) {
+                this.node.removeAttribute("marker-" + pos);
+            } else {
+                this.node.setAttribute("marker-" + pos, marker.toString());
+            }
+            return this;
         }
     });
     return Marker;
