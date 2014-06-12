@@ -135,10 +135,10 @@ define(function(require, exports, module) {
 
         addResource: function(resource) {
             this.resources.appendItem(resource);
+
             if (resource.node) {
                 this.resourceNode.appendChild(resource.node);
             }
-
 
             return this;
         },
