@@ -35,13 +35,14 @@
 
         var argLen = arguments.length,
             module = null;
+        var scriptNode;
 
         switch (argLen) {
 
             case 1:
-                var scriptNode = document.getElementsByTagName('script');
+                scriptNode = document.getElementsByTagName('script');
                 f = id;
-                id = scriptNode[scriptNode.length - 1].getAttribute("data-id");
+                id = scriptNode[scriptNode.length - 1].getAttribute('data-id');
                 break;
 
             case 2:
@@ -51,9 +52,9 @@
 
                 } else {
 
-                    var scriptNode = document.getElementsByTagName('script');
+                    scriptNode = document.getElementsByTagName('script');
                     f = deps;
-                    id = scriptNode[scriptNode.length - 1].getAttribute("data-id");
+                    id = scriptNode[scriptNode.length - 1].getAttribute('data-id');
 
                 }
 
@@ -81,7 +82,7 @@
 
         }
 
-    }
+    };
 
     function require(id) {
 
@@ -147,7 +148,8 @@
 
             loaded[key] = true;
 
-            document.write('<script src="' + uri + inc.base + '/' + key + '.js" onload="inc.remove(this)" data-id="' + key + '"></script>');
+            document.write('<script src="' + uri + inc.base + '/' + key + '.js'  +
+                'onload="inc.remove(this)"' + ' data-id="' + key + '"></script>');
 
         }
 
@@ -160,7 +162,7 @@
             deps = [],
             pattern = /require\s*\(\s*([^)]+?)\s*\)/g;
 
-        while (match = pattern.exec(content)) {
+        while ((match = pattern.exec(content))) {
 
             deps.push(match[1].replace(/'|"/g, ''));
 

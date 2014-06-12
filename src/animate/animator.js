@@ -98,6 +98,9 @@ define(function(require) {
             }
             return this;
         },
+        timeline: function() {
+            return this._KityAnimateQueue[0].t;
+        },
         stop: function() {
             var queue = this._KityAnimateQueue;
             if (queue) {

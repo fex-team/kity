@@ -1,16 +1,15 @@
-/*global use:true*/
+/* global use, inc: true */
 
 /**
  * 模块暴露
  */
 
-(function(global) {
+(function() {
 
-    define('export', function(require) {
-        return require('kity');
-    });
+    try {
+        inc.use('kity');
+    } catch (e) {
+        use('kity');
+    }
 
-    // build 环境中才含有use
-    use('export');
-
-})(this);
+})();

@@ -569,8 +569,13 @@ define(function(require) {
     g.pointAtBezier = function(bezierArray, t) {
         var b2t = cutBezier(bezierArray, t)[0];
         var p = Point.parse(b2t.slice(6)),
-            c = Point.parse(b2t.slice(4, 2));
-        p.tan = Vector.fromPoints(c, p).normalize();
+            c = Point.parse(b2t.slice(4, 2)),
+            v = Vector.fromPoints(c, p);
+        if (t === 0) {
+            p.tan = g.pointAtBezier(bezierArray, 0.01).tan;
+        } else {
+            p.tan = v.normalize();
+        }
         return p;
     };
 
@@ -611,7 +616,7 @@ define(function(require) {
     });
 
     // 计算一个 pathSegment 中每一段的在整体中所占的长度范围，以及总长度
-    // 改方法要求每一段都是贝塞尔曲线
+    // 方法要求每一段都是贝塞尔曲线
     var getBezierPathSegmentRanges = cacher(function(pathSegment) {
         var i, ii, segment, position, bezierLength, segmentRanges, totalLength;
 
@@ -813,6 +818,7 @@ define(function(require) {
 
         var p = Point.parse(lastCurve.slice(4)),
             c = Point.parse(lastCurve.slice(2, 4));
+
         p.tan = Vector.fromPoints(c, p).normalize();
 
         return p;

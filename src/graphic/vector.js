@@ -47,7 +47,11 @@ define(function(require, exports, module) {
             return this.multipy(-1);
         },
         getAngle: function() {
-            
+            var length = this.length();
+            if (length === 0) return 0;
+            var rad = Math.acos(this.x / length);
+            var sign = this.y > 0 ? 1 : -1;
+            return sign * 180 * rad / Math.PI;
         }
     });
     Vector.fromPoints = function(p1, p2) {

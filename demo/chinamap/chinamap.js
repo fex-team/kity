@@ -19,7 +19,6 @@ define(function(require) {
             }
             this.width = data.width;
             this.height = data.height;
-            this.setAnchor(0, 0);
         },
 
         setWidth: function(width) {

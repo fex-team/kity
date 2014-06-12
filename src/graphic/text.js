@@ -132,7 +132,7 @@ define(function(require, exports, module) {
                 this.node.appendChild(textpath);
             }
             textpath.setAttributeNS(svg.xlink, 'xlink:href', '#' + path.node.id);
-            this.setAnchor(this.getAnchor());
+            this.setTextAnchor(this.getTextAnchor());
             return this;
         }
     });

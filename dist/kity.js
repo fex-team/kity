@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kity - v2.0.0 - 2014-06-10
+ * kity - v2.0.0 - 2014-06-12
  * https://github.com/fex-team/kity
  * GitHub: https://github.com/fex-team/kity.git 
  * Copyright (c) 2014 Baidu FEX; Licensed BSD
@@ -169,6 +169,9 @@ define("animate/animator", [ "animate/timeline", "graphic/eventhandler", "animat
                 setTimeout(timeline.play.bind(timeline), delay);
             }
             return this;
+        },
+        timeline: function() {
+            return this._KityAnimateQueue[0].t;
         },
         stop: function() {
             var queue = this._KityAnimateQueue;
@@ -461,6 +464,37 @@ define("animate/frame", [], function(require, exports) {
     // 暴露
     exports.requestFrame = requestFrame;
     exports.releaseFrame = releaseFrame;
+});
+define("animate/motionanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/geometry", "core/utils", "graphic/point", "graphic/vector", "graphic/matrix", "graphic/path", "graphic/svg" ], function(require) {
+    var Animator = require("animate/animator");
+    var g = require("graphic/geometry");
+    var Path = require("graphic/path");
+    var MotionAnimator = require("core/class").createClass("MotionAnimator", {
+        base: Animator,
+        constructor: function(path) {
+            var me = this;
+            this.callBase({
+                beginValue: 0,
+                finishValue: 1,
+                setter: function(target, value) {
+                    var path = me.motionPath instanceof Path ? me.motionPath.getPathData() : me.motionPath;
+                    var point = g.pointAtPath(path, value);
+                    target.setTranslate(point.x, point.y);
+                    target.setRotate(point.tan.getAngle());
+                }
+            });
+            this.updatePath(path);
+        },
+        updatePath: function(path) {
+            this.motionPath = path;
+        }
+    });
+    require("core/class").extendClass(Path, {
+        motion: function(path, duration, easing, delay, callback) {
+            return this.animate(new MotionAnimator(path), duration, easing, delay, callback);
+        }
+    });
+    return MotionAnimator;
 });
 define("animate/opacityanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/svg", "core/utils", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen", "graphic/box" ], function(require) {
     var Animator = require("animate/animator");
@@ -3104,8 +3138,12 @@ define("graphic/geometry", [ "core/utils", "graphic/point", "core/class", "graph
      */
     g.pointAtBezier = function(bezierArray, t) {
         var b2t = cutBezier(bezierArray, t)[0];
-        var p = Point.parse(b2t.slice(6)), c = Point.parse(b2t.slice(4, 2));
-        p.tan = Vector.fromPoints(c, p).normalize();
+        var p = Point.parse(b2t.slice(6)), c = Point.parse(b2t.slice(4, 2)), v = Vector.fromPoints(c, p);
+        if (t === 0) {
+            p.tan = g.pointAtBezier(bezierArray, .01).tan;
+        } else {
+            p.tan = v.normalize();
+        }
         return p;
     };
     /**
@@ -3137,7 +3175,7 @@ define("graphic/geometry", [ "core/utils", "graphic/point", "core/class", "graph
         return bezierLength(cutted[0], tolerate / 2) + bezierLength(cutted[1], tolerate / 3);
     });
     // 计算一个 pathSegment 中每一段的在整体中所占的长度范围，以及总长度
-    // 改方法要求每一段都是贝塞尔曲线
+    // 方法要求每一段都是贝塞尔曲线
     var getBezierPathSegmentRanges = cacher(function(pathSegment) {
         var i, ii, segment, position, bezierLength, segmentRanges, totalLength;
         segmentRanges = [];
@@ -5830,7 +5868,7 @@ define("graphic/text", [ "graphic/textcontent", "graphic/shape", "core/class", "
                 this.node.appendChild(textpath);
             }
             textpath.setAttributeNS(svg.xlink, "xlink:href", "#" + path.node.id);
-            this.setAnchor(this.getAnchor());
+            this.setTextAnchor(this.getTextAnchor());
             return this;
         }
     });
@@ -6000,7 +6038,13 @@ define("graphic/vector", [ "graphic/point", "core/class", "graphic/matrix", "cor
         reverse: function() {
             return this.multipy(-1);
         },
-        getAngle: function() {}
+        getAngle: function() {
+            var length = this.length();
+            if (length === 0) return 0;
+            var rad = Math.acos(this.x / length);
+            var sign = this.y > 0 ? 1 : -1;
+            return sign * 180 * rad / Math.PI;
+        }
     });
     Vector.fromPoints = function(p1, p2) {
         return new Vector(p2.x - p1.x, p2.y - p1.y);
@@ -6054,7 +6098,7 @@ define("graphic/viewbox", [ "core/class" ], function(require, exports, module) {
         }
     });
 });
-define("kity", [ "core/utils", "core/class", "core/browser", "graphic/bezier", "graphic/pointcontainer", "graphic/path", "graphic/bezierpoint", "graphic/shapepoint", "graphic/vector", "graphic/circle", "graphic/ellipse", "graphic/clip", "graphic/shape", "graphic/shapecontainer", "graphic/color", "graphic/standardcolor", "graphic/container", "graphic/curve", "graphic/point", "graphic/gradientbrush", "graphic/svg", "graphic/defbrush", "graphic/group", "graphic/hyperlink", "graphic/image", "graphic/line", "graphic/lineargradientbrush", "graphic/mask", "graphic/matrix", "graphic/box", "graphic/marker", "graphic/resource", "graphic/viewbox", "graphic/palette", "graphic/paper", "graphic/eventhandler", "graphic/styled", "graphic/geometry", "graphic/patternbrush", "graphic/pen", "graphic/polygon", "graphic/poly", "graphic/polyline", "graphic/pie", "graphic/sweep", "graphic/radialgradientbrush", "graphic/rect", "graphic/regularpolygon", "graphic/ring", "graphic/data", "graphic/star", "graphic/text", "graphic/textcontent", "graphic/textspan", "graphic/use", "animate/animator", "animate/timeline", "animate/easing", "animate/opacityanimator", "animate/rotateanimator", "animate/scaleanimator", "animate/frame", "animate/translateanimator", "filter/filter", "filter/effectcontainer", "filter/gaussianblurfilter", "filter/effect/gaussianblureffect", "filter/projectionfilter", "filter/effect/effect", "filter/effect/colormatrixeffect", "filter/effect/compositeeffect", "filter/effect/offseteffect", "filter/effect/convolvematrixeffect" ], function(require, exports, module) {
+define("kity", [ "core/utils", "core/class", "core/browser", "graphic/bezier", "graphic/pointcontainer", "graphic/path", "graphic/bezierpoint", "graphic/shapepoint", "graphic/vector", "graphic/circle", "graphic/ellipse", "graphic/clip", "graphic/shape", "graphic/shapecontainer", "graphic/color", "graphic/standardcolor", "graphic/container", "graphic/curve", "graphic/point", "graphic/gradientbrush", "graphic/svg", "graphic/defbrush", "graphic/group", "graphic/hyperlink", "graphic/image", "graphic/line", "graphic/lineargradientbrush", "graphic/mask", "graphic/matrix", "graphic/box", "graphic/marker", "graphic/resource", "graphic/viewbox", "graphic/palette", "graphic/paper", "graphic/eventhandler", "graphic/styled", "graphic/geometry", "graphic/patternbrush", "graphic/pen", "graphic/polygon", "graphic/poly", "graphic/polyline", "graphic/pie", "graphic/sweep", "graphic/radialgradientbrush", "graphic/rect", "graphic/regularpolygon", "graphic/ring", "graphic/data", "graphic/star", "graphic/text", "graphic/textcontent", "graphic/textspan", "graphic/use", "animate/animator", "animate/timeline", "animate/easing", "animate/opacityanimator", "animate/rotateanimator", "animate/scaleanimator", "animate/frame", "animate/translateanimator", "animate/pathanimator", "animate/motionanimator", "filter/filter", "filter/effectcontainer", "filter/gaussianblurfilter", "filter/effect/gaussianblureffect", "filter/projectionfilter", "filter/effect/effect", "filter/effect/colormatrixeffect", "filter/effect/compositeeffect", "filter/effect/offseteffect", "filter/effect/convolvematrixeffect" ], function(require, exports, module) {
     var kity = {}, utils = require("core/utils");
     kity.version = "2.0.0";
     utils.extend(kity, {
@@ -6112,6 +6156,8 @@ define("kity", [ "core/utils", "core/class", "core/browser", "graphic/bezier", "
         ScaleAnimator: require("animate/scaleanimator"),
         Timeline: require("animate/timeline"),
         TranslateAnimator: require("animate/translateanimator"),
+        PathAnimator: require("animate/pathanimator"),
+        MotionAnimator: require("animate/motionanimator"),
         // filter
         Filter: require("filter/filter"),
         GaussianblurFilter: require("filter/gaussianblurfilter"),
@@ -6127,19 +6173,18 @@ define("kity", [ "core/utils", "core/class", "core/browser", "graphic/bezier", "
     return window.kity = kity;
 });
 
-/*global use:true*/
+/* global use, inc: true */
 
 /**
  * 模块暴露
  */
 
-(function(global) {
+(function() {
 
-    define('export', function(require) {
-        return require('kity');
-    });
+    try {
+        inc.use('kity');
+    } catch (e) {
+        use('kity');
+    }
 
-    // build 环境中才含有use
-    use('export');
-
-})(this);})();
+})();})();

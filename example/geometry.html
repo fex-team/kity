@@ -14,6 +14,9 @@
             var g = require('graphic/geometry');
             var Matrix = require('graphic/matrix');
             var pathData = g.transformPath('M283.962,257.412 L229.347,253.275 194.977,295.919 182.036,242.699 130.857,223.189 177.473,194.435 180.213,139.733 221.965,175.182 274.837,160.884 254.025,211.547 Z', new Matrix().scale(0.3).translate(400, 0));
+            var Group = require('graphic/group');
+
+            require('animate/motionanimator');
 
             var path1 = new Path().stroke('blue').translate(-300, 0);
             var path2 = new Path().stroke('red', 5).translate(-300, 0);
@@ -37,6 +40,13 @@
                 requestAnimationFrame(update);
             }
             update();
+
+            var triangle = new Path().setPathData('M0,-15L15,0,0,15Z').fill('green');
+
+            triangle.motion(path1, 4000, 'linear').timeline().repeat(10000);
+
+            paper.addShape(new Group().addShape(triangle).translate(-300, 0));
+
             window.g = g;
         });
         seajs.use('start');

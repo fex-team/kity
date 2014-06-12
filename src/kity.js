@@ -60,6 +60,8 @@ define(function(require, exports, module) {
         ScaleAnimator: require('animate/scaleanimator'),
         Timeline: require('animate/timeline'),
         TranslateAnimator: require('animate/translateanimator'),
+        PathAnimator: require('animate/pathanimator'),
+        MotionAnimator: require('animate/motionanimator'),
 
         // filter
         Filter: require('filter/filter'),
