@@ -592,7 +592,7 @@ define(function(require) {
      */
     g.bezierLength = cacher(function bezierLength(bezierArray, tolerate) {
         // 切割成多少段来计算
-        tolerate = Math.max(tolerate || 0.1, 1e-9);
+        tolerate = Math.max(tolerate || 0.001, 1e-9);
 
         function len(p, q) {
             var dx = p[0] - q[0],
@@ -977,8 +977,8 @@ define(function(require) {
      *     补间的结果
      */
     g.pathTween = function(path1, path2, t) {
-        //if (t === 0) return path1;
-        //if (t === 1) return path2;
+        if (t === 0) return path1;
+        if (t === 1) return path2;
 
         var aligned = alignCurve(path1, path2);
         var result = [], seg, i, j;

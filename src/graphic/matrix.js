@@ -305,7 +305,7 @@ define(function(require, exports, module) {
                 }
         }
 
-        return new Matrix(ctm.a, ctm.b, ctm.c, ctm.d, ctm.e, ctm.f);
+        return ctm ? new Matrix(ctm.a, ctm.b, ctm.c, ctm.d, ctm.e, ctm.f) : new Matrix();
     };
 
     return Matrix;

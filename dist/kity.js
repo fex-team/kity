@@ -3159,7 +3159,7 @@ define("graphic/geometry", [ "core/utils", "graphic/point", "core/class", "graph
      */
     g.bezierLength = cacher(function bezierLength(bezierArray, tolerate) {
         // 切割成多少段来计算
-        tolerate = Math.max(tolerate || .1, 1e-9);
+        tolerate = Math.max(tolerate || .001, 1e-9);
         function len(p, q) {
             var dx = p[0] - q[0], dy = p[1] - q[1];
             return Math.sqrt(dx * dx + dy * dy);
@@ -3461,8 +3461,8 @@ define("graphic/geometry", [ "core/utils", "graphic/point", "core/class", "graph
      *     补间的结果
      */
     g.pathTween = function(path1, path2, t) {
-        //if (t === 0) return path1;
-        //if (t === 1) return path2;
+        if (t === 0) return path1;
+        if (t === 1) return path2;
         var aligned = alignCurve(path1, path2);
         var result = [], seg, i, j;
         path1 = aligned[0];
@@ -4055,7 +4055,7 @@ define("graphic/matrix", [ "core/utils", "graphic/box", "core/class", "graphic/p
                 ctm = target.node.getTransformToElement(refer.shapeNode || refer.node);
             }
         }
-        return new Matrix(ctm.a, ctm.b, ctm.c, ctm.d, ctm.e, ctm.f);
+        return ctm ? new Matrix(ctm.a, ctm.b, ctm.c, ctm.d, ctm.e, ctm.f) : new Matrix();
     };
     return Matrix;
 });
