@@ -1650,27 +1650,21 @@ define("graphic/box", [ "core/class" ], function(require, exports, module) {
             this.y = y;
             this.width = width;
             this.height = height;
-        },
-        getLeft: function() {
-            return this.x;
-        },
-        getRight: function() {
-            return this.x + this.width;
-        },
-        getTop: function() {
-            return this.y;
-        },
-        getBottom: function() {
-            return this.y + this.height;
+            this.left = x;
+            this.right = this.x + this.width;
+            this.top = this.y;
+            this.bottom = this.y + this.height;
+            this.cx = x + this.width / 2;
+            this.cy = y + this.height / 2;
         },
         getRangeX: function() {
-            return [ this.x, this.x + this.width ];
+            return [ this.left, this.right ];
         },
         getRangeY: function() {
-            return [ this.y, this.y + this.height ];
+            return [ this.left, this.right ];
         },
         merge: function(another) {
-            var xMin = Math.min(this.x, another.x), xMax = Math.max(this.x + this.width, another.x + another.width), yMin = Math.min(this.y, another.y), yMax = Math.max(this.y + this.height, another.y + another.height);
+            var xMin = Math.min(this.x, another.x), xMax = Math.max(this.right, another.right), yMin = Math.min(this.y, another.y), yMax = Math.max(this.bottom, another.bottom);
             return new Box(xMin, yMin, xMax - xMin, yMax - yMin);
         },
         valueOf: function() {
@@ -4000,13 +3994,7 @@ define("graphic/matrix", [ "core/utils", "graphic/box", "core/class", "graphic/p
             height: yMax - yMin
         });
         utils.extend(box, {
-            closurePoints: rps,
-            left: xMin,
-            right: xMax,
-            top: yMin,
-            bottom: yMax,
-            cx: (xMin + xMax) / 2,
-            cy: (yMin + yMax) / 2
+            closurePoints: rps
         });
         return box;
     };

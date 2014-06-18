@@ -246,13 +246,7 @@ define(function(require, exports, module) {
             height: yMax - yMin
         });
         utils.extend(box, {
-            closurePoints: rps,
-            left: xMin,
-            right: xMax,
-            top: yMin,
-            bottom: yMax,
-            cx: (xMin + xMax) / 2,
-            cy: (yMin + yMax) / 2
+            closurePoints: rps
         });
         return box;
     };
