@@ -11,6 +11,7 @@ define(function(require, exports, module) {
         Browser: require('core/browser'),
 
         // shape
+        Box: require('graphic/box'),
         Bezier: require('graphic/bezier'),
         BezierPoint: require('graphic/bezierpoint'),
         Circle: require('graphic/circle'),
