@@ -2,7 +2,8 @@ define(function(require, exports, module) {
 
     var RectUtils = {},
         Utils = require('core/utils'),
-        Point = require('graphic/point');
+        Point = require('graphic/point'),
+        Box = require('graphic/box');
 
     Utils.extend(RectUtils, {
 
@@ -95,6 +96,19 @@ define(function(require, exports, module) {
             this.height = height;
 
             return this.update();
+        },
+
+        setBox: function(box) {
+            this.x = box.x;
+            this.y = box.y;
+            this.width = box.width;
+            this.height = box.height;
+
+            return this.update();
+        },
+
+        getBox: function() {
+            return new Box(this.x, this.y, this.width, this.height);
         },
 
         getRadius: function() {

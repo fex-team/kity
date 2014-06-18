@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kity - v2.0.0 - 2014-06-12
+ * kity - v2.0.0 - 2014-06-18
  * https://github.com/fex-team/kity
  * GitHub: https://github.com/fex-team/kity.git 
  * Copyright (c) 2014 Baidu FEX; Licensed BSD
@@ -4759,8 +4759,8 @@ define("graphic/radialgradientbrush", [ "graphic/gradientbrush", "graphic/svg", 
         }
     });
 });
-define("graphic/rect", [ "core/utils", "graphic/point", "core/class", "graphic/path", "graphic/shape", "graphic/svg", "graphic/geometry" ], function(require, exports, module) {
-    var RectUtils = {}, Utils = require("core/utils"), Point = require("graphic/point");
+define("graphic/rect", [ "core/utils", "graphic/point", "core/class", "graphic/box", "graphic/path", "graphic/shape", "graphic/svg", "graphic/geometry" ], function(require, exports, module) {
+    var RectUtils = {}, Utils = require("core/utils"), Point = require("graphic/point"), Box = require("graphic/box");
     Utils.extend(RectUtils, {
         //根据传递进来的width、height和radius属性，
         //获取最适合的radius值
@@ -4820,6 +4820,16 @@ define("graphic/rect", [ "core/utils", "graphic/point", "core/class", "graphic/p
             this.width = width;
             this.height = height;
             return this.update();
+        },
+        setBox: function(box) {
+            this.x = box.x;
+            this.y = box.y;
+            this.width = box.width;
+            this.height = box.height;
+            return this.update();
+        },
+        getBox: function() {
+            return new Box(this.x, this.y, this.width, this.height);
         },
         getRadius: function() {
             return this.radius;
