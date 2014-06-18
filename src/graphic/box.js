@@ -15,10 +15,10 @@ define(function(require, exports, module) {
             if (height < 0) {
                 y -= (height = -height);
             }
-            this.x = x;
-            this.y = y;
-            this.width = width;
-            this.height = height;
+            this.x = x || 0;
+            this.y = y || 0;
+            this.width = width || 0;
+            this.height = height || 0;
             this.left = x;
             this.right = this.x + this.width;
             this.top = this.y;
