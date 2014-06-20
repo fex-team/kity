@@ -174,18 +174,25 @@ define(function(require, exports, module) {
         stroke: function(pen, width) {
             if (pen && pen.stroke) {
                 pen.stroke(this);
-            } else {
+            } else if (pen) {
                 // 字符串或重写了 toString 的对象
                 this.node.setAttribute('stroke', pen.toString());
                 if (width) {
                     this.node.setAttribute('stroke-width', width);
                 }
+            } else if (pen === null) {
+                this.node.removeAttribute('stroe');
             }
             return this;
         },
         fill: function(brush) {
             // 字符串或重写了 toString 的对象
-            this.node.setAttribute('fill', brush.toString());
+            if (brush) {
+                this.node.setAttribute('fill', brush.toString());
+            }
+            if (brush === null) {
+                this.node.removeAttribute('fill');
+            }
             return this;
         },
         setAttr: function(a, v) {
