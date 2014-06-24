@@ -4,7 +4,7 @@ define(function(require, exports, module) {
         mixins: [ShapeContainer],
         base: require('graphic/shape'),
 
-        constructor: function() {
+        constructor: function Group() {
 
             this.callBase('g');
 

@@ -43,6 +43,10 @@ define(function(require, exports, module) {
             return new Box(xMin, yMin, xMax - xMin, yMax - yMin);
         },
 
+        expand: function(ex, ey, ew, eh) {
+            return new Box(this.x + ex, this.y + ey, this.width + ew, this.height + eh);
+        },
+
         valueOf: function() {
             return [this.x, this.y, this.width, this.height];
         },

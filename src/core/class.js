@@ -72,7 +72,7 @@ define(function(require, exports) {
     };
 
     Class.prototype.getType = function() {
-        return this.__KityClassName;
+        return this.__KityClassName || this.constructor.name;
     };
 
     Class.prototype.getClass = function() {
@@ -91,15 +91,10 @@ define(function(require, exports) {
     var KITY_INHERIT_FLAG = '__KITY_INHERIT_FLAG_' + (+new Date());
 
     function inherit(constructor, BaseClass, classname) {
-        var KityClass = eval('(function ' + classname + '( __inherit__flag ) {' +
-            'if( __inherit__flag != KITY_INHERIT_FLAG ) {' +
-            'KityClass.__KityConstructor.apply(this, arguments);' +
-            '}' +
-            'this.__KityClassName = KityClass.__KityClassName;' +
-            '})');
+        var KityClass = constructor;
         KityClass.__KityConstructor = constructor;
 
-        KityClass.prototype = new BaseClass(KITY_INHERIT_FLAG);
+        KityClass.prototype = Object.create(BaseClass.prototype);
 
         for (var methodName in BaseClass.prototype) {
             if (BaseClass.prototype.hasOwnProperty(methodName) && methodName.indexOf('__Kity') !== 0) {

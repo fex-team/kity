@@ -11,7 +11,7 @@ define(function(require, exports, module) {
 
     var Shape = require('core/class').createClass('Shape', {
         mixins: [EventHandler, Styled, Data],
-        constructor: function(tagName) {
+        constructor: function Shape(tagName) {
             this.node = svg.createNode(tagName);
             this.node.shape = this;
             this.transform = {

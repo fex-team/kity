@@ -2,10 +2,29 @@ define(function(require, exports, module) {
     var Container = require('graphic/container');
     var utils = require('core/utils');
 
+    function construct(constructor, args) {
+        var obj = Object.create(constructor.prototype);
+        constructor.apply(obj, args);
+        return obj;
+    }
+
     var ShapeContainer = require('core/class').createClass('ShapeContainer', {
         base: Container,
 
         isShapeContainer: true,
+
+        create: function(name) {
+
+            var CreatorClass = ShapeContainer.creators[name];
+            if (CreatorClass) {
+                var args = Array.prototype.slice.call(arguments, 1);
+                var shape = construct(CreatorClass, args);
+                this.addShape(shape);
+                return shape;
+            }
+            return null;
+        },
+
         /* private */
         handleAdd: function(shape, index) {
             var parent = this.getShapeNode();
@@ -169,6 +188,8 @@ define(function(require, exports, module) {
             return this;
         }
     });
+
+    ShapeContainer.creators = {};
 
     return ShapeContainer;
 

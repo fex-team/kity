@@ -1,0 +1,31 @@
+<html>
+<head>
+    <title>Hello kity</title>
+    <script src="../dist/kity.js"></script>
+</head>
+<body>
+    <div id="kity_paper"></div>
+</body>
+
+<script type="text/javascript">
+    var paper = new kity.Paper('kity_paper');
+
+    var text = new kity.Text('Hello, kity!')
+        .fill('white')
+        .setX(100)
+        .setY(200);
+
+    paper.addShape(text);
+
+    var box = text
+        .getBoundaryBox()
+        .expand(-15, -10, 15, 10);
+
+    var rect = new kity.Rect()
+        .setBox(box)
+        .setRadius(5)
+        .fill('blue');
+
+    paper.addShape(rect);
+</script>
+</html>

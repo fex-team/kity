@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kity - v2.0.0 - 2014-06-20
+ * kity - v2.0.0 - 2014-06-24
  * https://github.com/fex-team/kity
  * GitHub: https://github.com/fex-team/kity.git 
  * Copyright (c) 2014 Baidu FEX; Licensed BSD
@@ -899,7 +899,7 @@ define("core/class", [], function(require, exports) {
         return this;
     };
     Class.prototype.getType = function() {
-        return this.__KityClassName;
+        return this.__KityClassName || this.constructor.name;
     };
     Class.prototype.getClass = function() {
         return this.constructor;
@@ -914,9 +914,9 @@ define("core/class", [], function(require, exports) {
     }
     var KITY_INHERIT_FLAG = "__KITY_INHERIT_FLAG_" + +new Date();
     function inherit(constructor, BaseClass, classname) {
-        var KityClass = eval("(function " + classname + "( __inherit__flag ) {" + "if( __inherit__flag != KITY_INHERIT_FLAG ) {" + "KityClass.__KityConstructor.apply(this, arguments);" + "}" + "this.__KityClassName = KityClass.__KityClassName;" + "})");
+        var KityClass = constructor;
         KityClass.__KityConstructor = constructor;
-        KityClass.prototype = new BaseClass(KITY_INHERIT_FLAG);
+        KityClass.prototype = Object.create(BaseClass.prototype);
         for (var methodName in BaseClass.prototype) {
             if (BaseClass.prototype.hasOwnProperty(methodName) && methodName.indexOf("__Kity") !== 0) {
                 KityClass.prototype[methodName] = BaseClass.prototype[methodName];
@@ -1666,6 +1666,9 @@ define("graphic/box", [ "core/class" ], function(require, exports, module) {
         merge: function(another) {
             var xMin = Math.min(this.x, another.x), xMax = Math.max(this.right, another.right), yMin = Math.min(this.y, another.y), yMax = Math.max(this.bottom, another.bottom);
             return new Box(xMin, yMin, xMax - xMin, yMax - yMin);
+        },
+        expand: function(ex, ey, ew, eh) {
+            return new Box(this.x + ex, this.y + ey, this.width + ew, this.height + eh);
         },
         valueOf: function() {
             return [ this.x, this.y, this.width, this.height ];
@@ -3540,7 +3543,7 @@ define("graphic/group", [ "graphic/shapecontainer", "graphic/container", "core/u
     return require("core/class").createClass("Group", {
         mixins: [ ShapeContainer ],
         base: require("graphic/shape"),
-        constructor: function() {
+        constructor: function Group() {
             this.callBase("g");
         }
     });
@@ -4747,7 +4750,7 @@ define("graphic/radialgradientbrush", [ "graphic/gradientbrush", "graphic/svg", 
         }
     });
 });
-define("graphic/rect", [ "core/utils", "graphic/point", "core/class", "graphic/box", "graphic/path", "graphic/shape", "graphic/svg", "graphic/geometry" ], function(require, exports, module) {
+define("graphic/rect", [ "core/utils", "graphic/point", "core/class", "graphic/box", "graphic/path", "graphic/shape", "graphic/svg", "graphic/geometry", "graphic/shapecontainer", "graphic/container" ], function(require, exports, module) {
     var RectUtils = {}, Utils = require("core/utils"), Point = require("graphic/point"), Box = require("graphic/box");
     Utils.extend(RectUtils, {
         //根据传递进来的width、height和radius属性，
@@ -4757,7 +4760,7 @@ define("graphic/rect", [ "core/utils", "graphic/point", "core/class", "graphic/b
             return Math.min(minValue, radius);
         }
     });
-    return require("core/class").createClass("Rect", {
+    var Rect = require("core/class").createClass("Rect", {
         base: require("graphic/path"),
         constructor: function(width, height, x, y, radius) {
             this.callBase();
@@ -4860,6 +4863,9 @@ define("graphic/rect", [ "core/utils", "graphic/point", "core/class", "graphic/b
             return this.update();
         }
     });
+    var ShapeContainer = require("graphic/shapecontainer");
+    ShapeContainer.creators.rect = Rect;
+    return Rect;
 });
 define("graphic/regularpolygon", [ "graphic/point", "core/class", "graphic/path", "core/utils", "graphic/shape", "graphic/svg", "graphic/geometry" ], function(require, exports, module) {
     var Point = require("graphic/point");
@@ -4948,7 +4954,7 @@ define("graphic/shape", [ "graphic/svg", "core/utils", "graphic/eventhandler", "
     var Box = require("graphic/box");
     var Shape = require("core/class").createClass("Shape", {
         mixins: [ EventHandler, Styled, Data ],
-        constructor: function(tagName) {
+        constructor: function Shape(tagName) {
             this.node = svg.createNode(tagName);
             this.node.shape = this;
             this.transform = {
@@ -5153,9 +5159,24 @@ define("graphic/shape", [ "graphic/svg", "core/utils", "graphic/eventhandler", "
 define("graphic/shapecontainer", [ "graphic/container", "core/class", "core/utils", "graphic/shape", "graphic/svg", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen", "graphic/box" ], function(require, exports, module) {
     var Container = require("graphic/container");
     var utils = require("core/utils");
+    function construct(constructor, args) {
+        var obj = Object.create(constructor.prototype);
+        constructor.apply(obj, args);
+        return obj;
+    }
     var ShapeContainer = require("core/class").createClass("ShapeContainer", {
         base: Container,
         isShapeContainer: true,
+        create: function(name) {
+            var CreatorClass = ShapeContainer.creators[name];
+            if (CreatorClass) {
+                var args = Array.prototype.slice.call(arguments, 1);
+                var shape = construct(CreatorClass, args);
+                this.addShape(shape);
+                return shape;
+            }
+            return null;
+        },
         /* private */
         handleAdd: function(shape, index) {
             var parent = this.getShapeNode();
@@ -5300,6 +5321,7 @@ define("graphic/shapecontainer", [ "graphic/container", "core/class", "core/util
             return this;
         }
     });
+    ShapeContainer.creators = {};
     return ShapeContainer;
 });
 /*
