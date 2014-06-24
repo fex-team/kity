@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kity - v2.0.0 - 2014-06-20
+ * kity - v2.0.0 - 2014-06-23
  * https://github.com/fex-team/kity
  * GitHub: https://github.com/fex-team/kity.git 
  * Copyright (c) 2014 Baidu FEX; Licensed BSD
@@ -691,6 +691,7 @@ define("animate/timeline", [ "graphic/eventhandler", "core/utils", "graphic/shap
                     this.finishValue = this.finishValue.call(this.target, this.target);
                 }
                 this.time = 0;
+                this.setValue(this.beginValue);
                 this.frame = frame.requestFrame(this.nextFrame.bind(this));
                 break;
 
