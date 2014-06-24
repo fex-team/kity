@@ -37,7 +37,7 @@ Kity 是一个易用、直观、现代的矢量图形库。帮助你快速在页
 </script>
 ```
 
-![Hello Kity](doc/image/hello-kity.png)
+![Hello Kity](doc/images/hello-kity.png)
 
 更详细的使用方法请参考 [wiki](https://github.com/fex-team/kity/wiki)。
 
