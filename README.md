@@ -23,24 +23,21 @@ Kity 是一个易用、直观、现代的矢量图形库。帮助你快速在页
 
 <script type="text/javascript">
     var paper = new kity.Paper('kity_paper');
+    var rect = paper.put(new kity.Rect());
+    var text = paper.put(new kity.Text());
 
-    var text = new kity.Text('Hello, kity!')
-        .fill('white');
+    text.setContent('hello kity!');
+    text.fill('white');
+    text.setX(100);
+    text.setY(200);
 
-    paper.addShape(text);
-
-    var box = text
-        .getBoundaryBox()
-        .expand(-15, -10, 15, 10);
-
-    var rect = new kity.Rect()
-        .setBox(box)
-        .setRadius(5)
-        .fill('blue');
-
-    paper.addShape(rect);
+    rect.setBox(text.getBoundaryBox().expand(-15, -10, 15, 10));
+    rect.setRadius(5);
+    rect.fill('blue');
 </script>
 ```
+
+![Hello Kity](doc/image/hello-kity.png)
 
 更详细的使用方法请参考 [wiki](https://github.com/fex-team/kity/wiki)。
 

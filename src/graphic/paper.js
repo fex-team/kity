@@ -167,6 +167,9 @@ define(function(require, exports, module) {
             }
             return parent;
         },
+        isAttached: function() {
+            return !!this.getPaper();
+        },
         whenPaperReady: function(fn) {
             var me = this;
 

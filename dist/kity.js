@@ -899,7 +899,7 @@ define("core/class", [], function(require, exports) {
         return this;
     };
     Class.prototype.getType = function() {
-        return this.__KityClassName || this.constructor.name;
+        return this.__KityClassName;
     };
     Class.prototype.getClass = function() {
         return this.constructor;
@@ -914,9 +914,9 @@ define("core/class", [], function(require, exports) {
     }
     var KITY_INHERIT_FLAG = "__KITY_INHERIT_FLAG_" + +new Date();
     function inherit(constructor, BaseClass, classname) {
-        var KityClass = constructor;
+        var KityClass = eval("(function " + classname + "( __inherit__flag ) {" + "if( __inherit__flag != KITY_INHERIT_FLAG ) {" + "KityClass.__KityConstructor.apply(this, arguments);" + "}" + "this.__KityClassName = KityClass.__KityClassName;" + "})");
         KityClass.__KityConstructor = constructor;
-        KityClass.prototype = Object.create(BaseClass.prototype);
+        KityClass.prototype = new BaseClass(KITY_INHERIT_FLAG);
         for (var methodName in BaseClass.prototype) {
             if (BaseClass.prototype.hasOwnProperty(methodName) && methodName.indexOf("__Kity") !== 0) {
                 KityClass.prototype[methodName] = BaseClass.prototype[methodName];
@@ -1668,7 +1668,7 @@ define("graphic/box", [ "core/class" ], function(require, exports, module) {
             return new Box(xMin, yMin, xMax - xMin, yMax - yMin);
         },
         expand: function(ex, ey, ew, eh) {
-            return new Box(this.x + ex, this.y + ey, this.width + ew, this.height + eh);
+            return new Box(this.x + ex, this.y + ey, this.width - ex + ew, this.height - ey + eh);
         },
         valueOf: function() {
             return [ this.x, this.y, this.width, this.height ];
@@ -4294,6 +4294,9 @@ define("graphic/paper", [ "core/class", "core/utils", "graphic/svg", "graphic/co
             }
             return parent;
         },
+        isAttached: function() {
+            return !!this.getPaper();
+        },
         whenPaperReady: function(fn) {
             var me = this;
             function check() {
@@ -4750,7 +4753,7 @@ define("graphic/radialgradientbrush", [ "graphic/gradientbrush", "graphic/svg", 
         }
     });
 });
-define("graphic/rect", [ "core/utils", "graphic/point", "core/class", "graphic/box", "graphic/path", "graphic/shape", "graphic/svg", "graphic/geometry", "graphic/shapecontainer", "graphic/container" ], function(require, exports, module) {
+define("graphic/rect", [ "core/utils", "graphic/point", "core/class", "graphic/box", "graphic/path", "graphic/shape", "graphic/svg", "graphic/geometry" ], function(require, exports, module) {
     var RectUtils = {}, Utils = require("core/utils"), Point = require("graphic/point"), Box = require("graphic/box");
     Utils.extend(RectUtils, {
         //根据传递进来的width、height和radius属性，
@@ -4863,8 +4866,6 @@ define("graphic/rect", [ "core/utils", "graphic/point", "core/class", "graphic/b
             return this.update();
         }
     });
-    var ShapeContainer = require("graphic/shapecontainer");
-    ShapeContainer.creators.rect = Rect;
     return Rect;
 });
 define("graphic/regularpolygon", [ "graphic/point", "core/class", "graphic/path", "core/utils", "graphic/shape", "graphic/svg", "graphic/geometry" ], function(require, exports, module) {
@@ -5159,24 +5160,9 @@ define("graphic/shape", [ "graphic/svg", "core/utils", "graphic/eventhandler", "
 define("graphic/shapecontainer", [ "graphic/container", "core/class", "core/utils", "graphic/shape", "graphic/svg", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen", "graphic/box" ], function(require, exports, module) {
     var Container = require("graphic/container");
     var utils = require("core/utils");
-    function construct(constructor, args) {
-        var obj = Object.create(constructor.prototype);
-        constructor.apply(obj, args);
-        return obj;
-    }
     var ShapeContainer = require("core/class").createClass("ShapeContainer", {
         base: Container,
         isShapeContainer: true,
-        create: function(name) {
-            var CreatorClass = ShapeContainer.creators[name];
-            if (CreatorClass) {
-                var args = Array.prototype.slice.call(arguments, 1);
-                var shape = construct(CreatorClass, args);
-                this.addShape(shape);
-                return shape;
-            }
-            return null;
-        },
         /* private */
         handleAdd: function(shape, index) {
             var parent = this.getShapeNode();
@@ -5217,6 +5203,10 @@ define("graphic/shapecontainer", [ "graphic/container", "core/class", "core/util
         /* public */
         addShape: function(shape, index) {
             return this.addItem(shape, index);
+        },
+        put: function(shape) {
+            this.addShape(shape);
+            return shape;
         },
         appendShape: function(shape) {
             return this.addShape(shape);
@@ -5321,7 +5311,6 @@ define("graphic/shapecontainer", [ "graphic/container", "core/class", "core/util
             return this;
         }
     });
-    ShapeContainer.creators = {};
     return ShapeContainer;
 });
 /*

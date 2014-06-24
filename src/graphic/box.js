@@ -44,7 +44,7 @@ define(function(require, exports, module) {
         },
 
         expand: function(ex, ey, ew, eh) {
-            return new Box(this.x + ex, this.y + ey, this.width + ew, this.height + eh);
+            return new Box(this.x + ex, this.y + ey, this.width - ex + ew, this.height - ey + eh);
         },
 
         valueOf: function() {

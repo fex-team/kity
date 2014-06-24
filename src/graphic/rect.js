@@ -167,10 +167,6 @@ define(function(require, exports, module) {
 
     });
 
-    var ShapeContainer = require('graphic/shapecontainer');
-
-    ShapeContainer.creators.rect = Rect;
-
     return Rect;
 
 });
