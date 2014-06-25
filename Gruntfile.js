@@ -7,6 +7,17 @@ module.exports = function(grunt) {
         // Metadata.
         pkg: grunt.file.readJSON('package.json'),
 
+        dependence: {
+            options: {
+                base: 'src'
+            },
+
+            files: [{
+                src: '**/*.js',
+                dest: 'dist/kity_tmp.js'
+            }]
+        },
+
         // Task configuration.
         transport: {
 
@@ -72,6 +83,32 @@ module.exports = function(grunt) {
 
                 files: {
                     'dist/kity.js': [ 'dev-lib/cmd-define.js', '.build_tmp/kity-non.js', 'dev-lib/exports.js' ]
+                }
+
+            },
+
+            exports: {
+
+                options: {
+
+                    banner: '/*!\n' +
+                        ' * ====================================================\n' +
+                        ' * <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
+                        '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
+                        '<%= pkg.homepage ? " * " + pkg.homepage + "\\n" : "" %>' +
+                        ' * GitHub: <%= pkg.repository.url %> \n' +
+                        ' * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
+                        ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %>\n' +
+                        ' * ====================================================\n' +
+                        ' */\n\n' +
+                        '(function () {\n',
+
+                    footer: '})();'
+
+                },
+
+                files: {
+                    'dist/kity.js': [ 'dist/kity_tmp.js', 'exports.js' ]
                 }
 
             }
@@ -145,9 +182,11 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
     grunt.loadNpmTasks('grunt-contrib-connect');
+    grunt.loadNpmTasks('grunt-module-dependence');
 
     // Default task.
     grunt.registerTask('default', ['transport:cmd', 'concat:cmd', 'concat:full', 'uglify:minimize', 'clean:tmp']);
+    grunt.registerTask('dep', ['dependence', 'concat:exports']);
     grunt.registerTask('test', ['default', 'connect:kity', 'jasmine:kity']);
 
 };
