@@ -9,13 +9,16 @@ module.exports = function(grunt) {
 
         dependence: {
             options: {
+                entrance: 'kity',
                 base: 'src'
             },
 
-            files: [{
-                src: '**/*.js',
-                dest: 'dist/kity_tmp.js'
-            }]
+            merge: {
+                files: [{
+                    src: 'src/**/*.js',
+                    dest: '.build_tmp/kity_tmp.js'
+                }]
+            }
         },
 
         // Task configuration.
@@ -108,7 +111,7 @@ module.exports = function(grunt) {
                 },
 
                 files: {
-                    'dist/kity.js': [ 'dist/kity_tmp.js', 'exports.js' ]
+                    'dist/kity.js': [ '.build_tmp/kity_tmp.js', 'dev-lib/exports.js' ]
                 }
 
             }
@@ -186,7 +189,7 @@ module.exports = function(grunt) {
 
     // Default task.
     grunt.registerTask('default', ['transport:cmd', 'concat:cmd', 'concat:full', 'uglify:minimize', 'clean:tmp']);
-    grunt.registerTask('dep', ['dependence', 'concat:exports']);
+    grunt.registerTask('dep', ['dependence:merge', 'concat:exports', 'uglify:minimize', 'clean:tmp']);
     grunt.registerTask('test', ['default', 'connect:kity', 'jasmine:kity']);
 
 };
