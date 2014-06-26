@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kity - v2.0.0 - 2014-06-23
+ * kity - v2.0.0 - 2014-06-26
  * https://github.com/fex-team/kity
  * GitHub: https://github.com/fex-team/kity.git 
  * Copyright (c) 2014 Baidu FEX; Licensed BSD
@@ -4009,39 +4009,40 @@ define("graphic/matrix", [ "core/utils", "graphic/box", "core/class", "graphic/p
             e: 0,
             f: 0
         };
+        var node = target.shapeNode || target.node;
         refer = refer || "parent";
         // 根据参照坐标系选区的不一样，返回不同的结果
         switch (refer) {
           case "screen":
             // 以浏览器屏幕为参照坐标系
-            ctm = target.node.getScreenCTM();
+            ctm = node.getScreenCTM();
             break;
 
           case "doc":
           case "paper":
             // 以文档（Paper）为参照坐标系
-            ctm = target.node.getCTM();
+            ctm = node.getCTM();
             break;
 
           case "view":
           case "top":
             // 以顶层绘图容器（视野）为参照坐标系
             if (target.getPaper()) {
-                ctm = target.node.getTransformToElement(target.getPaper().shapeNode);
+                ctm = node.getTransformToElement(target.getPaper().shapeNode);
             }
             break;
 
           case "parent":
             // 以父容器为参照坐标系
             if (target.node.parentNode) {
-                ctm = target.node.getTransformToElement(target.node.parentNode);
+                ctm = node.getTransformToElement(target.node.parentNode);
             }
             break;
 
           default:
             // 其他情况，指定参照物
             if (refer.node) {
-                ctm = target.node.getTransformToElement(refer.shapeNode || refer.node);
+                ctm = node.getTransformToElement(refer.shapeNode || refer.node);
             }
         }
         return ctm ? new Matrix(ctm.a, ctm.b, ctm.c, ctm.d, ctm.e, ctm.f) : new Matrix();
@@ -5347,10 +5348,12 @@ define("graphic/shapeevent", [ "graphic/matrix", "core/utils", "graphic/box", "g
                 return null;
             }
             var eventClient = this.originEvent.touches ? this.originEvent.touches[touchIndex || 0] : this.originEvent;
-            var clientX = eventClient && eventClient.clientX || 0, clientY = eventClient && eventClient.clientY || 0, node = this.targetShape.shapeNode || this.targetShape.node, // 鼠标位置在目标对象上的坐标
-            // 基于屏幕坐标算
-            point = Matrix.transformPoint(clientX, clientY, node.getScreenCTM().inverse());
-            return Matrix.getCTM(this.targetShape, refer || "view").transformPoint(point);
+            var target = this.targetShape;
+            var targetNode = target.shapeNode || target.node;
+            var pScreen = new kity.Point(eventClient && eventClient.clientX || 0, eventClient && eventClient.clientY || 0);
+            var pTarget = Matrix.transformPoint(pScreen, targetNode.getScreenCTM().inverse());
+            var pRefer = Matrix.getCTM(target, refer || "view").transformPoint(pTarget);
+            return pRefer;
         },
         stopPropagation: function() {
             var evt = this.originEvent;
@@ -5770,10 +5773,10 @@ define("graphic/text", [ "graphic/textcontent", "graphic/shape", "core/class", "
     var TextContent = require("graphic/textcontent");
     var ShapeContainer = require("graphic/shapecontainer");
     var svg = require("graphic/svg");
+    var utils = require("core/utils");
     var offsetHash = {};
     function getTextBoundOffset(text) {
-        var style = window.getComputedStyle(text.node);
-        var font = [ style.fontFamily, style.fontSize, style.fontStretch, style.fontStyle, style.fontVariant, style.fontWeight ].join("-");
+        var font = text._cachedFontHash;
         if (offsetHash[font]) {
             return offsetHash[font];
         }
@@ -5796,6 +5799,22 @@ define("graphic/text", [ "graphic/textcontent", "graphic/shape", "core/class", "
             if (content !== undefined) {
                 this.setContent(content);
             }
+            this._buildFontHash();
+        },
+        _buildFontHash: function() {
+            var style = window.getComputedStyle(this.node);
+            this._cachedFontHash = [ style.fontFamily, style.fontSize, style.fontStretch, style.fontStyle, style.fontVariant, style.fontWeight ].join("-");
+        },
+        _fontChanged: function(font) {
+            var last = this._lastFont;
+            var current = utils.extend({}, last, font);
+            if (!last) {
+                last = font;
+                return true;
+            }
+            var changed = last.family != current.family || last.size != current.size || last.style != current.style || last.weight != current.weight;
+            last = current;
+            return changed;
         },
         setX: function(x) {
             this.node.setAttribute("x", x);
@@ -5816,7 +5835,11 @@ define("graphic/text", [ "graphic/textcontent", "graphic/shape", "core/class", "
         },
         setFont: function(font) {
             this.callBase(font);
-            return this.setVerticalAlign(this.getVerticalAlign());
+            if (this._fontChanged(font)) {
+                this._buildFontHash();
+                this.setVerticalAlign(this.getVerticalAlign());
+            }
+            return this;
         },
         setTextAnchor: function(anchor) {
             this.node.setAttribute("text-anchor", anchor);

@@ -86,16 +86,18 @@ define(function(require, exprots, module) {
                 this.originEvent.touches[touchIndex || 0] :
                 this.originEvent;
 
-            var clientX = eventClient && eventClient.clientX || 0,
-                clientY = eventClient && eventClient.clientY || 0,
-                node = this.targetShape.shapeNode || this.targetShape.node,
+            var target = this.targetShape;
+            var targetNode = target.shapeNode || target.node;
 
-                // 鼠标位置在目标对象上的坐标
-                // 基于屏幕坐标算
-                point = Matrix.transformPoint(clientX, clientY, node.getScreenCTM().inverse());
+            var pScreen = new kity.Point(
+                    eventClient && eventClient.clientX || 0,
+                    eventClient && eventClient.clientY || 0
+                );
 
-            return Matrix.getCTM(this.targetShape, refer || 'view').transformPoint(point);
+            var pTarget = Matrix.transformPoint(pScreen, targetNode.getScreenCTM().inverse());
+            var pRefer = Matrix.getCTM(target, refer || 'view').transformPoint(pTarget);
 
+            return pRefer;
         },
 
         stopPropagation: function() {

@@ -261,6 +261,8 @@ define(function(require, exports, module) {
             e: 0,
             f: 0
         };
+        var node = target.shapeNode || target.node;
+
         refer = refer || 'parent';
 
         // 根据参照坐标系选区的不一样，返回不同的结果
@@ -268,34 +270,34 @@ define(function(require, exports, module) {
 
             case 'screen':
                 // 以浏览器屏幕为参照坐标系
-                ctm = target.node.getScreenCTM();
+                ctm = node.getScreenCTM();
                 break;
 
             case 'doc':
             case 'paper':
                 // 以文档（Paper）为参照坐标系
-                ctm = target.node.getCTM();
+                ctm = node.getCTM();
                 break;
 
             case 'view':
             case 'top':
                 // 以顶层绘图容器（视野）为参照坐标系
                 if (target.getPaper()) {
-                    ctm = target.node.getTransformToElement(target.getPaper().shapeNode);
+                    ctm = node.getTransformToElement(target.getPaper().shapeNode);
                 }
                 break;
 
             case 'parent':
                 // 以父容器为参照坐标系
                 if (target.node.parentNode) {
-                    ctm = target.node.getTransformToElement(target.node.parentNode);
+                    ctm = node.getTransformToElement(target.node.parentNode);
                 }
                 break;
 
             default:
                 // 其他情况，指定参照物
                 if (refer.node) {
-                    ctm = target.node.getTransformToElement(refer.shapeNode || refer.node);
+                    ctm = node.getTransformToElement(refer.shapeNode || refer.node);
                 }
         }
 
