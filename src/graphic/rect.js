@@ -19,7 +19,7 @@ define(function(require, exports, module) {
 
     });
 
-    return require('core/class').createClass('Rect', {
+    var Rect = require('core/class').createClass('Rect', {
 
         base: require('graphic/path'),
 
@@ -167,6 +167,6 @@ define(function(require, exports, module) {
 
     });
 
-
+    return Rect;
 
 });

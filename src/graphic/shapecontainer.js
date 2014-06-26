@@ -6,6 +6,7 @@ define(function(require, exports, module) {
         base: Container,
 
         isShapeContainer: true,
+
         /* private */
         handleAdd: function(shape, index) {
             var parent = this.getShapeNode();
@@ -50,6 +51,11 @@ define(function(require, exports, module) {
         /* public */
         addShape: function(shape, index) {
             return this.addItem(shape, index);
+        },
+
+        put: function(shape) {
+            this.addShape(shape);
+            return shape;
         },
 
         appendShape: function(shape) {
