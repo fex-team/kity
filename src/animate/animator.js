@@ -105,9 +105,19 @@ define(function(require) {
             var queue = this._KityAnimateQueue;
             if (queue) {
                 while (queue.length) {
-                    queue.shift().stop();
+                    queue.shift().t.stop();
                 }
             }
+            return this;
+        },
+        pause: function() {
+            var queue = this._KityAnimateQueue;
+            if (queue) {
+                while (queue.length) {
+                    queue.shift().t.pause();
+                }
+            }
+            return this;
         }
     });
 

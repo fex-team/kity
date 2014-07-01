@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kity - v2.0.0 - 2014-06-26
+ * kity - v2.0.0 - 2014-07-01
  * https://github.com/fex-team/kity
  * GitHub: https://github.com/fex-team/kity.git 
  * Copyright (c) 2014 Baidu FEX; Licensed BSD
@@ -177,9 +177,19 @@ define("animate/animator", [ "animate/timeline", "graphic/eventhandler", "animat
             var queue = this._KityAnimateQueue;
             if (queue) {
                 while (queue.length) {
-                    queue.shift().stop();
+                    queue.shift().t.stop();
                 }
             }
+            return this;
+        },
+        pause: function() {
+            var queue = this._KityAnimateQueue;
+            if (queue) {
+                while (queue.length) {
+                    queue.shift().t.pause();
+                }
+            }
+            return this;
         }
     });
     return Animator;
