@@ -31,6 +31,8 @@
 
     };
 
+    global.use = global.inc.use;
+
     global.define = function(id, deps, f) {
 
         var argLen = arguments.length,

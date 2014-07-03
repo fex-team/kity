@@ -1,6 +1,17 @@
 /*global module:false*/
 module.exports = function(grunt) {
 
+    var banner = '/*!\n' +
+        ' * ====================================================\n' +
+        ' * <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
+        '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
+        '<%= pkg.homepage ? " * " + pkg.homepage + "\\n" : "" %>' +
+        ' * GitHub: <%= pkg.repository.url %> \n' +
+        ' * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
+        ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %>\n' +
+        ' * ====================================================\n' +
+        ' */\n\n';
+
     // Project configuration.
     grunt.initConfig({
 
@@ -12,7 +23,6 @@ module.exports = function(grunt) {
                 entrance: 'kity',
                 base: 'src'
             },
-
             merge: {
                 files: [{
                     src: 'src/**/*.js',
@@ -21,139 +31,36 @@ module.exports = function(grunt) {
             }
         },
 
-        // Task configuration.
-        transport: {
-
-            options: {
-
-                // module path
-                paths: [ 'src' ],
-                debug: false
-
-            },
-
-            cmd: {
-
-                files: [ {
-
-                    cwd: 'src',
-                    src: '**/*.js',
-                    dest: '.build_tmp'
-
-                } ]
-
-            }
-
-        },
-
         concat: {
-
-            options: {
-
-                paths: [ 'src' ],
-                include: 'all',
-                noncmd: true
-
-            },
-
-            cmd: {
-
-                files: {
-                    '.build_tmp/kity-non.js': '.build_tmp/**/*.js'
-                }
-
-            },
-
-            full: {
-
+            closure: {
                 options: {
-
-                    banner: '/*!\n' +
-                        ' * ====================================================\n' +
-                        ' * <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
-                        '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
-                        '<%= pkg.homepage ? " * " + pkg.homepage + "\\n" : "" %>' +
-                        ' * GitHub: <%= pkg.repository.url %> \n' +
-                        ' * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
-                        ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %>\n' +
-                        ' * ====================================================\n' +
-                        ' */\n\n' +
-                        '(function () {\n',
-
+                    banner: banner + '(function () {\n',
                     footer: '})();'
-
                 },
-
                 files: {
-                    'dist/kity.js': [ 'dev-lib/cmd-define.js', '.build_tmp/kity-non.js', 'dev-lib/exports.js' ]
+                    'dist/kity.js': ['.build_tmp/kity_tmp.js', 'dev-lib/exports.js']
                 }
-
-            },
-
-            exports: {
-
-                options: {
-
-                    banner: '/*!\n' +
-                        ' * ====================================================\n' +
-                        ' * <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
-                        '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
-                        '<%= pkg.homepage ? " * " + pkg.homepage + "\\n" : "" %>' +
-                        ' * GitHub: <%= pkg.repository.url %> \n' +
-                        ' * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
-                        ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %>\n' +
-                        ' * ====================================================\n' +
-                        ' */\n\n' +
-                        '(function () {\n',
-
-                    footer: '})();'
-
-                },
-
-                files: {
-                    'dist/kity.js': [ '.build_tmp/kity_tmp.js', 'dev-lib/exports.js' ]
-                }
-
             }
-
         },
 
         uglify: {
-
             options: {
-
-                banner: '/*!\n' +
-                    ' * ====================================================\n' +
-                    ' * <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
-                    '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
-                    '<%= pkg.homepage ? " * " + pkg.homepage + "\\n" : "" %>' +
-                    ' * GitHub: <%= pkg.repository.url %> \n' +
-                    ' * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
-                    ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %>\n' +
-                    ' * ====================================================\n' +
-                    ' */\n'
-
+                banner: banner
             },
-
             minimize: {
-
                 files: {
                     'dist/kity.min.js': 'dist/kity.js'
                 }
-
             }
-
         },
 
         clean: {
-
-            tmp: [ '.build_tmp' ]
-
+            tmp: ['.build_tmp']
         },
 
         jasmine: {
-            kity: {
-                src: ['dev-lib/cmd-define.js', 'dist/kity.min.js'],
+            unit: {
+                src: ['dist/kity.min.js'],
                 options: {
                     specs: [
                         'spec/core/*',
@@ -166,7 +73,7 @@ module.exports = function(grunt) {
         },
 
         connect: {
-            kity: {
+            unit: {
                 options: {
                     hostname: '0.0.0.0',
                     port: 7777,
@@ -178,18 +85,15 @@ module.exports = function(grunt) {
     });
 
     // These plugins provide necessary tasks.
-    grunt.loadNpmTasks('grunt-cmd-transport');
-    grunt.loadNpmTasks('grunt-cmd-concat');
+    grunt.loadNpmTasks('grunt-module-dependence');
+    grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
-    grunt.loadNpmTasks('grunt-contrib-connect');
-    grunt.loadNpmTasks('grunt-module-dependence');
 
     // Default task.
-    grunt.registerTask('default', ['transport:cmd', 'concat:cmd', 'concat:full', 'uglify:minimize', 'clean:tmp']);
-    grunt.registerTask('dep', ['dependence:merge', 'concat:exports', 'uglify:minimize', 'clean:tmp']);
-    grunt.registerTask('test', ['default', 'connect:kity', 'jasmine:kity']);
+    grunt.registerTask('default', ['dependence:merge', 'concat:closure', 'uglify:minimize', 'clean:tmp']);
+    grunt.registerTask('test', ['default', 'connect:unit', 'jasmine:unit']);
 
 };
