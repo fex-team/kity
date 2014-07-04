@@ -3,17 +3,11 @@ define(function(require, exports, module) {
     var TextContent = require('graphic/textcontent');
     var ShapeContainer = require('graphic/shapecontainer');
     var svg = require('graphic/svg');
+    var utils = require('core/utils');
     var offsetHash = {};
 
     function getTextBoundOffset(text) {
-        var style = window.getComputedStyle(text.node);
-        var font = [style.fontFamily,
-            style.fontSize,
-            style.fontStretch,
-            style.fontStyle,
-            style.fontVariant,
-            style.fontWeight
-        ].join('-');
+        var font = text._cachedFontHash;
 
         if (offsetHash[font]) {
             return offsetHash[font];
@@ -23,7 +17,7 @@ define(function(require, exports, module) {
         text.setContent('test');
 
         var bbox = text.getBoundaryBox(),
-            y = text.getY() + +text.node.getAttribute('dy');
+            y = text.getY() + (+text.node.getAttribute('dy'));
 
         var topOffset = y - bbox.y,
             bottomOffset = topOffset - bbox.height;
@@ -47,6 +41,38 @@ define(function(require, exports, module) {
             if (content !== undefined) {
                 this.setContent(content);
             }
+            this._buildFontHash();
+        },
+
+        _buildFontHash: function() {
+            var style = window.getComputedStyle(this.node);
+
+            this._cachedFontHash = [style.fontFamily,
+                style.fontSize,
+                style.fontStretch,
+                style.fontStyle,
+                style.fontVariant,
+                style.fontWeight
+            ].join('-');
+        },
+
+        _fontChanged: function(font) {
+            var last = this._lastFont;
+            var current = utils.extend({}, last, font);
+
+            if (!last) {
+                last = font;
+                return true;
+            }
+
+            var changed = last.family != current.family ||
+                last.size != current.size ||
+                last.style != current.style ||
+                last.weight != current.weight;
+
+            last = current;
+
+            return changed;
         },
 
         setX: function(x) {
@@ -70,7 +96,11 @@ define(function(require, exports, module) {
 
         setFont: function(font) {
             this.callBase(font);
-            return this.setVerticalAlign(this.getVerticalAlign());
+            if (this._fontChanged(font)) {
+                this._buildFontHash();
+                this.setVerticalAlign(this.getVerticalAlign());
+            }
+            return this;
         },
 
         setTextAnchor: function(anchor) {

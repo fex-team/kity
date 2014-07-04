@@ -110,6 +110,7 @@ define(function(require) {
                         this.finishValue = this.finishValue.call(this.target, this.target);
                     }
                     this.time = 0;
+                    this.setValue(this.beginValue);
                     this.frame = frame.requestFrame(this.nextFrame.bind(this));
                     break;
 
