@@ -366,7 +366,7 @@ define(function(require) {
      */
     g.pathToCurve = cacher(function(path) {
 
-        var i, command, param;
+        var i, j, command, param;
         var initPoint, currentPoint, endPoint, shouldClose, lastControlPoint, aussumedControlPoint;
         var controlPoint1, controlPoint2;
         var res = [];
@@ -444,13 +444,22 @@ define(function(require) {
                     break;
                 case 'A':
                     param = a2c.apply(null, currentPoint.concat(param));
-                    controlPoint1 = param.slice(0, 2);
-                    controlPoint2 = param.slice(2, 4);
+                    j = 0;
+                    while (j in param) {
+                        controlPoint1 = param.slice(j, j + 2);
+                        controlPoint2 = param.slice(j + 2, j + 4);
+                        endPoint = param.slice(j + 4, j + 6);
+                        // 写入当前一段曲线
+                        res.push(['C'].concat(controlPoint1).concat(controlPoint2).concat(endPoint));
+                        j += 6;
+                    }
                     break;
             }
 
-            // 写入当前一段曲线
-            res.push(['C'].concat(controlPoint1).concat(controlPoint2).concat(endPoint));
+            if (command != 'A') {
+                // 写入当前一段曲线
+                res.push(['C'].concat(controlPoint1).concat(controlPoint2).concat(endPoint));
+            }
 
             // 为下次循环准备当前位置
             currentPoint = endPoint;
