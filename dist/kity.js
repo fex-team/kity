@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kity - v2.0.0 - 2014-07-01
+ * kity - v2.0.0 - 2014-07-08
  * https://github.com/fex-team/kity
  * GitHub: https://github.com/fex-team/kity.git 
  * Copyright (c) 2014 Baidu FEX; Licensed BSD
@@ -5931,6 +5931,7 @@ define("graphic/textcontent", [ "graphic/shape", "graphic/svg", "core/utils", "g
             // call shape constructor
             this.callBase(nodeType);
             this.shapeNode = this.shapeNode || this.node;
+            this.shapeNode.setAttribute("text-rendering", "geometricPrecision");
         },
         clearContent: function() {
             while (this.shapeNode.firstChild) {

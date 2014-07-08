@@ -8,6 +8,7 @@ define(function(require, exports, module) {
             // call shape constructor
             this.callBase(nodeType);
             this.shapeNode = this.shapeNode || this.node;
+            this.shapeNode.setAttribute('text-rendering', 'geometricPrecision');
         },
 
         clearContent: function() {
