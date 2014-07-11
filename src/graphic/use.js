@@ -13,11 +13,19 @@ define(function(require, exports, module) {
 
         constructor: function(shape) {
 
-            var shapeId = null;
-
             this.callBase('use');
 
-            shapeId = shape.getId();
+            this.ref(shape);
+        },
+
+        ref: function(shape) {
+
+            if (!shape) {
+                this.node.removeAttributeNS(Svg.xlink, 'xlink:href');
+                return this;
+            }
+
+            var shapeId = shape.getId();
 
             if (shapeId) {
                 this.node.setAttributeNS(Svg.xlink, 'xlink:href', '#' + shapeId);
@@ -31,7 +39,7 @@ define(function(require, exports, module) {
             if (shape.node.getAttribute('stroke') === 'none') {
                 shape.node.removeAttribute('stroke');
             }
-
+            return this;
         }
 
     });
