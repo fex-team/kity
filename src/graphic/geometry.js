@@ -62,6 +62,7 @@ define(function(require) {
             return postprocessor ? postprocessor(cache[args]) : cache[args];
         }
         return newf;
+        console.log('test');
     }
 
     /**
