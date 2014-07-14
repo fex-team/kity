@@ -600,6 +600,17 @@ define(function(require) {
      * @return {Number} 贝塞尔曲线的长度
      */
     g.bezierLength = cacher(function bezierLength(bezierArray) {
+
+        // 表示（c[0]*t^4 + c[1]*t^3 + c[2]*t^2 + c[3]*t^1 + c[4])^(1/2)的函数
+        function f(x) {
+            var m = c[0]*Math.pow(x,4) + c[1]*Math.pow(x,3) + c[2]*Math.pow(x,2) + c[3]*x + c[4];
+            if (m < 0)
+            {
+                m = 0;
+            }
+            return Math.pow(m,0.5);
+        }
+
         // 用Newton-Cotes型求积公式
         var arr = bezierArray;
 
@@ -632,11 +643,6 @@ define(function(require) {
 
         // 用cotes积分公式求值
         return (7*f(0) + 32*f(0.25) + 12*f(0.5) + 32*f(0.75) + 7*f(1))/90;
-
-        // 表示（c[0]*t^4 + c[1]*t^3 + c[2]*t^2 + c[3]*t^1 + c[4])^(1/2)的函数
-        function f(x) {
-            return Math.pow(c[0]*Math.pow(x,4) + c[1]*Math.pow(x,3) + c[2]*Math.pow(x,2) + c[3]*x + c[4],0.5);
-        }
     });
 
 
