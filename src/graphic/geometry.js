@@ -603,7 +603,11 @@ define(function(require) {
 
         // 表示（c[0]*t^4 + c[1]*t^3 + c[2]*t^2 + c[3]*t^1 + c[4])^(1/2)的函数
         function f(x) {
+<<<<<<< HEAD
             var m = c0*Math.pow(x,4) + c1*Math.pow(x,3) + c2*Math.pow(x,2) + c3*x + c4;
+=======
+            var m = c[0]*Math.pow(x,4) + c[1]*Math.pow(x,3) + c[2]*Math.pow(x,2) + c[3]*x + c[4];
+>>>>>>> 54ddef23485215e61e5a20e860c248ab11d70738
             if (m < 0)
             {
                 m = 0;
@@ -637,7 +641,11 @@ define(function(require) {
         c4 = Math.pow(cx2,2) + Math.pow(cy2,2);
 
         // 用cotes积分公式求值
+<<<<<<< HEAD
         return ( f(0) + f(1) + 4*( f(0.125) + f(0.375) + f(0.625) + f(0.875) ) + 2*( f(0.25) + f(0.5) + f(0.75)) )/24;
+=======
+        return (7*f(0) + 32*f(0.25) + 12*f(0.5) + 32*f(0.75) + 7*f(1))/90;
+>>>>>>> 54ddef23485215e61e5a20e860c248ab11d70738
     });
 
 
