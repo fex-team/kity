@@ -10,6 +10,13 @@ define(function(require, exports) {
             return setTimeout(fn, 1000 / 60);
         };
 
+    var cancelAnimationFrame =
+        window.cancelAnimationFrame ||
+        window.mozCancelAnimationFrame ||
+        window.webkitCancelAnimationFrame ||
+        window.msCancelAnimationFrame ||
+        window.clearTimeout;
+
     var frameRequestId;
 
     // 等待执行的帧的集合，这些帧的方法将在下个动画帧同步执行
@@ -21,7 +28,7 @@ define(function(require, exports) {
      * 如果添加的帧是序列的第一个，至少有一个帧需要被执行，则下一个动画帧需要执行
      */
     function pushFrame(frame) {
-        if (pendingFrames.push(frame) === 1 && !frameRequestId) {
+        if (pendingFrames.push(frame) === 1) {
             frameRequestId = requestAnimationFrame(executePendingFrames);
         }
     }
@@ -77,6 +84,9 @@ define(function(require, exports) {
         var index = pendingFrames.indexOf(frame);
         if (~index) {
             pendingFrames.splice(index, 1);
+        }
+        if (pendingFrames.length === 0) {
+            cancelAnimationFrame(frameRequestId);
         }
     }
 
