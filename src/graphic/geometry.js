@@ -45,6 +45,7 @@ define(function(require) {
                     return array.push(array.splice(i, 1)[0]);
                 }
         }
+
         function newf() {
             var arg = Array.prototype.slice.call(arguments, 0),
                 args = arg.join('\u2400'),
@@ -603,49 +604,40 @@ define(function(require) {
 
         // 表示（c[0]*t^4 + c[1]*t^3 + c[2]*t^2 + c[3]*t^1 + c[4])^(1/2)的函数
         function f(x) {
-<<<<<<< HEAD
-            var m = c0*Math.pow(x,4) + c1*Math.pow(x,3) + c2*Math.pow(x,2) + c3*x + c4;
-=======
-            var m = c[0]*Math.pow(x,4) + c[1]*Math.pow(x,3) + c[2]*Math.pow(x,2) + c[3]*x + c[4];
->>>>>>> 54ddef23485215e61e5a20e860c248ab11d70738
-            if (m < 0)
-            {
+            var m = c0 * Math.pow(x, 4) + c1 * Math.pow(x, 3) + c2 * Math.pow(x, 2) + c3 * x + c4;
+            if (m < 0) {
                 m = 0;
             }
-            return Math.pow(m,0.5);
+            return Math.pow(m, 0.5);
         }
 
         // 用Newton-Cotes型求积公式
         var arr = bezierArray;
 
         // 三次贝塞尔曲线函数求导后，求出对应的方程系数，用cx[],cy[]表示x`(t)和y`(t)的系数
-        var cx0,cx1,cx2;
-        var cy0,cy1,cy2;
+        var cx0, cx1, cx2;
+        var cy0, cy1, cy2;
         // 用c[]表示x`(t)^2 + y`(t)^2的结果的系数
-        var c0,c1,c2,c3,c4;
+        var c0, c1, c2, c3, c4;
 
         // 求x`(t) 和 y`(t)的系数
-        cx0 = -3*arr[0] + 9*arr[2] - 9*arr[4] +3*arr[6];
-        cx1 = 6*arr[0] -12*arr[2] + 6*arr[4];
-        cx2 = -3*arr[0] + 3*arr[2];
+        cx0 = -3 * arr[0] + 9 * arr[2] - 9 * arr[4] + 3 * arr[6];
+        cx1 = 6 * arr[0] - 12 * arr[2] + 6 * arr[4];
+        cx2 = -3 * arr[0] + 3 * arr[2];
 
-        cy0 = -3*arr[1] + 9*arr[3] - 9*arr[5] + 3*arr[7];
-        cy1 = 6*arr[1] -12*arr[3] + 6*arr[5];
-        cy2 = -3*arr[1] + 3*arr[3];
+        cy0 = -3 * arr[1] + 9 * arr[3] - 9 * arr[5] + 3 * arr[7];
+        cy1 = 6 * arr[1] - 12 * arr[3] + 6 * arr[5];
+        cy2 = -3 * arr[1] + 3 * arr[3];
 
         // 求x`(t)^2 + y`(t)^2的结果的系数 c[]
-        c0 = Math.pow(cx0,2) + Math.pow(cy0,2);
-        c1 = 2*(cx0*cx1 + cy0*cy1);
-        c2 = 2*(cx0*cx2 + cy0*cy2) + Math.pow(cx1,2) + Math.pow(cy1,2);
-        c3 = 2*(cx1*cx2 + cy1*cy2);
-        c4 = Math.pow(cx2,2) + Math.pow(cy2,2);
+        c0 = Math.pow(cx0, 2) + Math.pow(cy0, 2);
+        c1 = 2 * (cx0 * cx1 + cy0 * cy1);
+        c2 = 2 * (cx0 * cx2 + cy0 * cy2) + Math.pow(cx1, 2) + Math.pow(cy1, 2);
+        c3 = 2 * (cx1 * cx2 + cy1 * cy2);
+        c4 = Math.pow(cx2, 2) + Math.pow(cy2, 2);
 
         // 用cotes积分公式求值
-<<<<<<< HEAD
-        return ( f(0) + f(1) + 4*( f(0.125) + f(0.375) + f(0.625) + f(0.875) ) + 2*( f(0.25) + f(0.5) + f(0.75)) )/24;
-=======
-        return (7*f(0) + 32*f(0.25) + 12*f(0.5) + 32*f(0.75) + 7*f(1))/90;
->>>>>>> 54ddef23485215e61e5a20e860c248ab11d70738
+        return (f(0) + f(1) + 4 * (f(0.125) + f(0.375) + f(0.625) + f(0.875)) + 2 * (f(0.25) + f(0.5) + f(0.75))) / 24;
     });
 
 
@@ -767,9 +759,7 @@ define(function(require) {
 
                 position = bezier.slice(bezier.length - 2);
                 continue;
-            }
-
-            else if (t0Length >= a) {
+            } else if (t0Length >= a) {
                 // 命中 t0；t1 可能命中或右溢出
                 // -----------------------------------
                 //            t0   t1
@@ -780,15 +770,12 @@ define(function(require) {
                 // 取当前块 t0 到 t1 的部分
 
                 subBezier = g.subBezier(bezier,
-                    Math.min((t1Length - a) / d, 1),
-                    (t0Length - a) / d);
+                    Math.min((t1Length - a) / d, 1), (t0Length - a) / d);
                 stared = true;
                 position = subBezier.slice(0, 2);
                 subPath.push(['M'].concat(subBezier.slice(0, 2)));
                 subPath.push(['C'].concat(subBezier.slice(2)));
-            }
-
-            else if (t1Length >= b) {
+            } else if (t1Length >= b) {
                 // t0 左溢出；t1 右溢出，整个块是需要的
                 // -----------------------------------
                 //       t0             t1
@@ -796,9 +783,7 @@ define(function(require) {
                 //
                 // 此时取整个块
                 subPath.push(path[i].slice());
-            }
-
-            else if (t1Length >= a) {
+            } else if (t1Length >= a) {
                 // t0 左溢出；t1 命中，取当前块 t1 之前的部分
                 // -----------------------------------
                 //            t0   t1
@@ -807,9 +792,7 @@ define(function(require) {
                 subBezier = g.subBezier(bezier, (t1Length - a) / d);
                 subPath.push(['C'].concat(subBezier.slice(2)));
                 stared = false;
-            }
-
-            else {
+            } else {
                 // 没有可以再要的了
                 break;
             }
@@ -845,8 +828,8 @@ define(function(require) {
         }
         var subPath = g.subPath(path, t);
         var lastCurve = subPath[subPath.length - 1][0] == 'Z' ?
-                subPath[subPath.length - 2] :
-                subPath[subPath.length - 1];
+            subPath[subPath.length - 2] :
+            subPath[subPath.length - 1];
 
         // 跳过 'C' 命令，只留参数
         lastCurve = lastCurve.slice(1);
@@ -1016,7 +999,8 @@ define(function(require) {
         if (t === 1) return path2;
 
         var aligned = alignCurve(path1, path2);
-        var result = [], seg, i, j;
+        var result = [],
+            seg, i, j;
 
         path1 = aligned[0];
         path2 = aligned[1];
