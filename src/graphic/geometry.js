@@ -599,30 +599,56 @@ define(function(require) {
      *
      * @return {Number} 贝塞尔曲线的长度
      */
-    g.bezierLength = cacher(function bezierLength(bezierArray, tolerate) {
-        // 切割成多少段来计算
-        tolerate = Math.max(tolerate || 0.001, 1e-9);
+    g.bezierLength = cacher(function bezierLength(bezierArray) {
 
-        function len(p, q) {
-            var dx = p[0] - q[0],
-                dy = p[1] - q[1];
-            return Math.sqrt(dx * dx + dy * dy);
+        // 表示（c[0]*t^4 + c[1]*t^3 + c[2]*t^2 + c[3]*t^1 + c[4])^(1/2)的函数
+        function f(x) {
+<<<<<<< HEAD
+            var m = c0*Math.pow(x,4) + c1*Math.pow(x,3) + c2*Math.pow(x,2) + c3*x + c4;
+=======
+            var m = c[0]*Math.pow(x,4) + c[1]*Math.pow(x,3) + c[2]*Math.pow(x,2) + c[3]*x + c[4];
+>>>>>>> 54ddef23485215e61e5a20e860c248ab11d70738
+            if (m < 0)
+            {
+                m = 0;
+            }
+            return Math.pow(m,0.5);
         }
 
-        var cutted, p, q, m, cuttedLength;
+        // 用Newton-Cotes型求积公式
+        var arr = bezierArray;
 
-        cutted = cutBezier(bezierArray);
-        p = bezierArray.slice(0, 2);
-        q = bezierArray.slice(6);
-        m = cutted[1].slice(0, 2);
+        // 三次贝塞尔曲线函数求导后，求出对应的方程系数，用cx[],cy[]表示x`(t)和y`(t)的系数
+        var cx0,cx1,cx2;
+        var cy0,cy1,cy2;
+        // 用c[]表示x`(t)^2 + y`(t)^2的结果的系数
+        var c0,c1,c2,c3,c4;
 
-        cuttedLength = len(p, m) + len(m, q);
+        // 求x`(t) 和 y`(t)的系数
+        cx0 = -3*arr[0] + 9*arr[2] - 9*arr[4] +3*arr[6];
+        cx1 = 6*arr[0] -12*arr[2] + 6*arr[4];
+        cx2 = -3*arr[0] + 3*arr[2];
 
-        if (cuttedLength - len(p, q) < tolerate) return cuttedLength;
+        cy0 = -3*arr[1] + 9*arr[3] - 9*arr[5] + 3*arr[7];
+        cy1 = 6*arr[1] -12*arr[3] + 6*arr[5];
+        cy2 = -3*arr[1] + 3*arr[3];
 
-        // 递归计算
-        return bezierLength(cutted[0], tolerate / 2) + bezierLength(cutted[1], tolerate / 3);
+        // 求x`(t)^2 + y`(t)^2的结果的系数 c[]
+        c0 = Math.pow(cx0,2) + Math.pow(cy0,2);
+        c1 = 2*(cx0*cx1 + cy0*cy1);
+        c2 = 2*(cx0*cx2 + cy0*cy2) + Math.pow(cx1,2) + Math.pow(cy1,2);
+        c3 = 2*(cx1*cx2 + cy1*cy2);
+        c4 = Math.pow(cx2,2) + Math.pow(cy2,2);
+
+        // 用cotes积分公式求值
+<<<<<<< HEAD
+        return ( f(0) + f(1) + 4*( f(0.125) + f(0.375) + f(0.625) + f(0.875) ) + 2*( f(0.25) + f(0.5) + f(0.75)) )/24;
+=======
+        return (7*f(0) + 32*f(0.25) + 12*f(0.5) + 32*f(0.75) + 7*f(1))/90;
+>>>>>>> 54ddef23485215e61e5a20e860c248ab11d70738
     });
+
+
 
     // 计算一个 pathSegment 中每一段的在整体中所占的长度范围，以及总长度
     // 方法要求每一段都是贝塞尔曲线
