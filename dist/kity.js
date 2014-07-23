@@ -372,6 +372,7 @@ define("animate/frame", [], function(require, exports) {
     var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || function(fn) {
         return setTimeout(fn, 1e3 / 60);
     };
+    var frameRequestId;
     // 等待执行的帧的集合，这些帧的方法将在下个动画帧同步执行
     var pendingFrames = [];
     /**
@@ -380,8 +381,8 @@ define("animate/frame", [], function(require, exports) {
      * 如果添加的帧是序列的第一个，至少有一个帧需要被执行，则下一个动画帧需要执行
      */
     function pushFrame(frame) {
-        if (pendingFrames.push(frame) === 1) {
-            requestAnimationFrame(executePendingFrames);
+        if (pendingFrames.push(frame) === 1 && !frameRequestId) {
+            frameRequestId = requestAnimationFrame(executePendingFrames);
         }
     }
     /**
@@ -393,6 +394,7 @@ define("animate/frame", [], function(require, exports) {
         while (frames.length) {
             executeFrame(frames.pop());
         }
+        frameRequestId = 0;
     }
     /**
      * 请求一个帧，执行指定的动作。动作回调提供一些有用的信息
