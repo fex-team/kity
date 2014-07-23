@@ -207,6 +207,7 @@ define(function(require, exports, module) {
             } else {
                 this.node.setAttribute(a, v);
             }
+            return this;
         },
         getAttr: function(a) {
             return this.node.getAttribute(a);

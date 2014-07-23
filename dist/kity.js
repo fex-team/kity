@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kity - v2.0.0 - 2014-07-11
+ * kity - v2.0.0 - 2014-07-23
  * https://github.com/fex-team/kity
  * GitHub: https://github.com/fex-team/kity.git 
  * Copyright (c) 2014 Baidu FEX; Licensed BSD
@@ -1661,12 +1661,12 @@ define("graphic/box", [ "core/class" ], function(require, exports, module) {
             this.y = y || 0;
             this.width = width || 0;
             this.height = height || 0;
-            this.left = x;
+            this.left = this.x;
             this.right = this.x + this.width;
             this.top = this.y;
             this.bottom = this.y + this.height;
-            this.cx = x + this.width / 2;
-            this.cy = y + this.height / 2;
+            this.cx = this.x + this.width / 2;
+            this.cy = this.y + this.height / 2;
         },
         getRangeX: function() {
             return [ this.left, this.right ];
@@ -5171,6 +5171,7 @@ define("graphic/shape", [ "graphic/svg", "core/utils", "graphic/eventhandler", "
             } else {
                 this.node.setAttribute(a, v);
             }
+            return this;
         },
         getAttr: function(a) {
             return this.node.getAttribute(a);

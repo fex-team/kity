@@ -19,12 +19,12 @@ define(function(require, exports, module) {
             this.y = y || 0;
             this.width = width || 0;
             this.height = height || 0;
-            this.left = x;
+            this.left = this.x;
             this.right = this.x + this.width;
             this.top = this.y;
             this.bottom = this.y + this.height;
-            this.cx = x + this.width / 2;
-            this.cy = y + this.height / 2;
+            this.cx = this.x + this.width / 2;
+            this.cy = this.y + this.height / 2;
         },
 
         getRangeX: function() {
