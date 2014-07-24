@@ -19,10 +19,25 @@ define(function(require, exports, module) {
 
     });
 
+    /**
+     * @class kity.Rect
+     * @description 表示一个矩形
+     * @base kity.Path
+     */
     var Rect = require('core/class').createClass('Rect', {
 
         base: require('graphic/path'),
 
+        /**
+         * @constructor
+         * @for kity.Rect
+         * @grammar kity.Rect(width, height, x, y, radius)
+         * @param  {Number} width  矩形的初始化宽度
+         * @param  {Number} height 矩形的初始化高度
+         * @param  {Number} x      矩形的初始化 x 坐标
+         * @param  {Number} y      矩形的初始化 y 坐标
+         * @param  {Number} radius 矩形的初始化圆角大小
+         */
         constructor: function(width, height, x, y, radius) {
 
             this.callBase();
@@ -79,18 +94,55 @@ define(function(require, exports, module) {
 
         },
 
+        /**
+         * @method setWidth
+         * @for kity.Rect
+         * @grammar setWidth(width) => kity.Rect
+         * @description 设置矩形的宽度，设置后返回矩形实例本身
+         * @param {Number} width 宽度值
+         *
+         * @example
+         * ```js
+         * rect.setWidth(300);
+         * ```
+         */
         setWidth: function(width) {
             this.width = width;
 
             return this.update();
         },
 
+        /**
+         * @method setHeight
+         * @for  kity.Rect
+         * @grammar setHeight(height) => kity.Rect
+         * @description 设置矩形的高度，设置后返回矩形实例本身
+         * @param {Number} height 高度值
+         *
+         * @example
+         * ```js
+         * rect.setHeight(200);
+         * ```
+         */
         setHeight: function(height) {
             this.height = height;
 
             return this.update();
         },
 
+        /**
+         * @method setSize
+         * @for  kity.Rect
+         * @grammar setSize(width, height) => kity.Rect
+         * @description 设置矩形的尺寸，设置后返回矩形本身
+         * @param {Number} width  矩形的宽度值
+         * @param {Number} height 矩形的高度值
+         *
+         * @example
+         * ```js
+         * rect.setSize(300, 200);
+         * ```
+         */
         setSize: function(width, height) {
             this.width = width;
             this.height = height;
@@ -98,6 +150,13 @@ define(function(require, exports, module) {
             return this.update();
         },
 
+        /**
+         * @method setBox
+         * @for kity.Rect
+         * @grammar setBox(box) => kity.Rect
+         * @description 使用一个 kity 的盒子数据，
+         * @param {kity.Box} box 盒子数据
+         */
         setBox: function(box) {
             this.x = box.x;
             this.y = box.y;
