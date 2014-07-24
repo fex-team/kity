@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kity - v2.0.0 - 2014-07-23
+ * kity - v2.0.0 - 2014-07-24
  * https://github.com/fex-team/kity
  * GitHub: https://github.com/fex-team/kity.git 
  * Copyright (c) 2014 Baidu FEX; Licensed BSD
@@ -4612,9 +4612,33 @@ define("graphic/pie", [ "core/class", "graphic/sweep", "graphic/point", "graphic
  * 点对象抽象
  */
 define("graphic/point", [ "core/class" ], function(require, exports, module) {
+    /**
+     * @class kity.Point
+     * @description 表示一个点
+     */
     var Point = require("core/class").createClass("Point", {
+        /**
+         * @constructor
+         * @for kity.Point
+         * @description 指定默认的 x 和 y 创建一个点
+         * 
+         * @param  {Number} x 点的 x 坐标
+         * @param  {Number} y 点的 y 坐标
+         */
         constructor: function(x, y) {
+            /**
+             * @property
+             * @for kity.Point
+             * @description 表示点的 x 坐标
+             * @type {Number}
+             */
             this.x = x || 0;
+            /**
+             * @property
+             * @for kity.Point
+             * @description 表示点的 y 坐标
+             * @type {Number}
+             */
             this.y = y || 0;
         },
         offset: function(dx, dy) {
@@ -4634,6 +4658,15 @@ define("graphic/point", [ "core/class" ], function(require, exports, module) {
             return new Point((this.x | 0) + .5, (this.y | 0) + .5);
         }
     });
+    /**
+     * @static
+     * @method fromPolar()
+     * @for kity.Point
+     * @grammar kity.Point.fromPolar(radius, angle, unit) => kity.Point
+     * @param  {Number} radius 极坐标中的半径
+     * @param  {Number} angle  极坐标中的角度
+     * @param  {String} unit   角度使用的单位，默认为 'deg' (角度)，可以取值为 'rad'，表示传入的是弧度值
+     */
     Point.fromPolar = function(radius, angle, unit) {
         if (unit != "rad") {
             // deg to rad
@@ -4805,8 +4838,23 @@ define("graphic/rect", [ "core/utils", "graphic/point", "core/class", "graphic/b
             return Math.min(minValue, radius);
         }
     });
+    /**
+     * @class kity.Rect
+     * @description 表示一个矩形
+     * @base kity.Path
+     */
     var Rect = require("core/class").createClass("Rect", {
         base: require("graphic/path"),
+        /**
+         * @constructor
+         * @for kity.Rect
+         * @grammar kity.Rect(width, height, x, y, radius)
+         * @param  {Number} width  矩形的初始化宽度
+         * @param  {Number} height 矩形的初始化高度
+         * @param  {Number} x      矩形的初始化 x 坐标
+         * @param  {Number} y      矩形的初始化 y 坐标
+         * @param  {Number} radius 矩形的初始化圆角大小
+         */
         constructor: function(width, height, x, y, radius) {
             this.callBase();
             this.x = x || 0;
@@ -4844,19 +4892,63 @@ define("graphic/rect", [ "core/utils", "graphic/point", "core/class", "graphic/b
             drawer.done();
             return this;
         },
+        /**
+         * @method setWidth
+         * @for kity.Rect
+         * @grammar setWidth(width) => kity.Rect
+         * @description 设置矩形的宽度，设置后返回矩形实例本身
+         * @param {Number} width 宽度值
+         *
+         * @example
+         * ```js
+         * rect.setWidth(300);
+         * ```
+         */
         setWidth: function(width) {
             this.width = width;
             return this.update();
         },
+        /**
+         * @method setHeight
+         * @for  kity.Rect
+         * @grammar setHeight(height) => kity.Rect
+         * @description 设置矩形的高度，设置后返回矩形实例本身
+         * @param {Number} height 高度值
+         *
+         * @example
+         * ```js
+         * rect.setHeight(200);
+         * ```
+         */
         setHeight: function(height) {
             this.height = height;
             return this.update();
         },
+        /**
+         * @method setSize
+         * @for  kity.Rect
+         * @grammar setSize(width, height) => kity.Rect
+         * @description 设置矩形的尺寸，设置后返回矩形本身
+         * @param {Number} width  矩形的宽度值
+         * @param {Number} height 矩形的高度值
+         *
+         * @example
+         * ```js
+         * rect.setSize(300, 200);
+         * ```
+         */
         setSize: function(width, height) {
             this.width = width;
             this.height = height;
             return this.update();
         },
+        /**
+         * @method setBox
+         * @for kity.Rect
+         * @grammar setBox(box) => kity.Rect
+         * @description 使用一个 kity 的盒子数据，
+         * @param {kity.Box} box 盒子数据
+         */
         setBox: function(box) {
             this.x = box.x;
             this.y = box.y;
