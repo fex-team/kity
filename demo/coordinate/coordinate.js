@@ -33,7 +33,7 @@ var Coordinate = kity.createClass( "Coordinate", {
             this.stroke( baseColor );
             this.whenPaperReady( function ( paper ) {
                 paper.addResource( marker );
-                this.setMarkerEnd( marker );
+                this.setMarker( marker, 'end' );
             } );
         } );
 
@@ -44,7 +44,7 @@ var Coordinate = kity.createClass( "Coordinate", {
             this.stroke( baseColor );
             this.whenPaperReady( function ( paper ) {
                 paper.addResource( marker );
-                this.setMarkerEnd( marker );
+                this.setMarker( marker, 'end' );
             } );
         } );
 
