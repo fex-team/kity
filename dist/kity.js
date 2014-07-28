@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kity - v2.0.0 - 2014-07-03
+ * kity - v2.0.0 - 2014-07-28
  * https://github.com/fex-team/kity
  * GitHub: https://github.com/fex-team/kity.git 
  * Copyright (c) 2014 Baidu FEX; Licensed BSD
@@ -37,6 +37,7 @@ var _p = {
     }
 };
 
+//src/animate/animator.js
 _p[0] = {
     value: function(require) {
         function parseTime(str) {
@@ -139,6 +140,7 @@ _p[0] = {
     }
 };
 
+//src/animate/easing.js
 /**
  * Kity Animate Easing modified from jQuery Easing
  * Author: techird
@@ -347,6 +349,7 @@ _p[1] = {
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  */
+//src/animate/frame.js
 _p[2] = {
     value: function(require, exports) {
         // 原生动画帧方法 polyfill
@@ -458,6 +461,7 @@ _p[2] = {
     }
 };
 
+//src/animate/motionanimator.js
 _p[3] = {
     value: function(require) {
         var Animator = _p.r(0);
@@ -492,6 +496,7 @@ _p[3] = {
     }
 };
 
+//src/animate/opacityanimator.js
 _p[4] = {
     value: function(require) {
         var Animator = _p.r(0);
@@ -528,6 +533,7 @@ _p[4] = {
     }
 };
 
+//src/animate/pathanimator.js
 _p[5] = {
     value: function(require) {
         var Animator = _p.r(0);
@@ -557,6 +563,7 @@ _p[5] = {
     }
 };
 
+//src/animate/rotateanimator.js
 _p[6] = {
     value: function(require) {
         var Animator = _p.r(0);
@@ -586,6 +593,7 @@ _p[6] = {
     }
 };
 
+//src/animate/scaleanimator.js
 _p[7] = {
     value: function(require) {
         var Animator = _p.r(0);
@@ -614,6 +622,7 @@ _p[7] = {
     }
 };
 
+//src/animate/timeline.js
 _p[8] = {
     value: function(require) {
         var EventHandler = _p.r(34);
@@ -777,6 +786,7 @@ _p[8] = {
     }
 };
 
+//src/animate/translateanimator.js
 _p[9] = {
     value: function(require) {
         var Animator = _p.r(0);
@@ -805,6 +815,7 @@ _p[9] = {
     }
 };
 
+//src/core/browser.js
 _p[10] = {
     value: function() {
         var browser = function() {
@@ -850,6 +861,7 @@ _p[10] = {
     }
 };
 
+//src/core/class.js
 /**
  * @description 创建一个类
  * @param {String}    fullClassName  类全名，包括命名空间。
@@ -1018,6 +1030,7 @@ _p[11] = {
     }
 };
 
+//src/core/utils.js
 _p[12] = {
     value: function() {
         var utils = {
@@ -1177,6 +1190,7 @@ _p[12] = {
     }
 };
 
+//src/filter/effect/colormatrixeffect.js
 /**
  * 颜色矩阵运算效果封装
  */
@@ -1205,6 +1219,7 @@ _p[13] = {
     }
 };
 
+//src/filter/effect/compositeeffect.js
 /**
  * 高斯模糊效果封装
  */
@@ -1237,6 +1252,7 @@ _p[14] = {
     }
 };
 
+//src/filter/effect/convolvematrixeffect.js
 /**
  * 像素级别的矩阵卷积运算效果封装
  */
@@ -1260,6 +1276,7 @@ _p[15] = {
     }
 };
 
+//src/filter/effect/effect.js
 /*
  * 效果类
  * 该类型的对象不存储任何内部属性， 所有操作都是针对该类对象所维护的节点进行的
@@ -1311,6 +1328,7 @@ _p[16] = {
     }
 };
 
+//src/filter/effect/gaussianblureffect.js
 /**
  * 高斯模糊效果封装
  */
@@ -1328,6 +1346,7 @@ _p[17] = {
     }
 };
 
+//src/filter/effect/offseteffect.js
 /**
  * 偏移效果封装
  */
@@ -1346,6 +1365,7 @@ _p[18] = {
     }
 };
 
+//src/filter/effectcontainer.js
 /*
  * Effect所用的container
  */
@@ -1396,6 +1416,7 @@ _p[19] = {
     }
 };
 
+//src/filter/filter.js
 /**
  * Filter 基类
  */
@@ -1452,6 +1473,7 @@ _p[20] = {
     }
 };
 
+//src/filter/gaussianblurfilter.js
 /*
  * 高斯模糊滤镜
  */
@@ -1468,6 +1490,7 @@ _p[21] = {
     }
 };
 
+//src/filter/projectionfilter.js
 /*
  * 投影滤镜
  */
@@ -1538,6 +1561,7 @@ _p[22] = {
     }
 };
 
+//src/graphic/bezier.js
 /**
  * 贝塞尔曲线
  */
@@ -1586,6 +1610,7 @@ _p[23] = {
     }
 };
 
+//src/graphic/bezierpoint.js
 /**
  * 贝塞尔点
  */
@@ -1689,6 +1714,7 @@ _p[24] = {
     }
 };
 
+//src/graphic/box.js
 _p[25] = {
     value: function(require, exports, module) {
         var Box = _p.r(11).createClass("Box", {
@@ -1741,6 +1767,7 @@ _p[25] = {
     }
 };
 
+//src/graphic/circle.js
 _p[26] = {
     value: function(require, exports, module) {
         return _p.r(11).createClass("Circle", {
@@ -1758,6 +1785,7 @@ _p[26] = {
     }
 };
 
+//src/graphic/clip.js
 _p[27] = {
     value: function(require, exports, module) {
         var Class = _p.r(11);
@@ -1783,6 +1811,7 @@ _p[27] = {
     }
 };
 
+//src/graphic/color.js
 _p[28] = {
     value: function(require, exports, module) {
         var Utils = _p.r(12), StandardColor = _p.r(65), ColorUtils = {}, Color = _p.r(11).createClass("Color", {
@@ -2145,6 +2174,7 @@ _p[28] = {
     }
 };
 
+//src/graphic/container.js
 _p[29] = {
     value: function(require, exports, module) {
         function itemRemove() {
@@ -2247,6 +2277,7 @@ _p[29] = {
     }
 };
 
+//src/graphic/curve.js
 /*
  * 曲线
  * */
@@ -2443,6 +2474,7 @@ _p[30] = {
     }
 };
 
+//src/graphic/data.js
 _p[31] = {
     value: function(require, exports, module) {
         return _p.r(11).createClass("Data", {
@@ -2464,6 +2496,7 @@ _p[31] = {
     }
 };
 
+//src/graphic/defbrush.js
 _p[32] = {
     value: function(require, exports, module) {
         return _p.r(11).createClass("GradientBrush", {
@@ -2475,6 +2508,7 @@ _p[32] = {
     }
 };
 
+//src/graphic/ellipse.js
 _p[33] = {
     value: function(require, exports, module) {
         var Utils = _p.r(12), Point = _p.r(51);
@@ -2553,6 +2587,7 @@ _p[33] = {
     }
 };
 
+//src/graphic/eventhandler.js
 /*
  * kity event 实现
  */
@@ -2736,6 +2771,7 @@ _p[34] = {
     }
 };
 
+//src/graphic/geometry.js
 _p[35] = {
     value: function(require) {
         var utils = _p.r(12);
@@ -3602,6 +3638,7 @@ _p[35] = {
     }
 };
 
+//src/graphic/gradientbrush.js
 _p[36] = {
     value: function(require, exports, module) {
         var svg = _p.r(68);
@@ -3633,6 +3670,7 @@ _p[36] = {
     }
 };
 
+//src/graphic/group.js
 _p[37] = {
     value: function(require, exports, module) {
         var ShapeContainer = _p.r(62);
@@ -3646,6 +3684,7 @@ _p[37] = {
     }
 };
 
+//src/graphic/hyperlink.js
 _p[38] = {
     value: function(require, exports, module) {
         var ShapeContainer = _p.r(62);
@@ -3674,6 +3713,7 @@ _p[38] = {
     }
 };
 
+//src/graphic/image.js
 _p[39] = {
     value: function(require, exports, module) {
         return _p.r(11).createClass("Image", {
@@ -3734,6 +3774,7 @@ _p[39] = {
     }
 };
 
+//src/graphic/line.js
 _p[40] = {
     value: function(require, exports, module) {
         return _p.r(11).createClass("Line", {
@@ -3783,6 +3824,7 @@ _p[40] = {
     }
 };
 
+//src/graphic/lineargradientbrush.js
 _p[41] = {
     value: function(require, exports, module) {
         var className = "LinearGradientBrush";
@@ -3824,6 +3866,7 @@ _p[41] = {
     }
 };
 
+//src/graphic/marker.js
 _p[42] = {
     value: function(require, exports, module) {
         var Point = _p.r(51);
@@ -3884,6 +3927,7 @@ _p[42] = {
     }
 };
 
+//src/graphic/mask.js
 /**
  * 蒙板
  */
@@ -3912,6 +3956,7 @@ _p[43] = {
     }
 };
 
+//src/graphic/matrix.js
 _p[44] = {
     value: function(require, exports, module) {
         var utils = _p.r(12);
@@ -4169,6 +4214,7 @@ _p[44] = {
     }
 };
 
+//src/graphic/palette.js
 /**
  * 调色板
  */
@@ -4275,6 +4321,7 @@ _p[45] = {
     }
 };
 
+//src/graphic/paper.js
 _p[46] = {
     value: function(require, exports, module) {
         var Class = _p.r(11);
@@ -4444,6 +4491,7 @@ _p[46] = {
     }
 };
 
+//src/graphic/path.js
 _p[47] = {
     value: function(require, exports, module) {
         var Utils = _p.r(12);
@@ -4564,6 +4612,7 @@ _p[47] = {
     }
 };
 
+//src/graphic/patternbrush.js
 _p[48] = {
     value: function(require, exports, module) {
         var DefBrush = _p.r(32);
@@ -4606,6 +4655,7 @@ _p[48] = {
     }
 };
 
+//src/graphic/pen.js
 _p[49] = {
     value: function(require, exports, module) {
         var Color = _p.r(28);
@@ -4686,6 +4736,7 @@ _p[49] = {
     }
 };
 
+//src/graphic/pie.js
 _p[50] = {
     value: function(require, exports, module) {
         return _p.r(11).createClass({
@@ -4703,6 +4754,7 @@ _p[50] = {
     }
 };
 
+//src/graphic/point.js
 /*
  * 点对象抽象
  */
@@ -4752,6 +4804,7 @@ _p[51] = {
     }
 };
 
+//src/graphic/pointcontainer.js
 /**
  * 点集合容器
  */
@@ -4796,6 +4849,7 @@ _p[52] = {
     }
 };
 
+//src/graphic/poly.js
 /*
  * 通过点来决定图形的公共父类
  */
@@ -4839,6 +4893,7 @@ _p[53] = {
     }
 };
 
+//src/graphic/polygon.js
 _p[54] = {
     value: function(require, exports, module) {
         return _p.r(11).createClass("Polygon", {
@@ -4850,6 +4905,7 @@ _p[54] = {
     }
 };
 
+//src/graphic/polyline.js
 _p[55] = {
     value: function(require, exports, module) {
         return _p.r(11).createClass("Polyline", {
@@ -4861,6 +4917,7 @@ _p[55] = {
     }
 };
 
+//src/graphic/radialgradientbrush.js
 _p[56] = {
     value: function(require, exports, module) {
         var GradientBrush = _p.r(36);
@@ -4908,6 +4965,7 @@ _p[56] = {
     }
 };
 
+//src/graphic/rect.js
 _p[57] = {
     value: function(require, exports, module) {
         var RectUtils = {}, Utils = _p.r(12), Point = _p.r(51), Box = _p.r(25);
@@ -5026,6 +5084,7 @@ _p[57] = {
     }
 };
 
+//src/graphic/regularpolygon.js
 _p[58] = {
     value: function(require, exports, module) {
         var Point = _p.r(51);
@@ -5072,6 +5131,7 @@ _p[58] = {
     }
 };
 
+//src/graphic/resource.js
 _p[59] = {
     value: function(require, exports, module) {
         var svg = _p.r(68);
@@ -5087,6 +5147,7 @@ _p[59] = {
     }
 };
 
+//src/graphic/ring.js
 _p[60] = {
     value: function(require, exports, module) {
         return _p.r(11).createClass({
@@ -5110,6 +5171,7 @@ _p[60] = {
     }
 };
 
+//src/graphic/shape.js
 _p[61] = {
     value: function(require, exports, module) {
         var svg = _p.r(68);
@@ -5327,6 +5389,7 @@ _p[61] = {
     }
 };
 
+//src/graphic/shapecontainer.js
 _p[62] = {
     value: function(require, exports, module) {
         var Container = _p.r(29);
@@ -5486,6 +5549,7 @@ _p[62] = {
     }
 };
 
+//src/graphic/shapeevent.js
 /*
  * 图形事件包装类
  * */
@@ -5551,6 +5615,7 @@ _p[63] = {
     }
 };
 
+//src/graphic/shapepoint.js
 /*
  * 图形上的点抽象
  */
@@ -5586,6 +5651,7 @@ _p[64] = {
     }
 };
 
+//src/graphic/standardcolor.js
 /**
  * 标准颜色映射
  */
@@ -5744,6 +5810,7 @@ _p[65] = {
     }
 };
 
+//src/graphic/star.js
 _p[66] = {
     value: function(require, exports, module) {
         /**
@@ -5824,6 +5891,7 @@ _p[66] = {
     }
 };
 
+//src/graphic/styled.js
 _p[67] = {
     value: function(require, exports, module) {
         // polyfill for ie
@@ -5884,6 +5952,7 @@ _p[67] = {
     }
 };
 
+//src/graphic/svg.js
 _p[68] = {
     value: function(require, exports, module) {
         var doc = document;
@@ -5905,6 +5974,7 @@ _p[68] = {
     }
 };
 
+//src/graphic/sweep.js
 _p[69] = {
     value: function(require, exports, module) {
         var Point = _p.r(51);
@@ -5970,6 +6040,7 @@ _p[69] = {
     }
 };
 
+//src/graphic/text.js
 _p[70] = {
     value: function(require, exports, module) {
         var TextContent = _p.r(71);
@@ -6086,6 +6157,7 @@ _p[70] = {
     }
 };
 
+//src/graphic/textcontent.js
 _p[71] = {
     value: function(require, exports, module) {
         var Shape = _p.r(61);
@@ -6160,6 +6232,7 @@ _p[71] = {
     }
 };
 
+//src/graphic/textspan.js
 _p[72] = {
     value: function(require, exports, module) {
         var TextContent = _p.r(71);
@@ -6175,6 +6248,7 @@ _p[72] = {
     }
 };
 
+//src/graphic/use.js
 /*
  * USE 功能
  */
@@ -6212,6 +6286,7 @@ _p[73] = {
     }
 };
 
+//src/graphic/vector.js
 _p[74] = {
     value: function(require, exports, module) {
         var Point = _p.r(51);
@@ -6281,6 +6356,7 @@ _p[74] = {
     }
 };
 
+//src/graphic/view.js
 _p[75] = {
     value: function(require, exports, module) {
         var ShapeContainer = _p.r(62);
@@ -6295,6 +6371,7 @@ _p[75] = {
     }
 };
 
+//src/graphic/viewbox.js
 _p[76] = {
     value: function(require, exports, module) {
         return _p.r(11).createClass("ViewBox", {
@@ -6329,6 +6406,7 @@ _p[76] = {
     }
 };
 
+//src/kity.js
 _p[77] = {
     value: function(require, exports, module) {
         var kity = {}, utils = _p.r(12);
