@@ -1,15 +1,9 @@
 /**
- * @description 创建一个类
- * @param {String}    fullClassName  类全名，包括命名空间。
- * @param {Plain}     defines        要创建的类的特性
- *     defines.constructor  {Function}       类的构造函数，实例化的时候会被调用。
- *     defines.base         {String}         基类的名称。名称要使用全名。（因为base是javascript未来保留字，所以不用base）
- *     defines.mixin        {Array<String>}  要混合到新类的类集合
- *     defines.<method>     {Function}       其他类方法
+ * @fileOverview
  *
- * TODO:
- *     Mixin 构造函数调用支持
+ * 提供 Kity 的 OOP 支持
  */
+
 define(function(require, exports) {
 
     // just to bind context
@@ -18,18 +12,87 @@ define(function(require, exports) {
         return this.apply(thisObj, args);
     };
 
-    // 所有类的基类
+    /**
+     * @class kity.Class
+     * @description 所有 kity 类的基类
+     * @abstract
+     */
     function Class() {}
+
+    exports.Class = Class;
+
     Class.__KityClassName = 'Class';
 
-    // 提供 base 调用支持
+    /**
+     * @method base()
+     * @for kity.Class
+     * @protected
+     * @grammar base(name, args...) => {any}
+     * @description 调用父类指定名称的函数
+     * @param {string} name 函数的名称
+     * @param {parameter} args... 传递给父类函数的参数
+     *
+     * @example
+     *
+     * ```js
+     * var Person = kity.createClass('Person', {
+     *     toString: function() {
+     *         return 'I am a person';
+     *     }
+     * });
+     *
+     * var Male = kity.createClass('Male', {
+     *     base: Person,
+     *
+     *     toString: function() {
+     *         return 'I am a man';
+     *     },
+     *
+     *     speak: function() {
+     *         return this.base('toString') + ',' + this.toString();
+     *     }
+     * })
+     * ```
+     */
     Class.prototype.base = function(name) {
         var caller = arguments.callee.caller;
         var method = caller.__KityMethodClass.__KityBaseClass.prototype[name];
         return method.apply(this, Array.prototype.slice.call(arguments, 1));
     };
 
-    // 直接调用 base 类的同名方法
+    /**
+     * @method callBase()
+     * @for kity.Class
+     * @protected
+     * @grammar callBase(args...) => {any}
+     * @description 调用父类同名函数
+     * @param {parameter} args... 传递到父类同名函数的参数
+     *
+     * @example
+     *
+     * ```js
+     * var Animal = kity.createClass('Animal', {
+     *     constructor: function(name) {
+     *         this.name = name;
+     *     },
+     *     toString: function() {
+     *         return 'I am an animal name ' + this.name;
+     *     }
+     * });
+     *
+     * var Dog = kity.createClass('Dog', {
+     *     constructor: function(name) {
+     *         this.callBase(name);
+     *     },
+     *     toString: function() {
+     *         return this.callBase() + ', a dog';
+     *     }
+     * });
+     *
+     * var dog = new Dog('Dummy');
+     * console.log(dog.toString()); // "I am an animal name Dummy, a dog";
+     * ```
+     */
     Class.prototype.callBase = function() {
         var caller = arguments.callee.caller;
         var method = caller.__KityMethodClass.__KityBaseClass.prototype[caller.__KityMethodName];
@@ -64,6 +127,22 @@ define(function(require, exports) {
         }
     };
 
+    /**
+     * @method pipe()
+     * @for kity.Class
+     * @grammar pipe() => {this}
+     * @description 以当前对象为上线文以及管道函数的第一个参数，执行一个管道函数
+     * @param  {Function} fn 进行管道操作的函数
+     *
+     * @example
+     *
+     * ```js
+     * var rect = new kity.Rect().pipe(function() {
+     *     this.setWidth(500);
+     *     this.setHeight(300);
+     * });
+     * ```
+     */
     Class.prototype.pipe = function(fn) {
         if (typeof(fn) == 'function') {
             fn.call(this, this);
@@ -71,10 +150,41 @@ define(function(require, exports) {
         return this;
     };
 
+    /**
+     * @method getType()
+     * @for kity.Class
+     * @grammar getType() => {string}
+     * @description 获得对象的类型
+     *
+     * @example
+     *
+     * ```js
+     * var rect = new kity.Rect();
+     * var circle = new kity.Circle();
+     *
+     * console.log(rect.getType()); // "Rect"
+     * console.log(rect.getType()); // "Circle"
+     * ```
+     */
     Class.prototype.getType = function() {
         return this.__KityClassName;
     };
 
+    /**
+     * @method getClass()
+     * @for kity.Class
+     * @grammar getClass() => {Class}
+     * @description 获得对象的类
+     *
+     * @example
+     *
+     * ```js
+     * var rect = new kity.Rect();
+     *
+     * console.log(rect.getClass() === kity.Rect); // true
+     * console.log(rect instanceof kity.Rect); // true
+     * ```
+     */
     Class.prototype.getClass = function() {
         return this.constructor;
     };
@@ -159,10 +269,80 @@ define(function(require, exports) {
         return BaseClass;
     }
 
-    Class.prototype._accessProperty = function() {
-        return this._propertyRawData || (this._propertyRawData = {});
-    };
-
+    /**
+     * @method kity.createClass()
+     * @grammar kity.createClass(classname, defines) => {Class}
+     * @description 创建一个类
+     * @param  {string} classname 类名，用于调试的时候查看，可选
+     * @param  {object} defines   类定义
+     *      defines.base {Class}
+     *          定义的类的基类，如果不配置，则表示基类为 kity.Class
+     *      defines.mixins {Class[]}
+     *          定义的类要融合的类列表
+     *      defines.constructor {Function}
+     *          定义类的构造函数，如果父类显式定义了构造函数，需要在构造函数中使用 callBase() 方法调用父类的构造函数
+     *      defines.* {Function}
+     *          定义类的其它函数
+     *
+     * @example 创建一个类
+     *
+     * ```js
+     * var Animal = kity.createClass('Animal', {
+     *     constructor: function(name) {
+     *         this.name = name;
+     *     },
+     *     toString: function() {
+     *         return this.name;
+     *     }
+     * });
+     *
+     * var a = new Animal('kity');
+     * console.log(a.toString()); // "kity"
+     * ```
+     *
+     * @example 继承一个类
+     *
+     * ```js
+     * var Cat = kity.createClass('Cat', {
+     *     base: Animal,
+     *     constructor: function(name, color) {
+     *         // 调用父类构造函数
+     *         this.callBase(name);
+     *     },
+     *     toString: function() {
+     *         return 'A ' + this.color + ' cat, ' + this.callBase();
+     *     }
+     * });
+     *
+     * var cat = new Cat('kity', 'black');
+     * console.log(cat.toString()); // "A black cat, kity"
+     * ```
+     *
+     * @example 混合类的能力
+     * ```js
+     * var Walkable = kity.createClass('Walkable', {
+     *     constructor: function() {
+     *         this.speed = 'fast';
+     *     },
+     *     walk: function() {
+     *         console.log('I am walking ' + this.speed);
+     *     }
+     * });
+     *
+     * var Dog = kity.createClass('Dog', {
+     *     base: Animal,
+     *     mixins: [Walkable],
+     *     constructor: function(name) {
+     *         this.callBase(name);
+     *         this.callMixins();
+     *     }
+     * });
+     *
+     * var dog = new Dog('doggy');
+     * console.log(dog.toString() + ' say:');
+     * dog.walk();
+     * ```
+     */
     exports.createClass = function(classname, defines) {
         var constructor, NewClass, BaseClass;
 
@@ -204,6 +384,23 @@ define(function(require, exports) {
         return NewClass;
     };
 
+    /**
+     * @method kity.extendClass()
+     * @grammar kity.extendClass(clazz, extension) => {Class}
+     * @description 拓展一个已有的类
+     *
+     * @example
+     *
+     * ```js
+     * kity.extendClass(Dog, {
+     *     spark: function() {
+     *         console.log('wao wao wao!');
+     *     }
+     * });
+     *
+     * new Dog().spark(); // "wao wao wao!";
+     * ```
+     */
     exports.extendClass = extend;
 
 });

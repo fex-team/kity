@@ -1,3 +1,7 @@
+/**
+ * @fileOverview kity 暴露的方法或对象
+ */
+
 define(function(require, exports, module) {
     var kity = {},
         utils = require('core/utils');
