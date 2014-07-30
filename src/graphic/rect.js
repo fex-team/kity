@@ -31,7 +31,7 @@ define(function(require, exports, module) {
         /**
          * @constructor
          * @for kity.Rect
-         * @grammar kity.Rect(width, height, x, y, radius)
+         * @grammar new kity.Rect(width, height, x, y, radius)
          * @param  {Number} width  矩形的初始化宽度
          * @param  {Number} height 矩形的初始化高度
          * @param  {Number} x      矩形的初始化 x 坐标

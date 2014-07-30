@@ -39,6 +39,7 @@ define(function(require, exports, module) {
         PatternBrush: require('graphic/patternbrush'),
         Pen: require('graphic/pen'),
         Point: require('graphic/point'),
+        PointContainer: require('graphic/pointcontainer'),
         Polygon: require('graphic/polygon'),
         Polyline: require('graphic/polyline'),
         Pie: require('graphic/pie'),

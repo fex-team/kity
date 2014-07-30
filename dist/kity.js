@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kity - v2.0.0 - 2014-07-24
+ * kity - v2.0.0 - 2014-07-30
  * https://github.com/fex-team/kity
  * GitHub: https://github.com/fex-team/kity.git 
  * Copyright (c) 2014 Baidu FEX; Licensed BSD
@@ -85,6 +85,11 @@ function use ( id ) {
     return require( id );
 
 }
+/**
+ * @fileOverview
+ *
+ * 提供基本的动画支持
+ */
 define("animate/animator", [ "animate/timeline", "graphic/eventhandler", "animate/frame", "core/utils", "core/class", "animate/easing", "graphic/shape", "graphic/svg", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen", "graphic/box" ], function(require) {
     function parseTime(str) {
         var value = parseFloat(str, 10);
@@ -101,7 +106,32 @@ define("animate/animator", [ "animate/timeline", "graphic/eventhandler", "animat
     }
     var Timeline = require("animate/timeline");
     var easingTable = require("animate/easing");
+    /**
+     * @class kity.Animator
+     * @catalog animate
+     * @description 表示一个动画启动器，可以作用于不同的对象进行动画
+     */
     var Animator = require("core/class").createClass("Animator", {
+        /**
+         * @constructor
+         * @for kity.Animator
+         * @catalog animate
+         *
+         * @grammar new kity.Animator(beginValue, finishValue, setter)
+         * @grammar new kity.Animator(option)
+         *
+         * @param  {any}      beginValue|opt.beginValue
+         *     动画的起始值，允许的类型有数字、数组、字面量、kity.Point、kity.Vector、kity.Box、kity.Matrix
+         *
+         * @param  {any}      finishValue|opt.beginValue
+         *     动画的结束值，类型应于起始值相同
+         *
+         * @param  {Function} setter|opt.setter
+         *     值的使用函数，接受三个参数: function(target, value, timeline)
+         *         target   {object}        动画的目标
+         *         value    {any}           动画的当前值
+         *         timeline {kity.Timeline} 动画当前的时间线对象
+         */
         constructor: function(beginValue, finishValue, setter) {
             if (arguments.length == 1) {
                 var opt = arguments[0];
@@ -114,7 +144,51 @@ define("animate/animator", [ "animate/timeline", "graphic/eventhandler", "animat
                 this.setter = setter;
             }
         },
+        /**
+         * @method start()
+         * @for kity.Animator
+         * @description 使用当前的动画器启动在指定目标上启动动画
+         *
+         * @grammar start(target, duration, easing, delay, callback) => {kity.Timeline}
+         * @grammar start(target, option) => {kity.Timeline}
+         *
+         * @param  {object} target
+         *     启动动画的目标
+         *
+         * @param  {Number|String} duration|option.duration
+         *     [Optional] 动画的持续时间，如 300、"300ms"、"1.5min"
+         *
+         * @param  {String|Function} easing|option.easing
+         *     [Optional] 动画使用的缓动函数，如 "ease"、"linear"、"swing"
+         *
+         * @param  {Number|String} delay|option.delay
+         *     [Optional] 动画的播放延迟时间
+         *
+         * @param  {Function} callback|option.callback
+         *     [Optional] 动画结束后的回调函数
+         *
+         * @example
+         *
+         * ```js
+         * var turnRed = new kity.Animator(
+         *     new kity.Color('yellow'),
+         *     new kity.Color('red'),
+         *     function(target, value) {
+         *         target.fill(value);
+         *     });
+         *
+         * turnRed.start(rect, 300, 'ease', function() {
+         *     console.log('I am red!');
+         * });
+         * ```
+         */
         start: function(target, duration, easing, delay, callback) {
+            if (arguments.length === 2 && typeof duration == "object") {
+                easing = duration.easing;
+                delay = duration.delay;
+                callback = duration.callback;
+                duration = duration.duration;
+            }
             if (arguments.length === 4 && typeof delay == "function") {
                 callback = delay;
                 delay = 0;
@@ -130,6 +204,37 @@ define("animate/animator", [ "animate/timeline", "graphic/eventhandler", "animat
             }
             return timeline;
         },
+        /**
+         * @method create()
+         * @for kity.Animator
+         * @description 使用当前的动画器为指定目标创建时间线
+         *
+         * @grammar create(target, duration, easing, callback) => {kity.Timeline}
+         *
+         * @param  {object}            target   要创建的时间线的目标
+         * @param  {Number|String}     duration 要创建的时间线的长度，如 300、"5s"、"0.5min"
+         * @param  {String|Function}   easing   要创建的时间线的缓动函数，如 'ease'、'linear'、'swing'
+         * @param  {Function}          callback 时间线播放结束之后的回调函数
+         *
+         * @example
+         *
+         * ```js
+         * var expand = new kity.Animator({
+         *     beginValue: function(target) {
+         *         return target.getBox();
+         *     },
+         *     finishValue: function(target) {
+         *         return target.getBox().expand(100, 100, 100, 100);
+         *     },
+         *     setter: function(target, value) {
+         *         target.setBox(value)
+         *     }
+         * });
+         *
+         * var timeline = expand.create(rect, 300);
+         * timeline.repeat(3).play();
+         * ```
+         */
         create: function(target, duration, easing, callback) {
             var timeline;
             duration = duration && parseTime(duration) || Animator.DEFAULT_DURATION;
@@ -143,6 +248,18 @@ define("animate/animator", [ "animate/timeline", "graphic/eventhandler", "animat
             }
             return timeline;
         },
+        /**
+         * @method reverse()
+         * @for kity.Animator
+         * @grammar reverse() => {kity.Animator}
+         * @description 创建一个与当前动画器相反的动画器
+         *
+         * @example
+         *
+         * ```js
+         * var turnYellow = turnRed.reverse();
+         * ```
+         */
         reverse: function() {
             return new Animator(this.finishValue, this.beginValue, this.setter);
         }
@@ -151,6 +268,26 @@ define("animate/animator", [ "animate/timeline", "graphic/eventhandler", "animat
     Animator.DEFAULT_EASING = "linear";
     var Shape = require("graphic/shape");
     require("core/class").extendClass(Shape, {
+        /**
+         * @method animate()
+         * @for kity.Shape
+         * @description 在图形上播放使用指定的动画器播放动画，如果图形当前有动画正在播放，则会加入播放队列
+         *
+         * @grammar animate(animator, duration, easing, delay, callback)
+         *
+         * @param  {object}            animator 播放动画使用的动画器
+         * @param  {Number|String}     duration 动画的播放长度，如 300、"5s"、"0.5min"
+         * @param  {Number|String}     delay    动画播放前的延时
+         * @param  {String|Function}   easing   动画播放使用的缓动函数，如 'ease'、'linear'、'swing'
+         * @param  {Function}          callback 播放结束之后的回调函数
+         *
+         * @example
+         *
+         * ```js
+         * rect.animate(turnRed, 300); // turnRect 是一个动画器
+         * rect.animate(expand, 500);  // turnRect 播放结束后播放 expand
+         * ```
+         */
         animate: function(animator, duration, easing, delay, callback) {
             var queue = this._KityAnimateQueue = this._KityAnimateQueue || [];
             var timeline = animator.create(this, duration, easing, callback);
@@ -170,23 +307,40 @@ define("animate/animator", [ "animate/timeline", "graphic/eventhandler", "animat
             }
             return this;
         },
+        /**
+         * @method timeline()
+         * @for kity.Shape
+         * @description 获得当前正在播放的动画的时间线
+         *
+         * @grammar timeline() => {kity.Timeline}
+         *
+         * @example
+         *
+         * ```js
+         * rect.timeline().repeat(2);
+         * ```
+         */
         timeline: function() {
             return this._KityAnimateQueue[0].t;
         },
+        /**
+         * @method stop()
+         * @for kity.Shape
+         * @description 停止当前正在播放的动画
+         *
+         * @grammar stop() => {this}
+         *
+         * @example
+         *
+         * ```js
+         * rect.stop(); // 停止 rect 上的动画
+         * ```
+         */
         stop: function() {
             var queue = this._KityAnimateQueue;
             if (queue) {
                 while (queue.length) {
                     queue.shift().t.stop();
-                }
-            }
-            return this;
-        },
-        pause: function() {
-            var queue = this._KityAnimateQueue;
-            if (queue) {
-                while (queue.length) {
-                    queue.shift().t.pause();
                 }
             }
             return this;
@@ -367,19 +521,25 @@ define("animate/easing", [], function(require, exports, module) {
     };
     return easings;
 });
+/**
+ * @fileOverview
+ *
+ * 提供动画帧的基本支持
+ */
 define("animate/frame", [], function(require, exports) {
     // 原生动画帧方法 polyfill
     var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || function(fn) {
         return setTimeout(fn, 1e3 / 60);
     };
     var cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame || window.webkitCancelAnimationFrame || window.msCancelAnimationFrame || window.clearTimeout;
+    // 上一个请求的原生动画帧 id
     var frameRequestId;
-    // 等待执行的帧的集合，这些帧的方法将在下个动画帧同步执行
+    // 等待执行的帧动作的集合，这些帧的方法将在下个原生动画帧同步执行
     var pendingFrames = [];
     /**
      * 添加一个帧到等待集合中
      *
-     * 如果添加的帧是序列的第一个，至少有一个帧需要被执行，则下一个动画帧需要执行
+     * 如果添加的帧是序列的第一个，至少有一个帧需要被执行，则会请求一个原生动画帧来执行
      */
     function pushFrame(frame) {
         if (pendingFrames.push(frame) === 1) {
@@ -398,30 +558,44 @@ define("animate/frame", [], function(require, exports) {
         frameRequestId = 0;
     }
     /**
-     * 请求一个帧，执行指定的动作。动作回调提供一些有用的信息
+     * @method kity.requestFrame
+     * @catalog animate
+     * @grammar kity.requestFrame(action) => {frame}
+     * @description 请求一个帧，执行指定的动作。动作回调提供一些有用的信息
      *
      * @param {Function} action
      *
      *     要执行的动作，该动作回调有一个参数 frame，其中：
      *
-     *     frame.time
+     *     frame.time {Number}
      *         动作执行时的时间戳（ms）
      *
-     *     frame.index
+     *     frame.index {Number}
      *         当前执行的帧的编号（首帧为 0）
      *
-     *     frame.dur
-     *         上一帧至今经过的时间，单位 ms
+     *     frame.dur {Number}
+     *         上一帧至当前帧经过的时间，单位 ms
      *
-     *     frame.elapsed
-     *         从首帧开始到当前帧经过的时间
+     *     frame.elapsed {Number}
+     *         从首帧开始到当前帧经过的时间，单位 ms
      *
-     *     frame.action
+     *     frame.action {Number}
      *         指向当前的帧处理函数
      *
      *     frame.next()
      *         表示下一帧继续执行。如果不调用该方法，将不会执行下一帧。
      *
+     * @example
+     *
+     * ```js
+     * kity.requestFrame(function(frame) {
+     *     console.log('平均帧率:' + frame.elapsed / (frame.index + 1));
+     *
+     *     // 更新或渲染动作
+     *
+     *     frame.next(); //继续执行下一帧
+     * });
+     * ```
      */
     function requestFrame(action) {
         var frame = initFrame(action);
@@ -429,7 +603,19 @@ define("animate/frame", [], function(require, exports) {
         return frame;
     }
     /**
-     * 释放一个已经请求过的帧，如果该帧在等待集合里，将移除，下个动画帧不会执行释放的帧
+     * @method kity.releaseFrame
+     * @catalog animate
+     * @grammar kity.releaseFrame(frame)
+     * @description 释放一个已经请求过的帧，如果该帧在等待集合里，将移除，下个动画帧不会执行释放的帧
+     *
+     * @param {frame} frame 使用 kity.requestFrame() 返回的帧
+     *
+     * @example
+     *
+     * ```js
+     * var frame = kity.requestFrame(function() {....});
+     * kity.releaseFrame(frame);
+     * ```
      */
     function releaseFrame(frame) {
         var index = pendingFrames.indexOf(frame);
@@ -481,13 +667,39 @@ define("animate/frame", [], function(require, exports) {
     exports.requestFrame = requestFrame;
     exports.releaseFrame = releaseFrame;
 });
-define("animate/motionanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/geometry", "core/utils", "graphic/point", "graphic/vector", "graphic/matrix", "graphic/path", "graphic/svg" ], function(require) {
+/**
+ * @fileOverview
+ *
+ * 路径动画器，可以让一个物体沿着某个轨迹运动
+ */
+define("animate/motionanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/geometry", "core/utils", "graphic/point", "graphic/vector", "graphic/matrix", "graphic/path", "graphic/svg", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/pen", "graphic/box" ], function(require) {
     var Animator = require("animate/animator");
     var g = require("graphic/geometry");
     var Path = require("graphic/path");
+    var Shape = require("graphic/shape");
+    /**
+     * @class kity.MotionAnimator
+     * @catalog animate
+     * @base kity.Animator
+     * @description 路径动画器，可以让一个物体沿着某个轨迹运动
+     *
+     * @example
+     *
+     * ```js
+     * var motionAnimator = new MotionAnimator('M0,0C100,0,100,0,100,100L200,200');
+     * motionAnimator.start(rect, 3000);
+     * ```
+     */
     var MotionAnimator = require("core/class").createClass("MotionAnimator", {
         base: Animator,
-        constructor: function(path) {
+        /**
+         * @constructor
+         * @for kity.MotionAnimator
+         * @grammar new kity.MotionAnimator(path, doRotate)
+         * @param {kity.Path|String|PathSegment} path 运动的轨迹，或者是 kity.Path 对象
+         * @param {boolean} doRotate 是否让运动的目标沿着路径的切线方向旋转
+         */
+        constructor: function(path, doRotate) {
             var me = this;
             this.callBase({
                 beginValue: 0,
@@ -496,26 +708,75 @@ define("animate/motionanimator", [ "animate/animator", "animate/timeline", "anim
                     var path = me.motionPath instanceof Path ? me.motionPath.getPathData() : me.motionPath;
                     var point = g.pointAtPath(path, value);
                     target.setTranslate(point.x, point.y);
-                    target.setRotate(point.tan.getAngle());
+                    if (this.doRotate) target.setRotate(point.tan.getAngle());
                 }
             });
             this.updatePath(path);
-        },
-        updatePath: function(path) {
+            /**
+             * @property doRotate
+             * @for kity.MotionAnimator
+             * @type {boolean}
+             * @description 是否让运动的目标沿着路径的切线方向旋转
+             *
+             * @example
+             *
+             * ```js
+             * motionAnimator.doRotate = true; // 目标沿着切线方向旋转
+             * ```
+             */
+            this.doRotate = doRotate;
+            /**
+             * @property motionPath
+             * @for kity.MotionAnimator
+             * @type  {kity.Path|String|PathSegment}
+             * @description 运动沿着的路径，可以在动画过程中更新
+             */
             this.motionPath = path;
         }
     });
-    require("core/class").extendClass(Path, {
+    require("core/class").extendClass(Shape, {
+        /**
+         * @method motion()
+         * @catalog animate
+         * @for kity.Shape
+         * @description 让图形沿着指定的路径运动
+         *
+         * @grammar motion(path, duration, easing, delay, callback) => this
+         *
+         * @param {kity.Path|String|PathSegment} path 运动的轨迹，或者是 kity.Path 对象
+         * @param {Number|String}     duration 动画的播放长度，如 300、"5s"、"0.5min"
+         * @param {Number|String}     delay    动画播放前的延时
+         * @param {String|Function}   easing   动画播放使用的缓动函数，如 'ease'、'linear'、'swing'
+         * @param {Function}          callback 播放结束之后的回调函数
+         */
         motion: function(path, duration, easing, delay, callback) {
             return this.animate(new MotionAnimator(path), duration, easing, delay, callback);
         }
     });
     return MotionAnimator;
 });
+/**
+ * @fileOverview
+ *
+ * 透明度动画器，让图形动画过度到指定的透明度。
+ */
 define("animate/opacityanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/svg", "core/utils", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen", "graphic/box" ], function(require) {
     var Animator = require("animate/animator");
+    /**
+     * @class kity.OpacityAnimator
+     * @catalog animate
+     * @base kity.Animator
+     * @description 透明度动画器，让图形动画过度到指定的透明度
+     */
     var OpacityAnimator = require("core/class").createClass("OpacityAnimator", {
         base: Animator,
+        /**
+         * @constructor
+         * @for kity.OpacityAnimator
+         * @grammar new kity.OpacityAnimator(opacity)
+         *
+         * @param  {Number} opacity 目标透明度，取值范围 0 - 1
+         */
         constructor: function(opacity) {
             this.callBase({
                 beginValue: function(target) {
@@ -530,26 +791,109 @@ define("animate/opacityanimator", [ "animate/animator", "animate/timeline", "ani
     });
     var Shape = require("graphic/shape");
     require("core/class").extendClass(Shape, {
+        /**
+         * @method fxOpacity()
+         * @catalog animate
+         * @for kity.Shape
+         * @description 让图形的透明度以动画的形式过渡到指定的值
+         *
+         * @grammar fxOpacity(opacity, duration, easing, delay, callback) => {this}
+         *
+         * @param {Number}            opacity  动画的目标透明度
+         * @param {Number|String}     duration 动画的播放长度，如 300、"5s"、"0.5min"
+         * @param {Number|String}     delay    动画播放前的延时
+         * @param {String|Function}   easing   动画播放使用的缓动函数，如 'ease'、'linear'、'swing'
+         * @param {Function}          callback 播放结束之后的回调函数
+         */
         fxOpacity: function(opacity, duration, easing, delay, callback) {
             return this.animate(new OpacityAnimator(opacity), duration, easing, delay, callback);
         },
+        /**
+         * @method fadeTo()
+         * @catalog animate
+         * @for kity.Shape
+         * @description 让图形的透明度以动画的形式过渡到指定的值
+         *
+         * @grammar fadeTo(opacity, duration, easing, delay, callback) => {this}
+         *
+         * @param {Number}            opacity  动画的目标透明度
+         * @param {Number|String}     duration 动画的播放长度，如 300、"5s"、"0.5min"
+         * @param {Number|String}     delay    动画播放前的延时
+         * @param {String|Function}   easing   动画播放使用的缓动函数，如 'ease'、'linear'、'swing'
+         * @param {Function}          callback 播放结束之后的回调函数
+         */
         fadeTo: function() {
             return this.fxOpacity.apply(this, arguments);
         },
+        /**
+         * @method fadeIn()
+         * @catalog animate
+         * @for kity.Shape
+         * @description 让图形淡入
+         *
+         * @grammar fadeIn(duration, easing, delay, callback) => {this}
+         *
+         * @param {Number|String}     duration 动画的播放长度，如 300、"5s"、"0.5min"
+         * @param {Number|String}     delay    动画播放前的延时
+         * @param {String|Function}   easing   动画播放使用的缓动函数，如 'ease'、'linear'、'swing'
+         * @param {Function}          callback 播放结束之后的回调函数
+         */
         fadeIn: function() {
             return this.fxOpacity.apply(this, [ 1 ].concat([].slice.call(arguments)));
         },
+        /**
+         * @method fadeOut()
+         * @catalog animate
+         * @for kity.Shape
+         * @description 让图形淡出
+         *
+         * @grammar fadeIn(duration, easing, delay, callback) => {this}
+         *
+         * @param {Number|String}     duration 动画的播放长度，如 300、"5s"、"0.5min"
+         * @param {Number|String}     delay    动画播放前的延时
+         * @param {String|Function}   easing   动画播放使用的缓动函数，如 'ease'、'linear'、'swing'
+         * @param {Function}          callback 播放结束之后的回调函数
+         */
         fadeOut: function() {
             return this.fxOpacity.apply(this, [ 0 ].concat([].slice.call(arguments)));
         }
     });
     return OpacityAnimator;
 });
+/**
+ * @fileOverview
+ *
+ * 路径补间动画器，让图形从一个形状变为另一个形状
+ */
 define("animate/pathanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/geometry", "core/utils", "graphic/point", "graphic/vector", "graphic/matrix", "graphic/path", "graphic/svg" ], function(require) {
     var Animator = require("animate/animator");
     var g = require("graphic/geometry");
+    /**
+     * @catalog animate
+     *
+     * @class kity.PathAnimator
+     * @base kity.Animator
+     * @description 路径补间动画器，让图形从一个形状变为另一个形状
+     *
+     * @example
+     *
+     * ```js
+     * var path = new kity.Path('M0,0L0,100');
+     * var pa = new kity.PathAnimator('M0,0C100,0,100,0,100,100');
+     * pa.start(path, 300);
+     * ```
+     */
     var PathAnimator = require("core/class").createClass("OpacityAnimator", {
         base: Animator,
+        /**
+         * @constructor
+         * @for kity.PathAnimator
+         *
+         * @grammar new kity.Path.Animator(path)
+         *
+         * @param  {String|PathSegment} path 目标形状的路径数据
+         *
+         */
         constructor: function(path) {
             this.callBase({
                 beginValue: function(target) {
@@ -565,17 +909,50 @@ define("animate/pathanimator", [ "animate/animator", "animate/timeline", "animat
     });
     var Path = require("graphic/path");
     require("core/class").extendClass(Path, {
+        /**
+         * @catalog animate
+         *
+         * @method fxPath()
+         * @for kity.Shape
+         * @description 以动画的形式把路径变换为新路径
+         *
+         * @grammar fxPath(path, duration, easing, delay, callback) => {this}
+         *
+         * @param {String|PathSegment}   path     要变换新路径
+         * @param {Number|String}     duration 动画的播放长度，如 300、"5s"、"0.5min"
+         * @param {Number|String}     delay    动画播放前的延时
+         * @param {String|Function}   easing   动画播放使用的缓动函数，如 'ease'、'linear'、'swing'
+         * @param {Function}          callback 播放结束之后的回调函数
+         */
         fxPath: function(path, duration, easing, delay, callback) {
             return this.animate(new PathAnimator(path), duration, easing, delay, callback);
         }
     });
     return PathAnimator;
 });
+/**
+ * @fileOverview
+ *
+ * 提供支持目标旋转的动画器
+ */
 define("animate/rotateanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/svg", "core/utils", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen", "graphic/box" ], function(require) {
     var Animator = require("animate/animator");
+    /**
+     * @class kity.RotateAnimator
+     * @base Animator
+     * @description 提供支持目标旋转的动画器
+     */
     var RotateAnimator = require("core/class").createClass("RotateAnimator", {
         base: Animator,
-        constructor: function(deg, ax, ay) {
+        /**
+         * @constructor
+         * @for kity.RotateAnimator
+         *
+         * @grammar new kity.RotateAnimator(deg, ax, ay)
+         *
+         * @param  {Number} deg 要旋转的角度
+         */
+        constructor: function(deg) {
             this.callBase({
                 beginValue: 0,
                 finishValue: deg,
@@ -588,19 +965,47 @@ define("animate/rotateanimator", [ "animate/animator", "animate/timeline", "anim
     });
     var Shape = require("graphic/shape");
     require("core/class").extendClass(Shape, {
+        /**
+         * @method fxRotate()
+         * @for kity.Shape
+         * @description 让目标以动画旋转指定的角度
+         *
+         * @grammar fxRotate(deg, duration, easing, delay) => {this}
+         *
+         * @param {Number}            deg      要旋转的角度
+         * @param {Number|String}     duration 动画的播放长度，如 300、"5s"、"0.5min"
+         * @param {Number|String}     delay    动画播放前的延时
+         * @param {String|Function}   easing   动画播放使用的缓动函数，如 'ease'、'linear'、'swing'
+         * @param {Function}          callback 播放结束之后的回调函数
+         */
         fxRotate: function(deg, duration, easing, delay, callback) {
             return this.animate(new RotateAnimator(deg), duration, easing, delay, callback);
-        },
-        fxRotateAnchor: function(deg, ax, ay, duration, easing, delay, callback) {
-            return this.animate(new RotateAnimator(deg, ax, ay), duration, easing, delay, callback);
         }
     });
     return RotateAnimator;
 });
+/**
+ * @fileOverview
+ *
+ * 提供支持目标缩放的动画器
+ */
 define("animate/scaleanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/svg", "core/utils", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen", "graphic/box" ], function(require) {
     var Animator = require("animate/animator");
+    /**
+     * @class kity.ScaleAnimator
+     * @base kity.Animator
+     * @description 提供支持目标缩放的动画器
+     */
     var ScaleAnimator = require("core/class").createClass("ScaleAnimator", {
         base: Animator,
+        /**
+         * @constructor
+         * @for kity.ScaleAnimator
+         *
+         * @grammar new kity.ScaleAnimator(sx, sy)
+         * @param  {Number} sx x 轴的缩放比例
+         * @param  {Number} sy y 轴的缩放比例
+         */
         constructor: function(sx, sy) {
             this.callBase({
                 beginValue: 0,
@@ -616,12 +1021,31 @@ define("animate/scaleanimator", [ "animate/animator", "animate/timeline", "anima
     });
     var Shape = require("graphic/shape");
     require("core/class").extendClass(Shape, {
+        /**
+         * @method fxScale
+         * @for kity.Shape
+         * @description 动画缩放当前的图形
+         *
+         * @grammar fxScale(sx, sy, duration, easing, delay, callback) => {this}
+         *
+         * @param {Number} sx x 轴的缩放比例
+         * @param {Number} sy y 轴的缩放比例
+         * @param {Number|String}     duration 动画的播放长度，如 300、"5s"、"0.5min"
+         * @param {Number|String}     delay    动画播放前的延时
+         * @param {String|Function}   easing   动画播放使用的缓动函数，如 'ease'、'linear'、'swing'
+         * @param {Function}          callback 播放结束之后的回调函数
+         */
         fxScale: function(sx, sy, duration, easing, delay, callback) {
             return this.animate(new ScaleAnimator(sx, sy), duration, easing, delay, callback);
         }
     });
     return ScaleAnimator;
 });
+/**
+ * @fileOverview
+ *
+ * 动画时间线的实现
+ */
 define("animate/timeline", [ "graphic/eventhandler", "core/utils", "graphic/shapeevent", "core/class", "animate/frame" ], function(require) {
     var EventHandler = require("graphic/eventhandler");
     var frame = require("animate/frame");
@@ -646,8 +1070,21 @@ define("animate/timeline", [ "graphic/eventhandler", "core/utils", "graphic/shap
             }
         }
     }
+    /**
+     * @class kity.Timeline
+     * @catalog animate
+     * @mixins EventHandler
+     * @description 动画时间线
+     */
     var Timeline = require("core/class").createClass("Timeline", {
         mixins: [ EventHandler ],
+        /**
+         * @constructor
+         * @for kity.Timeline
+         * @private
+         * @description 时间线应该由动画器进行构造，不应手动创建
+         *
+         */
         constructor: function(animator, target, duration, easing) {
             this.callMixin();
             this.target = target;
@@ -660,6 +1097,11 @@ define("animate/timeline", [ "graphic/eventhandler", "core/utils", "graphic/shap
             this.setter = animator.setter;
             this.status = "ready";
         },
+        /**
+         * @private
+         *
+         * 让时间线进入下一帧
+         */
         nextFrame: function(frame) {
             if (this.status != "playing") {
                 return;
@@ -671,30 +1113,71 @@ define("animate/timeline", [ "graphic/eventhandler", "core/utils", "graphic/shap
             }
             frame.next();
         },
+        /**
+         * @method getPlayTime()
+         * @for kity.Timeline
+         * @grammar getPlayTime() => {Number}
+         * @description 获得当前播放的时间，取值区间为 [0, duration]
+         */
         getPlayTime: function() {
             return this.rollbacking ? this.duration - this.time : this.time;
         },
+        /**
+         * @method getTimeProportion()
+         * @for kity.Timeline
+         * @grammar getTimeProportion() => {Number}
+         * @description 获得当前播放时间的比例，取值区间为 [0, 1]
+         */
         getTimeProportion: function() {
             return this.getPlayTime() / this.duration;
         },
+        /**
+         * @method getValueProportion()
+         * @for kity.Timeline
+         * @grammar getValueProportion() => {Number}
+         * @description 获得当前播放时间对应值的比例，取值区间为 [0, 1]；该值实际上是时间比例值经过缓动函数计算之后的值。
+         */
         getValueProportion: function() {
             return this.easing(this.getPlayTime(), 0, 1, this.duration);
         },
+        /**
+         * @method getValue()
+         * @for kity.Timeline
+         * @grammar getValue() => {any}
+         * @description 返回当前播放时间对应的值。
+         */
         getValue: function() {
             var b = this.beginValue;
             var f = this.finishValue;
             var p = this.getValueProportion();
             return getPercentValue(b, f, p);
         },
+        /**
+         * @private
+         *
+         * 把值通过动画器的 setter 设置到目标上
+         */
         setValue: function(value) {
             this.lastValue = this.currentValue;
             this.currentValue = value;
             this.setter.call(this.target, this.target, value, this);
         },
+        /**
+         * @method getDelta()
+         * @for kity.Timeline
+         * @grammar getDelta() => {any}
+         * @description 返回当前值和上一帧的值的差值
+         */
         getDelta: function() {
             this.lastValue = this.lastValue === undefined ? this.beginValue : this.lastValue;
             return getDelta(this.lastValue, this.currentValue);
         },
+        /**
+         * @method play()
+         * @for kity.Timeline
+         * @grammar play() => {this}
+         * @description 让时间线播放，如果时间线还没开始，或者已停止、已结束，则重头播放；如果是已暂停，从暂停的位置继续播放
+         */
         play: function() {
             var lastStatus = this.status;
             this.status = "playing";
@@ -720,25 +1203,62 @@ define("animate/timeline", [ "graphic/eventhandler", "core/utils", "graphic/shap
               case "paused":
                 this.frame.next();
             }
+            /**
+             * @event play
+             * @for kity.Timeline
+             * @description 在时间线播放后触发
+             *
+             * @param {String} event.lastStatus
+             *        表示播放前的上一个状态，可能取值为 'ready'、'finished'、'stoped'、'paused'
+             */
             this.fire("play", new TimelineEvent(this, "play", {
                 lastStatus: lastStatus
             }));
             return this;
         },
+        /**
+         * @method pause()
+         * @for kity.Timeline
+         * @description 暂停当前的时间线
+         *
+         * @grammar pause() => {this}
+         */
         pause: function() {
             this.status = "paused";
+            /**
+             * @event pause
+             * @for kity.Timeline
+             * @description 暂停事件，在时间线暂停时触发
+             */
             this.fire("pause", new TimelineEvent(this, "pause"));
             frame.releaseFrame(this.frame);
             return this;
         },
+        /**
+         * @method stop()
+         * @for kity.Timeline
+         * @description 停止当前时间线
+         *
+         * @grammar stop() => {this}
+         */
         stop: function() {
             this.status = "stoped";
             this.setValue(this.finishValue);
             this.rollbacking = false;
+            /**
+             * @event stop
+             * @for kity.Timeline
+             * @description 停止时间，在时间线停止时触发
+             */
             this.fire("stop", new TimelineEvent(this, "stop"));
             frame.releaseFrame(this.frame);
             return this;
         },
+        /**
+         * @private
+         *
+         * 播放结束之后的处理
+         */
         timeUp: function() {
             if (this.repeatOption) {
                 this.time = 0;
@@ -748,6 +1268,11 @@ define("animate/timeline", [ "graphic/eventhandler", "core/utils", "graphic/shap
                         this.rollbacking = false;
                     } else {
                         this.rollbacking = true;
+                        /**
+                         * @event rollback
+                         * @for kity.Timeline
+                         * @description 回滚事件，在时间线回滚播放开始的时候触发
+                         */
                         this.fire("rollback", new TimelineEvent(this, "rollback"));
                     }
                 } else {
@@ -756,23 +1281,57 @@ define("animate/timeline", [ "graphic/eventhandler", "core/utils", "graphic/shap
                 if (!this.repeatOption) {
                     this.finish();
                 } else {
+                    /**
+                     * @event repeat
+                     * @for kity.Timeline
+                     * @description 循环事件，在时间线循环播放开始的时候触发
+                     */
                     this.fire("repeat", new TimelineEvent(this, "repeat"));
                 }
             } else {
                 this.finish();
             }
         },
+        /**
+         * @private
+         *
+         * 决定播放结束的处理
+         */
         finish: function() {
             this.setValue(this.finishValue);
             this.status = "finished";
+            /**
+             * @event finish
+             * @for kity.Timeline
+             * @description 结束事件，在时间线播放结束后触发（包括重复和回滚都结束）
+             */
             this.fire("finish", new TimelineEvent(this, "finish"));
             frame.releaseFrame(this.frame);
         },
+        /**
+         * @private
+         *
+         *  循环次数递减
+         */
         decreaseRepeat: function() {
             if (this.repeatOption !== true) {
                 this.repeatOption--;
             }
         },
+        /**
+         * @method repeat()
+         * @for kity.Timeline
+         * @description 设置时间线的重复选项
+         *
+         * @grammar repeat(repeat, rollback) => {this}
+         *
+         * @param  {Number|Boolean} repeat
+         *     是否重复播放，设置为 true 无限循环播放，设置数值则循环指定的次数
+         * @param  {Boolean} rollback
+         *     指示是否要回滚播放。
+         *     如果设置为真，一次事件到 duration 则一个来回算一次循环次数，否则播放完成一次算一次循环次数
+         *
+         */
         repeat: function(repeat, rollback) {
             this.repeatOption = repeat;
             this.rollback = rollback;
@@ -783,10 +1342,27 @@ define("animate/timeline", [ "graphic/eventhandler", "core/utils", "graphic/shap
     Timeline.releaseFrame = frame.releaseFrame;
     return Timeline;
 });
+/**
+ * @fileOverview
+ *
+ * 提供让图形移动的动画器
+ */
 define("animate/translateanimator", [ "animate/animator", "animate/timeline", "animate/easing", "core/class", "graphic/shape", "graphic/svg", "core/utils", "graphic/eventhandler", "graphic/styled", "graphic/data", "graphic/matrix", "graphic/pen", "graphic/box" ], function(require) {
     var Animator = require("animate/animator");
+    /**
+     * @class kity.TranslateAnimator
+     * @base kity.Animator
+     * @description 提供让图形移动的动画器
+     */
     var TranslateAnimator = require("core/class").createClass("TranslateAnimator", {
         base: Animator,
+        /**
+         * @constructor
+         * @for kity.TranslateAnimator
+         * @grammar new kity.TranslateAnimator(x, y)
+         * @param  {Number} x x 方向上需要移动的距离
+         * @param  {Number} y y 方向上需要移动的距离
+         */
         constructor: function(x, y) {
             this.callBase({
                 x: 0,
@@ -802,21 +1378,70 @@ define("animate/translateanimator", [ "animate/animator", "animate/timeline", "a
     });
     var Shape = require("graphic/shape");
     require("core/class").extendClass(Shape, {
+        /**
+         * @method fxTranslate()
+         * @for kity.Shape
+         * @description 让目标以动画平移指定的距离
+         *
+         * @grammar fxTranslate(x, y, duration, easing, delay, callback) => {this}
+         *
+         * @param {Number} x x 方向上需要移动的距离
+         * @param {Number} y y 方向上需要移动的距离
+         * @param {Number|String}     duration 动画的播放长度，如 300、"5s"、"0.5min"
+         * @param {Number|String}     delay    动画播放前的延时
+         * @param {String|Function}   easing   动画播放使用的缓动函数，如 'ease'、'linear'、'swing'
+         * @param {Function}          callback 播放结束之后的回调函数
+         */
         fxTranslate: function(x, y, duration, easing, delay, callback) {
             return this.animate(new TranslateAnimator(x, y), duration, easing, delay, callback);
         }
     });
     return TranslateAnimator;
 });
+/**
+ * @fileOverview
+ *
+ * 提供浏览器判断的一些字段
+ */
 define("core/browser", [], function() {
+    /**
+     * @class kity.Browser
+     * @catalog core
+     * @static
+     * @description 提供浏览器信息
+     */
     var browser = function() {
         var agent = navigator.userAgent.toLowerCase(), opera = window.opera, browser;
+        // 浏览器对象
         browser = {
+            /**
+             * @property ie
+             * @for kity.Browser
+             * @description 判断是否为 IE 浏览器
+             * @type {boolean}
+             */
             ie: /(msie\s|trident.*rv:)([\w.]+)/.test(agent),
+            /**
+             * @property opera
+             * @for kity.Browser
+             * @description 判断是否为 Opera 浏览器
+             * @type {boolean}
+             */
             opera: !!opera && opera.version,
+            /**
+             * @property webkit
+             * @for kity.Browser
+             * @description 判断是否为 Webkit 内核的浏览器
+             * @type {boolean}
+             */
             webkit: agent.indexOf(" applewebkit/") > -1,
-            mac: agent.indexOf("macintosh") > -1,
-            quirks: document.compatMode == "BackCompat"
+            /**
+             * @property mac
+             * @for kity.Browser
+             * @description 判断是否为 Mac 下的浏览器
+             * @type {boolean}
+             */
+            mac: agent.indexOf("macintosh") > -1
         };
         browser.gecko = navigator.product == "Gecko" && !browser.webkit && !browser.opera && !browser.ie;
         var version = 0;
@@ -835,6 +1460,12 @@ define("core/browser", [], function() {
             }
         }
         if (/chrome\/(\d+\.\d)/i.test(agent)) {
+            /**
+             * @property chrome
+             * @for kity.Browser
+             * @description 判断是否为 Chrome 浏览器
+             * @type {boolean}
+             */
             browser.chrome = +RegExp["$1"];
         }
         if (/(\d+\.\d)?(?:\.\d)?\s+safari\/?(\d+\.\d+)?/i.test(agent) && !/chrome/i.test(agent)) {
@@ -844,6 +1475,12 @@ define("core/browser", [], function() {
         if (browser.opera) version = parseFloat(opera.version());
         // WebKit 522+ (Safari 3+)
         if (browser.webkit) version = parseFloat(agent.match(/ applewebkit\/(\d+)/)[1]);
+        /**
+         * @property version
+         * @for kity.Browser
+         * @description 获取当前浏览器的版本
+         * @type {Number}
+         */
         browser.version = version;
         browser.isCompatible = !browser.mobile && (browser.ie && version >= 6 || browser.gecko && version >= 10801 || browser.opera && version >= 9.5 || browser.air && version >= 1 || browser.webkit && version >= 522 || false);
         return browser;
@@ -851,16 +1488,9 @@ define("core/browser", [], function() {
     return browser;
 });
 /**
- * @description 创建一个类
- * @param {String}    fullClassName  类全名，包括命名空间。
- * @param {Plain}     defines        要创建的类的特性
- *     defines.constructor  {Function}       类的构造函数，实例化的时候会被调用。
- *     defines.base         {String}         基类的名称。名称要使用全名。（因为base是javascript未来保留字，所以不用base）
- *     defines.mixin        {Array<String>}  要混合到新类的类集合
- *     defines.<method>     {Function}       其他类方法
+ * @fileOverview
  *
- * TODO:
- *     Mixin 构造函数调用支持
+ * 提供 Kity 的 OOP 支持
  */
 define("core/class", [], function(require, exports) {
     // just to bind context
@@ -868,16 +1498,84 @@ define("core/class", [], function(require, exports) {
         var args = Array.prototype.slice.call(arguments, 1);
         return this.apply(thisObj, args);
     };
-    // 所有类的基类
+    /**
+     * @class kity.Class
+     * @catalog core
+     * @description 所有 kity 类的基类
+     * @abstract
+     */
     function Class() {}
+    exports.Class = Class;
     Class.__KityClassName = "Class";
-    // 提供 base 调用支持
+    /**
+     * @method base()
+     * @for kity.Class
+     * @protected
+     * @grammar base(name, args...) => {any}
+     * @description 调用父类指定名称的函数
+     * @param {string} name 函数的名称
+     * @param {parameter} args... 传递给父类函数的参数
+     *
+     * @example
+     *
+     * ```js
+     * var Person = kity.createClass('Person', {
+     *     toString: function() {
+     *         return 'I am a person';
+     *     }
+     * });
+     *
+     * var Male = kity.createClass('Male', {
+     *     base: Person,
+     *
+     *     toString: function() {
+     *         return 'I am a man';
+     *     },
+     *
+     *     speak: function() {
+     *         return this.base('toString') + ',' + this.toString();
+     *     }
+     * })
+     * ```
+     */
     Class.prototype.base = function(name) {
         var caller = arguments.callee.caller;
         var method = caller.__KityMethodClass.__KityBaseClass.prototype[name];
         return method.apply(this, Array.prototype.slice.call(arguments, 1));
     };
-    // 直接调用 base 类的同名方法
+    /**
+     * @method callBase()
+     * @for kity.Class
+     * @protected
+     * @grammar callBase(args...) => {any}
+     * @description 调用父类同名函数
+     * @param {parameter} args... 传递到父类同名函数的参数
+     *
+     * @example
+     *
+     * ```js
+     * var Animal = kity.createClass('Animal', {
+     *     constructor: function(name) {
+     *         this.name = name;
+     *     },
+     *     toString: function() {
+     *         return 'I am an animal name ' + this.name;
+     *     }
+     * });
+     *
+     * var Dog = kity.createClass('Dog', {
+     *     constructor: function(name) {
+     *         this.callBase(name);
+     *     },
+     *     toString: function() {
+     *         return this.callBase() + ', a dog';
+     *     }
+     * });
+     *
+     * var dog = new Dog('Dummy');
+     * console.log(dog.toString()); // "I am an animal name Dummy, a dog";
+     * ```
+     */
     Class.prototype.callBase = function() {
         var caller = arguments.callee.caller;
         var method = caller.__KityMethodClass.__KityBaseClass.prototype[caller.__KityMethodName];
@@ -909,15 +1607,62 @@ define("core/class", [], function(require, exports) {
             return method.apply(this, arguments);
         }
     };
+    /**
+     * @method pipe()
+     * @for kity.Class
+     * @grammar pipe() => {this}
+     * @description 以当前对象为上线文以及管道函数的第一个参数，执行一个管道函数
+     * @param  {Function} fn 进行管道操作的函数
+     *
+     * @example
+     *
+     * ```js
+     * var rect = new kity.Rect().pipe(function() {
+     *     this.setWidth(500);
+     *     this.setHeight(300);
+     * });
+     * ```
+     */
     Class.prototype.pipe = function(fn) {
         if (typeof fn == "function") {
             fn.call(this, this);
         }
         return this;
     };
+    /**
+     * @method getType()
+     * @for kity.Class
+     * @grammar getType() => {string}
+     * @description 获得对象的类型
+     *
+     * @example
+     *
+     * ```js
+     * var rect = new kity.Rect();
+     * var circle = new kity.Circle();
+     *
+     * console.log(rect.getType()); // "Rect"
+     * console.log(rect.getType()); // "Circle"
+     * ```
+     */
     Class.prototype.getType = function() {
         return this.__KityClassName;
     };
+    /**
+     * @method getClass()
+     * @for kity.Class
+     * @grammar getClass() => {Class}
+     * @description 获得对象的类
+     *
+     * @example
+     *
+     * ```js
+     * var rect = new kity.Rect();
+     *
+     * console.log(rect.getClass() === kity.Rect); // true
+     * console.log(rect instanceof kity.Rect); // true
+     * ```
+     */
     Class.prototype.getClass = function() {
         return this.constructor;
     };
@@ -979,9 +1724,80 @@ define("core/class", [], function(require, exports) {
         }
         return BaseClass;
     }
-    Class.prototype._accessProperty = function() {
-        return this._propertyRawData || (this._propertyRawData = {});
-    };
+    /**
+     * @method kity.createClass()
+     * @grammar kity.createClass(classname, defines) => {Class}
+     * @description 创建一个类
+     * @param  {string} classname 类名，用于调试的时候查看，可选
+     * @param  {object} defines   类定义
+     *      defines.base {Class}
+     *          定义的类的基类，如果不配置，则表示基类为 kity.Class
+     *      defines.mixins {Class[]}
+     *          定义的类要融合的类列表
+     *      defines.constructor {Function}
+     *          定义类的构造函数，如果父类显式定义了构造函数，需要在构造函数中使用 callBase() 方法调用父类的构造函数
+     *      defines.* {Function}
+     *          定义类的其它函数
+     *
+     * @example 创建一个类
+     *
+     * ```js
+     * var Animal = kity.createClass('Animal', {
+     *     constructor: function(name) {
+     *         this.name = name;
+     *     },
+     *     toString: function() {
+     *         return this.name;
+     *     }
+     * });
+     *
+     * var a = new Animal('kity');
+     * console.log(a.toString()); // "kity"
+     * ```
+     *
+     * @example 继承一个类
+     *
+     * ```js
+     * var Cat = kity.createClass('Cat', {
+     *     base: Animal,
+     *     constructor: function(name, color) {
+     *         // 调用父类构造函数
+     *         this.callBase(name);
+     *     },
+     *     toString: function() {
+     *         return 'A ' + this.color + ' cat, ' + this.callBase();
+     *     }
+     * });
+     *
+     * var cat = new Cat('kity', 'black');
+     * console.log(cat.toString()); // "A black cat, kity"
+     * ```
+     *
+     * @example 混合类的能力
+     * ```js
+     * var Walkable = kity.createClass('Walkable', {
+     *     constructor: function() {
+     *         this.speed = 'fast';
+     *     },
+     *     walk: function() {
+     *         console.log('I am walking ' + this.speed);
+     *     }
+     * });
+     *
+     * var Dog = kity.createClass('Dog', {
+     *     base: Animal,
+     *     mixins: [Walkable],
+     *     constructor: function(name) {
+     *         this.callBase(name);
+     *         this.callMixins();
+     *     }
+     * });
+     *
+     * var dog = new Dog('doggy');
+     * console.log(dog.toString() + ' say:');
+     * dog.walk();
+     * ```
+     */
     exports.createClass = function(classname, defines) {
         var constructor, NewClass, BaseClass;
         if (arguments.length === 1) {
@@ -1013,10 +1829,73 @@ define("core/class", [], function(require, exports) {
         NewClass = extend(NewClass, defines);
         return NewClass;
     };
+    /**
+     * @method kity.extendClass()
+     * @grammar kity.extendClass(clazz, extension) => {Class}
+     * @description 拓展一个已有的类
+     *
+     * @example
+     *
+     * ```js
+     * kity.extendClass(Dog, {
+     *     spark: function() {
+     *         console.log('wao wao wao!');
+     *     }
+     * });
+     *
+     * new Dog().spark(); // "wao wao wao!";
+     * ```
+     */
     exports.extendClass = extend;
 });
+/**
+ * @fileOverview
+ *
+ * 一些常用的工具方法
+ */
 define("core/utils", [], function() {
+    /**
+     * @class kity.Utils
+     * @catalog core
+     * @static
+     * @description 提供常用的工具方法
+     */
     var utils = {
+        /**
+         * @method each()
+         * @for kity.Utils
+         * @grammar each(obj, interator, context)
+         * @param  {Object|Array} obj 要迭代的对象或数组
+         * @param  {Function} iterator 迭代函数
+         * @param  {Any} context  迭代函数的上下文
+         *
+         * @example 迭代数组
+         *
+         * ```js
+         * kity.Utils.each([1, 2, 3, 4, 5], function(value, index, array) {
+         *     console.log(value, index);
+         * });
+         * // 1, 0
+         * // 2, 1
+         * // 3, 2
+         * // 4, 3
+         * // 5, 4
+         * ```
+         *
+         * @example 迭代对象
+         *
+         * ```js
+         * var obj = {
+         *     name: 'kity',
+         *     version: '1.2.1'
+         * };
+         * var param = [];
+         * kity.Utils.each(obj, function(value, key, obj) {
+         *     param.push(key + '=' + value);
+         * });
+         * console.log(param.join('&')); // "name=kity&version=1.2.1"
+         * ```
+         */
         each: function(obj, iterator, context) {
             if (obj === null) {
                 return;
@@ -1037,6 +1916,38 @@ define("core/utils", [], function() {
                 }
             }
         },
+        /**
+         * @method extend()
+         * @for kity.Utils
+         * @grammar extend(target, sources..., notCover) => {object}
+         * @description 把源对象的属性合并到目标对象上
+         * @param {object} target 目标对象
+         * @param {parameter} sources 源对象
+         * @param {boolean} notCover 是否不要覆盖源对象已有的属性
+         *
+         * @example
+         *
+         * ```js
+         * var a = {
+         *     key1: 'a1',
+         *     key2: 'a2'
+         * };
+         *
+         * var b = {
+         *     key2: 'b2',
+         *     key3: 'b3'
+         * };
+         *
+         * var c = {
+         *     key4: 'c4'
+         * };
+         *
+         * var d = kity.extend(a, b, c);
+         *
+         * console.log(d === a); // true
+         * console.log(a); // {key1: 'a1', key2: 'b2', key3: 'b3', key4: 'c4'}
+         * ```
+         */
         extend: function(t) {
             var a = arguments, notCover = this.isBoolean(a[a.length - 1]) ? a[a.length - 1] : false, len = this.isBoolean(a[a.length - 1]) ? a.length - 1 : a.length;
             for (var i = 1; i < len; i++) {
@@ -1049,6 +1960,15 @@ define("core/utils", [], function() {
             }
             return t;
         },
+        /**
+         * @method deepExtend()
+         * @for kity.Utils
+         * @grammar deepExtend(target, sources..., notCover)
+         * @description 把源对象的属性合并到目标对象上，如果属性是对象，会递归合并
+         * @param {object} target 目标对象
+         * @param {parameter} sources 源对象
+         * @param {boolean} notCover 是否不要覆盖源对象已有的属性
+         */
         deepExtend: function(t, s) {
             var a = arguments, notCover = this.isBoolean(a[a.length - 1]) ? a[a.length - 1] : false, len = this.isBoolean(a[a.length - 1]) ? a.length - 1 : a.length;
             for (var i = 1; i < len; i++) {
@@ -1065,6 +1985,30 @@ define("core/utils", [], function() {
             }
             return t;
         },
+        /**
+         * @method clone()
+         * @for kity.Utils
+         * @grammar clone(obj) => {object}
+         * @description 返回一个对象的克隆副本（非深度复制）
+         * @param  {object} obj 要克隆的对象
+         *
+         * @example
+         *
+         * ```js
+         * var source = {
+         *     key1: {
+         *         key2: 'value2'
+         *     },
+         *     key3: 'value3'
+         * };
+         *
+         * var target = kity.Utils.clone(source);
+         *
+         * console.log(target === source); // false
+         * console.log(target.key1 === source.key1); // true
+         * console.log(target.key3 === source.key3); // true
+         * ```
+         */
         clone: function(obj) {
             var cloned = {};
             for (var m in obj) {
@@ -1074,6 +2018,30 @@ define("core/utils", [], function() {
             }
             return cloned;
         },
+        /**
+         * @method copy()
+         * @for kity.Utils
+         * @grammar copy(obj) => {object}
+         * @description 返回一个对象的拷贝副本（深度复制）
+         * @param  {object} obj 要拷贝的对象
+         *
+         * @example
+         *
+         * ```js
+         * var source = {
+         *     key1: {
+         *         key2: 'value2'
+         *     },
+         *     key3: 'value3'
+         * };
+         *
+         * var target = kity.Utils.copy(source);
+         *
+         * console.log(target === source); // false
+         * console.log(target.key1 === source.key1); // false
+         * console.log(target.key3 === source.key3); // true，因为是值类型
+         * ```
+         */
         copy: function(obj) {
             if (typeof obj !== "object") return obj;
             if (typeof obj === "function") return null;
@@ -1097,6 +2065,20 @@ define("core/utils", [], function() {
         getValue: function(value, defaultValue) {
             return value !== undefined ? value : defaultValue;
         },
+        /**
+         * @method flatten()
+         * @for kity.Utils
+         * @grammar flatten(arr) => {Array}
+         * @description 返回给定数组的扁平化版本
+         * @param  {Array} arr 要扁平化的数组
+         *
+         * @example
+         *
+         * ```js
+         * var flattened = kity.Utils.flatten([[1, 2], [2, 3], [[4, 5], [6, 7]]]);
+         * console.log(flattened); // [1, 2, 3, 4, 5, 6, 7];
+         * ```
+         */
         flatten: function(arr) {
             var result = [], length = arr.length, i;
             for (i = 0; i < length; i++) {
@@ -1109,16 +2091,46 @@ define("core/utils", [], function() {
             return result;
         },
         /**
-         * 平行地对 v1 和 v2 进行指定的操作
+         * @method paralle()
+         * @for kity.Utils
+         * @grammar paralle() => {Any}
+         *
+         * @description 平行地对 v1 和 v2 进行指定的操作
          *
          *    如果 v1 是数字，那么直接进行 op 操作
-         *    如果 v1 是对象，那么返回一个对象，其元素是 v1 和 v2 同名的每个元素平行地进行 op 操作的结果
+         *    如果 v1 是对象，那么返回一个对象，其元素是 v1 和 v2 同键值的每个元素平行地进行 op 操作的结果
          *    如果 v1 是数组，那么返回一个数组，其元素是 v1 和 v2 同索引的每个元素平行地进行 op 操作的结果
          *
-         * @param  {Number|Object|Array} v1
-         * @param  {Number|Object|Array} v2
-         * @param  {Function} op
-         * @return {Number|Object|Array}
+         * @param  {Number|Object|Array} v1 第一个操作数
+         * @param  {Number|Object|Array} v2 第二个操作数
+         * @param  {Function} op 操作函数
+         *
+         *
+         *
+         * @example
+         *
+         * ```js
+         * var a = {
+         *     value1: 1,
+         *     value2: 2,
+         *     value3: [3, 4, 5]
+         * };
+         *
+         * var b = {
+         *     value1: 2,
+         *     value2: 3,
+         *     value3: [4, 5, 6]
+         * };
+         *
+         * var c = kity.Utils.paralle(a, b, function(v1, v2) {
+         *     return v1 + v2;
+         * });
+         *
+         * console.log(c.value1); // 3
+         * console.log(c.value2); // 5
+         * console.log(c.value3); // [7, 9, 11]
+         *
+         * ```
          */
         paralle: function(v1, v2, op) {
             var Class, field, index, name, value;
@@ -1164,6 +2176,55 @@ define("core/utils", [], function() {
             };
         }
     };
+    /**
+     * @method isString()
+     * @for kity.Utils
+     * @grammar isString(unknown) => {boolean}
+     * @description 判断一个值是否为字符串类型
+     * @param  {any} unknown 要判断的值
+     */
+    /**
+     * @method isFunction()
+     * @for kity.Utils
+     * @grammar isFunction(unknown) => {boolean}
+     * @description 判断一个值是否为函数类型
+     * @param  {any} unknown 要判断的值
+     */
+    /**
+     * @method isArray()
+     * @for kity.Utils
+     * @grammar isArray(unknown) => {boolean}
+     * @description 判断一个值是否为数组类型
+     * @param  {any} unknown 要判断的值
+     */
+    /**
+     * @method isNumber()
+     * @for kity.Utils
+     * @grammar isNumber(unknown) => {boolean}
+     * @description 判断一个值是否为数字类型
+     * @param  {any} unknown 要判断的值
+     */
+    /**
+     * @method isRegExp()
+     * @for kity.Utils
+     * @grammar isRegExp(unknown) => {boolean}
+     * @description 判断一个值是否为正则表达式类型
+     * @param  {any} unknown 要判断的值
+     */
+    /**
+     * @method isObject()
+     * @for kity.Utils
+     * @grammar isObject(unknown) => {boolean}
+     * @description 判断一个值是否为对象类型
+     * @param  {any} unknown 要判断的值
+     */
+    /**
+     * @method isBoolean()
+     * @for kity.Utils
+     * @grammar isBoolean(unknown) => {boolean}
+     * @description 判断一个值是否为布尔类型
+     * @param  {any} unknown 要判断的值
+     */
     utils.each([ "String", "Function", "Array", "Number", "RegExp", "Object", "Boolean" ], function(v) {
         utils["is" + v] = function(obj) {
             return Object.prototype.toString.apply(obj) == "[object " + v + "]";
@@ -1503,6 +2564,8 @@ define("filter/projectionfilter", [ "filter/effect/gaussianblureffect", "filter/
     });
 });
 /**
+ * @fileOverview
+ *
  * 贝塞尔曲线
  */
 define("graphic/bezier", [ "core/class", "graphic/pointcontainer", "graphic/container", "graphic/path", "core/utils", "graphic/shape", "graphic/svg", "graphic/geometry" ], function(require, exports, module) {
@@ -1694,6 +2757,16 @@ define("graphic/box", [ "core/class" ], function(require, exports, module) {
             return this.valueOf().join(" ");
         }
     });
+    Box.parse = function(any) {
+        if (typeof any == "string") {
+            return Box.parse(any.split(/[\s,]+/).map(parseFloat));
+        }
+        if (any instanceof Array) {
+            return new Box(any[0], any[1], any[2], any[3]);
+        }
+        if ("x" in any) return new Box(any);
+        return null;
+    };
     return Box;
 });
 define("graphic/circle", [ "core/class", "graphic/ellipse", "core/utils", "graphic/point", "graphic/path" ], function(require, exports, module) {
@@ -4848,7 +5921,7 @@ define("graphic/rect", [ "core/utils", "graphic/point", "core/class", "graphic/b
         /**
          * @constructor
          * @for kity.Rect
-         * @grammar kity.Rect(width, height, x, y, radius)
+         * @grammar new kity.Rect(width, height, x, y, radius)
          * @param  {Number} width  矩形的初始化宽度
          * @param  {Number} height 矩形的初始化高度
          * @param  {Number} x      矩形的初始化 x 坐标
@@ -6279,6 +7352,9 @@ define("graphic/viewbox", [ "core/class" ], function(require, exports, module) {
         }
     });
 });
+/**
+ * @fileOverview kity 暴露的方法或对象
+ */
 define("kity", [ "core/utils", "core/class", "core/browser", "graphic/box", "graphic/bezier", "graphic/pointcontainer", "graphic/path", "graphic/bezierpoint", "graphic/shapepoint", "graphic/vector", "graphic/circle", "graphic/ellipse", "graphic/clip", "graphic/shape", "graphic/shapecontainer", "graphic/color", "graphic/standardcolor", "graphic/container", "graphic/curve", "graphic/point", "graphic/gradientbrush", "graphic/svg", "graphic/defbrush", "graphic/group", "graphic/hyperlink", "graphic/image", "graphic/line", "graphic/lineargradientbrush", "graphic/mask", "graphic/matrix", "graphic/marker", "graphic/resource", "graphic/viewbox", "graphic/palette", "graphic/paper", "graphic/eventhandler", "graphic/styled", "graphic/geometry", "graphic/patternbrush", "graphic/pen", "graphic/polygon", "graphic/poly", "graphic/polyline", "graphic/pie", "graphic/sweep", "graphic/radialgradientbrush", "graphic/rect", "graphic/regularpolygon", "graphic/ring", "graphic/data", "graphic/star", "graphic/text", "graphic/textcontent", "graphic/textspan", "graphic/use", "animate/animator", "animate/timeline", "animate/easing", "animate/opacityanimator", "animate/rotateanimator", "animate/scaleanimator", "animate/frame", "animate/translateanimator", "animate/pathanimator", "animate/motionanimator", "filter/filter", "filter/effectcontainer", "filter/gaussianblurfilter", "filter/effect/gaussianblureffect", "filter/projectionfilter", "filter/effect/effect", "filter/effect/colormatrixeffect", "filter/effect/compositeeffect", "filter/effect/offseteffect", "filter/effect/convolvematrixeffect" ], function(require, exports, module) {
     var kity = {}, utils = require("core/utils");
     kity.version = "2.0.0";
@@ -6340,6 +7416,8 @@ define("kity", [ "core/utils", "core/class", "core/browser", "graphic/box", "gra
         TranslateAnimator: require("animate/translateanimator"),
         PathAnimator: require("animate/pathanimator"),
         MotionAnimator: require("animate/motionanimator"),
+        requestFrame: require("animate/frame").requestFrame,
+        releaseFrame: require("animate/frame").releaseFrame,
         // filter
         Filter: require("filter/filter"),
         GaussianblurFilter: require("filter/gaussianblurfilter"),

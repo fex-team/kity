@@ -1,5 +1,7 @@
 /**
- * 贝塞尔点
+ * @fileOverview
+ *
+ * 表示一个贝塞尔点
  */
 
 define(function(require, exports, module) {
@@ -7,6 +9,9 @@ define(function(require, exports, module) {
     var ShapePoint = require('graphic/shapepoint');
     var Vector = require('graphic/vector');
 
+    /**
+     * @class kity.BezierPoint
+     */
     var BezierPoint = require('core/class').createClass('BezierPoint', {
 
         constructor: function(x, y, isSmooth) {
@@ -115,7 +120,7 @@ define(function(require, exports, module) {
             var v = this.getVertex(),
                 pv = Vector.fromPoints(p.getPoint(), v),
                 vq = Vector.fromPoints(v, q.getPoint());
-            vq = Vector.normalize(pv, this.isSymReflaction() ? pv.length() : vq.length());
+            vq = pv.normalize(this.isSymReflaction() ? pv.length() : vq.length());
             q.setPoint(v.x + vq.x, v.y + vq.y);
         },
 
