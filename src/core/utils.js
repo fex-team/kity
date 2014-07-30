@@ -8,6 +8,7 @@ define(function() {
 
     /**
      * @class kity.Utils
+     * @catalog core
      * @static
      * @description 提供常用的工具方法
      */

@@ -8,6 +8,7 @@ define(function() {
 
     /**
      * @class kity.Browser
+     * @catalog core
      * @static
      * @description 提供浏览器信息
      */

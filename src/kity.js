@@ -67,6 +67,8 @@ define(function(require, exports, module) {
         TranslateAnimator: require('animate/translateanimator'),
         PathAnimator: require('animate/pathanimator'),
         MotionAnimator: require('animate/motionanimator'),
+        requestFrame: require('animate/frame').requestFrame,
+        releaseFrame: require('animate/frame').releaseFrame,
 
         // filter
         Filter: require('filter/filter'),

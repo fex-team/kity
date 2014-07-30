@@ -14,6 +14,7 @@ define(function(require, exports) {
 
     /**
      * @class kity.Class
+     * @catalog core
      * @description 所有 kity 类的基类
      * @abstract
      */
