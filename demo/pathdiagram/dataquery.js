@@ -16,7 +16,7 @@ define( function ( require, exports, module ) {
             }
         }
         return ret;
-    } )( require( './data' ) );
+    } )( require( '../demo/pathdiagram/data' ) );
 
     var length = data.length;
     var abs = Math.abs;

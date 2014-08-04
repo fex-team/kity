@@ -89,7 +89,7 @@ define(function(require, exprots, module) {
             var target = this.targetShape;
             var targetNode = target.shapeNode || target.node;
 
-            var pScreen = new kity.Point(
+            var pScreen = new Point(
                     eventClient && eventClient.clientX || 0,
                     eventClient && eventClient.clientY || 0
                 );

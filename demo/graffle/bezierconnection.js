@@ -83,8 +83,8 @@ define(function (require, exports, module) {
                 }
             }
             return {
-                start: nearStart,
-                end: nearEnd
+                start: new Vector(nearStart.x, nearStart.y),
+                end: new Vector(nearEnd.x, nearEnd.y)
             };
         },
         updateConnection: function() {
@@ -100,13 +100,11 @@ define(function (require, exports, module) {
 
             var pointVector = Vector.fromPoints( startEnd, endEnd );
 
-            var forward = Vector.projection( pointVector, startEnd.normal );
-            var backward = Vector.projection( Vector.reverse(pointVector), endEnd.normal );
+            var forward = pointVector.project(startEnd.normal);
+            var backward = pointVector.reverse().project(endEnd.normal);
 
-            forward = Vector.multipy( forward, 0.5 );
-            forward = Vector.add( startEnd, forward );
-            backward = Vector.multipy( backward, 0.5 );
-            backward = Vector.add( endEnd, backward );
+            forward = startEnd.add(forward.multipy(0.5));
+            backward = endEnd.add(backward.multipy(0.5));
 
             this.startBesierPoint.setVertex(startEnd.x, startEnd.y);
             this.startBesierPoint.setForward(forward.x, forward.y);

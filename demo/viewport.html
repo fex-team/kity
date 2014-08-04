@@ -1,14 +1,28 @@
 <!DOCTYPE html>
-<html style="height: 100%;">
+<html>
 <head>
-    <title>Viewport</title>
-    <script src="../dev-lib/sea.js"></script>
-    <script>
+    <!-- 必须强制指定页面编码为 UTF-8 -->
+    <meta charset="utf-8">
 
-        seajs.config({
-            base: '../src'
-        });
-        define('start', function (require) {
+    <!-- Demo 的简要说明，必须要填写 -->
+    <meta name="description" content="演示如何使用拖动，如何改变视野">
+    
+    <!-- Demo 的作者，建议填写 -->
+    <meta name="author" content="kity@baidu.com">
+    
+    <!-- Demo 的标题，必须填写 -->
+    <title>拖动和视野控制</title>
+    
+    <!-- Demo 开发过程中使用 CMD 引入 Kity 源码，方便调试 -->
+    <!-- dev start -->
+    <!-- 目录型的 Demo 注意修正源码引用路径 -->
+    <script src="../dev-lib/dev-define.js"></script>
+    <script>
+        // 设置好 kity 源代码目录
+        inc.config( { base: '../src'} );
+
+        // 定义 Demo 模块
+        define('demo', function(require) { 
             var Class = require('core/class');
             var Paper = require('graphic/paper');
             var Shape = require('graphic/shape');
@@ -63,16 +77,19 @@
                 paper.setViewPort(viewport);
             });
         });
-        seajs.use('start');
     </script>
     <style>
         body, html {
             margin: 0;
             padding: 0;
             overflow: hidden;
+            height: 100%;
         }
     </style>
 </head>
-<body style="height: 100%;">
-</body>
+<body></body>
+<script>
+    // 启动 Demo 模块
+    inc.use('demo');
+</script>
 </html>

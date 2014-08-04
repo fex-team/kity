@@ -1,12 +1,12 @@
 define(function (require, exports, module) {
     var Class = require('core/class');
     var Paper = require('graphic/paper');
-    var Draggable = require('../public/draggable');
-    var PathDiagram = require('./pathdiagram');
+    var Draggable = require('../demo/public/draggable');
+    var PathDiagram = require('../demo/pathdiagram/pathdiagram');
 
     Class.extendClass(Paper, Draggable);
 
-    var paper = new Paper('pathdiagram').drag();
+    var paper = new Paper(document.body).drag();
 
     paper.on('dragstart', function() {
         this.setStyle('cursor', '-webkit-grabbing');
@@ -14,8 +14,7 @@ define(function (require, exports, module) {
         this.setStyle('cursor', '-webkit-grab');
     }).trigger('dragend');
 
-    paper.setWidth(1200).setHeight(800);
-    paper.setViewBox(-600, -400, 1200, 800);
+    paper.setViewBox(-600.5, -400.5, 1200, 800);
 
     var keyword = /q=(.+)/.exec(window.location.href);
     keyword = keyword && keyword[1];

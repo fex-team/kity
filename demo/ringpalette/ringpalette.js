@@ -6,8 +6,8 @@ define(function(require, exports, module) {
     var Text = require('graphic/text');
     var Pen = require('graphic/pen');
     var Matrix = require('graphic/matrix');
-    var Pie = require('../public/pie');
-    var Draggable = require('../public/draggable');
+    var Pie = require('../demo/ringpalette/pie');
+    var Draggable = require('../demo/public/draggable');
 
     return require('core/class').createClass({
         base: Group,
@@ -41,7 +41,7 @@ define(function(require, exports, module) {
             for (var trackNumber = 0; trackNumber < this.trackCount; trackNumber++) {
                 this.pies.addShapes(this.generateTrackPies(trackNumber));
             }
-            this.addShape(this.pies.rotate(-this.angleStep / 2));
+            this.addShape(this.pies.rotate(0));
         },
         generateTrackPies: function(trackNumber) {
             var trackInnerRadius = this.innerRadius + this.trackHeight * trackNumber,
@@ -68,8 +68,8 @@ define(function(require, exports, module) {
         },
         generateLabels: function() {
             var fontSize = this.innerRadius / 6;
-            this.rgbLabel = new Text().setTextAnchor('center').setSize(fontSize).setY(-this.innerRadius / 8);
-            this.hslLabel = new Text().setTextAnchor('center').setSize(fontSize).setY(this.innerRadius / 4);
+            this.rgbLabel = new Text().setTextAnchor('middle').setSize(fontSize).setY(-this.innerRadius / 8);
+            this.hslLabel = new Text().setTextAnchor('middle').setSize(fontSize).setY(this.innerRadius / 4);
             this.addShape(this.rgbLabel);
             this.addShape(this.hslLabel);
         },
@@ -80,7 +80,7 @@ define(function(require, exports, module) {
                 if (pie instanceof Pie) {
                     var color = pie.color;
 
-                    pie.scale(2);
+                    pie.setScale(2).setTranslate(-pie.center.x, -pie.center.y);
                     pie.stroke('white');
 
                     ring.setCircleColor(color);
@@ -92,7 +92,7 @@ define(function(require, exports, module) {
             this.on('mouseout', function(e) {
                 var pie = e.targetShape;
                 if (pie instanceof Pie) {
-                    pie.resetTransform();
+                    pie.setScale(1).setTranslate(0, 0);
                     pie.stroke('none');
                     ring.showSelected();
                 }
@@ -164,7 +164,7 @@ define(function(require, exports, module) {
             });
         },
         updatePosition: function(x) {
-            this.setTransform(new Matrix().translate(x, 0));
+            this.setTranslate(x, 0);
         }
     });
 });

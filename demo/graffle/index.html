@@ -1,18 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
+
+    <!-- 必须强制指定页面编码为 UTF-8 -->
+    <meta charset="utf-8">
+
+    <!-- Demo 的简要说明，必须要填写 -->
+    <meta name="description" content="百度脑图的原型 Demo">
+    
+    <!-- Demo 的作者，建议填写 -->
+    <meta name="author" content="kity@baidu.com">
+    
+    <!-- Demo 的标题，必须填写 -->
     <title>Graffle</title>
-    <script src="../dev-lib/sea.js"></script>
+    
+    <!-- Demo 开发过程中使用 CMD 引入 Kity 源码，方便调试 -->
+    <!-- dev start -->
+    <!-- 目录型的 Demo 注意修正源码引用路径 -->
+    <script src="../../dev-lib/dev-define.js"></script>
+    <script>
+        // 设置好 kity 源代码目录
+        inc.config( { base: '../../src'} );
+    </script>
+    <!-- dev end -->
+
+    <!-- 生产使用中可以直接引用发布压缩的版本 -->
+    <!-- production start -->
+    <!-- 目录型的 Demo 注意修正源码引用路径 -->
+    <!-- <script src="../dist/kity.min.js"></script> -->
+    <!-- production end -->
     <script>
 
-        seajs.config({
-            base: '../src'
-        });
-        define('start', function (require) {
+        define('demo', function (require) {
             var Draggable = require('../demo/public/draggable');
             var Paper = require('core/class').extendClass( require('graphic/paper'), Draggable.prototype );
             var Rect = require('graphic/rect');
-            var BezierConnection = require('../demo/connection/bezierconnection');
+            var BezierConnection = require('../demo/graffle/bezierconnection');
             var PatternBrush = require('graphic/patternbrush');
             var Group = require('graphic/group');
             var Ellipse = require('graphic/ellipse');
@@ -193,7 +216,6 @@
                 paper.setViewPort(viewport);
             });
         });
-        seajs.use('start');
     </script>
     <style>
         body, div, html {
@@ -201,9 +223,12 @@
             padding: 0;
             overflow: hidden;
             background: #333;
+            height: 100%;
         }
     </style>
 </head>
-<body>
-</body>
+<body></body>
+<script>
+    inc.use('demo');
+</script>
 </html>

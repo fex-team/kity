@@ -15,7 +15,7 @@ define( function ( require, exports, module ) {
         //zoom倍数
         ZOOM = 100,
         controller = null,
-        Controller = require( "./demo.controller" );
+        Controller = require( "../demo/ps-pen/demo.controller" );
 
     function init () {
 

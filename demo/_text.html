@@ -28,7 +28,7 @@
             paper.addShape(p);
 
             setInterval(function() {
-                var box = t.getRenderBox();
+                var box = t.getRenderBox('top');
                 rb.setPosition(box.x, box.y).setSize(box.width, box.height);
             }, 15);
 

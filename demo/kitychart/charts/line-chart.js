@@ -14,7 +14,7 @@ var MarkDot = kity.createClass("MarkDot", {
 		this.text.setContent(content);
 	},
 	updatePosition: function(x, y, bx, by) {
-		this.setTransform(new kity.Matrix().translate(x, y));
+		this.setTranslate(x, y);
 
 		var rb = this.text.getRenderBox();
 		var tx, ty, margin = 15;
@@ -27,7 +27,7 @@ var MarkDot = kity.createClass("MarkDot", {
 			tx = margin;
 		}
 		ty = -rb.height / 2;
-		this.text.setTransform(new kity.Matrix().translate(tx, ty + rb.height - 2));
+		this.text.setTranslate(tx, ty + rb.height - 2);
 		var f = snapToSharp;
 		this.rect.setPosition(f(tx) - 5, f(ty) - 5);
 		this.rect.setSize((rb.width | 0) + 10, (rb.height | 0) + 10);
@@ -80,12 +80,14 @@ var KCLineChart = kity.createClass("lineChart", (function() {
 				}));
 				//绘制label
 				for (var j = 0; j < 17; j++) {
-					var vX = 10.5 + j * duraction;
+					var vX = 15.5 + j * duraction;
 					var _label = new kity.Text(labels[j]);
 					_label
-						.setX(vX).setY(drawArea.bottom + 30).setSize(12).setStyle("font-family", "Arial").fill(p.get('alix-text'));
+						.setX(vX).setY(drawArea.bottom + 10).setSize(12).setStyle("font-family", "Arial").fill(p.get('alix-text'));
 					_paper.addShape(_label);
-					_label.rotate(-60);
+					_label.translate(-_label.getX(), -_label.getY())
+						.rotate(60)
+						.translate(_label.getX(), _label.getY());
 				}
 			};
 			//根据设定的最大值和最小值绘制折线图
@@ -140,8 +142,8 @@ var KCLineChart = kity.createClass("lineChart", (function() {
 				for (var i = 0; i < origin.length; i++) {
 					for (var j = 0; j < origin[i].length; j++) {
 						var p = origin[i][j];
-						series[j] = series[j] || [p.getX()];
-						series[j].push(p.getY());
+						series[j] = series[j] || [p.x];
+						series[j].push(p.y);
 					}
 				}
 				return series;
@@ -183,7 +185,7 @@ var KCLineChart = kity.createClass("lineChart", (function() {
 				var x = e.getPosition().x;
 				var points = findNearestPoint(x);
 				x = Math.floor(points[0]);
-				xRuler.setTransform(new kity.Matrix().translate(x, 0));
+				xRuler.setTranslate(x, 0);
 				for (var i = 1; i < points.length; i++) {
 					iDots[i - 1].setText((points[0] | 0) + ', ' + (points[i] | 0));
 					iDots[i - 1].updatePosition(points[0], points[i], me.paperWidth - 100, me.paperHeight);

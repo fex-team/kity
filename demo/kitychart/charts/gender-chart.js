@@ -29,7 +29,10 @@ var KCGenderChart = kity.createClass("GenderChart", (function() {
 				rect2.fill(color);
 				_paper.addShape(group);
 				group.addShapes([polygon1, rect2]);
-				group.translate(me.centerX + me.R + 10, me.centerY).setAnchor(me.centerX, me.centerY).rotate(rotate);
+				group.translate(me.centerX + me.R + 10, me.centerY)
+					.translate(-me.centerX, -me.centerY)
+					.rotate(rotate)
+					.translate(me.centerX, me.centerY);
 			};
 			//绘制十字
 			var drawCross = function(color, rotate) {
@@ -40,7 +43,10 @@ var KCGenderChart = kity.createClass("GenderChart", (function() {
 				rect1.fill(color);
 				rect2.fill(color);
 				group.addShapes([rect1, rect2]);
-				group.translate(me.centerX + me.R + 10, me.centerY).setAnchor(me.centerX, me.centerY).rotate(rotate);
+				group.translate(me.centerX + me.R + 10, me.centerY)
+					.translate(-me.centerX, -me.centerY)
+					.rotate(rotate)
+					.translate(me.centerX, me.centerY);
 				_paper.addShape(group);
 			};
 			var renderPie = function(pMale, pFemale) {

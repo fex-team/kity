@@ -1,23 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>texteditor</title>
-    <!-- 正式发布的时候， 只需替换掉相应的脚本文件即可 -->
+    <!-- 必须强制指定页面编码为 UTF-8 -->
+    <meta charset="utf-8">
 
-    <!-- dev 版本 示例所需脚本文件 start -->
-
-    <!-- dev 版本 示例所需脚本文件 start -->
+    <!-- Demo 的简要说明，必须要填写 -->
+    <meta name="description" content="Kity 实现模拟光标输入">
+    
+    <!-- Demo 的作者，建议填写 -->
+    <meta name="author" content="kity@baidu.com">
+    
+    <!-- Demo 的标题，必须填写 -->
+    <title>模拟光标</title>
+    
+    <!-- Demo 开发过程中使用 CMD 引入 Kity 源码，方便调试 -->
+    <!-- dev start -->
+    <!-- 目录型的 Demo 注意修正源码引用路径 -->
     <script src="../dev-lib/dev-define.js"></script>
     <script>
-        inc.config({
-            base: '../src'
-        });
+        // 设置好 kity 源代码目录
+        inc.config( { base: '../src'} );
+        // 定义 Demo 模块
+        define('demo', function(require) { require('kity'); });
     </script>
-    <script src="../dev-lib/exports.js"></script>
-    <script src="../dev-lib/dev-start.js"></script>
+    <script>
+        // 启动 Demo 模块
+        inc.use('demo');
+    </script>
     <!-- dev 版本 示例所需脚本文件 end -->
 
-    <script src="jquery.js"></script>
+    <script src="public/jquery.js"></script>
     <style>
         .editor-container{
 
@@ -112,7 +124,7 @@
                     top:textShapeOffset.x,
                     left:textShapeOffset.y
                 });
-                this.textShape.setPosition(textShapeOffset.x,textShapeOffset.y + this.textShape.getSize());
+                this.textShape.setPosition(textShapeOffset.x, textShapeOffset.y);
                 return this;
             },
             setRange : function(range,index){
@@ -286,9 +298,9 @@
                 .setStyle('cursor','text')
             .on('click',function(e){
                 var originEvent = e.originEvent;
-                var position = e.getPosition();
+                var position = e.getPosition('top');
                 if(e.targetShape.getType() != 'Text'){
-                    var offset = e.getPosition();
+                    var offset = e.getPosition('top');
                     cursor.setShow().setPosition(offset);
                     receiver.clear()
                             .setTextShape()

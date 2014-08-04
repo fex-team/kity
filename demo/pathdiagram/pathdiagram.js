@@ -1,11 +1,11 @@
 define( function ( require, exports, module ) {
     var Class = require( 'core/class' );
-    var Query = require( './dataquery' );
-    var Connection = require( '../connection/bezierconnection' );
+    var Query = require( '../demo/pathdiagram/dataquery' );
+    var Connection = require( '../demo/graffle/bezierconnection' );
     var Group = require( 'graphic/group' );
     var Text = require( 'graphic/text' );
-    var LevelContainer = require( './levelcontainer' );
-    var colors = require( './colors' );
+    var LevelContainer = require( '../demo/pathdiagram/levelcontainer' );
+    var colors = require( '../demo/pathdiagram/colors' );
 
     var R_SIZE = LevelContainer.RECT_SIZE;
 

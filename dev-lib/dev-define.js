@@ -31,6 +31,8 @@
 
     };
 
+    global.use = global.inc.use;
+
     global.define = function(id, deps, f) {
 
         var argLen = arguments.length,
@@ -148,7 +150,7 @@
 
             loaded[key] = true;
 
-            document.write('<script src="' + uri + inc.base + '/' + key + '.js'  +
+            document.write('<script src="' + uri + inc.base + '/' + key + '.js" '  +
                 'onload="inc.remove(this)"' + ' data-id="' + key + '"></script>');
 
         }
