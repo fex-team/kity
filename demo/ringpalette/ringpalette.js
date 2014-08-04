@@ -77,7 +77,7 @@ define(function(require, exports, module) {
             var ring = this;
             this.on('mouseover', function(e) {
                 var pie = e.targetShape;
-                if (pie instanceof Pie) {
+                if (pie.getClass() == Pie) {
                     var color = pie.color;
 
                     pie.setScale(2).setTranslate(-pie.center.x, -pie.center.y);
@@ -91,7 +91,7 @@ define(function(require, exports, module) {
             });
             this.on('mouseout', function(e) {
                 var pie = e.targetShape;
-                if (pie instanceof Pie) {
+                if (pie.getClass() == Pie) {
                     pie.setScale(1).setTranslate(0, 0);
                     pie.stroke('none');
                     ring.showSelected();
@@ -99,7 +99,7 @@ define(function(require, exports, module) {
             });
             this.on('click', function(e) {
                 var pie = e.targetShape;
-                if (pie instanceof Pie) {
+                if (pie.getClass() == Pie) {
                     ring.selectedPie(pie);
                 }
             });
