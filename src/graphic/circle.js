@@ -19,16 +19,19 @@ define(function(require, exports, module) {
          * @constructor
          * @for kity.Circle
          *
-         * @param  {[type]} radius [description]
-         * @param  {[type]} cx     [description]
-         * @param  {[type]} cy     [description]
-         *
-         * @return {[type]}        [description]
+         * @param  {Number} radius 半径
+         * @param  {Number} cx     圆心 x 坐标
+         * @param  {Number} cy     圆心 y 坐标
          */
         constructor: function(radius, cx, cy) {
             this.callBase(radius, radius, cx, cy);
         },
 
+        /**
+         * @method
+         * @for kity.Circle
+         * @description 获取原型的半径
+         */
         getRadius: function() {
             return this.getRadiusX();
         },

@@ -46,7 +46,6 @@ define(function(require) {
                     if (this.doRotate) target.setRotate(point.tan.getAngle());
                 }
             });
-            this.updatePath(path);
 
             /**
              * @property doRotate

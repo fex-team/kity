@@ -1,3 +1,9 @@
+/**
+ * @fileOverview
+ *
+ * 支持图形剪辑
+ */
+
 define(function(require, exports, module) {
     var Class = require('core/class');
     var Shape = require('graphic/shape');
