@@ -57,6 +57,10 @@ define(function(require, exports, module) {
     Vector.fromPoints = function(p1, p2) {
         return new Vector(p2.x - p1.x, p2.y - p1.y);
     };
+    Vector.fromPolar = function() {
+        var p = Point.fromPolar.apply(Point, arguments);
+        return new Vector(p.x, p.y);
+    };
     require('core/class').extendClass(Point, {
         asVector: function() {
             return new Vector(this.x, this.y);

@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kity - v2.0.0 - 2014-08-04
+ * kity - v2.0.0 - 2014-08-28
  * https://github.com/fex-team/kity
  * GitHub: https://github.com/fex-team/kity.git 
  * Copyright (c) 2014 Baidu FEX; Licensed BSD
@@ -8016,6 +8016,10 @@ _p[74] = {
         });
         Vector.fromPoints = function(p1, p2) {
             return new Vector(p2.x - p1.x, p2.y - p1.y);
+        };
+        Vector.fromPolar = function() {
+            var p = Point.fromPolar.apply(Point, arguments);
+            return new Vector(p.x, p.y);
         };
         _p.r(11).extendClass(Point, {
             asVector: function() {
