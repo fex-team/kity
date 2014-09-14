@@ -182,12 +182,15 @@ define(function(require, exports, module) {
          *
          * ```js
          * var box1 = new kity.Box(10, 10, 50, 50);
-         * var box2 = new kity.BOx(30, 30, 50, 50);
+         * var box2 = new kity.Box(30, 30, 50, 50);
          * var box3 = box1.merge(box2);
          * console.log(box3.valueOf()); // [10, 10, 70, 70]
          * ```
          */
         merge: function(another) {
+            if (this.isEmpty()) {
+                return new Box(another.x, another.y, another.width, another.height);
+            }
             var left = Math.min(this.left, another.left),
                 right = Math.max(this.right, another.right),
                 top = Math.min(this.top, another.top),
@@ -280,6 +283,23 @@ define(function(require, exports, module) {
          */
         toString: function() {
             return this.valueOf().join(' ');
+        },
+
+        /**
+         * @method isEmpty()
+         * @for kity.Box
+         * @description 判断当前盒子是否具有尺寸（面积大
+         *
+         * @grammar isEmpty() => {boolean}
+         *
+         * @example
+         * ```js
+         * var box = new kity.Box(0, 0, 0, 100000);
+         * console.log(box.isEmpty()); // true
+         * ```
+         */
+        isEmpty: function() {
+            return !this.width || !this.height;
         }
     });
 

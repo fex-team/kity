@@ -54,6 +54,14 @@ define(function(require, exports, module) {
 
         spof: function() {
             return new Point((this.x | 0) + 0.5, (this.y | 0) + 0.5);
+        },
+
+        round: function() {
+            return new Point((this.x | 0), (this.y | 0));
+        },
+
+        isOrigin: function() {
+            return this.x === 0 && this.y === 0;
         }
     });
 

@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kity - v2.0.0 - 2014-08-28
+ * kity - v2.0.0 - 2014-09-14
  * https://github.com/fex-team/kity
  * GitHub: https://github.com/fex-team/kity.git 
  * Copyright (c) 2014 Baidu FEX; Licensed BSD
@@ -3139,12 +3139,15 @@ _p[25] = {
          *
          * ```js
          * var box1 = new kity.Box(10, 10, 50, 50);
-         * var box2 = new kity.BOx(30, 30, 50, 50);
+         * var box2 = new kity.Box(30, 30, 50, 50);
          * var box3 = box1.merge(box2);
          * console.log(box3.valueOf()); // [10, 10, 70, 70]
          * ```
          */
             merge: function(another) {
+                if (this.isEmpty()) {
+                    return new Box(another.x, another.y, another.width, another.height);
+                }
                 var left = Math.min(this.left, another.left), right = Math.max(this.right, another.right), top = Math.min(this.top, another.top), bottom = Math.max(this.bottom, another.bottom);
                 return new Box(left, top, right - left, bottom - top);
             },
@@ -3228,6 +3231,22 @@ _p[25] = {
          */
             toString: function() {
                 return this.valueOf().join(" ");
+            },
+            /**
+         * @method isEmpty()
+         * @for kity.Box
+         * @description 判断当前盒子是否具有尺寸（面积大
+         *
+         * @grammar isEmpty() => {boolean}
+         *
+         * @example
+         * ```js
+         * var box = new kity.Box(0, 0, 0, 100000);
+         * console.log(box.isEmpty()); // true
+         * ```
+         */
+            isEmpty: function() {
+                return !this.width || !this.height;
             }
         });
         /**
@@ -6351,6 +6370,12 @@ _p[51] = {
             },
             spof: function() {
                 return new Point((this.x | 0) + .5, (this.y | 0) + .5);
+            },
+            round: function() {
+                return new Point(this.x | 0, this.y | 0);
+            },
+            isOrigin: function() {
+                return this.x === 0 && this.y === 0;
             }
         });
         /**
