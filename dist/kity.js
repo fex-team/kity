@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kity - v2.0.0 - 2014-09-14
+ * kity - v2.0.0 - 2014-09-18
  * https://github.com/fex-team/kity
  * GitHub: https://github.com/fex-team/kity.git 
  * Copyright (c) 2014 Baidu FEX; Licensed BSD
@@ -6395,6 +6395,7 @@ _p[51] = {
             return new Point(radius * Math.cos(angle), radius * Math.sin(angle));
         };
         Point.parse = function(unknown) {
+            if (!unknown) return new Point();
             if (unknown instanceof Point) {
                 return unknown;
             }
