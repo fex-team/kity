@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kity - v2.0.0 - 2014-09-18
+ * kity - v2.0.0 - 2014-09-19
  * https://github.com/fex-team/kity
  * GitHub: https://github.com/fex-team/kity.git 
  * Copyright (c) 2014 Baidu FEX; Licensed BSD
@@ -3152,6 +3152,28 @@ _p[25] = {
                 return new Box(left, top, right - left, bottom - top);
             },
             /**
+         * @method intersect()
+         * @for kity.Box
+         * @description 求当前矩形区域和指定的矩形区域重叠的矩形区域
+         *
+         * @grammar intersect(another) => {kity.Box}
+         * @param  {kity.Box} another 要求重叠的矩形区域
+         *
+         * @example
+         *
+         * ```js
+         * var box1 = new kity.Box(10, 10, 50, 50);
+         * var box2 = new kity.Box(30, 30, 50, 50);
+         * var box3 = box1.intersect(box2);
+         * console.log(box3.valueOf()); // [30, 30, 20, 20]
+         * ```
+         */
+            intersect: function(another) {
+                var left = Math.max(this.left, another.left), right = Math.min(this.right, another.right), top = Math.max(this.top, another.top), bottom = Math.min(this.bottom, another.bottom);
+                if (left > right || top > bottom) return new Box();
+                return new Box(left, top, right - left, bottom - top);
+            },
+            /**
          * @method expand()
          * @for kity.Box
          * @description 扩展（或收缩）当前的盒子，返回新的盒子
@@ -5666,6 +5688,9 @@ _p[44] = {
             },
             transformBox: function(box) {
                 return Matrix.transformBox(box, this.m);
+            },
+            clone: function() {
+                return new Matrix(this.m);
             }
         });
         Matrix.parse = function(str) {
@@ -7684,7 +7709,7 @@ _p[69] = {
                 return this;
             },
             drawSection: function(from, to) {
-                var angleLength = this.angle && (this.angle % 360 ? this.angle % 360 : 360), angleStart = this.angleOffset, angleHalf = angleStart + angleLength / 2, angleEnd = angleStart + angleLength, drawer = this.getDrawer();
+                var angleLength = this.angle && (this.angle % 360 ? this.angle % 360 : 360), angleStart = this.angleOffset, angleHalf = angleStart + angleLength / 2, angleEnd = angleStart + angleLength, sweepFlag = angleLength < 0 ? 0 : 1, drawer = this.getDrawer();
                 drawer.redraw();
                 if (angleLength === 0) {
                     drawer.done();
@@ -7693,13 +7718,13 @@ _p[69] = {
                 drawer.moveTo(Point.fromPolar(from, angleStart));
                 drawer.lineTo(Point.fromPolar(to, angleStart));
                 if (to) {
-                    drawer.carcTo(to, 0, 1, Point.fromPolar(to, angleHalf));
-                    drawer.carcTo(to, 0, 1, Point.fromPolar(to, angleEnd));
+                    drawer.carcTo(to, 0, sweepFlag, Point.fromPolar(to, angleHalf));
+                    drawer.carcTo(to, 0, sweepFlag, Point.fromPolar(to, angleEnd));
                 }
                 drawer.lineTo(Point.fromPolar(from, angleEnd));
                 if (from) {
-                    drawer.carcTo(from, 0, 1, Point.fromPolar(from, angleHalf));
-                    drawer.carcTo(from, 0, 1, Point.fromPolar(from, angleStart));
+                    drawer.carcTo(from, 0, sweepFlag, Point.fromPolar(from, angleHalf));
+                    drawer.carcTo(from, 0, sweepFlag, Point.fromPolar(from, angleStart));
                 }
                 drawer.close();
                 drawer.done();

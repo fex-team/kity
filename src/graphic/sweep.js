@@ -54,6 +54,7 @@ define(function(require, exports, module) {
                 angleStart = this.angleOffset,
                 angleHalf = angleStart + angleLength / 2,
                 angleEnd = angleStart + angleLength,
+                sweepFlag = angleLength < 0 ? 0 : 1,
                 drawer = this.getDrawer();
 
             drawer.redraw();
@@ -68,15 +69,15 @@ define(function(require, exports, module) {
             drawer.lineTo(Point.fromPolar(to, angleStart));
 
             if (to) {
-                drawer.carcTo(to, 0, 1, Point.fromPolar(to, angleHalf));
-                drawer.carcTo(to, 0, 1, Point.fromPolar(to, angleEnd));
+                drawer.carcTo(to, 0, sweepFlag, Point.fromPolar(to, angleHalf));
+                drawer.carcTo(to, 0, sweepFlag, Point.fromPolar(to, angleEnd));
             }
 
             drawer.lineTo(Point.fromPolar(from, angleEnd));
 
             if (from) {
-                drawer.carcTo(from, 0, 1, Point.fromPolar(from, angleHalf));
-                drawer.carcTo(from, 0, 1, Point.fromPolar(from, angleStart));
+                drawer.carcTo(from, 0, sweepFlag, Point.fromPolar(from, angleHalf));
+                drawer.carcTo(from, 0, sweepFlag, Point.fromPolar(from, angleStart));
             }
 
             drawer.close();

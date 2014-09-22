@@ -174,6 +174,10 @@ define(function(require, exports, module) {
 
         transformBox: function(box) {
             return Matrix.transformBox(box, this.m);
+        },
+
+        clone: function() {
+            return new Matrix(this.m);
         }
     });
 
