@@ -124,6 +124,10 @@ define(function(require, exports, module) {
             return this.viewport;
         },
 
+        getViewPortMatrix: function() {
+            return Matrix.parse(this.shapeNode.getAttribute('transform'));
+        },
+
         getViewPortTransform: function() {
             var m = this.shapeNode.getCTM();
             return new Matrix(m.a, m.b, m.c, m.d, m.e, m.f);

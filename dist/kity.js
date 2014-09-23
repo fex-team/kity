@@ -1929,7 +1929,7 @@ _p[12] = {
          * console.log(param.join('&')); // "name=kity&version=1.2.1"
          * ```
          */
-            each: function(obj, iterator, context) {
+            each: function each(obj, iterator, context) {
                 if (obj === null) {
                     return;
                 }
@@ -1981,7 +1981,7 @@ _p[12] = {
          * console.log(a); // {key1: 'a1', key2: 'b2', key3: 'b3', key4: 'c4'}
          * ```
          */
-            extend: function(t) {
+            extend: function extend(t) {
                 var a = arguments, notCover = this.isBoolean(a[a.length - 1]) ? a[a.length - 1] : false, len = this.isBoolean(a[a.length - 1]) ? a.length - 1 : a.length;
                 for (var i = 1; i < len; i++) {
                     var x = a[i];
@@ -2042,7 +2042,7 @@ _p[12] = {
          * console.log(target.key3 === source.key3); // true
          * ```
          */
-            clone: function(obj) {
+            clone: function clone(obj) {
                 var cloned = {};
                 for (var m in obj) {
                     if (obj.hasOwnProperty(m)) {
@@ -2075,7 +2075,7 @@ _p[12] = {
          * console.log(target.key3 === source.key3); // true，因为是值类型
          * ```
          */
-            copy: function(obj) {
+            copy: function copy(obj) {
                 if (typeof obj !== "object") return obj;
                 if (typeof obj === "function") return null;
                 return JSON.parse(JSON.stringify(obj));
@@ -2112,7 +2112,7 @@ _p[12] = {
          * console.log(flattened); // [1, 2, 3, 4, 5, 6, 7];
          * ```
          */
-            flatten: function(arr) {
+            flatten: function flatten(arr) {
                 var result = [], length = arr.length, i;
                 for (i = 0; i < length; i++) {
                     if (arr[i] instanceof Array) {
@@ -2165,7 +2165,7 @@ _p[12] = {
          *
          * ```
          */
-            paralle: function(v1, v2, op) {
+            paralle: function paralle(v1, v2, op) {
                 var Class, field, index, name, value;
                 // 数组
                 if (v1 instanceof Array) {
@@ -2203,7 +2203,7 @@ _p[12] = {
             /**
          * 创建 op 操作的一个平行化版本
          */
-            parallelize: function(op) {
+            parallelize: function parallelize(op) {
                 return function(v1, v2) {
                     return utils.paralle(v1, v2, op);
                 };
@@ -2259,7 +2259,7 @@ _p[12] = {
      * @param  {any} unknown 要判断的值
      */
         utils.each([ "String", "Function", "Array", "Number", "RegExp", "Object", "Boolean" ], function(v) {
-            utils["is" + v] = function(obj) {
+            utils["is" + v] = function typeCheck(obj) {
                 return Object.prototype.toString.apply(obj) == "[object " + v + "]";
             };
         });
@@ -5548,7 +5548,7 @@ _p[44] = {
     value: function(require, exports, module) {
         var utils = _p.r(12);
         var Box = _p.r(25);
-        var mPattern = /matrix\((.+)\)/i;
+        var mPattern = /matrix\s*\((.+)\)/i;
         var Point = _p.r(51);
         // 注意，合并的结果是先执行m2，再执行m1的结果
         function mergeMatrixData(m2, m1) {
@@ -6018,6 +6018,9 @@ _p[46] = {
                     };
                 }
                 return this.viewport;
+            },
+            getViewPortMatrix: function() {
+                return Matrix.parse(this.shapeNode.getAttribute("transform"));
             },
             getViewPortTransform: function() {
                 var m = this.shapeNode.getCTM();
