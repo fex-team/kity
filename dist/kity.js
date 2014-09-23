@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kity - v2.0.0 - 2014-09-19
+ * kity - v2.0.0 - 2014-09-23
  * https://github.com/fex-team/kity
  * GitHub: https://github.com/fex-team/kity.git 
  * Copyright (c) 2014 Baidu FEX; Licensed BSD
@@ -4197,7 +4197,7 @@ _p[34] = {
             //移除指定的监听器
             if (!isRemoveAll) {
                 isRemoveAll = true;
-                Utils.each(userHandlerList, function(fn, index) {
+                Utils.each(userHandlerList, function removeKityEvent(fn, index) {
                     if (fn === handler) {
                         // 不能结束， 需要查找完整个list， 避免丢失移除多次绑定同一个处理器的情况
                         delete userHandlerList[index];
@@ -4223,9 +4223,9 @@ _p[34] = {
             }
             if (!INNER_HANDLER_CACHE[eid][type]) {
                 // 内部监听器
-                INNER_HANDLER_CACHE[eid][type] = function(e) {
+                INNER_HANDLER_CACHE[eid][type] = function kityEventHandler(e) {
                     e = new ShapeEvent(e || window.event);
-                    Utils.each(USER_HANDLER_CACHE[eid][type], function(fn) {
+                    Utils.each(USER_HANDLER_CACHE[eid][type], function executeKityEvent(fn) {
                         var result;
                         if (fn) {
                             result = fn.call(targetObject, e);
