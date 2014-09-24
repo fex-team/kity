@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kity - v2.0.0 - 2014-09-23
+ * kity - v2.0.0 - 2014-09-24
  * https://github.com/fex-team/kity
  * GitHub: https://github.com/fex-team/kity.git 
  * Copyright (c) 2014 Baidu FEX; Licensed BSD
@@ -7750,9 +7750,9 @@ _p[70] = {
                 return offsetHash[font];
             }
             var textContent = text.getContent();
-            text.setContent("test");
-            var bbox = text.getBoundaryBox(), y = text.getY() + +text.node.getAttribute("dy");
-            var topOffset = y - bbox.y, bottomOffset = topOffset - bbox.height;
+            text.setContent("百度Fex");
+            var bbox = text.getBoundaryBox(), y = text.getY();
+            var topOffset = y - bbox.y - +text.node.getAttribute("dy"), bottomOffset = topOffset - bbox.height;
             text.setContent(textContent);
             return offsetHash[font] = {
                 top: topOffset,
@@ -7778,11 +7778,11 @@ _p[70] = {
                 var last = this._lastFont;
                 var current = utils.extend({}, last, font);
                 if (!last) {
-                    last = font;
+                    this._lastFont = font;
                     return true;
                 }
                 var changed = last.family != current.family || last.size != current.size || last.style != current.style || last.weight != current.weight;
-                last = current;
+                this._lastFont = current;
                 return changed;
             },
             setX: function(x) {

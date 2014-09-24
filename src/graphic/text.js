@@ -14,12 +14,12 @@ define(function(require, exports, module) {
         }
 
         var textContent = text.getContent();
-        text.setContent('test');
+        text.setContent('百度Fex');
 
         var bbox = text.getBoundaryBox(),
-            y = text.getY() + (+text.node.getAttribute('dy'));
+            y = text.getY();
 
-        var topOffset = y - bbox.y,
+        var topOffset = y - bbox.y - (+text.node.getAttribute('dy')),
             bottomOffset = topOffset - bbox.height;
 
         text.setContent(textContent);
@@ -61,7 +61,7 @@ define(function(require, exports, module) {
             var current = utils.extend({}, last, font);
 
             if (!last) {
-                last = font;
+                this._lastFont = font;
                 return true;
             }
 
@@ -70,7 +70,7 @@ define(function(require, exports, module) {
                 last.style != current.style ||
                 last.weight != current.weight;
 
-            last = current;
+            this._lastFont = current;
 
             return changed;
         },
