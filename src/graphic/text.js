@@ -19,7 +19,7 @@ define(function(require, exports, module) {
         var bbox = text.getBoundaryBox(),
             y = text.getY();
 
-        var topOffset = y - bbox.y - (+text.node.getAttribute('dy')),
+        var topOffset = y - bbox.y + (+text.node.getAttribute('dy')),
             bottomOffset = topOffset - bbox.height;
 
         text.setContent(textContent);

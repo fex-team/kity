@@ -7752,7 +7752,7 @@ _p[70] = {
             var textContent = text.getContent();
             text.setContent("百度Fex");
             var bbox = text.getBoundaryBox(), y = text.getY();
-            var topOffset = y - bbox.y - +text.node.getAttribute("dy"), bottomOffset = topOffset - bbox.height;
+            var topOffset = y - bbox.y + +text.node.getAttribute("dy"), bottomOffset = topOffset - bbox.height;
             text.setContent(textContent);
             return offsetHash[font] = {
                 top: topOffset,
