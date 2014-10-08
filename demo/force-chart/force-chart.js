@@ -12,7 +12,7 @@ var ForceChart = kity.createClass( "ForceChart", {
     start: function () {
         var nodes = this.nodes;
         var links = this.links;
-        var color = new kity.Color.createHSL( 0, 100, 50 );
+        var color = kity.Color.createHSL( 0, 100, 50 );
 
         for ( var i = 0; i < links.length; i++ ) {
             var link = links[ i ];
