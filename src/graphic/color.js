@@ -1,3 +1,8 @@
+/**
+ * @fileOverview
+ *
+ * 提供颜色支持
+ */
 define(function(require, exports, module) {
 
     var Utils = require('core/utils'),
@@ -6,8 +11,30 @@ define(function(require, exports, module) {
 
         ColorUtils = {},
 
+        /**
+         * @class kity.Color
+         * @description 表示一个颜色
+         */
         Color = require('core/class').createClass('Color', {
 
+            /**
+             * @constructor
+             * @for kity.Color
+             *
+             * @grammar new kity.Color(r, g, b)
+             * @grammar new kity.Color(r, g, b, a)
+             * @grammar new kity.Color(colorString)
+             *
+             * @param {Number} r 红色分量，取值 0 - 255
+             * @param {Number} g 绿色分量，取值 0 - 255
+             * @param {Number} b 蓝色分量，取值 0 - 255
+             * @param {Number} a 透明度（可选），取值 0 - 100
+             * @param {String} colorString 一个代表颜色的字符串，可以是：
+             *     熟知颜色表：如 'red', 'yellow'
+             *     HEX 表示：如 '#368', '#123456'
+             *     RGB 表示：如 'RGB(200, 200, 0)', 'RGBA(200, 200, 200, .5)'
+             *     HSL 表示：如 'HSL(100, 60%, 80%)', 'HSLA(100, 60%, 80%, .5)'
+             */
             constructor: function() {
 
                 var colorValue = null;
@@ -39,7 +66,7 @@ define(function(require, exports, module) {
                         g: arguments[1] | 0,
                         b: arguments[2] | 0,
                         //alpha 默认为1
-                        a: parseFloat(arguments[3]) || 1
+                        a: arguments[3] === undefined ? 1 : parseFloat(arguments[3])
                     };
 
                     colorValue = ColorUtils.overflowFormat(colorValue);
@@ -53,6 +80,25 @@ define(function(require, exports, module) {
 
             },
 
+            /**
+             * @method set()
+             * @for kity.Color
+             *
+             * @description 设置当前颜色某个分量的值
+             *
+             * @grammar set(name, value) => {this}
+             *
+             * @param {string} name  要设置的颜色通道的名称
+             *     r: 红色（Red），取值范围 [0, 255]
+             *     g: 绿色（Green），取值范围 [0, 255]
+             *     b: 蓝色（Blue），取值范围 [0, 255]
+             *     a: 透明度（Alpha），取值范围 [0, 1]
+             *     h: 色环角度（Hue），取值范围 [0, 359]
+             *     s: 饱和度（Saturation），取值范围 [0, 100]
+             *     l: 亮度（Lightness），取值范围 [0, 100]
+             *     r、g、b 值和 h、s、l 值会联动修改
+             * @param {number} value 要设置的值
+             */
             set: function(name, value) {
 
                 var values = null;
@@ -84,6 +130,16 @@ define(function(require, exports, module) {
 
             },
 
+            /**
+             * @method inc()
+             *
+             * @description 返回新的颜色，表示当前颜色增加指定通道的值之后的颜色
+             *
+             * @grammar inc(name, value) => {this}
+             *
+             * @param  {string} name  要增加的通道的名称，具体含义请查看 set 方法
+             * @param  {number} value 增量值
+             */
             inc: function(name, value) {
 
                 value = this.get(name) + value;
@@ -99,18 +155,45 @@ define(function(require, exports, module) {
 
             },
 
+            /**
+             * @method dec()
+             * @for kity.Color
+             *
+             * @description 返回新的颜色，表示当前颜色减少指定通道的值之后的颜色
+             *
+             * @grammar dec(name, value) => {this}
+             *
+             * @param  {string} name  要减少值的通道的名称，具体含义请查看 set 方法
+             * @param  {number} value 减量值
+             */
             dec: function(name, value) {
 
                 return this.inc(name, -value);
 
             },
 
+            /**
+             * @method clone()
+             * @for kity.Color
+             *
+             * @description 返回当前颜色的一个拷贝
+             *
+             * @grammar clone() => {kity.Color}
+             */
             clone: function() {
 
                 return new Color(this.toRGBA());
 
             },
 
+            /**
+             * @method get()
+             * @for kity.Color
+             *
+             * @description 返回当前颜色指定的分量
+             *
+             * @grammar get() => {number}
+             */
             get: function(name) {
 
                 if (!Color._MAX_VALUE[name]) {
@@ -125,31 +208,94 @@ define(function(require, exports, module) {
                 return Utils.clone(this._color);
             },
 
+            /**
+             * @method valueOf()
+             * @for kity.Color
+             *
+             * @description 返回当前颜色的一个字面量表示
+             *
+             * @return {plain} 颜色字面量，其结构为：
+             *     {
+             *         r: 0,
+             *         g: 0,
+             *         b: 0,
+             *         a: 0,
+             *         h: 0,
+             *         s: 0,
+             *         l: 0
+             *     }
+             */
             valueOf: function() {
                 return this.getValues();
             },
 
+            /**
+             * @method toRGB()
+             * @for kity.Color
+             *
+             * @description 返回当前颜色的 RGB 表示，如果颜色有透明度，将抛弃透明度属性（想要保留请使用 toRGBA()）方法。
+             *
+             * @grammar toRGB() => {string}
+             */
             toRGB: function() {
                 return ColorUtils.toString(this._color, 'rgb');
             },
 
+            /**
+             * @method toRGBA()
+             * @for kity.Color
+             *
+             * @description 返回当前颜色的 RGBA 表示
+             *
+             * @grammar toRGBA() => {string}
+             */
             toRGBA: function() {
                 return ColorUtils.toString(this._color, 'rgba');
             },
 
+            /**
+             * @method toHEX()
+             * @for kity.Color
+             *
+             * @description 返回当前颜色的 HEX 表示，如果颜色有透明度，将抛弃透明度属性（想要保留请使用 toRGBA()）方法。
+             *
+             * @grammar toHEX() => {string}
+             */
             toHEX: function() {
                 return ColorUtils.toString(this._color, 'hex');
             },
 
+            /**
+             * @method toHSL()
+             * @for kity.Color
+             *
+             * @description 返回当前颜色的 HSL 表示，如果颜色有透明度，将抛弃透明度属性（想要保留请使用 toHSLA()）方法。
+             *
+             * @grammar toHSL() => {string}
+             */
             toHSL: function() {
                 return ColorUtils.toString(this._color, 'hsl');
             },
 
+            /**
+             * @method toHSLA()
+             * @for kity.Color
+             *
+             * @description 返回当前颜色的 HSLA 表示
+             *
+             * @grammar toHSLA() => {string}
+             */
             toHSLA: function() {
                 return ColorUtils.toString(this._color, 'hsla');
             },
 
-            //默认实现是调用toRGB或者toRGBA
+            /**
+             * @method toString()
+             * @for kity.Color
+             *
+             * @description 返回当前颜色的 RGB 或 RGBA 表示，如果颜色有透明度，将使用 RGBA 形式，否则是 RGB 形式
+             * @grammar toString() => {string}
+             */
             toString: function() {
 
                 if (this._color.a === 1) {
@@ -196,6 +342,21 @@ define(function(require, exports, module) {
         L: 'l',
         A: 'a',
 
+        /**
+         * @method parse()
+         * @static
+         * @for kity.Color
+         *
+         * @description 解析一个颜色字符串为 kity.Color 对象
+         *
+         * @grammar kity.Color.parse(valStr)
+         *
+         * @param  {string} valStr 一个代表颜色的字符串，可以是：
+         *     熟知颜色表：如 'red', 'yellow'
+         *     HEX 表示：如 '#368', '#123456'
+         *     RGB 表示：如 'RGB(200, 200, 0)', 'RGBA(200, 200, 200, .5)'
+         *     HSL 表示：如 'HSL(100, 60%, 80%)', 'HSLA(100, 60%, 80%, .5)'
+         */
         parse: function(valStr) {
 
             var rgbValue;
@@ -217,10 +378,37 @@ define(function(require, exports, module) {
 
         },
 
+        /**
+         * @method createHSL()
+         * @for kity.Color
+         * @static
+         *
+         * @description 创建一个 HSL 颜色
+         *
+         * @grammar kity.Color.createHSL(h, s, l) => {kity.Color}
+         *
+         * @param  {number} h 色环（Hue）分量值，取值范围 [0, 359]
+         * @param  {number} s 饱和度（Saturation）分量值，取值范围 [0, 100]
+         * @param  {number} l 亮度（Lighteness）分量值，取值范围 [0, 100]
+         */
         createHSL: function(h, s, l) {
             return Color.createHSLA(h, s, l, 1);
         },
 
+        /**
+         * @method createHSLA()
+         * @for kity.Color
+         * @static
+         *
+         * @description 创建一个 HSLA 颜色
+         *
+         * @grammar kity.Color.createHSLA(h, s, l, a) => {kity.Color}
+         *
+         * @param  {number} h 色环（Hue）分量值，取值范围 [0, 359]
+         * @param  {number} s 饱和度（Saturation）分量值，取值范围 [0, 100]
+         * @param  {number} l 亮度（Lighteness）分量值，取值范围 [0, 100]
+         * @param  {number} a 透明度（Alpha）分量值，取值范围 [0, 1]
+         */
         createHSLA: function(h, s, l, a) {
 
             var colorValue = null;
@@ -234,10 +422,37 @@ define(function(require, exports, module) {
 
         },
 
+        /**
+         * @method createRGB()
+         * @for kity.Color
+         * @static
+         *
+         * @description 创建一个 RGB 颜色
+         *
+         * @grammar kity.Color.createRGB(r, g, b) => {kity.Color}
+         *
+         * @param  {number} r 红色（Red）分量值，取值范围 [0, 255]
+         * @param  {number} g 绿色（Green）分量值，取值范围 [0, 255]
+         * @param  {number} b 蓝色（Blue）分量值，取值范围 [0, 255]
+         */
         createRGB: function(r, g, b) {
             return Color.createRGBA(r, g, b, 1);
         },
 
+        /**
+         * @method createRGBA()
+         * @for kity.Color
+         * @static
+         *
+         * @description 创建一个 RGBA 颜色
+         *
+         * @grammar kity.Color.createRGBA(r, g, b, a) => {kity.Color}
+         *
+         * @param  {number} r 红色（Red）分量值，取值范围 [0, 255]
+         * @param  {number} g 绿色（Green）分量值，取值范围 [0, 255]
+         * @param  {number} b 蓝色（Blue）分量值，取值范围 [0, 255]
+         * @param  {number} a 透明度（Alpha）分量值，取值范围 [0, 1]
+         */
         createRGBA: function(r, g, b, a) {
             return new Color(r, g, b, a);
         }

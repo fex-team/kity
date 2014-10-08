@@ -17,12 +17,12 @@ define(function(require, exports, module) {
          * @for kity.Box
          *
          * @grammar new kity.Box(x, y, width, height)
-         * @grammar new kity.Box(value)
+         * @grammar new kity.Box(box)
          *
-         * @param  {Number} x|value.x      矩形区域的 x 坐标
-         * @param  {Number} y|value.y      矩形区域的 y 坐标
-         * @param  {Number} width|value.width   矩形区域的宽度
-         * @param  {Number} height|value.height 矩形区域的高度
+         * @param  {Number} x|box.x      矩形区域的 x 坐标
+         * @param  {Number} y|box.y      矩形区域的 y 坐标
+         * @param  {Number} width|box.width   矩形区域的宽度
+         * @param  {Number} height|box.height 矩形区域的高度
          *
          * @example
          *
