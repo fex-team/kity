@@ -1,7 +1,7 @@
 define(function(require, exports, module) {
     var utils = require('core/utils');
     var Box = require('graphic/box');
-    var mPattern = /matrix\((.+)\)/i;
+    var mPattern = /matrix\s*\((.+)\)/i;
     var Point = require('graphic/point');
 
     // 注意，合并的结果是先执行m2，再执行m1的结果
@@ -174,6 +174,10 @@ define(function(require, exports, module) {
 
         transformBox: function(box) {
             return Matrix.transformBox(box, this.m);
+        },
+
+        clone: function() {
+            return new Matrix(this.m);
         }
     });
 

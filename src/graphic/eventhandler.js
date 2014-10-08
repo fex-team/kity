@@ -67,7 +67,7 @@ define(function(require, exports, module) {
 
             isRemoveAll = true;
 
-            Utils.each(userHandlerList, function(fn, index) {
+            Utils.each(userHandlerList, function removeKityEvent(fn, index) {
 
                 if (fn === handler) {
 
@@ -115,11 +115,11 @@ define(function(require, exports, module) {
         if (!INNER_HANDLER_CACHE[eid][type]) {
 
             // 内部监听器
-            INNER_HANDLER_CACHE[eid][type] = function(e) {
+            INNER_HANDLER_CACHE[eid][type] = function kityEventHandler(e) {
 
                 e = new ShapeEvent(e || window.event);
 
-                Utils.each(USER_HANDLER_CACHE[eid][type], function(fn) {
+                Utils.each(USER_HANDLER_CACHE[eid][type], function executeKityEvent(fn) {
                     var result;
                     if (fn) {
 

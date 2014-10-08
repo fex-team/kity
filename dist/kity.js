@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kity - v2.0.0 - 2014-09-14
+ * kity - v2.0.0 - 2014-09-24
  * https://github.com/fex-team/kity
  * GitHub: https://github.com/fex-team/kity.git 
  * Copyright (c) 2014 Baidu FEX; Licensed BSD
@@ -1929,7 +1929,7 @@ _p[12] = {
          * console.log(param.join('&')); // "name=kity&version=1.2.1"
          * ```
          */
-            each: function(obj, iterator, context) {
+            each: function each(obj, iterator, context) {
                 if (obj === null) {
                     return;
                 }
@@ -1981,7 +1981,7 @@ _p[12] = {
          * console.log(a); // {key1: 'a1', key2: 'b2', key3: 'b3', key4: 'c4'}
          * ```
          */
-            extend: function(t) {
+            extend: function extend(t) {
                 var a = arguments, notCover = this.isBoolean(a[a.length - 1]) ? a[a.length - 1] : false, len = this.isBoolean(a[a.length - 1]) ? a.length - 1 : a.length;
                 for (var i = 1; i < len; i++) {
                     var x = a[i];
@@ -2042,7 +2042,7 @@ _p[12] = {
          * console.log(target.key3 === source.key3); // true
          * ```
          */
-            clone: function(obj) {
+            clone: function clone(obj) {
                 var cloned = {};
                 for (var m in obj) {
                     if (obj.hasOwnProperty(m)) {
@@ -2075,7 +2075,7 @@ _p[12] = {
          * console.log(target.key3 === source.key3); // true，因为是值类型
          * ```
          */
-            copy: function(obj) {
+            copy: function copy(obj) {
                 if (typeof obj !== "object") return obj;
                 if (typeof obj === "function") return null;
                 return JSON.parse(JSON.stringify(obj));
@@ -2112,7 +2112,7 @@ _p[12] = {
          * console.log(flattened); // [1, 2, 3, 4, 5, 6, 7];
          * ```
          */
-            flatten: function(arr) {
+            flatten: function flatten(arr) {
                 var result = [], length = arr.length, i;
                 for (i = 0; i < length; i++) {
                     if (arr[i] instanceof Array) {
@@ -2165,7 +2165,7 @@ _p[12] = {
          *
          * ```
          */
-            paralle: function(v1, v2, op) {
+            paralle: function paralle(v1, v2, op) {
                 var Class, field, index, name, value;
                 // 数组
                 if (v1 instanceof Array) {
@@ -2203,7 +2203,7 @@ _p[12] = {
             /**
          * 创建 op 操作的一个平行化版本
          */
-            parallelize: function(op) {
+            parallelize: function parallelize(op) {
                 return function(v1, v2) {
                     return utils.paralle(v1, v2, op);
                 };
@@ -2259,7 +2259,7 @@ _p[12] = {
      * @param  {any} unknown 要判断的值
      */
         utils.each([ "String", "Function", "Array", "Number", "RegExp", "Object", "Boolean" ], function(v) {
-            utils["is" + v] = function(obj) {
+            utils["is" + v] = function typeCheck(obj) {
                 return Object.prototype.toString.apply(obj) == "[object " + v + "]";
             };
         });
@@ -3149,6 +3149,28 @@ _p[25] = {
                     return new Box(another.x, another.y, another.width, another.height);
                 }
                 var left = Math.min(this.left, another.left), right = Math.max(this.right, another.right), top = Math.min(this.top, another.top), bottom = Math.max(this.bottom, another.bottom);
+                return new Box(left, top, right - left, bottom - top);
+            },
+            /**
+         * @method intersect()
+         * @for kity.Box
+         * @description 求当前矩形区域和指定的矩形区域重叠的矩形区域
+         *
+         * @grammar intersect(another) => {kity.Box}
+         * @param  {kity.Box} another 要求重叠的矩形区域
+         *
+         * @example
+         *
+         * ```js
+         * var box1 = new kity.Box(10, 10, 50, 50);
+         * var box2 = new kity.Box(30, 30, 50, 50);
+         * var box3 = box1.intersect(box2);
+         * console.log(box3.valueOf()); // [30, 30, 20, 20]
+         * ```
+         */
+            intersect: function(another) {
+                var left = Math.max(this.left, another.left), right = Math.min(this.right, another.right), top = Math.max(this.top, another.top), bottom = Math.min(this.bottom, another.bottom);
+                if (left > right || top > bottom) return new Box();
                 return new Box(left, top, right - left, bottom - top);
             },
             /**
@@ -4175,7 +4197,7 @@ _p[34] = {
             //移除指定的监听器
             if (!isRemoveAll) {
                 isRemoveAll = true;
-                Utils.each(userHandlerList, function(fn, index) {
+                Utils.each(userHandlerList, function removeKityEvent(fn, index) {
                     if (fn === handler) {
                         // 不能结束， 需要查找完整个list， 避免丢失移除多次绑定同一个处理器的情况
                         delete userHandlerList[index];
@@ -4201,9 +4223,9 @@ _p[34] = {
             }
             if (!INNER_HANDLER_CACHE[eid][type]) {
                 // 内部监听器
-                INNER_HANDLER_CACHE[eid][type] = function(e) {
+                INNER_HANDLER_CACHE[eid][type] = function kityEventHandler(e) {
                     e = new ShapeEvent(e || window.event);
-                    Utils.each(USER_HANDLER_CACHE[eid][type], function(fn) {
+                    Utils.each(USER_HANDLER_CACHE[eid][type], function executeKityEvent(fn) {
                         var result;
                         if (fn) {
                             result = fn.call(targetObject, e);
@@ -5526,7 +5548,7 @@ _p[44] = {
     value: function(require, exports, module) {
         var utils = _p.r(12);
         var Box = _p.r(25);
-        var mPattern = /matrix\((.+)\)/i;
+        var mPattern = /matrix\s*\((.+)\)/i;
         var Point = _p.r(51);
         // 注意，合并的结果是先执行m2，再执行m1的结果
         function mergeMatrixData(m2, m1) {
@@ -5666,6 +5688,9 @@ _p[44] = {
             },
             transformBox: function(box) {
                 return Matrix.transformBox(box, this.m);
+            },
+            clone: function() {
+                return new Matrix(this.m);
             }
         });
         Matrix.parse = function(str) {
@@ -5993,6 +6018,9 @@ _p[46] = {
                     };
                 }
                 return this.viewport;
+            },
+            getViewPortMatrix: function() {
+                return Matrix.parse(this.shapeNode.getAttribute("transform"));
             },
             getViewPortTransform: function() {
                 var m = this.shapeNode.getCTM();
@@ -6395,6 +6423,7 @@ _p[51] = {
             return new Point(radius * Math.cos(angle), radius * Math.sin(angle));
         };
         Point.parse = function(unknown) {
+            if (!unknown) return new Point();
             if (unknown instanceof Point) {
                 return unknown;
             }
@@ -7683,7 +7712,7 @@ _p[69] = {
                 return this;
             },
             drawSection: function(from, to) {
-                var angleLength = this.angle && (this.angle % 360 ? this.angle % 360 : 360), angleStart = this.angleOffset, angleHalf = angleStart + angleLength / 2, angleEnd = angleStart + angleLength, drawer = this.getDrawer();
+                var angleLength = this.angle && (this.angle % 360 ? this.angle % 360 : 360), angleStart = this.angleOffset, angleHalf = angleStart + angleLength / 2, angleEnd = angleStart + angleLength, sweepFlag = angleLength < 0 ? 0 : 1, drawer = this.getDrawer();
                 drawer.redraw();
                 if (angleLength === 0) {
                     drawer.done();
@@ -7692,13 +7721,13 @@ _p[69] = {
                 drawer.moveTo(Point.fromPolar(from, angleStart));
                 drawer.lineTo(Point.fromPolar(to, angleStart));
                 if (to) {
-                    drawer.carcTo(to, 0, 1, Point.fromPolar(to, angleHalf));
-                    drawer.carcTo(to, 0, 1, Point.fromPolar(to, angleEnd));
+                    drawer.carcTo(to, 0, sweepFlag, Point.fromPolar(to, angleHalf));
+                    drawer.carcTo(to, 0, sweepFlag, Point.fromPolar(to, angleEnd));
                 }
                 drawer.lineTo(Point.fromPolar(from, angleEnd));
                 if (from) {
-                    drawer.carcTo(from, 0, 1, Point.fromPolar(from, angleHalf));
-                    drawer.carcTo(from, 0, 1, Point.fromPolar(from, angleStart));
+                    drawer.carcTo(from, 0, sweepFlag, Point.fromPolar(from, angleHalf));
+                    drawer.carcTo(from, 0, sweepFlag, Point.fromPolar(from, angleStart));
                 }
                 drawer.close();
                 drawer.done();
@@ -7721,9 +7750,9 @@ _p[70] = {
                 return offsetHash[font];
             }
             var textContent = text.getContent();
-            text.setContent("test");
-            var bbox = text.getBoundaryBox(), y = text.getY() + +text.node.getAttribute("dy");
-            var topOffset = y - bbox.y, bottomOffset = topOffset - bbox.height;
+            text.setContent("百度Fex");
+            var bbox = text.getBoundaryBox(), y = text.getY();
+            var topOffset = y - bbox.y + +text.node.getAttribute("dy"), bottomOffset = topOffset - bbox.height;
             text.setContent(textContent);
             return offsetHash[font] = {
                 top: topOffset,
@@ -7749,11 +7778,11 @@ _p[70] = {
                 var last = this._lastFont;
                 var current = utils.extend({}, last, font);
                 if (!last) {
-                    last = font;
+                    this._lastFont = font;
                     return true;
                 }
                 var changed = last.family != current.family || last.size != current.size || last.style != current.style || last.weight != current.weight;
-                last = current;
+                this._lastFont = current;
                 return changed;
             },
             setX: function(x) {

@@ -198,6 +198,35 @@ define(function(require, exports, module) {
             return new Box(left, top, right - left, bottom - top);
         },
 
+
+        /**
+         * @method intersect()
+         * @for kity.Box
+         * @description 求当前矩形区域和指定的矩形区域重叠的矩形区域
+         *
+         * @grammar intersect(another) => {kity.Box}
+         * @param  {kity.Box} another 要求重叠的矩形区域
+         *
+         * @example
+         *
+         * ```js
+         * var box1 = new kity.Box(10, 10, 50, 50);
+         * var box2 = new kity.Box(30, 30, 50, 50);
+         * var box3 = box1.intersect(box2);
+         * console.log(box3.valueOf()); // [30, 30, 20, 20]
+         * ```
+         */
+        intersect: function(another) {
+            var left = Math.max(this.left, another.left),
+                right = Math.min(this.right, another.right),
+                top = Math.max(this.top, another.top),
+                bottom = Math.min(this.bottom, another.bottom);
+
+            if (left > right || top > bottom) return new Box();
+
+            return new Box(left, top, right - left, bottom - top);
+        },
+
         /**
          * @method expand()
          * @for kity.Box

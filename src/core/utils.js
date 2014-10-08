@@ -49,7 +49,7 @@ define(function() {
          * console.log(param.join('&')); // "name=kity&version=1.2.1"
          * ```
          */
-        each: function(obj, iterator, context) {
+        each: function each(obj, iterator, context) {
             if (obj === null) {
                 return;
             }
@@ -102,7 +102,7 @@ define(function() {
          * console.log(a); // {key1: 'a1', key2: 'b2', key3: 'b3', key4: 'c4'}
          * ```
          */
-        extend: function(t) {
+        extend: function extend(t) {
             var a = arguments,
                 notCover = this.isBoolean(a[a.length - 1]) ? a[a.length - 1] : false,
                 len = this.isBoolean(a[a.length - 1]) ? a.length - 1 : a.length;
@@ -170,7 +170,7 @@ define(function() {
          * console.log(target.key3 === source.key3); // true
          * ```
          */
-        clone: function(obj) {
+        clone: function clone(obj) {
             var cloned = {};
             for (var m in obj) {
                 if (obj.hasOwnProperty(m)) {
@@ -204,7 +204,7 @@ define(function() {
          * console.log(target.key3 === source.key3); // true，因为是值类型
          * ```
          */
-        copy: function(obj) {
+        copy: function copy(obj) {
             if (typeof obj !== 'object') return obj;
             if (typeof obj === 'function') return null;
             return JSON.parse(JSON.stringify(obj));
@@ -248,7 +248,7 @@ define(function() {
          * console.log(flattened); // [1, 2, 3, 4, 5, 6, 7];
          * ```
          */
-        flatten: function(arr) {
+        flatten: function flatten(arr) {
             var result = [],
                 length = arr.length,
                 i;
@@ -304,7 +304,7 @@ define(function() {
          *
          * ```
          */
-        paralle: function(v1, v2, op) {
+        paralle: function paralle(v1, v2, op) {
             var Class, field, index, name, value;
 
             // 数组
@@ -353,7 +353,7 @@ define(function() {
         /**
          * 创建 op 操作的一个平行化版本
          */
-        parallelize: function(op) {
+        parallelize: function parallelize(op) {
             return function(v1, v2) {
                 return utils.paralle(v1, v2, op);
             };
@@ -410,7 +410,7 @@ define(function() {
      * @param  {any} unknown 要判断的值
      */
     utils.each(['String', 'Function', 'Array', 'Number', 'RegExp', 'Object', 'Boolean'], function(v) {
-        utils['is' + v] = function(obj) {
+        utils['is' + v] = function typeCheck(obj) {
             return Object.prototype.toString.apply(obj) == '[object ' + v + ']';
         };
     });

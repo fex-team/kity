@@ -83,6 +83,7 @@ define(function(require, exports, module) {
     };
 
     Point.parse = function(unknown) {
+        if (!unknown) return new Point();
         if (unknown instanceof Point) {
             return unknown;
         }
