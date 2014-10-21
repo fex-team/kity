@@ -43,6 +43,7 @@ define(function(require, exports, module) {
             var node = svg.createNode('svg');
             node.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
             node.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
+            node.setAttribute('version', '1.1');
             return node;
         },
 
