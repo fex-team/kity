@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kity - v2.0.0 - 2014-09-24
+ * kity - v2.0.0 - 2014-10-29
  * https://github.com/fex-team/kity
  * GitHub: https://github.com/fex-team/kity.git 
  * Copyright (c) 2014 Baidu FEX; Licensed BSD
@@ -6736,7 +6736,7 @@ _p[57] = {
                 return this.radius;
             },
             setRadius: function(radius) {
-                this.radius = radius;
+                this.radius = RectUtils.formatRadius(this.width, this.height, radius || 0);
                 return this.update();
             },
             getPosition: function() {
