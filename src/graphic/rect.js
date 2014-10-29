@@ -175,7 +175,7 @@ define(function(require, exports, module) {
         },
 
         setRadius: function(radius) {
-            this.radius = radius;
+            this.radius = RectUtils.formatRadius(this.width, this.height, radius || 0);
             return this.update();
         },
 
