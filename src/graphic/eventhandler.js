@@ -56,11 +56,7 @@ define(function(require, exports, module) {
             eventId = this._EVNET_UID,
             isRemoveAll = handler === undefined;
 
-        try {
-            userHandlerList = USER_HANDLER_CACHE[eventId][type];
-        } catch (e) {
-            return;
-        }
+        userHandlerList = USER_HANDLER_CACHE[eventId][type];
 
         //移除指定的监听器
         if (!isRemoveAll) {
@@ -156,7 +152,7 @@ define(function(require, exports, module) {
 
             // 绑定对应类型的事件
             // dom对象利用dom event进行处理， 非dom对象， 由消息分发机制处理
-            if (!!node) {
+            if (!!node && ('on' + type) in node) {
                 bindDomEvent(node, type, INNER_HANDLER_CACHE[eid][type]);
 
             }
@@ -218,18 +214,13 @@ define(function(require, exports, module) {
         var event = null,
             handler = null;
 
-        try {
+        var handlers = INNER_HANDLER_CACHE[messageObj._EVNET_UID];
+        if (!handlers) return;
 
-            handler = INNER_HANDLER_CACHE[messageObj._EVNET_UID][type];
+        handler = handlers[type];
 
-            if (!handler) {
-                return;
-            }
-
-        } catch (exception) {
-
+        if (!handler) {
             return;
-
         }
 
         event = Utils.extend({
@@ -295,15 +286,7 @@ define(function(require, exports, module) {
 
         trigger: function(type, params) {
 
-            if (this.node) {
-
-                triggerDomEvent(this.node, type, params);
-
-            } else {
-
-                sendMessage(this, type, params);
-
-            }
+            sendMessage(this, type, params);
 
             return this;
 
