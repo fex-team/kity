@@ -1,19 +1,15 @@
 define(function(require, exports, module) {
 
-    var className = 'LinearGradientBrush';
     var svg = require('./svg');
     var GradientBrush = require('./gradientbrush');
 
-    return require('../core/class').createClass(className, {
+    return require('../core/class').createClass('LinearGradientBrush', {
         base: GradientBrush,
 
-        constructor: function(builder) {
-            this.callBase('linearGradient');
+        constructor: function(paper) {
+            this.callBase('linearGradient', paper);
             this.setStartPosition(0, 0);
             this.setEndPosition(1, 0);
-            if (typeof(builder) == 'function') {
-                builder.call(this, this);
-            }
         },
 
         setStartPosition: function(px, py) {

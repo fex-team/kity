@@ -19,6 +19,8 @@ define(function(require, exports, module) {
          * @constructor
          * @for kity.Circle
          *
+         * @grammar new kity.Circle(radius, cx, cy)
+         *
          * @param  {Number} radius 半径
          * @param  {Number} cx     圆心 x 坐标
          * @param  {Number} cy     圆心 y 坐标
@@ -30,12 +32,23 @@ define(function(require, exports, module) {
         /**
          * @method
          * @for kity.Circle
-         * @description 获取原型的半径
+         * @description 获取圆形的半径
+         *
+         * @grammar getRadius() => {Number}
          */
         getRadius: function() {
             return this.getRadiusX();
         },
 
+        /**
+         * @method
+         * @for kity.Circle
+         * @description 设置圆形的半径
+         *
+         * @grammar setRadius() => {this}
+         *
+         * @param {Number} radius 半径大小
+         */
         setRadius: function(radius) {
             return this.callBase(radius, radius);
         }

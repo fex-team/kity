@@ -11,15 +11,6 @@ define(function(require, exports, module) {
      * @mixins kity.PointContainer
      * @base kity.Path
      * @description 绘制和使用贝塞尔曲线。贝塞尔曲线作为一个贝塞尔点的容器，任何贝塞尔点的改变都会更改贝塞尔曲线的外观
-     *
-     * @example
-     *
-     * ```js
-     * var bezier = new kity.Bezier([
-     *     new kity.BezierPoint(0, 0).setForward(100, 0),
-     *     new kity.BezierPoint(100, 100).setBackward(100, 0)
-     * ]);
-     * ```
      */
     return require('../core/class').createClass('Bezier', {
 
@@ -34,6 +25,15 @@ define(function(require, exports, module) {
          * @grammar new kity.Bezier(bezierPoints)
          *
          * @param  {kity.BezierPoints[]} bezierPoints 贝塞尔点集合，每个元素应该是 {kity.BezierPoint} 类型
+         *
+         * @example
+         *
+         * ```js
+         * var bezier = new kity.Bezier([
+         *     new kity.BezierPoint(0, 0).setForward(100, 0),
+         *     new kity.BezierPoint(100, 100).setBackward(100, 0)
+         * ]);
+         * ```
          */
         constructor: function(bezierPoints) {
 

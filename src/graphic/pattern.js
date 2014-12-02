@@ -1,13 +1,15 @@
 define(function(require, exports, module) {
-    var DefBrush = require('./defbrush');
+
+    var Resource = require('./resource');
     var ShapeContainer = require('./shapecontainer');
     var svg = require('./svg');
 
     return require('../core/class').createClass('PatternBrush', {
-        base: DefBrush,
+        base: Resource,
         mixins: [ShapeContainer],
-        constructor: function() {
-            this.callBase('pattern');
+
+        constructor: function(paper) {
+            this.callBase('pattern', paper);
             this.node.setAttribute('patternUnits', 'userSpaceOnUse');
         },
         setX: function(x) {
