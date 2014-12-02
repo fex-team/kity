@@ -36,7 +36,7 @@ define(function(require, exports, module) {
         Palette: require('./graphic/palette'),
         Paper: require('./graphic/paper'),
         Path: require('./graphic/path'),
-        PatternBrush: require('./graphic/patternbrush'),
+        PatternBrush: require('./graphic/pattern'),
         Pen: require('./graphic/pen'),
         Point: require('./graphic/point'),
         PointContainer: require('./graphic/pointcontainer'),
