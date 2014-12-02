@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kity - v2.0.0 - 2014-09-24
+ * kity - v2.0.0 - 2014-11-18
  * https://github.com/fex-team/kity
  * GitHub: https://github.com/fex-team/kity.git 
  * Copyright (c) 2014 Baidu FEX; Licensed BSD
@@ -4189,11 +4189,7 @@ _p[34] = {
         // 移除事件统一入口
         function _removeEvent(type, handler) {
             var userHandlerList = null, eventId = this._EVNET_UID, isRemoveAll = handler === undefined;
-            try {
-                userHandlerList = USER_HANDLER_CACHE[eventId][type];
-            } catch (e) {
-                return;
-            }
+            userHandlerList = USER_HANDLER_CACHE[eventId][type];
             //移除指定的监听器
             if (!isRemoveAll) {
                 isRemoveAll = true;
@@ -4247,7 +4243,7 @@ _p[34] = {
                 USER_HANDLER_CACHE[eid][type] = [ handler ];
                 // 绑定对应类型的事件
                 // dom对象利用dom event进行处理， 非dom对象， 由消息分发机制处理
-                if (!!node) {
+                if (!!node && "on" + type in node) {
                     bindDomEvent(node, type, INNER_HANDLER_CACHE[eid][type]);
                 }
             } else {
@@ -4282,12 +4278,10 @@ _p[34] = {
         // 发送消息
         function sendMessage(messageObj, type, msg) {
             var event = null, handler = null;
-            try {
-                handler = INNER_HANDLER_CACHE[messageObj._EVNET_UID][type];
-                if (!handler) {
-                    return;
-                }
-            } catch (exception) {
+            var handlers = INNER_HANDLER_CACHE[messageObj._EVNET_UID];
+            if (!handlers) return;
+            handler = handlers[type];
+            if (!handler) {
                 return;
             }
             event = Utils.extend({
@@ -4323,11 +4317,7 @@ _p[34] = {
                 return this.trigger.apply(this, arguments);
             },
             trigger: function(type, params) {
-                if (this.node) {
-                    triggerDomEvent(this.node, type, params);
-                } else {
-                    sendMessage(this, type, params);
-                }
+                sendMessage(this, type, params);
                 return this;
             }
         });
@@ -5950,6 +5940,7 @@ _p[46] = {
                 var node = svg.createNode("svg");
                 node.setAttribute("xmlns", "http://www.w3.org/2000/svg");
                 node.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
+                node.setAttribute("version", "1.1");
                 return node;
             },
             getNode: function() {
@@ -6736,7 +6727,7 @@ _p[57] = {
                 return this.radius;
             },
             setRadius: function(radius) {
-                this.radius = radius;
+                this.radius = RectUtils.formatRadius(this.width, this.height, radius || 0);
                 return this.update();
             },
             getPosition: function() {

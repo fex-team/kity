@@ -1,11 +1,11 @@
 define(function(require, exports, module) {
 
-    var Utils = require('core/utils'),
-        Point = require('graphic/point');
+    var Utils = require('../core/utils'),
+        Point = require('./point');
 
-    return require('core/class').createClass('Ellipse', {
+    return require('../core/class').createClass('Ellipse', {
 
-        base: require('graphic/path'),
+        base: require('./path'),
 
         constructor: function(rx, ry, cx, cy) {
             this.callBase();

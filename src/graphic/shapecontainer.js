@@ -1,8 +1,8 @@
 define(function(require, exports, module) {
-    var Container = require('graphic/container');
-    var utils = require('core/utils');
+    var Container = require('./container');
+    var utils = require('../core/utils');
 
-    var ShapeContainer = require('core/class').createClass('ShapeContainer', {
+    var ShapeContainer = require('../core/class').createClass('ShapeContainer', {
         base: Container,
 
         isShapeContainer: true,
@@ -132,9 +132,9 @@ define(function(require, exports, module) {
         }
     });
 
-    var Shape = require('graphic/shape');
+    var Shape = require('./shape');
 
-    require('core/class').extendClass(Shape, {
+    require('../core/class').extendClass(Shape, {
         bringTo: function(index) {
             this.container.arrangeShape(this, index);
             return this;

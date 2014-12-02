@@ -4,12 +4,12 @@
 
 define(function(require, exports, module) {
 
-    var svg = require('graphic/svg');
-    var Class = require('core/class');
+    var svg = require('../graphic/svg');
+    var Class = require('../core/class');
 
     var Filter = Class.createClass('Filter', {
 
-        mixins: [require('filter/effectcontainer')],
+        mixins: [require('./effectcontainer')],
 
         constructor: function(x, y, width, height) {
 
@@ -65,7 +65,7 @@ define(function(require, exports, module) {
 
     });
 
-    var Shape = require('graphic/shape');
+    var Shape = require('../graphic/shape');
 
     Class.extendClass(Shape, {
         applyFilter: function(filter) {

@@ -1,8 +1,8 @@
 define(function(require, exports, module) {
 
-    return require('core/class').createClass('Line', {
+    return require('../core/class').createClass('Line', {
 
-        base: require('graphic/path'),
+        base: require('./path'),
 
         constructor: function(x1, y1, x2, y2) {
             this.callBase();

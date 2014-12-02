@@ -11,9 +11,9 @@ define(function(require, exports, module) {
      * @base kity.Ellipse
      * @description 表示一个圆形
      */
-    return require('core/class').createClass('Circle', {
+    return require('../core/class').createClass('Circle', {
 
-        base: require('graphic/ellipse'),
+        base: require('./ellipse'),
 
         /**
          * @constructor

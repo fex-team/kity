@@ -5,7 +5,7 @@
  */
 
 define(function(require) {
-    var Animator = require('animate/animator');
+    var Animator = require('./animator');
 
     /**
      * @class kity.OpacityAnimator
@@ -13,7 +13,7 @@ define(function(require) {
      * @base kity.Animator
      * @description 透明度动画器，让图形动画过度到指定的透明度
      */
-    var OpacityAnimator = require('core/class').createClass('OpacityAnimator', {
+    var OpacityAnimator = require('../core/class').createClass('OpacityAnimator', {
         base: Animator,
 
         /**
@@ -36,9 +36,9 @@ define(function(require) {
         }
     });
 
-    var Shape = require('graphic/shape');
+    var Shape = require('../graphic/shape');
 
-    require('core/class').extendClass(Shape, {
+    require('../core/class').extendClass(Shape, {
         /**
          * @method fxOpacity()
          * @catalog animate

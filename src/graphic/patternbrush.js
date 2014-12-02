@@ -1,9 +1,9 @@
 define(function(require, exports, module) {
-    var DefBrush = require('graphic/defbrush');
-    var ShapeContainer = require('graphic/shapecontainer');
-    var svg = require('graphic/svg');
+    var DefBrush = require('./defbrush');
+    var ShapeContainer = require('./shapecontainer');
+    var svg = require('./svg');
 
-    return require('core/class').createClass('PatternBrush', {
+    return require('../core/class').createClass('PatternBrush', {
         base: DefBrush,
         mixins: [ShapeContainer],
         constructor: function() {

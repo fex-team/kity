@@ -1,9 +1,9 @@
 define(function(require, exports, module) {
 
     var RectUtils = {},
-        Utils = require('core/utils'),
-        Point = require('graphic/point'),
-        Box = require('graphic/box');
+        Utils = require('../core/utils'),
+        Point = require('./point'),
+        Box = require('./box');
 
     Utils.extend(RectUtils, {
 
@@ -24,9 +24,9 @@ define(function(require, exports, module) {
      * @description 表示一个矩形
      * @base kity.Path
      */
-    var Rect = require('core/class').createClass('Rect', {
+    var Rect = require('../core/class').createClass('Rect', {
 
-        base: require('graphic/path'),
+        base: require('./path'),
 
         /**
          * @constructor
@@ -175,7 +175,7 @@ define(function(require, exports, module) {
         },
 
         setRadius: function(radius) {
-            this.radius = radius;
+            this.radius = RectUtils.formatRadius(this.width, this.height, radius || 0);
             return this.update();
         },
 

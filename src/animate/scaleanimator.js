@@ -5,14 +5,14 @@
  */
 
 define(function(require) {
-    var Animator = require('animate/animator');
+    var Animator = require('./animator');
 
     /**
      * @class kity.ScaleAnimator
      * @base kity.Animator
      * @description 提供支持目标缩放的动画器
      */
-    var ScaleAnimator = require('core/class').createClass('ScaleAnimator', {
+    var ScaleAnimator = require('../core/class').createClass('ScaleAnimator', {
         base: Animator,
 
         /**
@@ -37,9 +37,9 @@ define(function(require) {
         }
     });
 
-    var Shape = require('graphic/shape');
+    var Shape = require('../graphic/shape');
 
-    require('core/class').extendClass(Shape, {
+    require('../core/class').extendClass(Shape, {
 
         /**
          * @method fxScale

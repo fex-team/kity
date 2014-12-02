@@ -1,8 +1,8 @@
 define(function(require, exports, module) {
-    var utils = require('core/utils');
-    var Box = require('graphic/box');
+    var utils = require('../core/utils');
+    var Box = require('./box');
     var mPattern = /matrix\s*\((.+)\)/i;
-    var Point = require('graphic/point');
+    var Point = require('./point');
 
     // 注意，合并的结果是先执行m2，再执行m1的结果
     function mergeMatrixData(m2, m1) {
@@ -20,7 +20,7 @@ define(function(require, exports, module) {
         return deg * Math.PI / 180;
     }
 
-    var Matrix = require('core/class').createClass('Matrix', {
+    var Matrix = require('../core/class').createClass('Matrix', {
         constructor: function() {
             if (arguments.length) {
                 this.setMatrix.apply(this, arguments);

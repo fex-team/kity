@@ -5,13 +5,13 @@
 define(function(require, exports, module) {
 
     //标准color
-    var StandardColor = require('graphic/standardcolor'),
+    var StandardColor = require('./standardcolor'),
 
-        Color = require('graphic/color'),
+        Color = require('./color'),
 
-        Utils = require('core/utils');
+        Utils = require('../core/utils');
 
-    var Palette = require('core/class').createClass('Palette', {
+    var Palette = require('../core/class').createClass('Palette', {
 
         constructor: function() {
             this.color = {};

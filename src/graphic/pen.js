@@ -1,8 +1,8 @@
 define(function(require, exports, module) {
 
-    var Color = require('graphic/color');
+    var Color = require('./color');
 
-    return require('core/class').createClass('Pen', {
+    return require('../core/class').createClass('Pen', {
 
         constructor: function(brush, width) {
 

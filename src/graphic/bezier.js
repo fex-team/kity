@@ -21,11 +21,11 @@ define(function(require, exports, module) {
      * ]);
      * ```
      */
-    return require('core/class').createClass('Bezier', {
+    return require('../core/class').createClass('Bezier', {
 
-        mixins: [require('graphic/pointcontainer')],
+        mixins: [require('./pointcontainer')],
 
-        base: require('graphic/path'),
+        base: require('./path'),
 
         /**
          * @constructor

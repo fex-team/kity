@@ -4,10 +4,10 @@
 
 define(function(require, exports, module) {
 
-    var Effect = require('filter/effect/effect'),
-        Utils = require('core/utils');
+    var Effect = require('./effect'),
+        Utils = require('../../core/utils');
 
-    return require('core/class').createClass('OffsetEffect', {
+    return require('../../core/class').createClass('OffsetEffect', {
 
         base: Effect,
 

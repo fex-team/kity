@@ -1,8 +1,8 @@
 define(function(require, exports, module) {
 
-    return require('core/class').createClass('Image', {
+    return require('../core/class').createClass('Image', {
 
-        base: require('graphic/shape'),
+        base: require('./shape'),
 
         constructor: function(url, width, height, x, y) {
 

@@ -5,14 +5,14 @@
  */
 
 define(function(require) {
-    var Animator = require('animate/animator');
+    var Animator = require('./animator');
 
     /**
      * @class kity.RotateAnimator
      * @base Animator
      * @description 提供支持目标旋转的动画器
      */
-    var RotateAnimator = require('core/class').createClass('RotateAnimator', {
+    var RotateAnimator = require('../core/class').createClass('RotateAnimator', {
         base: Animator,
 
         /**
@@ -35,9 +35,9 @@ define(function(require) {
         }
     });
 
-    var Shape = require('graphic/shape');
+    var Shape = require('../graphic/shape');
 
-    require('core/class').extendClass(Shape, {
+    require('../core/class').extendClass(Shape, {
         /**
          * @method fxRotate()
          * @for kity.Shape

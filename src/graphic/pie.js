@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
-    return require('core/class').createClass({
-        base: require('graphic/sweep'),
+    return require('../core/class').createClass({
+        base: require('./sweep'),
         constructor: function(radius, angle, angleOffset) {
             this.callBase([0, radius], angle, angleOffset);
         },

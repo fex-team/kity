@@ -4,10 +4,10 @@
 
 define(function(require, exports, module) {
 
-    var Effect = require('filter/effect/effect'),
-        Utils = require('core/utils');
+    var Effect = require('./effect'),
+        Utils = require('../../core/utils');
 
-    var ColorMatrixEffect = require('core/class').createClass('ColorMatrixEffect', {
+    var ColorMatrixEffect = require('../../core/class').createClass('ColorMatrixEffect', {
 
         base: Effect,
 

@@ -1,7 +1,7 @@
 define(function(require, exports, module) {
 
     // polyfill for ie
-    var ClassList = require('core/class').createClass('ClassList', {
+    var ClassList = require('../core/class').createClass('ClassList', {
         constructor: function(node) {
             this._node = node;
             this._list = node.className.toString().split(' ');
@@ -31,7 +31,7 @@ define(function(require, exports, module) {
         }
         return node.classList;
     }
-    return require('core/class').createClass('Styled', {
+    return require('../core/class').createClass('Styled', {
         addClass: function(name) {
             getClassList(this.node).add(name);
             return this;
