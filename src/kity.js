@@ -25,6 +25,7 @@ define(function(require, exports, module) {
         Curve: require('./graphic/curve'),
         Ellipse: require('./graphic/ellipse'),
         Group: require('./graphic/group'),
+        Gradient: require('./graphic/gradient'),
         HyperLink: require('./graphic/hyperlink'),
         Image: require('./graphic/image'),
         Line: require('./graphic/line'),

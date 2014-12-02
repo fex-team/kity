@@ -1,9 +1,9 @@
 define(function(require, exports, module) {
 
-    var Resource = require('./resource');
+    var Gradient = require('./gradient');
 
     return require('../core/class').createClass('RadialGradientBrush', {
-        base: Resource,
+        base: Gradient,
 
         constructor: function(paper) {
             this.callBase('radialGradient', paper);

@@ -1,10 +1,10 @@
 define(function(require, exports, module) {
 
     var svg = require('./svg');
-    var Resource = require('./resource');
+    var Gradient = require('./gradinet');
 
     return require('../core/class').createClass('LinearGradientBrush', {
-        base: Resource,
+        base: Gradient,
 
         constructor: function(paper) {
             this.callBase('linearGradient', paper);
