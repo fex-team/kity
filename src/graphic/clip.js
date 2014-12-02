@@ -5,9 +5,8 @@
  */
 
 define(function(require, exports, module) {
-    var Class = require('core/class');
-    var Resource = require('graphic/resource');
-    var Shape = require('graphic/shape');
+    var Class = require('../core/class');
+    var Shape = require('./shape');
 
     /**
      * @class kity.Clip
@@ -18,9 +17,8 @@ define(function(require, exports, module) {
      */
     var Clip = Class.createClass('Clip', {
 
-        base: Resource,
-
-        mixins: [require('graphic/shapecontainer')],
+        base: Shape,
+        mixins: [require('./shapecontainer')],
 
         /**
          * @constructor

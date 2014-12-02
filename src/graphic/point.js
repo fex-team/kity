@@ -8,7 +8,7 @@ define(function(require, exports, module) {
      * @class kity.Point
      * @description 表示一个点
      */
-    var Point = require('core/class').createClass('Point', {
+    var Point = require('../core/class').createClass('Point', {
 
         /**
          * @constructor

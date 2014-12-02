@@ -1,13 +1,11 @@
 define(function(require, exports, module) {
 
-    var Resource = require('graphic/resource');
-    var ShapeContainer = require('graphic/shapecontainer');
-    var svg = require('graphic/svg');
+    var Resource = require('./resource');
+    var ShapeContainer = require('./shapecontainer');
+    var svg = require('./svg');
 
-    return require('core/class').createClass('Pattern', {
-
+    return require('../core/class').createClass('PatternBrush', {
         base: Resource,
-
         mixins: [ShapeContainer],
 
         constructor: function(paper) {

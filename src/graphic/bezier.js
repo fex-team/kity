@@ -12,11 +12,11 @@ define(function(require, exports, module) {
      * @base kity.Path
      * @description 绘制和使用贝塞尔曲线。贝塞尔曲线作为一个贝塞尔点的容器，任何贝塞尔点的改变都会更改贝塞尔曲线的外观
      */
-    return require('core/class').createClass('Bezier', {
+    return require('../core/class').createClass('Bezier', {
 
-        mixins: [require('graphic/pointcontainer')],
+        mixins: [require('./pointcontainer')],
 
-        base: require('graphic/path'),
+        base: require('./path'),
 
         /**
          * @constructor

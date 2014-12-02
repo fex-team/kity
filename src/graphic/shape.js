@@ -1,15 +1,15 @@
 define(function(require, exports, module) {
-    var svg = require('graphic/svg');
-    var utils = require('core/utils');
-    var EventHandler = require('graphic/eventhandler');
-    var Styled = require('graphic/styled');
-    var Data = require('graphic/data');
-    var Matrix = require('graphic/matrix');
-    var Pen = require('graphic/pen');
+    var svg = require('./svg');
+    var utils = require('../core/utils');
+    var EventHandler = require('./eventhandler');
+    var Styled = require('./styled');
+    var Data = require('./data');
+    var Matrix = require('./matrix');
+    var Pen = require('./pen');
     var slice = Array.prototype.slice;
-    var Box = require('graphic/box');
+    var Box = require('./box');
 
-    var Shape = require('core/class').createClass('Shape', {
+    var Shape = require('../core/class').createClass('Shape', {
         mixins: [EventHandler, Styled, Data],
         constructor: function Shape(tagName) {
             this.node = svg.createNode(tagName);

@@ -1,10 +1,10 @@
 define(function(require, exports, module) {
 
-    var svg = require('graphic/svg');
-    var Resource = require('graphic/resource');
-    var Color = require('graphic/color');
+    var svg = require('./svg');
+    var Resource = require('./resource');
+    var Color = require('./color');
 
-    return require('core/class').createClass('Gradient', {
+    return require('../core/class').createClass('GradientBrush', {
         base: Resource,
 
         constructor: function(gradientNodeType, paper) {

@@ -10,7 +10,7 @@ define(function(require, exports, module) {
      * @class kity.Box
      * @description 表示一个矩形区域
      */
-    var Box = require('core/class').createClass('Box', {
+    var Box = require('../core/class').createClass('Box', {
 
         /**
          * @constructor

@@ -1,9 +1,9 @@
 define(function(require, exports, module) {
 
-    var svg = require('graphic/svg');
-    var GradientBrush = require('graphic/gradient');
+    var svg = require('./svg');
+    var GradientBrush = require('./gradientbrush');
 
-    return require('core/class').createClass('LinearGradient', {
+    return require('../core/class').createClass('LinearGradientBrush', {
         base: GradientBrush,
 
         constructor: function(paper) {

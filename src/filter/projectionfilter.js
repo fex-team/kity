@@ -4,17 +4,17 @@
 
 define(function(require, exports, module) {
 
-    var GaussianblurEffect = require('filter/effect/gaussianblureffect'),
-        Effect = require('filter/effect/effect'),
-        ColorMatrixEffect = require('filter/effect/colormatrixeffect'),
-        Color = require('graphic/color'),
-        Utils = require('core/utils'),
-        CompositeEffect = require('filter/effect/compositeeffect'),
-        OffsetEffect = require('filter/effect/offseteffect');
+    var GaussianblurEffect = require('./effect/gaussianblureffect'),
+        Effect = require('./effect/effect'),
+        ColorMatrixEffect = require('./effect/colormatrixeffect'),
+        Color = require('../graphic/color'),
+        Utils = require('../core/utils'),
+        CompositeEffect = require('./effect/compositeeffect'),
+        OffsetEffect = require('./effect/offseteffect');
 
-    return require('core/class').createClass('ProjectionFilter', {
+    return require('../core/class').createClass('ProjectionFilter', {
 
-        base: require('filter/filter'),
+        base: require('./filter'),
 
         constructor: function(stdDeviation, dx, dy) {
 

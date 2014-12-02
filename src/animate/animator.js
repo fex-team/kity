@@ -20,8 +20,8 @@ define(function(require) {
         return value;
     }
 
-    var Timeline = require('animate/timeline');
-    var easingTable = require('animate/easing');
+    var Timeline = require('./timeline');
+    var easingTable = require('./easing');
 
 
     /**
@@ -29,7 +29,7 @@ define(function(require) {
      * @catalog animate
      * @description 表示一个动画启动器，可以作用于不同的对象进行动画
      */
-    var Animator = require('core/class').createClass('Animator', {
+    var Animator = require('../core/class').createClass('Animator', {
 
         /**
          * @constructor
@@ -196,8 +196,8 @@ define(function(require) {
     Animator.DEFAULT_DURATION = 300;
     Animator.DEFAULT_EASING = 'linear';
 
-    var Shape = require('graphic/shape');
-    require('core/class').extendClass(Shape, {
+    var Shape = require('../graphic/shape');
+    require('../core/class').extendClass(Shape, {
         /**
          * @method animate()
          * @for kity.Shape

@@ -1,8 +1,8 @@
 define(function(require, exports, module) {
 
-    return require('core/class').createClass('Polygon', {
+    return require('../core/class').createClass('Polygon', {
 
-        base: require('graphic/poly'),
+        base: require('./poly'),
 
         constructor: function(points) {
 

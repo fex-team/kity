@@ -4,9 +4,9 @@
 
 define(function(require) {
 
-    return require('core/class').createClass('EffectContainer', {
+    return require('../core/class').createClass('EffectContainer', {
 
-        base: require('graphic/container'),
+        base: require('../graphic/container'),
 
         addEffect: function(point, pos) {
 

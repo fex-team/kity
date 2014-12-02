@@ -4,11 +4,11 @@
 
 define(function(require, exports, module) {
 
-    var GaussianblurEffect = require('filter/effect/gaussianblureffect');
+    var GaussianblurEffect = require('./effect/gaussianblureffect');
 
-    return require('core/class').createClass('GaussianblurFilter', {
+    return require('../core/class').createClass('GaussianblurFilter', {
 
-        base: require('filter/filter'),
+        base: require('./filter'),
 
         constructor: function(stdDeviation) {
 

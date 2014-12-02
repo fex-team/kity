@@ -1,13 +1,13 @@
 define(function(require, exports, module) {
-    var Class = require('core/class');
-    var utils = require('core/utils');
-    var svg = require('graphic/svg');
-    var Container = require('graphic/container');
-    var ShapeContainer = require('graphic/shapecontainer');
-    var ViewBox = require('graphic/viewbox');
-    var EventHandler = require('graphic/eventhandler');
-    var Styled = require('graphic/styled');
-    var Matrix = require('graphic/matrix');
+    var Class = require('../core/class');
+    var utils = require('../core/utils');
+    var svg = require('./svg');
+    var Container = require('./container');
+    var ShapeContainer = require('./shapecontainer');
+    var ViewBox = require('./viewbox');
+    var EventHandler = require('./eventhandler');
+    var Styled = require('./styled');
+    var Matrix = require('./matrix');
 
     var Paper = Class.createClass('Paper', {
 
@@ -43,6 +43,7 @@ define(function(require, exports, module) {
             var node = svg.createNode('svg');
             node.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
             node.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
+            node.setAttribute('version', '1.1');
             return node;
         },
 
@@ -162,7 +163,7 @@ define(function(require, exports, module) {
         }
     });
 
-    var Shape = require('graphic/shape');
+    var Shape = require('./shape');
     Class.extendClass(Shape, {
         getPaper: function() {
             var parent = this.container;

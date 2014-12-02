@@ -5,8 +5,8 @@
  */
 
 define(function(require) {
-    var Animator = require('animate/animator');
-    var g = require('graphic/geometry');
+    var Animator = require('./animator');
+    var g = require('../graphic/geometry');
 
     /**
      * @catalog animate
@@ -23,7 +23,7 @@ define(function(require) {
      * pa.start(path, 300);
      * ```
      */
-    var PathAnimator = require('core/class').createClass('OpacityAnimator', {
+    var PathAnimator = require('../core/class').createClass('OpacityAnimator', {
         base: Animator,
 
         /**
@@ -49,9 +49,9 @@ define(function(require) {
         }
     });
 
-    var Path = require('graphic/path');
+    var Path = require('../graphic/path');
 
-    require('core/class').extendClass(Path, {
+    require('../core/class').extendClass(Path, {
         /**
          * @catalog animate
          *

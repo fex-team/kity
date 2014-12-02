@@ -5,9 +5,9 @@
 
 define(function(require, exports, module) {
 
-    var svg = require('graphic/svg'),
+    var svg = require('../../graphic/svg'),
 
-        Effect = require('core/class').createClass('Effect', {
+        Effect = require('../../core/class').createClass('Effect', {
 
             constructor: function(type) {
 
@@ -56,7 +56,7 @@ define(function(require, exports, module) {
 
         });
 
-    require('core/utils').extend(Effect, {
+    require('../../core/utils').extend(Effect, {
 
         // 特效名称常量
         NAME_GAUSSIAN_BLUR: 'feGaussianBlur',

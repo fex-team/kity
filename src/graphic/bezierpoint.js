@@ -6,8 +6,8 @@
 
 define(function(require, exports, module) {
 
-    var ShapePoint = require('graphic/shapepoint');
-    var Vector = require('graphic/vector');
+    var ShapePoint = require('./shapepoint');
+    var Vector = require('./vector');
 
     /**
      * @class kity.BezierPoint
@@ -15,7 +15,7 @@ define(function(require, exports, module) {
      * @description 表示一个贝塞尔点
      *              一个贝塞尔点由顶点坐标（曲线经过的点）、前方控制点、后方控制点表示
      */
-    var BezierPoint = require('core/class').createClass('BezierPoint', {
+    var BezierPoint = require('../core/class').createClass('BezierPoint', {
 
         /**
          * @constructor

@@ -3,7 +3,7 @@
  * */
 define(function(require, exports, module) {
 
-    var Utils = require('core/utils'),
+    var Utils = require('../core/utils'),
         CurveUtil = {
 
             /*
@@ -160,11 +160,11 @@ define(function(require, exports, module) {
 
         };
 
-    return require('core/class').createClass('Curve', {
+    return require('../core/class').createClass('Curve', {
 
-        base: require('graphic/path'),
+        base: require('./path'),
 
-        mixins: [require('graphic/pointcontainer')],
+        mixins: [require('./pointcontainer')],
 
         constructor: function(points, isColse) {
 

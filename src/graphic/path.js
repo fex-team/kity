@@ -1,9 +1,9 @@
 define(function(require, exports, module) {
-    var Utils = require('core/utils');
-    var createClass = require('core/class').createClass;
-    var Shape = require('graphic/shape');
-    var svg = require('graphic/svg');
-    var g = require('graphic/geometry');
+    var Utils = require('../core/utils');
+    var createClass = require('../core/class').createClass;
+    var Shape = require('./shape');
+    var svg = require('./svg');
+    var g = require('./geometry');
 
     var slice = Array.prototype.slice,
         flatten = Utils.flatten;

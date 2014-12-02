@@ -1,9 +1,9 @@
 define(function(require, exports, module) {
-    var Point = require('graphic/point');
+    var Point = require('./point');
 
-    var Marker = require('core/class').createClass('Marker', {
-        base: require('graphic/resource'),
-        mixins: [require('graphic/shapecontainer'), require('graphic/viewbox')],
+    var Marker = require('../core/class').createClass('Marker', {
+        base: require('./resource'),
+        mixins: [require('./shapecontainer'), require('./viewbox')],
 
         constructor: function() {
             this.callBase('marker');
@@ -52,9 +52,9 @@ define(function(require, exports, module) {
         }
     });
 
-    var Path = require('graphic/path');
+    var Path = require('./path');
 
-    require('core/class').extendClass(Path, {
+    require('../core/class').extendClass(Path, {
         setMarker: function(marker, pos) {
             pos = pos || 'end';
             if (!marker) {

@@ -1,7 +1,7 @@
 define(function(require, exports, module) {
-    var TextContent = require('graphic/textcontent');
-    var Styled = require('graphic/styled');
-    return require('core/class').createClass('TextSpan', {
+    var TextContent = require('./textcontent');
+    var Styled = require('./styled');
+    return require('../core/class').createClass('TextSpan', {
         base: TextContent,
         mixins: [Styled],
         constructor: function(content) {

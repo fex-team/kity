@@ -5,9 +5,9 @@
  */
 define(function(require, exports, module) {
 
-    var Utils = require('core/utils'),
+    var Utils = require('../core/utils'),
 
-        StandardColor = require('graphic/standardcolor'),
+        StandardColor = require('./standardcolor'),
 
         ColorUtils = {},
 
@@ -15,7 +15,7 @@ define(function(require, exports, module) {
          * @class kity.Color
          * @description 表示一个颜色
          */
-        Color = require('core/class').createClass('Color', {
+        Color = require('../core/class').createClass('Color', {
 
             /**
              * @constructor

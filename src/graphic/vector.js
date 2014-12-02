@@ -1,7 +1,7 @@
 define(function(require, exports, module) {
-    var Point = require('graphic/point');
-    var Matrix = require('graphic/matrix');
-    var Vector = require('core/class').createClass('Vector', {
+    var Point = require('./point');
+    var Matrix = require('./matrix');
+    var Vector = require('../core/class').createClass('Vector', {
         base: Point,
         constructor: function(x, y) {
             this.callBase(x, y);
@@ -61,7 +61,7 @@ define(function(require, exports, module) {
         var p = Point.fromPolar.apply(Point, arguments);
         return new Vector(p.x, p.y);
     };
-    require('core/class').extendClass(Point, {
+    require('../core/class').extendClass(Point, {
         asVector: function() {
             return new Vector(this.x, this.y);
         }

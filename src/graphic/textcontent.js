@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
-    var Shape = require('graphic/shape');
-    return require('core/class').createClass('TextContent', {
+    var Shape = require('./shape');
+    return require('../core/class').createClass('TextContent', {
 
         base: Shape,
 
