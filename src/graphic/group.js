@@ -1,8 +1,8 @@
 define(function(require, exports, module) {
-    var ShapeContainer = require('graphic/shapecontainer');
-    return require('core/class').createClass('Group', {
+    var ShapeContainer = require('./shapecontainer');
+    return require('../core/class').createClass('Group', {
         mixins: [ShapeContainer],
-        base: require('graphic/shape'),
+        base: require('./shape'),
 
         constructor: function Group() {
 

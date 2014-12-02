@@ -5,14 +5,14 @@
  */
 
 define(function(require) {
-    var Animator = require('animate/animator');
+    var Animator = require('./animator');
 
     /**
      * @class kity.TranslateAnimator
      * @base kity.Animator
      * @description 提供让图形移动的动画器
      */
-    var TranslateAnimator = require('core/class').createClass('TranslateAnimator', {
+    var TranslateAnimator = require('../core/class').createClass('TranslateAnimator', {
         base: Animator,
 
         /**
@@ -36,9 +36,9 @@ define(function(require) {
         }
     });
 
-    var Shape = require('graphic/shape');
+    var Shape = require('../graphic/shape');
 
-    require('core/class').extendClass(Shape, {
+    require('../core/class').extendClass(Shape, {
         /**
          * @method fxTranslate()
          * @for kity.Shape

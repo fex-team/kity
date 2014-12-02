@@ -6,11 +6,10 @@
 
 define(function(require) {
 
-    var EventHandler = require('graphic/eventhandler');
+    var EventHandler = require('../graphic/eventhandler');
+    var utils = require('../core/utils');
 
-    var frame = require('animate/frame');
-
-    var utils = require('core/utils');
+    var frame = require('./frame');
 
     function getPercentValue(b, f, p) {
         return utils.paralle(b, f, function(b, f) {
@@ -41,7 +40,7 @@ define(function(require) {
      * @mixins EventHandler
      * @description 动画时间线
      */
-    var Timeline = require('core/class').createClass('Timeline', {
+    var Timeline = require('../core/class').createClass('Timeline', {
 
         mixins: [EventHandler],
 

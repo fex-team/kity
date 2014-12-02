@@ -1,8 +1,8 @@
 define(function(require, exports, module) {
 
-    var GradientBrush = require('graphic/gradientbrush');
+    var GradientBrush = require('./gradientbrush');
 
-    return require('core/class').createClass('RadialGradientBrush', {
+    return require('../core/class').createClass('RadialGradientBrush', {
         base: GradientBrush,
 
         constructor: function(builder) {

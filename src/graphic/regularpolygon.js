@@ -1,9 +1,9 @@
 define(function(require, exports, module) {
 
-    var Point = require('graphic/point');
+    var Point = require('./point');
 
-    return require('core/class').createClass('RegularPolygon', {
-        base: require('graphic/path'),
+    return require('../core/class').createClass('RegularPolygon', {
+        base: require('./path'),
         constructor: function(side, radius, x, y) {
             this.callBase();
             this.radius = radius || 0;

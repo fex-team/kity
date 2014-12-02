@@ -4,13 +4,13 @@
 
 define(function(require, exports, module) {
 
-    var Utils = require('core/utils');
+    var Utils = require('../core/utils');
 
-    return require('core/class').createClass('Poly', {
+    return require('../core/class').createClass('Poly', {
 
-        base: require('graphic/path'),
+        base: require('./path'),
 
-        mixins: [require('graphic/pointcontainer')],
+        mixins: [require('./pointcontainer')],
 
         constructor: function(points, closeable) {
 

@@ -4,11 +4,11 @@
 
 define(function(require, exprots, module) {
 
-    var Matrix = require('graphic/matrix'),
-        Utils = require('core/utils'),
-        Point = require('graphic/point');
+    var Matrix = require('./matrix'),
+        Utils = require('../core/utils'),
+        Point = require('./point');
 
-    return require('core/class').createClass('ShapeEvent', {
+    return require('../core/class').createClass('ShapeEvent', {
 
         constructor: function(event) {
 

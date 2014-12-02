@@ -5,11 +5,11 @@
  */
 
 define(function(require) {
-    var Animator = require('animate/animator');
-    var g = require('graphic/geometry');
+    var Animator = require('./animator');
+    var g = require('../graphic/geometry');
 
-    var Path = require('graphic/path');
-    var Shape = require('graphic/shape');
+    var Path = require('../graphic/path');
+    var Shape = require('../graphic/shape');
 
     /**
      * @class kity.MotionAnimator
@@ -24,7 +24,7 @@ define(function(require) {
      * motionAnimator.start(rect, 3000);
      * ```
      */
-    var MotionAnimator = require('core/class').createClass('MotionAnimator', {
+    var MotionAnimator = require('../core/class').createClass('MotionAnimator', {
         base: Animator,
 
         /**
@@ -72,7 +72,7 @@ define(function(require) {
         }
     });
 
-    require('core/class').extendClass(Shape, {
+    require('../core/class').extendClass(Shape, {
 
         /**
          * @method motion()

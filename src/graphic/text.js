@@ -1,9 +1,9 @@
 define(function(require, exports, module) {
 
-    var TextContent = require('graphic/textcontent');
-    var ShapeContainer = require('graphic/shapecontainer');
-    var svg = require('graphic/svg');
-    var utils = require('core/utils');
+    var TextContent = require('./textcontent');
+    var ShapeContainer = require('./shapecontainer');
+    var svg = require('./svg');
+    var utils = require('../core/utils');
     var offsetHash = {};
 
     function getTextBoundOffset(text) {
@@ -31,7 +31,7 @@ define(function(require, exports, module) {
         });
     }
 
-    return require('core/class').createClass('Text', {
+    return require('../core/class').createClass('Text', {
         base: TextContent,
 
         mixins: [ShapeContainer],

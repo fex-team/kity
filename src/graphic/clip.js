@@ -5,13 +5,13 @@
  */
 
 define(function(require, exports, module) {
-    var Class = require('core/class');
-    var Shape = require('graphic/shape');
+    var Class = require('../core/class');
+    var Shape = require('./shape');
 
     var Clip = Class.createClass('Clip', {
 
         base: Shape,
-        mixins: [require('graphic/shapecontainer')],
+        mixins: [require('./shapecontainer')],
 
         constructor: function() {
 

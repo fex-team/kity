@@ -21,8 +21,8 @@ define(function(require, exports, module) {
         window.CustomEvent = CustomEvent;
     })();
 
-    var Utils = require('core/utils'),
-        ShapeEvent = require('graphic/shapeevent');
+    var Utils = require('../core/utils'),
+        ShapeEvent = require('./shapeevent');
 
     // 内部处理器缓存
     var INNER_HANDLER_CACHE = {},
@@ -234,7 +234,7 @@ define(function(require, exports, module) {
     }
 
     // 对外接口
-    return require('core/class').createClass('EventHandler', {
+    return require('../core/class').createClass('EventHandler', {
 
         constructor: function() {
 

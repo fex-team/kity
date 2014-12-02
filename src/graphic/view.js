@@ -1,12 +1,12 @@
 define(function(require, exports, module) {
 
-    var ShapeContainer = require('graphic/shapecontainer');
-    var ViewBox = require('graphic/viewbox');
+    var ShapeContainer = require('./shapecontainer');
+    var ViewBox = require('./viewbox');
 
-    return require('core/class').createClass('View', {
+    return require('../core/class').createClass('View', {
         mixins: [ShapeContainer, ViewBox],
 
-        base: require('graphic/view'),
+        base: require('./view'),
 
         constructor: function() {
 

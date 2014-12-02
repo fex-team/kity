@@ -1,12 +1,12 @@
 define(function(require, exports, module) {
 
-    var Utils = require('core/utils'),
+    var Utils = require('../core/utils'),
 
-        StandardColor = require('graphic/standardcolor'),
+        StandardColor = require('./standardcolor'),
 
         ColorUtils = {},
 
-        Color = require('core/class').createClass('Color', {
+        Color = require('../core/class').createClass('Color', {
 
             constructor: function() {
 

@@ -1,5 +1,5 @@
 define(function(require, exports, module) {
-    return require('core/class').createClass('ViewBox', {
+    return require('../core/class').createClass('ViewBox', {
 
         getViewBox: function() {
             var attr = this.node.getAttribute('viewBox');

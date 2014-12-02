@@ -1,8 +1,8 @@
 define(function(require) {
-    var utils = require('core/utils');
-    var Point = require('graphic/point');
-    var Vector = require('graphic/vector');
-    var Matrix = require('graphic/matrix');
+    var utils = require('../core/utils');
+    var Point = require('./point');
+    var Vector = require('./vector');
+    var Matrix = require('./matrix');
     var g = {};
 
     var pathCommand = /([achlmrqstvz])[\s,]*((-?\d*\.?\d*(?:e[\-+]?\d+)?[\s]*,?\s*)+)/ig,
@@ -1051,7 +1051,7 @@ define(function(require) {
     });
 
     // entend
-    require('core/class').extendClass(Matrix, {
+    require('../core/class').extendClass(Matrix, {
         transformPath: function(path) {
             return g.transformPath(path, this);
         }

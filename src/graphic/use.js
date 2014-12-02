@@ -4,12 +4,12 @@
 
 define(function(require, exports, module) {
 
-    var Svg = require('graphic/svg');
-    var Class = require('core/class');
+    var Svg = require('./svg');
+    var Class = require('../core/class');
 
     var Use = Class.createClass('Use', {
 
-        base: require('graphic/shape'),
+        base: require('./shape'),
 
         constructor: function(shape) {
 
@@ -44,7 +44,7 @@ define(function(require, exports, module) {
 
     });
 
-    var Shape = require('graphic/shape');
+    var Shape = require('./shape');
     Class.extendClass(Shape, {
         // fast-use
         use: function() {

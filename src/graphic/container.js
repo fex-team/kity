@@ -3,7 +3,7 @@ define(function(require, exports, module) {
         this.container.removeItem(this);
         return this;
     }
-    return require('core/class').createClass('Container', {
+    return require('../core/class').createClass('Container', {
         getItems: function() {
             return this.items || (this.items = []);
         },

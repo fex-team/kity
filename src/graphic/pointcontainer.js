@@ -5,9 +5,9 @@
 define(function(require, exports, module) {
 
 
-    return require('core/class').createClass('PointContainer', {
+    return require('../core/class').createClass('PointContainer', {
 
-        base: require('graphic/container'),
+        base: require('./container'),
 
         constructor: function() {
             this.callBase();

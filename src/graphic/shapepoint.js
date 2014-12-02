@@ -4,9 +4,9 @@
 
 define(function(require, exports, module) {
 
-    return require('core/class').createClass('ShapePoint', {
+    return require('../core/class').createClass('ShapePoint', {
 
-        base: require('graphic/point'),
+        base: require('./point'),
 
         constructor: function(px, py) {
 

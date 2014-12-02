@@ -21,10 +21,10 @@
     "debug": false,
     "funcscope": true,
     "laxcomma": false,
-    "loopfunc": false,
     "onevar": false,
     "unused": false,
     "browser": true,
+    "loopfunc": true,
     "predef" : [
         "define",
         "describe",

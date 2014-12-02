@@ -1,5 +1,5 @@
 define(function(require, exports, module) {
-    return require('core/class').createClass('Data', {
+    return require('../core/class').createClass('Data', {
         constructor: function() {
             this._data = {};
         },
