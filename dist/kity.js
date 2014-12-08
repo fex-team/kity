@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kity - v2.0.0 - 2014-11-18
+ * kity - v2.0.0 - 2014-12-08
  * https://github.com/fex-team/kity
  * GitHub: https://github.com/fex-team/kity.git 
  * Copyright (c) 2014 Baidu FEX; Licensed BSD
@@ -220,7 +220,7 @@ _p[0] = {
         });
         Animator.DEFAULT_DURATION = 300;
         Animator.DEFAULT_EASING = "linear";
-        var Shape = _p.r(61);
+        var Shape = _p.r(60);
         _p.r(11).extendClass(Shape, {
             /**
          * @method animate()
@@ -672,9 +672,9 @@ _p[2] = {
 _p[3] = {
     value: function(require) {
         var Animator = _p.r(0);
-        var g = _p.r(35);
-        var Path = _p.r(47);
-        var Shape = _p.r(61);
+        var g = _p.r(34);
+        var Path = _p.r(46);
+        var Shape = _p.r(60);
         /**
      * @class kity.MotionAnimator
      * @catalog animate
@@ -790,7 +790,7 @@ _p[4] = {
                 });
             }
         });
-        var Shape = _p.r(61);
+        var Shape = _p.r(60);
         _p.r(11).extendClass(Shape, {
             /**
          * @method fxOpacity()
@@ -872,7 +872,7 @@ _p[4] = {
 _p[5] = {
     value: function(require) {
         var Animator = _p.r(0);
-        var g = _p.r(35);
+        var g = _p.r(34);
         /**
      * @catalog animate
      *
@@ -912,7 +912,7 @@ _p[5] = {
                 });
             }
         });
-        var Path = _p.r(47);
+        var Path = _p.r(46);
         _p.r(11).extendClass(Path, {
             /**
          * @catalog animate
@@ -972,7 +972,7 @@ _p[6] = {
                 });
             }
         });
-        var Shape = _p.r(61);
+        var Shape = _p.r(60);
         _p.r(11).extendClass(Shape, {
             /**
          * @method fxRotate()
@@ -1032,7 +1032,7 @@ _p[7] = {
                 });
             }
         });
-        var Shape = _p.r(61);
+        var Shape = _p.r(60);
         _p.r(11).extendClass(Shape, {
             /**
          * @method fxScale
@@ -1064,9 +1064,9 @@ _p[7] = {
  */
 _p[8] = {
     value: function(require) {
-        var EventHandler = _p.r(34);
-        var frame = _p.r(2);
+        var EventHandler = _p.r(33);
         var utils = _p.r(12);
+        var frame = _p.r(2);
         function getPercentValue(b, f, p) {
             return utils.paralle(b, f, function(b, f) {
                 return b + (f - b) * p;
@@ -1397,7 +1397,7 @@ _p[9] = {
                 });
             }
         });
-        var Shape = _p.r(61);
+        var Shape = _p.r(60);
         _p.r(11).extendClass(Shape, {
             /**
          * @method fxTranslate()
@@ -1522,11 +1522,6 @@ _p[10] = {
  */
 _p[11] = {
     value: function(require, exports) {
-        // just to bind context
-        Function.prototype.bind = Function.prototype.bind || function(thisObj) {
-            var args = Array.prototype.slice.call(arguments, 1);
-            return this.apply(thisObj, args);
-        };
         /**
      * @class kity.Class
      * @catalog core
@@ -2360,7 +2355,7 @@ _p[15] = {
  */
 _p[16] = {
     value: function(require, exports, module) {
-        var svg = _p.r(68), Effect = _p.r(11).createClass("Effect", {
+        var svg = _p.r(67), Effect = _p.r(11).createClass("Effect", {
             constructor: function(type) {
                 this.node = svg.createNode(type);
             },
@@ -2499,7 +2494,7 @@ _p[19] = {
  */
 _p[20] = {
     value: function(require, exports, module) {
-        var svg = _p.r(68);
+        var svg = _p.r(67);
         var Class = _p.r(11);
         var Filter = Class.createClass("Filter", {
             mixins: [ _p.r(19) ],
@@ -2536,7 +2531,7 @@ _p[20] = {
                 return this.node;
             }
         });
-        var Shape = _p.r(61);
+        var Shape = _p.r(60);
         Class.extendClass(Shape, {
             applyFilter: function(filter) {
                 var filterId = filter.get("id");
@@ -2651,19 +2646,10 @@ _p[23] = {
      * @mixins kity.PointContainer
      * @base kity.Path
      * @description 绘制和使用贝塞尔曲线。贝塞尔曲线作为一个贝塞尔点的容器，任何贝塞尔点的改变都会更改贝塞尔曲线的外观
-     *
-     * @example
-     *
-     * ```js
-     * var bezier = new kity.Bezier([
-     *     new kity.BezierPoint(0, 0).setForward(100, 0),
-     *     new kity.BezierPoint(100, 100).setBackward(100, 0)
-     * ]);
-     * ```
      */
         return _p.r(11).createClass("Bezier", {
-            mixins: [ _p.r(52) ],
-            base: _p.r(47),
+            mixins: [ _p.r(51) ],
+            base: _p.r(46),
             /**
          * @constructor
          * @for kity.Bezier
@@ -2671,6 +2657,15 @@ _p[23] = {
          * @grammar new kity.Bezier(bezierPoints)
          *
          * @param  {kity.BezierPoints[]} bezierPoints 贝塞尔点集合，每个元素应该是 {kity.BezierPoint} 类型
+         *
+         * @example
+         *
+         * ```js
+         * var bezier = new kity.Bezier([
+         *     new kity.BezierPoint(0, 0).setForward(100, 0),
+         *     new kity.BezierPoint(100, 100).setBackward(100, 0)
+         * ]);
+         * ```
          */
             constructor: function(bezierPoints) {
                 this.callBase();
@@ -2737,8 +2732,8 @@ _p[23] = {
  */
 _p[24] = {
     value: function(require, exports, module) {
-        var ShapePoint = _p.r(64);
-        var Vector = _p.r(74);
+        var ShapePoint = _p.r(63);
+        var Vector = _p.r(73);
         /**
      * @class kity.BezierPoint
      *
@@ -2988,12 +2983,12 @@ _p[25] = {
          * @for kity.Box
          *
          * @grammar new kity.Box(x, y, width, height)
-         * @grammar new kity.Box(value)
+         * @grammar new kity.Box(box)
          *
-         * @param  {Number} x|value.x      矩形区域的 x 坐标
-         * @param  {Number} y|value.y      矩形区域的 y 坐标
-         * @param  {Number} width|value.width   矩形区域的宽度
-         * @param  {Number} height|value.height 矩形区域的高度
+         * @param  {Number} x|box.x      矩形区域的 x 坐标
+         * @param  {Number} y|box.y      矩形区域的 y 坐标
+         * @param  {Number} width|box.width   矩形区域的宽度
+         * @param  {Number} height|box.height 矩形区域的高度
          *
          * @example
          *
@@ -3316,10 +3311,12 @@ _p[26] = {
      * @description 表示一个圆形
      */
         return _p.r(11).createClass("Circle", {
-            base: _p.r(33),
+            base: _p.r(32),
             /**
          * @constructor
          * @for kity.Circle
+         *
+         * @grammar new kity.Circle(radius, cx, cy)
          *
          * @param  {Number} radius 半径
          * @param  {Number} cx     圆心 x 坐标
@@ -3331,11 +3328,22 @@ _p[26] = {
             /**
          * @method
          * @for kity.Circle
-         * @description 获取原型的半径
+         * @description 获取圆形的半径
+         *
+         * @grammar getRadius() => {Number}
          */
             getRadius: function() {
                 return this.getRadiusX();
             },
+            /**
+         * @method
+         * @for kity.Circle
+         * @description 设置圆形的半径
+         *
+         * @grammar setRadius() => {this}
+         *
+         * @param {Number} radius 半径大小
+         */
             setRadius: function(radius) {
                 return this.callBase(radius, radius);
             }
@@ -3347,25 +3355,80 @@ _p[26] = {
 /**
  * @fileOverview
  *
- * 支持图形剪辑
+ * 支持图形裁切
  */
 _p[27] = {
     value: function(require, exports, module) {
         var Class = _p.r(11);
-        var Shape = _p.r(61);
+        var Shape = _p.r(60);
+        /**
+     * @class kity.Clip
+     * @base kity.Resource
+     * @mixins kity.ShapeContainer
+     *
+     * @description 创建图形裁切，用于裁切目标图形
+     */
         var Clip = Class.createClass("Clip", {
             base: Shape,
-            mixins: [ _p.r(62) ],
-            constructor: function() {
-                this.callBase("clipPath");
+            mixins: [ _p.r(61) ],
+            /**
+         * @constructor
+         * @for kity.Clip
+         *
+         * @grammar new kity.Clip(paper)
+         *
+         * @param  {kity.Paper} paper 资源所属的文档
+         *
+         * @example
+         *
+         * ```js
+         * var circle = paper.put(new kity.Circle(100).fill('yellow'));
+         * var clip = new kity.Clip(paper);
+         * clip.addShape(new kity.Circle(100, 50, 0));
+         * clip.clip(circle);
+         * ```
+         */
+            constructor: function(paper) {
+                this.callBase("clipPath", paper);
             },
+            /**
+         * @method clip()
+         * @for kity.Clip
+         * @description 将裁切应用到指定的图形上，应用之后，目标图形将显示与裁切形状重合的部分
+         *
+         * @grammar clip(shape) => {this}
+         *
+         * @param  {kity.Shape} shape 要应用裁切的图形
+         */
             clip: function(shape) {
-                shape.getNode().setAttribute("clip-path", "url(#" + this.getId() + ")");
+                shape.getNode().setAttribute("clip-path", this);
                 return this;
             }
         });
         Class.extendClass(Shape, {
+            /**
+         * @method clipWidth()
+         * @for kity.Shape
+         *
+         * @grammar clipWidth(clip) => {this}
+         *
+         * @param {kity.Clip|kity.Shape} clip 要用于裁切当前图形的图形；
+         *     如果 clip 本身是一个裁切对象（kity.Clip 类型），则直接裁切；
+         *     否则将创建新的裁切包含给定的图形，然后对当前图形进行裁切
+         *
+         * @example
+         *
+         * ```js
+         * var circle = paper.put(new kity.Circle(100));
+         * var rect = paper.put(new kity.Rect(100, 100, -100, 0));
+         *
+         * circle.clipWidth(rect);
+         * ```
+         */
             clipWith: function(clip) {
+                if (clip instanceof Shape) {
+                    clip = new Clip(clip.getPaper()).addShape(clip);
+                }
                 clip.clip(this);
                 return this;
             }
@@ -3375,9 +3438,36 @@ _p[27] = {
 };
 
 //src/graphic/color.js
+/**
+ * @fileOverview
+ *
+ * 提供颜色支持
+ */
 _p[28] = {
     value: function(require, exports, module) {
-        var Utils = _p.r(12), StandardColor = _p.r(65), ColorUtils = {}, Color = _p.r(11).createClass("Color", {
+        var Utils = _p.r(12), StandardColor = _p.r(64), ColorUtils = {}, /**
+         * @class kity.Color
+         * @description 表示一个颜色
+         */
+        Color = _p.r(11).createClass("Color", {
+            /**
+             * @constructor
+             * @for kity.Color
+             *
+             * @grammar new kity.Color(r, g, b)
+             * @grammar new kity.Color(r, g, b, a)
+             * @grammar new kity.Color(colorString)
+             *
+             * @param {Number} r 红色分量，取值 0 - 255
+             * @param {Number} g 绿色分量，取值 0 - 255
+             * @param {Number} b 蓝色分量，取值 0 - 255
+             * @param {Number} a 透明度（可选），取值 0 - 100
+             * @param {String} colorString 一个代表颜色的字符串，可以是：
+             *     熟知颜色表：如 'red', 'yellow'
+             *     HEX 表示：如 '#368', '#123456'
+             *     RGB 表示：如 'RGB(200, 200, 0)', 'RGBA(200, 200, 200, .5)'
+             *     HSL 表示：如 'HSL(100, 60%, 80%)', 'HSLA(100, 60%, 80%, .5)'
+             */
             constructor: function() {
                 var colorValue = null;
                 //parse构造
@@ -3401,7 +3491,7 @@ _p[28] = {
                         g: arguments[1] | 0,
                         b: arguments[2] | 0,
                         //alpha 默认为1
-                        a: parseFloat(arguments[3]) || 1
+                        a: arguments[3] === undefined ? 1 : parseFloat(arguments[3])
                     };
                     colorValue = ColorUtils.overflowFormat(colorValue);
                     //获取hsl分量
@@ -3409,6 +3499,25 @@ _p[28] = {
                 }
                 this._color = colorValue;
             },
+            /**
+             * @method set()
+             * @for kity.Color
+             *
+             * @description 设置当前颜色某个分量的值
+             *
+             * @grammar set(name, value) => {this}
+             *
+             * @param {string} name  要设置的颜色通道的名称
+             *     r: 红色（Red），取值范围 [0, 255]
+             *     g: 绿色（Green），取值范围 [0, 255]
+             *     b: 蓝色（Blue），取值范围 [0, 255]
+             *     a: 透明度（Alpha），取值范围 [0, 1]
+             *     h: 色环角度（Hue），取值范围 [0, 359]
+             *     s: 饱和度（Saturation），取值范围 [0, 100]
+             *     l: 亮度（Lightness），取值范围 [0, 100]
+             *     r、g、b 值和 h、s、l 值会联动修改
+             * @param {number} value 要设置的值
+             */
             set: function(name, value) {
                 var values = null;
                 //设置的值非法
@@ -3429,6 +3538,16 @@ _p[28] = {
                 }
                 return this;
             },
+            /**
+             * @method inc()
+             *
+             * @description 返回新的颜色，表示当前颜色增加指定通道的值之后的颜色
+             *
+             * @grammar inc(name, value) => {this}
+             *
+             * @param  {string} name  要增加的通道的名称，具体含义请查看 set 方法
+             * @param  {number} value 增量值
+             */
             inc: function(name, value) {
                 value = this.get(name) + value;
                 if (name == "h") {
@@ -3439,12 +3558,39 @@ _p[28] = {
                 }
                 return this.clone().set(name, value);
             },
+            /**
+             * @method dec()
+             * @for kity.Color
+             *
+             * @description 返回新的颜色，表示当前颜色减少指定通道的值之后的颜色
+             *
+             * @grammar dec(name, value) => {this}
+             *
+             * @param  {string} name  要减少值的通道的名称，具体含义请查看 set 方法
+             * @param  {number} value 减量值
+             */
             dec: function(name, value) {
                 return this.inc(name, -value);
             },
+            /**
+             * @method clone()
+             * @for kity.Color
+             *
+             * @description 返回当前颜色的一个拷贝
+             *
+             * @grammar clone() => {kity.Color}
+             */
             clone: function() {
                 return new Color(this.toRGBA());
             },
+            /**
+             * @method get()
+             * @for kity.Color
+             *
+             * @description 返回当前颜色指定的分量
+             *
+             * @grammar get() => {number}
+             */
             get: function(name) {
                 if (!Color._MAX_VALUE[name]) {
                     return null;
@@ -3454,25 +3600,88 @@ _p[28] = {
             getValues: function() {
                 return Utils.clone(this._color);
             },
+            /**
+             * @method valueOf()
+             * @for kity.Color
+             *
+             * @description 返回当前颜色的一个字面量表示
+             *
+             * @return {plain} 颜色字面量，其结构为：
+             *     {
+             *         r: 0,
+             *         g: 0,
+             *         b: 0,
+             *         a: 0,
+             *         h: 0,
+             *         s: 0,
+             *         l: 0
+             *     }
+             */
             valueOf: function() {
                 return this.getValues();
             },
+            /**
+             * @method toRGB()
+             * @for kity.Color
+             *
+             * @description 返回当前颜色的 RGB 表示，如果颜色有透明度，将抛弃透明度属性（想要保留请使用 toRGBA()）方法。
+             *
+             * @grammar toRGB() => {string}
+             */
             toRGB: function() {
                 return ColorUtils.toString(this._color, "rgb");
             },
+            /**
+             * @method toRGBA()
+             * @for kity.Color
+             *
+             * @description 返回当前颜色的 RGBA 表示
+             *
+             * @grammar toRGBA() => {string}
+             */
             toRGBA: function() {
                 return ColorUtils.toString(this._color, "rgba");
             },
+            /**
+             * @method toHEX()
+             * @for kity.Color
+             *
+             * @description 返回当前颜色的 HEX 表示，如果颜色有透明度，将抛弃透明度属性（想要保留请使用 toRGBA()）方法。
+             *
+             * @grammar toHEX() => {string}
+             */
             toHEX: function() {
                 return ColorUtils.toString(this._color, "hex");
             },
+            /**
+             * @method toHSL()
+             * @for kity.Color
+             *
+             * @description 返回当前颜色的 HSL 表示，如果颜色有透明度，将抛弃透明度属性（想要保留请使用 toHSLA()）方法。
+             *
+             * @grammar toHSL() => {string}
+             */
             toHSL: function() {
                 return ColorUtils.toString(this._color, "hsl");
             },
+            /**
+             * @method toHSLA()
+             * @for kity.Color
+             *
+             * @description 返回当前颜色的 HSLA 表示
+             *
+             * @grammar toHSLA() => {string}
+             */
             toHSLA: function() {
                 return ColorUtils.toString(this._color, "hsla");
             },
-            //默认实现是调用toRGB或者toRGBA
+            /**
+             * @method toString()
+             * @for kity.Color
+             *
+             * @description 返回当前颜色的 RGB 或 RGBA 表示，如果颜色有透明度，将使用 RGBA 形式，否则是 RGB 形式
+             * @grammar toString() => {string}
+             */
             toString: function() {
                 if (this._color.a === 1) {
                     return this.toRGB();
@@ -3510,6 +3719,21 @@ _p[28] = {
             S: "s",
             L: "l",
             A: "a",
+            /**
+         * @method parse()
+         * @static
+         * @for kity.Color
+         *
+         * @description 解析一个颜色字符串为 kity.Color 对象
+         *
+         * @grammar kity.Color.parse(valStr)
+         *
+         * @param  {string} valStr 一个代表颜色的字符串，可以是：
+         *     熟知颜色表：如 'red', 'yellow'
+         *     HEX 表示：如 '#368', '#123456'
+         *     RGB 表示：如 'RGB(200, 200, 0)', 'RGBA(200, 200, 200, .5)'
+         *     HSL 表示：如 'HSL(100, 60%, 80%)', 'HSLA(100, 60%, 80%, .5)'
+         */
             parse: function(valStr) {
                 var rgbValue;
                 if (Utils.isString(valStr)) {
@@ -3524,9 +3748,36 @@ _p[28] = {
                 }
                 return new Color(rgbValue.r, rgbValue.g, rgbValue.b, rgbValue.a);
             },
+            /**
+         * @method createHSL()
+         * @for kity.Color
+         * @static
+         *
+         * @description 创建一个 HSL 颜色
+         *
+         * @grammar kity.Color.createHSL(h, s, l) => {kity.Color}
+         *
+         * @param  {number} h 色环（Hue）分量值，取值范围 [0, 359]
+         * @param  {number} s 饱和度（Saturation）分量值，取值范围 [0, 100]
+         * @param  {number} l 亮度（Lighteness）分量值，取值范围 [0, 100]
+         */
             createHSL: function(h, s, l) {
                 return Color.createHSLA(h, s, l, 1);
             },
+            /**
+         * @method createHSLA()
+         * @for kity.Color
+         * @static
+         *
+         * @description 创建一个 HSLA 颜色
+         *
+         * @grammar kity.Color.createHSLA(h, s, l, a) => {kity.Color}
+         *
+         * @param  {number} h 色环（Hue）分量值，取值范围 [0, 359]
+         * @param  {number} s 饱和度（Saturation）分量值，取值范围 [0, 100]
+         * @param  {number} l 亮度（Lighteness）分量值，取值范围 [0, 100]
+         * @param  {number} a 透明度（Alpha）分量值，取值范围 [0, 1]
+         */
             createHSLA: function(h, s, l, a) {
                 var colorValue = null;
                 s += "%";
@@ -3534,9 +3785,36 @@ _p[28] = {
                 colorValue = [ "hsla(" + h, s, l, a + ")" ];
                 return Color.parse(colorValue.join(", "));
             },
+            /**
+         * @method createRGB()
+         * @for kity.Color
+         * @static
+         *
+         * @description 创建一个 RGB 颜色
+         *
+         * @grammar kity.Color.createRGB(r, g, b) => {kity.Color}
+         *
+         * @param  {number} r 红色（Red）分量值，取值范围 [0, 255]
+         * @param  {number} g 绿色（Green）分量值，取值范围 [0, 255]
+         * @param  {number} b 蓝色（Blue）分量值，取值范围 [0, 255]
+         */
             createRGB: function(r, g, b) {
                 return Color.createRGBA(r, g, b, 1);
             },
+            /**
+         * @method createRGBA()
+         * @for kity.Color
+         * @static
+         *
+         * @description 创建一个 RGBA 颜色
+         *
+         * @grammar kity.Color.createRGBA(r, g, b, a) => {kity.Color}
+         *
+         * @param  {number} r 红色（Red）分量值，取值范围 [0, 255]
+         * @param  {number} g 绿色（Green）分量值，取值范围 [0, 255]
+         * @param  {number} b 蓝色（Blue）分量值，取值范围 [0, 255]
+         * @param  {number} a 透明度（Alpha）分量值，取值范围 [0, 1]
+         */
             createRGBA: function(r, g, b, a) {
                 return new Color(r, g, b, a);
             }
@@ -3954,8 +4232,8 @@ _p[30] = {
             }
         };
         return _p.r(11).createClass("Curve", {
-            base: _p.r(47),
-            mixins: [ _p.r(52) ],
+            base: _p.r(46),
+            mixins: [ _p.r(51) ],
             constructor: function(points, isColse) {
                 this.callBase();
                 this.setPoints(points || []);
@@ -4059,24 +4337,12 @@ _p[31] = {
     }
 };
 
-//src/graphic/defbrush.js
+//src/graphic/ellipse.js
 _p[32] = {
     value: function(require, exports, module) {
-        return _p.r(11).createClass("GradientBrush", {
-            base: _p.r(59),
-            constructor: function(nodeType) {
-                this.callBase(nodeType);
-            }
-        });
-    }
-};
-
-//src/graphic/ellipse.js
-_p[33] = {
-    value: function(require, exports, module) {
-        var Utils = _p.r(12), Point = _p.r(51);
+        var Utils = _p.r(12), Point = _p.r(50);
         return _p.r(11).createClass("Ellipse", {
-            base: _p.r(47),
+            base: _p.r(46),
             constructor: function(rx, ry, cx, cy) {
                 this.callBase();
                 this.rx = rx || 0;
@@ -4154,7 +4420,7 @@ _p[33] = {
 /*
  * kity event 实现
  */
-_p[34] = {
+_p[33] = {
     value: function(require, exports, module) {
         // polyfill
         (function() {
@@ -4171,7 +4437,7 @@ _p[34] = {
             CustomEvent.prototype = window.Event.prototype;
             window.CustomEvent = CustomEvent;
         })();
-        var Utils = _p.r(12), ShapeEvent = _p.r(63);
+        var Utils = _p.r(12), ShapeEvent = _p.r(62);
         // 内部处理器缓存
         var INNER_HANDLER_CACHE = {}, // 用户处理器缓存
         USER_HANDLER_CACHE = {}, guid = 0;
@@ -4325,12 +4591,12 @@ _p[34] = {
 };
 
 //src/graphic/geometry.js
-_p[35] = {
+_p[34] = {
     value: function(require) {
         var utils = _p.r(12);
-        var Point = _p.r(51);
-        var Vector = _p.r(74);
-        var Matrix = _p.r(44);
+        var Point = _p.r(50);
+        var Vector = _p.r(73);
+        var Matrix = _p.r(43);
         var g = {};
         var pathCommand = /([achlmrqstvz])[\s,]*((-?\d*\.?\d*(?:e[\-+]?\d+)?[\s]*,?\s*)+)/gi, pathValues = /(-?\d*\.?\d*(?:e[\-+]?\d+)?)\s*,?\s*/gi, paramCounts = {
             a: 7,
@@ -5215,16 +5481,16 @@ _p[35] = {
     }
 };
 
-//src/graphic/gradientbrush.js
-_p[36] = {
+//src/graphic/gradient.js
+_p[35] = {
     value: function(require, exports, module) {
-        var svg = _p.r(68);
-        var DefBrush = _p.r(32);
+        var svg = _p.r(67);
+        var Resource = _p.r(58);
         var Color = _p.r(28);
         return _p.r(11).createClass("GradientBrush", {
-            base: DefBrush,
-            constructor: function(gradientNodeType) {
-                this.callBase(gradientNodeType);
+            base: Resource,
+            constructor: function(gradientNodeType, paper) {
+                this.callBase(gradientNodeType, paper);
                 this.stops = [];
             },
             addStop: function(offset, color, opacity) {
@@ -5248,12 +5514,12 @@ _p[36] = {
 };
 
 //src/graphic/group.js
-_p[37] = {
+_p[36] = {
     value: function(require, exports, module) {
-        var ShapeContainer = _p.r(62);
+        var ShapeContainer = _p.r(61);
         return _p.r(11).createClass("Group", {
             mixins: [ ShapeContainer ],
-            base: _p.r(61),
+            base: _p.r(60),
             constructor: function Group() {
                 this.callBase("g");
             }
@@ -5262,12 +5528,12 @@ _p[37] = {
 };
 
 //src/graphic/hyperlink.js
-_p[38] = {
+_p[37] = {
     value: function(require, exports, module) {
-        var ShapeContainer = _p.r(62);
+        var ShapeContainer = _p.r(61);
         return _p.r(11).createClass("HyperLink", {
             mixins: [ ShapeContainer ],
-            base: _p.r(61),
+            base: _p.r(60),
             constructor: function(url) {
                 this.callBase("a");
                 this.setHref(url);
@@ -5291,10 +5557,10 @@ _p[38] = {
 };
 
 //src/graphic/image.js
-_p[39] = {
+_p[38] = {
     value: function(require, exports, module) {
         return _p.r(11).createClass("Image", {
-            base: _p.r(61),
+            base: _p.r(60),
             constructor: function(url, width, height, x, y) {
                 this.callBase("image");
                 this.url = url;
@@ -5352,10 +5618,10 @@ _p[39] = {
 };
 
 //src/graphic/line.js
-_p[40] = {
+_p[39] = {
     value: function(require, exports, module) {
         return _p.r(11).createClass("Line", {
-            base: _p.r(47),
+            base: _p.r(46),
             constructor: function(x1, y1, x2, y2) {
                 this.callBase();
                 this.point1 = {
@@ -5401,21 +5667,17 @@ _p[40] = {
     }
 };
 
-//src/graphic/lineargradientbrush.js
-_p[41] = {
+//src/graphic/lineargradient.js
+_p[40] = {
     value: function(require, exports, module) {
-        var className = "LinearGradientBrush";
-        var svg = _p.r(68);
-        var GradientBrush = _p.r(36);
-        return _p.r(11).createClass(className, {
-            base: GradientBrush,
-            constructor: function(builder) {
-                this.callBase("linearGradient");
+        var svg = _p.r(67);
+        var Gradient = _p.r(35);
+        return _p.r(11).createClass("LinearGradientBrush", {
+            base: Gradient,
+            constructor: function(paper) {
+                this.callBase("linearGradient", paper);
                 this.setStartPosition(0, 0);
                 this.setEndPosition(1, 0);
-                if (typeof builder == "function") {
-                    builder.call(this, this);
-                }
             },
             setStartPosition: function(px, py) {
                 this.node.setAttribute("x1", px);
@@ -5444,12 +5706,12 @@ _p[41] = {
 };
 
 //src/graphic/marker.js
-_p[42] = {
+_p[41] = {
     value: function(require, exports, module) {
-        var Point = _p.r(51);
+        var Point = _p.r(50);
         var Marker = _p.r(11).createClass("Marker", {
-            base: _p.r(59),
-            mixins: [ _p.r(62), _p.r(76) ],
+            base: _p.r(58),
+            mixins: [ _p.r(61), _p.r(75) ],
             constructor: function() {
                 this.callBase("marker");
                 this.setOrient("auto");
@@ -5488,7 +5750,7 @@ _p[42] = {
                 return +this.height;
             }
         });
-        var Path = _p.r(47);
+        var Path = _p.r(46);
         _p.r(11).extendClass(Path, {
             setMarker: function(marker, pos) {
                 pos = pos || "end";
@@ -5508,13 +5770,13 @@ _p[42] = {
 /**
  * 蒙板
  */
-_p[43] = {
+_p[42] = {
     value: function(require, exports, module) {
         var Class = _p.r(11);
-        var Shape = _p.r(61);
+        var Shape = _p.r(60);
         var Mask = Class.createClass("Mask", {
             base: Shape,
-            mixins: [ _p.r(62) ],
+            mixins: [ _p.r(61) ],
             constructor: function() {
                 this.callBase("mask");
             },
@@ -5534,12 +5796,12 @@ _p[43] = {
 };
 
 //src/graphic/matrix.js
-_p[44] = {
+_p[43] = {
     value: function(require, exports, module) {
         var utils = _p.r(12);
         var Box = _p.r(25);
         var mPattern = /matrix\s*\((.+)\)/i;
-        var Point = _p.r(51);
+        var Point = _p.r(50);
         // 注意，合并的结果是先执行m2，再执行m1的结果
         function mergeMatrixData(m2, m1) {
             return {
@@ -5799,10 +6061,10 @@ _p[44] = {
 /**
  * 调色板
  */
-_p[45] = {
+_p[44] = {
     value: function(require, exports, module) {
         //标准color
-        var StandardColor = _p.r(65), Color = _p.r(28), Utils = _p.r(12);
+        var StandardColor = _p.r(64), Color = _p.r(28), Utils = _p.r(12);
         var Palette = _p.r(11).createClass("Palette", {
             constructor: function() {
                 this.color = {};
@@ -5903,17 +6165,17 @@ _p[45] = {
 };
 
 //src/graphic/paper.js
-_p[46] = {
+_p[45] = {
     value: function(require, exports, module) {
         var Class = _p.r(11);
         var utils = _p.r(12);
-        var svg = _p.r(68);
+        var svg = _p.r(67);
         var Container = _p.r(29);
-        var ShapeContainer = _p.r(62);
-        var ViewBox = _p.r(76);
-        var EventHandler = _p.r(34);
-        var Styled = _p.r(67);
-        var Matrix = _p.r(44);
+        var ShapeContainer = _p.r(61);
+        var ViewBox = _p.r(75);
+        var EventHandler = _p.r(33);
+        var Styled = _p.r(66);
+        var Matrix = _p.r(43);
         var Paper = Class.createClass("Paper", {
             mixins: [ ShapeContainer, EventHandler, Styled, ViewBox ],
             constructor: function(container) {
@@ -6040,7 +6302,7 @@ _p[46] = {
                 return this;
             }
         });
-        var Shape = _p.r(61);
+        var Shape = _p.r(60);
         Class.extendClass(Shape, {
             getPaper: function() {
                 var parent = this.container;
@@ -6077,13 +6339,13 @@ _p[46] = {
 };
 
 //src/graphic/path.js
-_p[47] = {
+_p[46] = {
     value: function(require, exports, module) {
         var Utils = _p.r(12);
         var createClass = _p.r(11).createClass;
-        var Shape = _p.r(61);
-        var svg = _p.r(68);
-        var g = _p.r(35);
+        var Shape = _p.r(60);
+        var svg = _p.r(67);
+        var g = _p.r(34);
         var slice = Array.prototype.slice, flatten = Utils.flatten;
         var PathDrawer = createClass("PathDrawer", {
             constructor: function(path) {
@@ -6197,17 +6459,17 @@ _p[47] = {
     }
 };
 
-//src/graphic/patternbrush.js
-_p[48] = {
+//src/graphic/pattern.js
+_p[47] = {
     value: function(require, exports, module) {
-        var DefBrush = _p.r(32);
-        var ShapeContainer = _p.r(62);
-        var svg = _p.r(68);
+        var Resource = _p.r(58);
+        var ShapeContainer = _p.r(61);
+        var svg = _p.r(67);
         return _p.r(11).createClass("PatternBrush", {
-            base: DefBrush,
+            base: Resource,
             mixins: [ ShapeContainer ],
-            constructor: function() {
-                this.callBase("pattern");
+            constructor: function(paper) {
+                this.callBase("pattern", paper);
                 this.node.setAttribute("patternUnits", "userSpaceOnUse");
             },
             setX: function(x) {
@@ -6241,7 +6503,7 @@ _p[48] = {
 };
 
 //src/graphic/pen.js
-_p[49] = {
+_p[48] = {
     value: function(require, exports, module) {
         var Color = _p.r(28);
         return _p.r(11).createClass("Pen", {
@@ -6322,10 +6584,10 @@ _p[49] = {
 };
 
 //src/graphic/pie.js
-_p[50] = {
+_p[49] = {
     value: function(require, exports, module) {
         return _p.r(11).createClass({
-            base: _p.r(69),
+            base: _p.r(68),
             constructor: function(radius, angle, angleOffset) {
                 this.callBase([ 0, radius ], angle, angleOffset);
             },
@@ -6343,7 +6605,7 @@ _p[50] = {
 /*
  * 点对象抽象
  */
-_p[51] = {
+_p[50] = {
     value: function(require, exports, module) {
         /**
      * @class kity.Point
@@ -6433,7 +6695,7 @@ _p[51] = {
 /**
  * 点集合容器
  */
-_p[52] = {
+_p[51] = {
     value: function(require, exports, module) {
         return _p.r(11).createClass("PointContainer", {
             base: _p.r(29),
@@ -6478,12 +6740,12 @@ _p[52] = {
 /*
  * 通过点来决定图形的公共父类
  */
-_p[53] = {
+_p[52] = {
     value: function(require, exports, module) {
         var Utils = _p.r(12);
         return _p.r(11).createClass("Poly", {
-            base: _p.r(47),
-            mixins: [ _p.r(52) ],
+            base: _p.r(46),
+            mixins: [ _p.r(51) ],
             constructor: function(points, closeable) {
                 this.callBase();
                 //是否可闭合
@@ -6519,10 +6781,10 @@ _p[53] = {
 };
 
 //src/graphic/polygon.js
-_p[54] = {
+_p[53] = {
     value: function(require, exports, module) {
         return _p.r(11).createClass("Polygon", {
-            base: _p.r(53),
+            base: _p.r(52),
             constructor: function(points) {
                 this.callBase(points, true);
             }
@@ -6531,10 +6793,10 @@ _p[54] = {
 };
 
 //src/graphic/polyline.js
-_p[55] = {
+_p[54] = {
     value: function(require, exports, module) {
         return _p.r(11).createClass("Polyline", {
-            base: _p.r(53),
+            base: _p.r(52),
             constructor: function(points) {
                 this.callBase(points);
             }
@@ -6542,20 +6804,17 @@ _p[55] = {
     }
 };
 
-//src/graphic/radialgradientbrush.js
-_p[56] = {
+//src/graphic/radialgradient.js
+_p[55] = {
     value: function(require, exports, module) {
-        var GradientBrush = _p.r(36);
+        var Gradient = _p.r(35);
         return _p.r(11).createClass("RadialGradientBrush", {
-            base: GradientBrush,
-            constructor: function(builder) {
-                this.callBase("radialGradient");
+            base: Gradient,
+            constructor: function(paper) {
+                this.callBase("radialGradient", paper);
                 this.setCenter(.5, .5);
                 this.setFocal(.5, .5);
                 this.setRadius(.5);
-                if (typeof builder == "function") {
-                    builder.call(this, this);
-                }
             },
             setCenter: function(cx, cy) {
                 this.node.setAttribute("cx", cx);
@@ -6591,9 +6850,9 @@ _p[56] = {
 };
 
 //src/graphic/rect.js
-_p[57] = {
+_p[56] = {
     value: function(require, exports, module) {
-        var RectUtils = {}, Utils = _p.r(12), Point = _p.r(51), Box = _p.r(25);
+        var RectUtils = {}, Utils = _p.r(12), Point = _p.r(50), Box = _p.r(25);
         Utils.extend(RectUtils, {
             //根据传递进来的width、height和radius属性，
             //获取最适合的radius值
@@ -6608,7 +6867,7 @@ _p[57] = {
      * @base kity.Path
      */
         var Rect = _p.r(11).createClass("Rect", {
-            base: _p.r(47),
+            base: _p.r(46),
             /**
          * @constructor
          * @for kity.Rect
@@ -6769,11 +7028,11 @@ _p[57] = {
 };
 
 //src/graphic/regularpolygon.js
-_p[58] = {
+_p[57] = {
     value: function(require, exports, module) {
-        var Point = _p.r(51);
+        var Point = _p.r(50);
         return _p.r(11).createClass("RegularPolygon", {
-            base: _p.r(47),
+            base: _p.r(46),
             constructor: function(side, radius, x, y) {
                 this.callBase();
                 this.radius = radius || 0;
@@ -6816,13 +7075,24 @@ _p[58] = {
 };
 
 //src/graphic/resource.js
-_p[59] = {
+/**
+ * @fileOverview
+ *
+ * 资源节点基类
+ *
+ * @author: techird
+ * @copyright: Baidu FEX, 2014
+ */
+_p[58] = {
     value: function(require, exports, module) {
-        var svg = _p.r(68);
+        var svg = _p.r(67);
         return _p.r(11).createClass("Resource", {
-            constructor: function(nodeType) {
+            constructor: function(nodeType, paper) {
                 this.callBase();
                 this.node = svg.createNode(nodeType);
+                if (paper) {
+                    paper.addResource(this);
+                }
             },
             toString: function() {
                 return "url(#" + this.node.id + ")";
@@ -6832,10 +7102,10 @@ _p[59] = {
 };
 
 //src/graphic/ring.js
-_p[60] = {
+_p[59] = {
     value: function(require, exports, module) {
         return _p.r(11).createClass({
-            base: _p.r(69),
+            base: _p.r(68),
             constructor: function(innerRadius, outerRadius) {
                 this.callBase([ innerRadius, outerRadius ], 360, 0);
             },
@@ -6856,15 +7126,15 @@ _p[60] = {
 };
 
 //src/graphic/shape.js
-_p[61] = {
+_p[60] = {
     value: function(require, exports, module) {
-        var svg = _p.r(68);
+        var svg = _p.r(67);
         var utils = _p.r(12);
-        var EventHandler = _p.r(34);
-        var Styled = _p.r(67);
+        var EventHandler = _p.r(33);
+        var Styled = _p.r(66);
         var Data = _p.r(31);
-        var Matrix = _p.r(44);
-        var Pen = _p.r(49);
+        var Matrix = _p.r(43);
+        var Pen = _p.r(48);
         var slice = Array.prototype.slice;
         var Box = _p.r(25);
         var Shape = _p.r(11).createClass("Shape", {
@@ -7075,7 +7345,7 @@ _p[61] = {
 };
 
 //src/graphic/shapecontainer.js
-_p[62] = {
+_p[61] = {
     value: function(require, exports, module) {
         var Container = _p.r(29);
         var utils = _p.r(12);
@@ -7188,7 +7458,7 @@ _p[62] = {
                 return this.shapeNode || this.node;
             }
         });
-        var Shape = _p.r(61);
+        var Shape = _p.r(60);
         _p.r(11).extendClass(Shape, {
             bringTo: function(index) {
                 this.container.arrangeShape(this, index);
@@ -7238,9 +7508,9 @@ _p[62] = {
 /*
  * 图形事件包装类
  * */
-_p[63] = {
+_p[62] = {
     value: function(require, exprots, module) {
-        var Matrix = _p.r(44), Utils = _p.r(12), Point = _p.r(51);
+        var Matrix = _p.r(43), Utils = _p.r(12), Point = _p.r(50);
         return _p.r(11).createClass("ShapeEvent", {
             constructor: function(event) {
                 var target = null;
@@ -7306,10 +7576,10 @@ _p[63] = {
 /*
  * 图形上的点抽象
  */
-_p[64] = {
+_p[63] = {
     value: function(require, exports, module) {
         return _p.r(11).createClass("ShapePoint", {
-            base: _p.r(51),
+            base: _p.r(50),
             constructor: function(px, py) {
                 this.callBase(px, py);
             },
@@ -7342,7 +7612,7 @@ _p[64] = {
 /**
  * 标准颜色映射
  */
-_p[65] = {
+_p[64] = {
     value: {
         COLOR_STANDARD: {
             aliceblue: "#f0f8ff",
@@ -7498,7 +7768,7 @@ _p[65] = {
 };
 
 //src/graphic/star.js
-_p[66] = {
+_p[65] = {
     value: function(require, exports, module) {
         /**
      * @see http://www.jdawiseman.com/papers/easymath/surds_star_inner_radius.html
@@ -7512,9 +7782,9 @@ _p[66] = {
             "10": .726542528005,
             "12": .707106781187
         };
-        var Point = _p.r(51);
+        var Point = _p.r(50);
         return _p.r(11).createClass("Star", {
-            base: _p.r(47),
+            base: _p.r(46),
             constructor: function(vertex, radius, shrink, offset, angleOffset) {
                 this.callBase();
                 this.vertex = vertex || 3;
@@ -7579,7 +7849,7 @@ _p[66] = {
 };
 
 //src/graphic/styled.js
-_p[67] = {
+_p[66] = {
     value: function(require, exports, module) {
         // polyfill for ie
         var ClassList = _p.r(11).createClass("ClassList", {
@@ -7640,7 +7910,7 @@ _p[67] = {
 };
 
 //src/graphic/svg.js
-_p[68] = {
+_p[67] = {
     value: function(require, exports, module) {
         var doc = document;
         var id = 0;
@@ -7662,11 +7932,11 @@ _p[68] = {
 };
 
 //src/graphic/sweep.js
-_p[69] = {
+_p[68] = {
     value: function(require, exports, module) {
-        var Point = _p.r(51);
+        var Point = _p.r(50);
         return _p.r(11).createClass("Sweep", {
-            base: _p.r(47),
+            base: _p.r(46),
             constructor: function(sectionArray, angle, angleOffset) {
                 this.callBase();
                 this.sectionArray = sectionArray || [];
@@ -7728,11 +7998,11 @@ _p[69] = {
 };
 
 //src/graphic/text.js
-_p[70] = {
+_p[69] = {
     value: function(require, exports, module) {
-        var TextContent = _p.r(71);
-        var ShapeContainer = _p.r(62);
-        var svg = _p.r(68);
+        var TextContent = _p.r(70);
+        var ShapeContainer = _p.r(61);
+        var svg = _p.r(67);
         var utils = _p.r(12);
         var offsetHash = {};
         function getTextBoundOffset(text) {
@@ -7865,9 +8135,9 @@ _p[70] = {
 };
 
 //src/graphic/textcontent.js
-_p[71] = {
+_p[70] = {
     value: function(require, exports, module) {
-        var Shape = _p.r(61);
+        var Shape = _p.r(60);
         return _p.r(11).createClass("TextContent", {
             base: Shape,
             constructor: function(nodeType) {
@@ -7941,10 +8211,10 @@ _p[71] = {
 };
 
 //src/graphic/textspan.js
-_p[72] = {
+_p[71] = {
     value: function(require, exports, module) {
-        var TextContent = _p.r(71);
-        var Styled = _p.r(67);
+        var TextContent = _p.r(70);
+        var Styled = _p.r(66);
         return _p.r(11).createClass("TextSpan", {
             base: TextContent,
             mixins: [ Styled ],
@@ -7960,12 +8230,12 @@ _p[72] = {
 /*
  * USE 功能
  */
-_p[73] = {
+_p[72] = {
     value: function(require, exports, module) {
-        var Svg = _p.r(68);
+        var Svg = _p.r(67);
         var Class = _p.r(11);
         var Use = Class.createClass("Use", {
-            base: _p.r(61),
+            base: _p.r(60),
             constructor: function(shape) {
                 this.callBase("use");
                 this.ref(shape);
@@ -7990,7 +8260,7 @@ _p[73] = {
                 return this;
             }
         });
-        var Shape = _p.r(61);
+        var Shape = _p.r(60);
         Class.extendClass(Shape, {
             // fast-use
             use: function() {
@@ -8002,10 +8272,10 @@ _p[73] = {
 };
 
 //src/graphic/vector.js
-_p[74] = {
+_p[73] = {
     value: function(require, exports, module) {
-        var Point = _p.r(51);
-        var Matrix = _p.r(44);
+        var Point = _p.r(50);
+        var Matrix = _p.r(43);
         var Vector = _p.r(11).createClass("Vector", {
             base: Point,
             constructor: function(x, y) {
@@ -8076,13 +8346,13 @@ _p[74] = {
 };
 
 //src/graphic/view.js
-_p[75] = {
+_p[74] = {
     value: function(require, exports, module) {
-        var ShapeContainer = _p.r(62);
-        var ViewBox = _p.r(76);
+        var ShapeContainer = _p.r(61);
+        var ViewBox = _p.r(75);
         return _p.r(11).createClass("View", {
             mixins: [ ShapeContainer, ViewBox ],
-            base: _p.r(75),
+            base: _p.r(74),
             constructor: function() {
                 this.callBase("view");
             }
@@ -8091,7 +8361,7 @@ _p[75] = {
 };
 
 //src/graphic/viewbox.js
-_p[76] = {
+_p[75] = {
     value: function(require, exports, module) {
         return _p.r(11).createClass("ViewBox", {
             getViewBox: function() {
@@ -8129,7 +8399,7 @@ _p[76] = {
 /**
  * @fileOverview kity 暴露的方法或对象
  */
-_p[77] = {
+_p[76] = {
     value: function(require, exports, module) {
         var kity = {}, utils = _p.r(12);
         kity.version = "2.0.0";
@@ -8148,40 +8418,41 @@ _p[77] = {
             Color: _p.r(28),
             Container: _p.r(29),
             Curve: _p.r(30),
-            Ellipse: _p.r(33),
-            GradientBrush: _p.r(36),
-            Group: _p.r(37),
-            HyperLink: _p.r(38),
-            Image: _p.r(39),
-            Line: _p.r(40),
-            LinearGradientBrush: _p.r(41),
-            Mask: _p.r(43),
-            Matrix: _p.r(44),
-            Marker: _p.r(42),
-            Palette: _p.r(45),
-            Paper: _p.r(46),
-            Path: _p.r(47),
-            PatternBrush: _p.r(48),
-            Pen: _p.r(49),
-            Point: _p.r(51),
-            PointContainer: _p.r(52),
-            Polygon: _p.r(54),
-            Polyline: _p.r(55),
-            Pie: _p.r(50),
-            RadialGradientBrush: _p.r(56),
-            Rect: _p.r(57),
-            RegularPolygon: _p.r(58),
-            Ring: _p.r(60),
-            Shape: _p.r(61),
-            ShapePoint: _p.r(64),
-            ShapeContainer: _p.r(62),
-            Sweep: _p.r(69),
-            Star: _p.r(66),
-            Text: _p.r(70),
-            TextSpan: _p.r(72),
-            Use: _p.r(73),
-            Vector: _p.r(74),
-            g: _p.r(35),
+            Ellipse: _p.r(32),
+            Group: _p.r(36),
+            Gradient: _p.r(35),
+            HyperLink: _p.r(37),
+            Image: _p.r(38),
+            Line: _p.r(39),
+            LinearGradient: _p.r(40),
+            Mask: _p.r(42),
+            Matrix: _p.r(43),
+            Marker: _p.r(41),
+            Palette: _p.r(44),
+            Paper: _p.r(45),
+            Path: _p.r(46),
+            Pattern: _p.r(47),
+            Pen: _p.r(48),
+            Point: _p.r(50),
+            PointContainer: _p.r(51),
+            Polygon: _p.r(53),
+            Polyline: _p.r(54),
+            Pie: _p.r(49),
+            RadialGradient: _p.r(55),
+            Resource: _p.r(58),
+            Rect: _p.r(56),
+            RegularPolygon: _p.r(57),
+            Ring: _p.r(59),
+            Shape: _p.r(60),
+            ShapePoint: _p.r(63),
+            ShapeContainer: _p.r(61),
+            Sweep: _p.r(68),
+            Star: _p.r(65),
+            Text: _p.r(69),
+            TextSpan: _p.r(71),
+            Use: _p.r(72),
+            Vector: _p.r(73),
+            g: _p.r(34),
             // animate
             Animator: _p.r(0),
             Easing: _p.r(1),
@@ -8211,7 +8482,7 @@ _p[77] = {
 };
 
 var moduleMapping = {
-    kity: 77
+    kity: 76
 };
 
 function use(name) {

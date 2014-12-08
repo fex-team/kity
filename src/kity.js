@@ -2,7 +2,7 @@
  * @fileOverview kity 暴露的方法或对象
  */
 
-define(function(require, exports, module) {
+define('kity', function(require, exports, module) {
     var kity = {},
         utils = require('./core/utils');
     kity.version = '2.0.0';
