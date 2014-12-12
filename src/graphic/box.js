@@ -217,6 +217,10 @@ define(function(require, exports, module) {
          * ```
          */
         intersect: function(another) {
+            if (!another instanceof Box) {
+                another = new Box(another);
+            }
+
             var left = Math.max(this.left, another.left),
                 right = Math.min(this.right, another.right),
                 top = Math.max(this.top, another.top),
