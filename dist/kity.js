@@ -1,9 +1,9 @@
 /*!
  * ====================================================
- * kity - v2.0.0 - 2014-12-08
+ * kity - v2.0.0 - 2015-01-12
  * https://github.com/fex-team/kity
  * GitHub: https://github.com/fex-team/kity.git 
- * Copyright (c) 2014 Baidu FEX; Licensed BSD
+ * Copyright (c) 2015 Baidu FEX; Licensed BSD
  * ====================================================
  */
 
@@ -3164,6 +3164,9 @@ _p[25] = {
          * ```
          */
             intersect: function(another) {
+                if (!another instanceof Box) {
+                    another = new Box(another);
+                }
                 var left = Math.max(this.left, another.left), right = Math.min(this.right, another.right), top = Math.max(this.top, another.top), bottom = Math.min(this.bottom, another.bottom);
                 if (left > right || top > bottom) return new Box();
                 return new Box(left, top, right - left, bottom - top);
