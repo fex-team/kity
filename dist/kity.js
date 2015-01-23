@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kity - v2.0.0 - 2015-01-22
+ * kity - v2.0.0 - 2015-01-23
  * https://github.com/fex-team/kity
  * GitHub: https://github.com/fex-team/kity.git 
  * Copyright (c) 2015 Baidu FEX; Licensed BSD
