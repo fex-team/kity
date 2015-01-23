@@ -19,6 +19,12 @@ define(function(require, exports, module) {
         var bbox = text.getBoundaryBox(),
             y = text.getY();
 
+        if (!bbox.height) return {
+            top: 0,
+            bottom: 0,
+            middle: 0
+        };
+
         var topOffset = y - bbox.y + (+text.node.getAttribute('dy')),
             bottomOffset = topOffset - bbox.height;
 
@@ -42,6 +48,12 @@ define(function(require, exports, module) {
                 this.setContent(content);
             }
             this._buildFontHash();
+        },
+
+        fixPosition: function() {
+            if (!this.__fixedPosition) {
+                this.setVerticalAlign(this.getVerticalAlign());
+            }
         },
 
         _buildFontHash: function() {
@@ -129,6 +141,7 @@ define(function(require, exports, module) {
                     default:
                         dy = 0;
                 }
+                if (dy) this.__fixedPosition = true;
                 this.node.setAttribute('dy', dy);
             });
             this.verticalAlign = align;

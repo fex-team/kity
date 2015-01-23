@@ -1,9 +1,9 @@
 /*!
  * ====================================================
- * kity - v2.0.0 - 2014-12-08
+ * kity - v2.0.0 - 2015-01-22
  * https://github.com/fex-team/kity
  * GitHub: https://github.com/fex-team/kity.git 
- * Copyright (c) 2014 Baidu FEX; Licensed BSD
+ * Copyright (c) 2015 Baidu FEX; Licensed BSD
  * ====================================================
  */
 
@@ -3164,6 +3164,9 @@ _p[25] = {
          * ```
          */
             intersect: function(another) {
+                if (!another instanceof Box) {
+                    another = new Box(another);
+                }
                 var left = Math.max(this.left, another.left), right = Math.min(this.right, another.right), top = Math.max(this.top, another.top), bottom = Math.min(this.bottom, another.bottom);
                 if (left > right || top > bottom) return new Box();
                 return new Box(left, top, right - left, bottom - top);
@@ -8013,6 +8016,11 @@ _p[69] = {
             var textContent = text.getContent();
             text.setContent("百度Fex");
             var bbox = text.getBoundaryBox(), y = text.getY();
+            if (!bbox.height) return {
+                top: 0,
+                bottom: 0,
+                middle: 0
+            };
             var topOffset = y - bbox.y + +text.node.getAttribute("dy"), bottomOffset = topOffset - bbox.height;
             text.setContent(textContent);
             return offsetHash[font] = {
@@ -8030,6 +8038,11 @@ _p[69] = {
                     this.setContent(content);
                 }
                 this._buildFontHash();
+            },
+            fixPosition: function() {
+                if (!this.__fixedPosition) {
+                    this.setVerticalAlign(this.getVerticalAlign());
+                }
             },
             _buildFontHash: function() {
                 var style = window.getComputedStyle(this.node);
@@ -8098,6 +8111,7 @@ _p[69] = {
                       default:
                         dy = 0;
                     }
+                    if (dy) this.__fixedPosition = true;
                     this.node.setAttribute("dy", dy);
                 });
                 this.verticalAlign = align;
