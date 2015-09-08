@@ -24,13 +24,13 @@ define(function() {
              * @description 获取浏览器所在系统,"Win"->Windows;"Mac"->Mac;"Lux"->Linux
              * @type {String}
              */
-            platform: (function() {
+            platform: (function(navigator) {
                 var _p = {
                     "win32": "Win",
-                    "MacIntel": "Mac"
+                    "macintel": "Mac"
                 };
                 return _p[navigator.platform.toLowerCase()] || "Lux";
-            }),
+            })(navigator),
 
             /**
              * 猎豹,区分两种不同内核
