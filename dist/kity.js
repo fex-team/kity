@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kity - v2.0.0 - 2015-09-09
+ * kity - v2.0.4 - 2015-09-09
  * https://github.com/fex-team/kity
  * GitHub: https://github.com/fex-team/kity.git 
  * Copyright (c) 2015 Baidu FEX; Licensed BSD
@@ -1444,13 +1444,13 @@ _p[10] = {
              * @description 获取浏览器所在系统,"Win"->Windows;"Mac"->Mac;"Lux"->Linux
              * @type {String}
              */
-                platform: function() {
+                platform: function(navigator) {
                     var _p = {
                         win32: "Win",
-                        MacIntel: "Mac"
+                        macintel: "Mac"
                     };
                     return _p[navigator.platform.toLowerCase()] || "Lux";
-                },
+                }(navigator),
                 /**
              * 猎豹,区分两种不同内核
              */
