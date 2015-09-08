@@ -1,6 +1,6 @@
 /*!
  * ====================================================
- * kity - v2.0.0 - 2015-01-23
+ * kity - v2.0.0 - 2015-09-08
  * https://github.com/fex-team/kity
  * GitHub: https://github.com/fex-team/kity.git 
  * Copyright (c) 2015 Baidu FEX; Licensed BSD
@@ -1440,12 +1440,43 @@ _p[10] = {
             // 浏览器对象
             browser = {
                 /**
-             * @property ie
-             * @for kity.Browser
-             * @description 判断是否为 IE 浏览器
-             * @type {boolean}
+             * @property platform
+             * @description 获取浏览器所在系统,"Win"->Windows;"Mac"->Mac;"Lux"->Linux
+             * @type {String}
              */
-                ie: /(msie\s|trident.*rv:)([\w.]+)/.test(agent),
+                platform: function() {
+                    var _p = {
+                        win32: "Win",
+                        MacIntel: "Mac"
+                    };
+                    return _p[navigator.platform.toLowerCase()] || "Lux";
+                },
+                /**
+             * 猎豹,区分两种不同内核
+             */
+                lb: function(agent) {
+                    if (~agent.indexOf("lbbrowser")) {
+                        return ~agent.indexOf("msie") ? "ie" : "chrome";
+                    }
+                    return false;
+                }(agent),
+                /**
+             * 搜狗
+             */
+                sg: /se[\s\S]+metasr/.test(agent),
+                /**
+             * 百度
+             */
+                bd: !!~agent.indexOf("bidubrowser"),
+                /**
+             * edge浏览器
+             */
+                edge: !!~agent.indexOf("edge"),
+                /**
+             * chrome初始化为false
+             * @type {Boolean}
+             */
+                chrome: false,
                 /**
              * @property opera
              * @for kity.Browser
@@ -1468,6 +1499,13 @@ _p[10] = {
              */
                 mac: agent.indexOf("macintosh") > -1
             };
+            /**
+         * @property ie
+         * @for kity.Browser
+         * @description 判断是否为 IE 浏览器
+         * @type {boolean}
+         */
+            browser.ie = !browser.lb && /(msie\s|trident.*rv:)([\w.]+)/.test(agent);
             browser.gecko = navigator.product == "Gecko" && !browser.webkit && !browser.opera && !browser.ie;
             var version = 0;
             // Internet Explorer 6.0+
@@ -1484,7 +1522,8 @@ _p[10] = {
                     version = geckoRelease[0] * 1e4 + (geckoRelease[1] || 0) * 100 + (geckoRelease[2] || 0) * 1;
                 }
             }
-            if (/chrome\/(\d+\.\d)/i.test(agent)) {
+            // 排除其他chrome内核的浏览器的干扰
+            if (/chrome\/(\d+\.\d)/i.test(agent) && !browser.bd && !browser.opera && !browser.lb && !browser.sg && !browser.edge) {
                 /**
              * @property chrome
              * @for kity.Browser
@@ -1500,6 +1539,14 @@ _p[10] = {
             if (browser.opera) version = parseFloat(opera.version());
             // WebKit 522+ (Safari 3+)
             if (browser.webkit) version = parseFloat(agent.match(/ applewebkit\/(\d+)/)[1]);
+            // 搜狗版本号无从得知
+            // 猎豹版本号无从得知
+            // 百度
+            if (browser.bd) version = parseFloat(agent.match(/bidubrowser\/(\d+)/)[1]);
+            // Opera 9.50+
+            if (browser.opera) version = parseFloat(agent.match(/opr\/(\d+)/)[1]);
+            // edge
+            if (browser.edge) version = parseFloat(agent.match(/edge\/(\d+)/)[1]);
             /**
          * @property version
          * @for kity.Browser
