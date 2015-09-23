@@ -6,8 +6,8 @@ define(function(require, exports, module) {
     var Text = require('graphic/text');
     var Pen = require('graphic/pen');
     var Matrix = require('graphic/matrix');
-    var Pie = require('../demo/ringpalette/pie');
-    var Draggable = require('../demo/public/draggable');
+    var Pie = require('../ringpalette/pie');
+    var Draggable = require('../public/draggable');
 
     return require('core/class').createClass({
         base: Group,

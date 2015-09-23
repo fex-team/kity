@@ -114,8 +114,8 @@ define( function ( require, exports, module ) {
                 bindEvents( me.getPaper() );
             } else {
                 var listener = function ( e ) {
-                    if ( e.targetShape.getPaper() ) {
-                        bindEvents( e.targetShape.getPaper() );
+                    if ( e.target.getPaper() ) {
+                        bindEvents( e.target.getPaper() );
                         me.off( 'add', listener );
                         me.off( 'treeadd', listener );
                     }

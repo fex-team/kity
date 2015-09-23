@@ -32,16 +32,16 @@ Demo 允许以单个 HTML 页面存在，也可以以目录的形式存在。
     <!-- Demo 开发过程中使用 CMD 引入 Kity 源码，方便调试 -->
     <!-- dev start -->
     <!-- 目录型的 Demo 注意修正源码引用路径 -->
-    <script src="../dev-lib/dev-define.js"></script>
+    <script src="../dev-lib/sea.js"></script>
     <script>
         // 设置好 kity 源代码目录
-        inc.config( { base: '../src'} );
+        seajs.config( { base: '../src'} );
         // 定义 Demo 模块
         define('demo', function(require) { require('kity'); });
     </script>
     <script>
         // 启动 Demo 模块
-        inc.use('demo');
+        seajs.use('demo');
     </script>
     <!-- dev end -->
 

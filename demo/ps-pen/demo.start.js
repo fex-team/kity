@@ -8,14 +8,14 @@ define( function ( require, exports, module ) {
     var Paper = require( "graphic/paper" ),
         Color = require( "graphic/color" ),
         Rect = require( "graphic/rect" ),
-        PatternBrush = require( "graphic/patternbrush" );
+        PatternBrush = require( "graphic/pattern" );
 
     // 程序变量
     var paper = null,
         //zoom倍数
         ZOOM = 100,
         controller = null,
-        Controller = require( "../demo/ps-pen/demo.controller" );
+        Controller = require( "../ps-pen/demo.controller" );
 
     function init () {
 

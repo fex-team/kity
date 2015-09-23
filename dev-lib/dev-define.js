@@ -31,7 +31,7 @@
 
     };
 
-    global.use = global.inc.use;
+    global.use = global.seajs.use;
 
     global.define = function(id, deps, f) {
 

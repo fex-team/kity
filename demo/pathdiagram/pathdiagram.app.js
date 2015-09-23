@@ -1,8 +1,8 @@
 define(function (require, exports, module) {
     var Class = require('core/class');
     var Paper = require('graphic/paper');
-    var Draggable = require('../demo/public/draggable');
-    var PathDiagram = require('../demo/pathdiagram/pathdiagram');
+    var Draggable = require('../public/draggable');
+    var PathDiagram = require('../pathdiagram/pathdiagram');
 
     Class.extendClass(Paper, Draggable);
 

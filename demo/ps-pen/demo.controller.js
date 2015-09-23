@@ -10,7 +10,7 @@ define( function ( require, exports, module ) {
         Utils = require( "core/utils" ),
         Vector = require( "graphic/vector" ),
         // 引入可绘制的点集合
-        PointGroup = require( "../demo/ps-pen/demo.pointgroup" ),
+        PointGroup = require( "../ps-pen/demo.pointgroup" ),
         BezierPoint = require( "graphic/bezierpoint" );
 
 

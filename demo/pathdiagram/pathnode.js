@@ -3,7 +3,7 @@ define(function(require, exports, module) {
     var Rect = require('graphic/rect');
     var Text = require('graphic/text');
     var TextSpan = require('graphic/textspan');
-    var colors = require('../demo/pathdiagram/colors');
+    var colors = require('../pathdiagram/colors');
 
     return require('core/class').createClass({
         base: Group,

@@ -1,12 +1,12 @@
 define( function ( require, exports, module ) {
     var Group = require( 'graphic/group' );
-    var Connection = require( '../demo/graffle/bezierconnection' );
-    var Query = require( '../demo/pathdiagram/dataquery' );
+    var Connection = require( '../graffle/bezierconnection' );
+    var Query = require( '../pathdiagram/dataquery' );
     var Rect = require( 'graphic/rect' );
     var Text = require( 'graphic/text' );
     var TextSpan = require( 'graphic/textspan' );
-    var PathNode = require( '../demo/pathdiagram/pathnode' );
-    var colors = require( '../demo/pathdiagram/colors' );
+    var PathNode = require( '../pathdiagram/pathnode' );
+    var colors = require( '../pathdiagram/colors' );
 
     var rHeight = 25;
     var rWidth = 250;

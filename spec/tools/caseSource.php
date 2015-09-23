@@ -38,8 +38,8 @@ class Kiss
         else{
             $basePath =  '../../src';
         }
-        print "<script type='text/javascript' src='../../dev-lib/dev-define.js' ></script>\n";
-        print "<script>inc.config( {
+        print "<script type='text/javascript' src='../../dev-lib/sea.js' ></script>\n";
+        print "<script>seajs.config( {
             base:'".$basePath."'
         } );
         </script>\n";

@@ -5,6 +5,6 @@
  * Time: 下午7:24
  * To change this template use File | Settings | File Templates.
  */
-inc.config({
+seajs.config({
     base: 'base/src'
 });
