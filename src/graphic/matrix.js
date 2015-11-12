@@ -268,43 +268,55 @@ define(function(require, exports, module) {
         var node = target.shapeNode || target.node;
 
         refer = refer || 'parent';
+        /**
+         * 由于新版chrome(dev 48.0)移除了getTransformToElement这个方法可能导致报错，这里做兼容处理
+         * @Date 2015-11-12
+         * @Editor Naixor
+         */
+        function getTransformToElement(target, source) {
+            var matrix;
+            try {
+                matrix = source.getScreenCTM().inverse();
+            } catch(e) {
+                throw new Error('Can not inverse source element\' ctm.');
+            }
+            return matrix.multiply(target.getScreenCTM());
+        }
 
         // 根据参照坐标系选区的不一样，返回不同的结果
         switch (refer) {
+          case "screen":
+            // 以浏览器屏幕为参照坐标系
+            ctm = node.getScreenCTM();
+            break;
 
-            case 'screen':
-                // 以浏览器屏幕为参照坐标系
-                ctm = node.getScreenCTM();
-                break;
+          case "doc":
+          case "paper":
+            // 以文档（Paper）为参照坐标系
+            ctm = node.getCTM();
+            break;
 
-            case 'doc':
-            case 'paper':
-                // 以文档（Paper）为参照坐标系
-                ctm = node.getCTM();
-                break;
+          case "view":
+          case "top":
+            // 以顶层绘图容器（视野）为参照坐标系
+            if (target.getPaper()) {
+                ctm = node.getTransformToElement !== undefined ? node.getTransformToElement(target.getPaper().shapeNode) : getTransformToElement(node, target.getPaper().shapeNode);
+            }
+            break;
 
-            case 'view':
-            case 'top':
-                // 以顶层绘图容器（视野）为参照坐标系
-                if (target.getPaper()) {
-                    ctm = node.getTransformToElement(target.getPaper().shapeNode);
-                }
-                break;
+          case "parent":
+            // 以父容器为参照坐标系
+            if (target.node.parentNode) {
+                ctm = node.getTransformToElement !== undefined ? node.getTransformToElement(target.node.parentNode) : getTransformToElement(node, target.node.parentNode);
+            }
+            break;
 
-            case 'parent':
-                // 以父容器为参照坐标系
-                if (target.node.parentNode) {
-                    ctm = node.getTransformToElement(target.node.parentNode);
-                }
-                break;
-
-            default:
-                // 其他情况，指定参照物
-                if (refer.node) {
-                    ctm = node.getTransformToElement(refer.shapeNode || refer.node);
-                }
+          default:
+            // 其他情况，指定参照物
+            if (refer.node) {
+                ctm = node.getTransformToElement !== undefined ? node.getTransformToElement(refer.shapeNode || refer.node) : getTransformToElement(node, refer.shapeNode || refer.node);
+            }
         }
-
         return ctm ? new Matrix(ctm.a, ctm.b, ctm.c, ctm.d, ctm.e, ctm.f) : new Matrix();
     };
 
