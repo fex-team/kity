@@ -2,55 +2,39 @@
 <html>
 <head>
     <title>Animate</title>
-    <script src="../dev-lib/sea.js"></script>
+    <script src="../dist/kity.js"></script>
     <script>
-        seajs.config({
-            base: '../src'
-        });
-        define('start', function (require) {
-            var Paper = require('graphic/paper');
-            var Group = require('graphic/group');
-            var Path = require('graphic/path');
-            var Color = require('graphic/color');
-            var Text = require('graphic/text');
-            var Draggable = require('../demo/public/draggable');
-            var Animator = require('animate/animator');
-            var Matrix = require('graphic/matrix');
-            var Circle = require('graphic/circle');
-            var Rect = require('graphic/rect');
-            var Use = require('graphic/use');
-            require('animate/translateanimator');
-            require('animate/rotateanimator');
-            require('animate/scaleanimator');
-            require('animate/opacityanimator');
+        window.onload = function () {
 
-            require('core/class').extendClass(Paper, Draggable);
+            var paper = new kity.Paper(document.body);
+            paper.setViewBox(0, 0, 1200, 600);
 
-            var paper = new Paper(document.body);
-            paper.setViewBox(0, 0, 1200, 600).drag();
-
-            var bounce = new Animator(0, 400, function(target, y, timeline) {
+            // 定义反弹动画器
+            var bounce = new kity.Animator(0, 400, function(target, y, timeline) {
                 target.translate(0, timeline.getDelta());
             });
-            var colorChanger = new Animator({
+
+            // 定义颜色动画器
+            var colorChanger = new kity.Animator({
                 beginValue: function(target) {
                     return target.color;
-                }, 
+                },
                 finishValue: function(target) {
                     return target.color.inc('h', 90)
-                }, 
+                },
                 setter: function(target, color) {
                     target.fill(color);
                 }
             });
-            
+
+            // 定义形变函数
             function atternuate(e) {
-                //e.target.scale(0.6 + Math.random() * 0.6, e.target.getCenterX(), e.target.getCenterY());
+                e.target.scale(1 + Math.sign((Math.random() - 0.5)) * Math.random());
             }
-            //paper.addResource(rect);
+
             for(var i = 0; i < 200; i++) {
-                var color = Color.createHSL(i * 30 % 360, 80, 50);
-                var copy = new Rect(5, 20, 0, 10).translate( i * 5, 0 );
+                var color = kity.Color.createHSL(i * 30 % 360, 80, 50);
+                var copy = new kity.Rect(5, 20, 0, 10).translate( i * 5, 0 );
                 copy.color = color;
                 copy.fill(color);
 
@@ -66,8 +50,7 @@
                 copy.fxTranslate(100, -200, '0.8s', 'easeOutElastic');
                 copy.fadeOut(300).fadeIn(1000).fadeTo(.5, 100);
             }
-        });
-        seajs.use('start');
+        };
     </script>
 </head>
 <body>

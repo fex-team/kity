@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Start</title>
+
+    <style>
+        #kity-paper {
+            width: 100%;
+            height: 800px;
+        }
+
+    </style>
+
+    <!-- dev 版本 示例所需脚本文件 start -->
+    <script src="../dev-lib/sea.js"></script>
+    <script>
+
+        seajs.config({
+            base: '../src'
+        });
+
+        define('start', function(require) {
+            var kity = require('kity');
+
+            var paper = new kity.Paper('kity-paper');
+            var rect = paper.put(new kity.Rect());
+            var text = paper.put(new kity.Text());
+
+            text.setContent('hello kity!');
+            text.fill('white');
+            text.setX(100);
+            text.setY(200);
+            rect.setBox(text.getBoundaryBox().expand(15));
+            rect.setRadius(5);
+            rect.fill('blue');
+        });
+
+        seajs.use('start');
+    </script>
+</head>
+<body>
+    <div id="kity-paper"></div>
+</body>
+</html>

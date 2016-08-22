@@ -5,14 +5,7 @@
     <!-- 正式发布的时候， 只需替换掉相应的脚本文件即可 -->
 
     <!-- dev 版本 示例所需脚本文件 start -->
-    <script src="../dev-lib/sea.js"></script>
-    <script>
-        seajs.config({
-            base: '../src'
-        });
-    </script>
-    <script src="../dev-lib/exports.js"></script>
-    <script src="../dev-lib/dev-start.js"></script>
+    <script src="../dist/kity.js"></script>
     <!-- dev 版本 示例所需脚本文件 end -->
 
     <!-- 正式版本 示例所需脚本文件 start -->
@@ -27,7 +20,7 @@
             paper.setWidth(400).setHeight(300);
 
             var rect = new kity.Rect(200, 100, 40, 40);
-            rect.fill(new kity.PatternBrush().pipe( function() {
+            rect.fill(new kity.Pattern().pipe( function() {
                 var colors = ['red', 'blue', 'yellow', 'green'];
                 this.setWidth(40);
                 this.setHeight(40);

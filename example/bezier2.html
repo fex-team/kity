@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bezier Example</title>
+    <!--<script src="../dist/kity.js"></script>-->
+    <!--<script src="./coordinate/coordinate.js"></script>-->
+</head>
+<body></body>
+
+<script src="../dev-lib/sea.js"></script>
+<script>
+
+    seajs.config({
+        base: '../src'
+    });
+
+    define('start', function(require) {
+
+        var kity = require('kity');
+//        var Coordinate = require('../example/coordinate/coordinate');
+
+        var BezierViewer = kity.createClass({
+            base: kity.Group,
+            constructor: function(bezier) {
+                this.callBase();
+                this.addShape(bezier);
+                this.bezier = bezier.stroke(new kity.Color('red').set('a', 0.8));
+                this.update();
+            },
+            update: function() {
+                var points = this.bezier.getBezierPoints();
+                if (this.group) {
+                    this.group.remove();
+                }
+
+                this.addShape(this.group = new kity.Group().pipe(function() {
+                    for (var i = 0; i < points.length; i++) {
+                        var p = points[i], f, b;
+                        f = p.getForward();
+                        b = p.getBackward();
+                        p = p.getVertex();
+                        this.addShape(new kity.Path().pipe(function() {
+                            var d = this.getDrawer();
+                            d.moveTo(b.x, b.y);
+                            d.lineTo(p.x, p.y);
+                            d.lineTo(f.x, f.y);
+//                        this.fill('none');
+                            this.stroke('red');
+                        }));
+                        this.addShape(new kity.Rect(6, 6, b.x - 3, b.y - 3).stroke('red').fill('white'));
+                        this.addShape(new kity.Rect(6, 6, f.x - 3, f.y - 3).stroke('red').fill('white'));
+                        this.addShape(new kity.Rect(6, 6, p.x - 3, p.y - 3).fill('red'));
+                    }
+                }));
+            }
+        });
+
+        var paper = new kity.Paper(document.body).pipe(function () {
+            var width = 600, height = 400;
+            this.setWidth(width).setHeight(height);
+//        this.setViewBox(-40.5, -40.5, width + 40.5, height + 40.5);
+
+//            this.addShape(new Coordinate('black', [0, 59], [0, 39]));
+
+            var bezier = new kity.Bezier().addPoints([
+                new kity.BezierPoint(100, 250).setForward(100, 100),
+                new kity.BezierPoint(400, 250).setBackward(400, 100)
+//            new kity.BezierPoint(300, 350, false).setForward(200, 300).setBackward(400, 300),
+//            new kity.BezierPoint(150, 150).setBackward(130, 200),
+//            new kity.BezierPoint(300, 150, false).setForward(350, 50).setBackward(250, 50)
+            ]);
+
+            this.addShape(window.v = new BezierViewer(bezier));
+            window.p = bezier.getPoint(1);
+        });
+    });
+
+    seajs.use('start');
+</script>
+</html>
