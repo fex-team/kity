@@ -29,7 +29,7 @@ define(function(require) {
                 finishValue: deg,
                 setter: function(target, value, timeline) {
                     var delta = timeline.getDelta();
-                    target.rotate(delta, ax, ay);
+                    target.rotate(delta);
                 }
             });
         }
