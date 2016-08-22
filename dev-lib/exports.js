@@ -3,4 +3,4 @@
 /**
  * 模块暴露
  */
-use('kity');
+seajs.use('kity');

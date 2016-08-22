@@ -12,6 +12,8 @@ module.exports = function(grunt) {
         ' * ====================================================\n' +
         ' */\n\n';
 
+    var expose = '\nuse(\'expose-kity\');\n';
+
     // Project configuration.
     grunt.initConfig({
 
@@ -20,7 +22,7 @@ module.exports = function(grunt) {
 
         dependence: {
             options: {
-                entrance: 'kity',
+                entrance: 'expose-kity',
                 base: 'src'
             },
             merge: {
@@ -35,10 +37,10 @@ module.exports = function(grunt) {
             closure: {
                 options: {
                     banner: banner + '(function () {\n',
-                    footer: '})();'
+                    footer: expose + '})();'
                 },
                 files: {
-                    'dist/kity.js': ['.build_tmp/kity_tmp.js', 'dev-lib/exports.js']
+                    'dist/kity.js': ['.build_tmp/kity_tmp.js']
                 }
             }
         },

@@ -2,7 +2,7 @@
  * @fileOverview kity 暴露的方法或对象
  */
 
-define('kity', function(require, exports, module) {
+define(function(require, exports, module) {
     var kity = {},
         utils = require('./core/utils');
     kity.version = '2.0.0';
@@ -86,5 +86,5 @@ define('kity', function(require, exports, module) {
         OffsetEffect: require('./filter/effect/offseteffect')
     });
 
-    return (window.kity = kity);
+    module.exports = kity;
 });
