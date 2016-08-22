@@ -1,9 +1,9 @@
 /*!
  * ====================================================
- * kity - v2.0.5 - 2015-11-12
+ * kity - v2.0.5 - 2016-08-22
  * https://github.com/fex-team/kity
  * GitHub: https://github.com/fex-team/kity.git 
- * Copyright (c) 2015 Baidu FEX; Licensed BSD
+ * Copyright (c) 2016 Baidu FEX; Licensed BSD
  * ====================================================
  */
 
@@ -220,7 +220,7 @@ _p[0] = {
         });
         Animator.DEFAULT_DURATION = 300;
         Animator.DEFAULT_EASING = "linear";
-        var Shape = _p.r(60);
+        var Shape = _p.r(61);
         _p.r(11).extendClass(Shape, {
             /**
          * @method animate()
@@ -672,9 +672,9 @@ _p[2] = {
 _p[3] = {
     value: function(require) {
         var Animator = _p.r(0);
-        var g = _p.r(34);
-        var Path = _p.r(46);
-        var Shape = _p.r(60);
+        var g = _p.r(35);
+        var Path = _p.r(47);
+        var Shape = _p.r(61);
         /**
      * @class kity.MotionAnimator
      * @catalog animate
@@ -790,7 +790,7 @@ _p[4] = {
                 });
             }
         });
-        var Shape = _p.r(60);
+        var Shape = _p.r(61);
         _p.r(11).extendClass(Shape, {
             /**
          * @method fxOpacity()
@@ -872,7 +872,7 @@ _p[4] = {
 _p[5] = {
     value: function(require) {
         var Animator = _p.r(0);
-        var g = _p.r(34);
+        var g = _p.r(35);
         /**
      * @catalog animate
      *
@@ -912,7 +912,7 @@ _p[5] = {
                 });
             }
         });
-        var Path = _p.r(46);
+        var Path = _p.r(47);
         _p.r(11).extendClass(Path, {
             /**
          * @catalog animate
@@ -967,12 +967,12 @@ _p[6] = {
                     finishValue: deg,
                     setter: function(target, value, timeline) {
                         var delta = timeline.getDelta();
-                        target.rotate(delta, ax, ay);
+                        target.rotate(delta);
                     }
                 });
             }
         });
-        var Shape = _p.r(60);
+        var Shape = _p.r(61);
         _p.r(11).extendClass(Shape, {
             /**
          * @method fxRotate()
@@ -1032,7 +1032,7 @@ _p[7] = {
                 });
             }
         });
-        var Shape = _p.r(60);
+        var Shape = _p.r(61);
         _p.r(11).extendClass(Shape, {
             /**
          * @method fxScale
@@ -1064,7 +1064,7 @@ _p[7] = {
  */
 _p[8] = {
     value: function(require) {
-        var EventHandler = _p.r(33);
+        var EventHandler = _p.r(34);
         var utils = _p.r(12);
         var frame = _p.r(2);
         function getPercentValue(b, f, p) {
@@ -1397,7 +1397,7 @@ _p[9] = {
                 });
             }
         });
-        var Shape = _p.r(60);
+        var Shape = _p.r(61);
         _p.r(11).extendClass(Shape, {
             /**
          * @method fxTranslate()
@@ -2309,13 +2309,20 @@ _p[12] = {
     }
 };
 
+//src/expose-kity.js
+_p[13] = {
+    value: function(require, exports, module) {
+        module.exports = window.kity = _p.r(77);
+    }
+};
+
 //src/filter/effect/colormatrixeffect.js
 /**
  * 颜色矩阵运算效果封装
  */
-_p[13] = {
+_p[14] = {
     value: function(require, exports, module) {
-        var Effect = _p.r(16), Utils = _p.r(12);
+        var Effect = _p.r(17), Utils = _p.r(12);
         var ColorMatrixEffect = _p.r(11).createClass("ColorMatrixEffect", {
             base: Effect,
             constructor: function(type, input) {
@@ -2342,9 +2349,9 @@ _p[13] = {
 /**
  * 高斯模糊效果封装
  */
-_p[14] = {
+_p[15] = {
     value: function(require, exports, module) {
-        var Effect = _p.r(16), Utils = _p.r(12);
+        var Effect = _p.r(17), Utils = _p.r(12);
         var CompositeEffect = _p.r(11).createClass("CompositeEffect", {
             base: Effect,
             constructor: function(operator, input, input2) {
@@ -2375,9 +2382,9 @@ _p[14] = {
 /**
  * 像素级别的矩阵卷积运算效果封装
  */
-_p[15] = {
+_p[16] = {
     value: function(require, exports, module) {
-        var Effect = _p.r(16), Utils = _p.r(12);
+        var Effect = _p.r(17), Utils = _p.r(12);
         var ConvolveMatrixEffect = _p.r(11).createClass("ConvolveMatrixEffect", {
             base: Effect,
             constructor: function(edgeMode, input) {
@@ -2400,9 +2407,9 @@ _p[15] = {
  * 效果类
  * 该类型的对象不存储任何内部属性， 所有操作都是针对该类对象所维护的节点进行的
  */
-_p[16] = {
+_p[17] = {
     value: function(require, exports, module) {
-        var svg = _p.r(67), Effect = _p.r(11).createClass("Effect", {
+        var svg = _p.r(68), Effect = _p.r(11).createClass("Effect", {
             constructor: function(type) {
                 this.node = svg.createNode(type);
             },
@@ -2451,9 +2458,9 @@ _p[16] = {
 /**
  * 高斯模糊效果封装
  */
-_p[17] = {
+_p[18] = {
     value: function(require, exports, module) {
-        var Effect = _p.r(16), Utils = _p.r(12);
+        var Effect = _p.r(17), Utils = _p.r(12);
         return _p.r(11).createClass("GaussianblurEffect", {
             base: Effect,
             constructor: function(stdDeviation, input) {
@@ -2469,9 +2476,9 @@ _p[17] = {
 /**
  * 偏移效果封装
  */
-_p[18] = {
+_p[19] = {
     value: function(require, exports, module) {
-        var Effect = _p.r(16), Utils = _p.r(12);
+        var Effect = _p.r(17), Utils = _p.r(12);
         return _p.r(11).createClass("OffsetEffect", {
             base: Effect,
             constructor: function(dx, dy, input) {
@@ -2488,10 +2495,10 @@ _p[18] = {
 /*
  * Effect所用的container
  */
-_p[19] = {
+_p[20] = {
     value: function(require) {
         return _p.r(11).createClass("EffectContainer", {
-            base: _p.r(29),
+            base: _p.r(30),
             addEffect: function(point, pos) {
                 return this.addItem.apply(this, arguments);
             },
@@ -2539,12 +2546,12 @@ _p[19] = {
 /**
  * Filter 基类
  */
-_p[20] = {
+_p[21] = {
     value: function(require, exports, module) {
-        var svg = _p.r(67);
+        var svg = _p.r(68);
         var Class = _p.r(11);
         var Filter = Class.createClass("Filter", {
-            mixins: [ _p.r(19) ],
+            mixins: [ _p.r(20) ],
             constructor: function(x, y, width, height) {
                 this.node = svg.createNode("filter");
                 if (x !== undefined) {
@@ -2578,7 +2585,7 @@ _p[20] = {
                 return this.node;
             }
         });
-        var Shape = _p.r(60);
+        var Shape = _p.r(61);
         Class.extendClass(Shape, {
             applyFilter: function(filter) {
                 var filterId = filter.get("id");
@@ -2596,11 +2603,11 @@ _p[20] = {
 /*
  * 高斯模糊滤镜
  */
-_p[21] = {
+_p[22] = {
     value: function(require, exports, module) {
-        var GaussianblurEffect = _p.r(17);
+        var GaussianblurEffect = _p.r(18);
         return _p.r(11).createClass("GaussianblurFilter", {
-            base: _p.r(20),
+            base: _p.r(21),
             constructor: function(stdDeviation) {
                 this.callBase();
                 this.addEffect(new GaussianblurEffect(stdDeviation));
@@ -2613,11 +2620,11 @@ _p[21] = {
 /*
  * 投影滤镜
  */
-_p[22] = {
+_p[23] = {
     value: function(require, exports, module) {
-        var GaussianblurEffect = _p.r(17), Effect = _p.r(16), ColorMatrixEffect = _p.r(13), Color = _p.r(28), Utils = _p.r(12), CompositeEffect = _p.r(14), OffsetEffect = _p.r(18);
+        var GaussianblurEffect = _p.r(18), Effect = _p.r(17), ColorMatrixEffect = _p.r(14), Color = _p.r(29), Utils = _p.r(12), CompositeEffect = _p.r(15), OffsetEffect = _p.r(19);
         return _p.r(11).createClass("ProjectionFilter", {
-            base: _p.r(20),
+            base: _p.r(21),
             constructor: function(stdDeviation, dx, dy) {
                 this.callBase();
                 this.gaussianblurEffect = new GaussianblurEffect(stdDeviation, Effect.INPUT_SOURCE_ALPHA);
@@ -2686,7 +2693,7 @@ _p[22] = {
  *
  * 贝塞尔曲线
  */
-_p[23] = {
+_p[24] = {
     value: function(require, exports, module) {
         /**
      * @class kity.Bezier
@@ -2695,8 +2702,8 @@ _p[23] = {
      * @description 绘制和使用贝塞尔曲线。贝塞尔曲线作为一个贝塞尔点的容器，任何贝塞尔点的改变都会更改贝塞尔曲线的外观
      */
         return _p.r(11).createClass("Bezier", {
-            mixins: [ _p.r(51) ],
-            base: _p.r(46),
+            mixins: [ _p.r(52) ],
+            base: _p.r(47),
             /**
          * @constructor
          * @for kity.Bezier
@@ -2777,10 +2784,10 @@ _p[23] = {
  *
  * 表示一个贝塞尔点
  */
-_p[24] = {
+_p[25] = {
     value: function(require, exports, module) {
-        var ShapePoint = _p.r(63);
-        var Vector = _p.r(73);
+        var ShapePoint = _p.r(64);
+        var Vector = _p.r(74);
         /**
      * @class kity.BezierPoint
      *
@@ -3018,7 +3025,7 @@ _p[24] = {
  *
  * 表示一个矩形区域
  */
-_p[25] = {
+_p[26] = {
     value: function(require, exports, module) {
         /**
      * @class kity.Box
@@ -3263,7 +3270,7 @@ _p[25] = {
                 if (arguments.length < 4) {
                     left = right;
                 }
-                var x = this.left - left, y = this.top - top, width = this.width + right, height = this.height + top;
+                var x = this.left - left, y = this.top - top, width = this.width + right + left, height = this.height + top + bottom;
                 return new Box(x, y, width, height);
             },
             /**
@@ -3353,7 +3360,7 @@ _p[25] = {
  *
  * 绘制和使用圆形
  */
-_p[26] = {
+_p[27] = {
     value: function(require, exports, module) {
         /**
      * @class kity.Circle
@@ -3361,7 +3368,7 @@ _p[26] = {
      * @description 表示一个圆形
      */
         return _p.r(11).createClass("Circle", {
-            base: _p.r(32),
+            base: _p.r(33),
             /**
          * @constructor
          * @for kity.Circle
@@ -3407,10 +3414,10 @@ _p[26] = {
  *
  * 支持图形裁切
  */
-_p[27] = {
+_p[28] = {
     value: function(require, exports, module) {
         var Class = _p.r(11);
-        var Shape = _p.r(60);
+        var Shape = _p.r(61);
         /**
      * @class kity.Clip
      * @base kity.Resource
@@ -3420,7 +3427,7 @@ _p[27] = {
      */
         var Clip = Class.createClass("Clip", {
             base: Shape,
-            mixins: [ _p.r(61) ],
+            mixins: [ _p.r(62) ],
             /**
          * @constructor
          * @for kity.Clip
@@ -3493,9 +3500,9 @@ _p[27] = {
  *
  * 提供颜色支持
  */
-_p[28] = {
+_p[29] = {
     value: function(require, exports, module) {
-        var Utils = _p.r(12), StandardColor = _p.r(64), ColorUtils = {}, /**
+        var Utils = _p.r(12), StandardColor = _p.r(65), ColorUtils = {}, /**
          * @class kity.Color
          * @description 表示一个颜色
          */
@@ -4066,7 +4073,7 @@ _p[28] = {
 };
 
 //src/graphic/container.js
-_p[29] = {
+_p[30] = {
     value: function(require, exports, module) {
         function itemRemove() {
             this.container.removeItem(this);
@@ -4172,7 +4179,7 @@ _p[29] = {
 /*
  * 曲线
  * */
-_p[30] = {
+_p[31] = {
     value: function(require, exports, module) {
         var Utils = _p.r(12), CurveUtil = {
             /*
@@ -4282,8 +4289,8 @@ _p[30] = {
             }
         };
         return _p.r(11).createClass("Curve", {
-            base: _p.r(46),
-            mixins: [ _p.r(51) ],
+            base: _p.r(47),
+            mixins: [ _p.r(52) ],
             constructor: function(points, isColse) {
                 this.callBase();
                 this.setPoints(points || []);
@@ -4366,7 +4373,7 @@ _p[30] = {
 };
 
 //src/graphic/data.js
-_p[31] = {
+_p[32] = {
     value: function(require, exports, module) {
         return _p.r(11).createClass("Data", {
             constructor: function() {
@@ -4388,11 +4395,11 @@ _p[31] = {
 };
 
 //src/graphic/ellipse.js
-_p[32] = {
+_p[33] = {
     value: function(require, exports, module) {
-        var Utils = _p.r(12), Point = _p.r(50);
+        var Utils = _p.r(12), Point = _p.r(51);
         return _p.r(11).createClass("Ellipse", {
-            base: _p.r(46),
+            base: _p.r(47),
             constructor: function(rx, ry, cx, cy) {
                 this.callBase();
                 this.rx = rx || 0;
@@ -4470,7 +4477,7 @@ _p[32] = {
 /*
  * kity event 实现
  */
-_p[33] = {
+_p[34] = {
     value: function(require, exports, module) {
         // polyfill
         (function() {
@@ -4487,7 +4494,7 @@ _p[33] = {
             CustomEvent.prototype = window.Event.prototype;
             window.CustomEvent = CustomEvent;
         })();
-        var Utils = _p.r(12), ShapeEvent = _p.r(62);
+        var Utils = _p.r(12), ShapeEvent = _p.r(63);
         // 内部处理器缓存
         var INNER_HANDLER_CACHE = {}, // 用户处理器缓存
         USER_HANDLER_CACHE = {}, guid = 0;
@@ -4641,12 +4648,12 @@ _p[33] = {
 };
 
 //src/graphic/geometry.js
-_p[34] = {
+_p[35] = {
     value: function(require) {
         var utils = _p.r(12);
-        var Point = _p.r(50);
-        var Vector = _p.r(73);
-        var Matrix = _p.r(43);
+        var Point = _p.r(51);
+        var Vector = _p.r(74);
+        var Matrix = _p.r(44);
         var g = {};
         var pathCommand = /([achlmrqstvz])[\s,]*((-?\d*\.?\d*(?:e[\-+]?\d+)?[\s]*,?\s*)+)/gi, pathValues = /(-?\d*\.?\d*(?:e[\-+]?\d+)?)\s*,?\s*/gi, paramCounts = {
             a: 7,
@@ -5532,11 +5539,11 @@ _p[34] = {
 };
 
 //src/graphic/gradient.js
-_p[35] = {
+_p[36] = {
     value: function(require, exports, module) {
-        var svg = _p.r(67);
-        var Resource = _p.r(58);
-        var Color = _p.r(28);
+        var svg = _p.r(68);
+        var Resource = _p.r(59);
+        var Color = _p.r(29);
         return _p.r(11).createClass("GradientBrush", {
             base: Resource,
             constructor: function(gradientNodeType, paper) {
@@ -5564,12 +5571,12 @@ _p[35] = {
 };
 
 //src/graphic/group.js
-_p[36] = {
+_p[37] = {
     value: function(require, exports, module) {
-        var ShapeContainer = _p.r(61);
+        var ShapeContainer = _p.r(62);
         return _p.r(11).createClass("Group", {
             mixins: [ ShapeContainer ],
-            base: _p.r(60),
+            base: _p.r(61),
             constructor: function Group() {
                 this.callBase("g");
             }
@@ -5578,12 +5585,12 @@ _p[36] = {
 };
 
 //src/graphic/hyperlink.js
-_p[37] = {
+_p[38] = {
     value: function(require, exports, module) {
-        var ShapeContainer = _p.r(61);
+        var ShapeContainer = _p.r(62);
         return _p.r(11).createClass("HyperLink", {
             mixins: [ ShapeContainer ],
-            base: _p.r(60),
+            base: _p.r(61),
             constructor: function(url) {
                 this.callBase("a");
                 this.setHref(url);
@@ -5607,10 +5614,10 @@ _p[37] = {
 };
 
 //src/graphic/image.js
-_p[38] = {
+_p[39] = {
     value: function(require, exports, module) {
         return _p.r(11).createClass("Image", {
-            base: _p.r(60),
+            base: _p.r(61),
             constructor: function(url, width, height, x, y) {
                 this.callBase("image");
                 this.url = url;
@@ -5668,10 +5675,10 @@ _p[38] = {
 };
 
 //src/graphic/line.js
-_p[39] = {
+_p[40] = {
     value: function(require, exports, module) {
         return _p.r(11).createClass("Line", {
-            base: _p.r(46),
+            base: _p.r(47),
             constructor: function(x1, y1, x2, y2) {
                 this.callBase();
                 this.point1 = {
@@ -5718,10 +5725,10 @@ _p[39] = {
 };
 
 //src/graphic/lineargradient.js
-_p[40] = {
+_p[41] = {
     value: function(require, exports, module) {
-        var svg = _p.r(67);
-        var Gradient = _p.r(35);
+        var svg = _p.r(68);
+        var Gradient = _p.r(36);
         return _p.r(11).createClass("LinearGradientBrush", {
             base: Gradient,
             constructor: function(paper) {
@@ -5756,12 +5763,12 @@ _p[40] = {
 };
 
 //src/graphic/marker.js
-_p[41] = {
+_p[42] = {
     value: function(require, exports, module) {
-        var Point = _p.r(50);
+        var Point = _p.r(51);
         var Marker = _p.r(11).createClass("Marker", {
-            base: _p.r(58),
-            mixins: [ _p.r(61), _p.r(75) ],
+            base: _p.r(59),
+            mixins: [ _p.r(62), _p.r(76) ],
             constructor: function() {
                 this.callBase("marker");
                 this.setOrient("auto");
@@ -5800,7 +5807,7 @@ _p[41] = {
                 return +this.height;
             }
         });
-        var Path = _p.r(46);
+        var Path = _p.r(47);
         _p.r(11).extendClass(Path, {
             setMarker: function(marker, pos) {
                 pos = pos || "end";
@@ -5820,13 +5827,13 @@ _p[41] = {
 /**
  * 蒙板
  */
-_p[42] = {
+_p[43] = {
     value: function(require, exports, module) {
         var Class = _p.r(11);
-        var Shape = _p.r(60);
+        var Shape = _p.r(61);
         var Mask = Class.createClass("Mask", {
             base: Shape,
-            mixins: [ _p.r(61) ],
+            mixins: [ _p.r(62) ],
             constructor: function() {
                 this.callBase("mask");
             },
@@ -5846,12 +5853,12 @@ _p[42] = {
 };
 
 //src/graphic/matrix.js
-_p[43] = {
+_p[44] = {
     value: function(require, exports, module) {
         var utils = _p.r(12);
-        var Box = _p.r(25);
+        var Box = _p.r(26);
         var mPattern = /matrix\s*\((.+)\)/i;
-        var Point = _p.r(50);
+        var Point = _p.r(51);
         // 注意，合并的结果是先执行m2，再执行m1的结果
         function mergeMatrixData(m2, m1) {
             return {
@@ -6125,10 +6132,10 @@ _p[43] = {
 /**
  * 调色板
  */
-_p[44] = {
+_p[45] = {
     value: function(require, exports, module) {
         //标准color
-        var StandardColor = _p.r(64), Color = _p.r(28), Utils = _p.r(12);
+        var StandardColor = _p.r(65), Color = _p.r(29), Utils = _p.r(12);
         var Palette = _p.r(11).createClass("Palette", {
             constructor: function() {
                 this.color = {};
@@ -6229,17 +6236,17 @@ _p[44] = {
 };
 
 //src/graphic/paper.js
-_p[45] = {
+_p[46] = {
     value: function(require, exports, module) {
         var Class = _p.r(11);
         var utils = _p.r(12);
-        var svg = _p.r(67);
-        var Container = _p.r(29);
-        var ShapeContainer = _p.r(61);
-        var ViewBox = _p.r(75);
-        var EventHandler = _p.r(33);
-        var Styled = _p.r(66);
-        var Matrix = _p.r(43);
+        var svg = _p.r(68);
+        var Container = _p.r(30);
+        var ShapeContainer = _p.r(62);
+        var ViewBox = _p.r(76);
+        var EventHandler = _p.r(34);
+        var Styled = _p.r(67);
+        var Matrix = _p.r(44);
         var Paper = Class.createClass("Paper", {
             mixins: [ ShapeContainer, EventHandler, Styled, ViewBox ],
             constructor: function(container) {
@@ -6366,7 +6373,7 @@ _p[45] = {
                 return this;
             }
         });
-        var Shape = _p.r(60);
+        var Shape = _p.r(61);
         Class.extendClass(Shape, {
             getPaper: function() {
                 var parent = this.container;
@@ -6403,13 +6410,13 @@ _p[45] = {
 };
 
 //src/graphic/path.js
-_p[46] = {
+_p[47] = {
     value: function(require, exports, module) {
         var Utils = _p.r(12);
         var createClass = _p.r(11).createClass;
-        var Shape = _p.r(60);
-        var svg = _p.r(67);
-        var g = _p.r(34);
+        var Shape = _p.r(61);
+        var svg = _p.r(68);
+        var g = _p.r(35);
         var slice = Array.prototype.slice, flatten = Utils.flatten;
         var PathDrawer = createClass("PathDrawer", {
             constructor: function(path) {
@@ -6524,11 +6531,11 @@ _p[46] = {
 };
 
 //src/graphic/pattern.js
-_p[47] = {
+_p[48] = {
     value: function(require, exports, module) {
-        var Resource = _p.r(58);
-        var ShapeContainer = _p.r(61);
-        var svg = _p.r(67);
+        var Resource = _p.r(59);
+        var ShapeContainer = _p.r(62);
+        var svg = _p.r(68);
         return _p.r(11).createClass("PatternBrush", {
             base: Resource,
             mixins: [ ShapeContainer ],
@@ -6567,9 +6574,9 @@ _p[47] = {
 };
 
 //src/graphic/pen.js
-_p[48] = {
+_p[49] = {
     value: function(require, exports, module) {
-        var Color = _p.r(28);
+        var Color = _p.r(29);
         return _p.r(11).createClass("Pen", {
             constructor: function(brush, width) {
                 this.brush = brush;
@@ -6648,10 +6655,10 @@ _p[48] = {
 };
 
 //src/graphic/pie.js
-_p[49] = {
+_p[50] = {
     value: function(require, exports, module) {
         return _p.r(11).createClass({
-            base: _p.r(68),
+            base: _p.r(69),
             constructor: function(radius, angle, angleOffset) {
                 this.callBase([ 0, radius ], angle, angleOffset);
             },
@@ -6669,7 +6676,7 @@ _p[49] = {
 /*
  * 点对象抽象
  */
-_p[50] = {
+_p[51] = {
     value: function(require, exports, module) {
         /**
      * @class kity.Point
@@ -6759,10 +6766,10 @@ _p[50] = {
 /**
  * 点集合容器
  */
-_p[51] = {
+_p[52] = {
     value: function(require, exports, module) {
         return _p.r(11).createClass("PointContainer", {
-            base: _p.r(29),
+            base: _p.r(30),
             constructor: function() {
                 this.callBase();
             },
@@ -6804,12 +6811,12 @@ _p[51] = {
 /*
  * 通过点来决定图形的公共父类
  */
-_p[52] = {
+_p[53] = {
     value: function(require, exports, module) {
         var Utils = _p.r(12);
         return _p.r(11).createClass("Poly", {
-            base: _p.r(46),
-            mixins: [ _p.r(51) ],
+            base: _p.r(47),
+            mixins: [ _p.r(52) ],
             constructor: function(points, closeable) {
                 this.callBase();
                 //是否可闭合
@@ -6845,10 +6852,10 @@ _p[52] = {
 };
 
 //src/graphic/polygon.js
-_p[53] = {
+_p[54] = {
     value: function(require, exports, module) {
         return _p.r(11).createClass("Polygon", {
-            base: _p.r(52),
+            base: _p.r(53),
             constructor: function(points) {
                 this.callBase(points, true);
             }
@@ -6857,10 +6864,10 @@ _p[53] = {
 };
 
 //src/graphic/polyline.js
-_p[54] = {
+_p[55] = {
     value: function(require, exports, module) {
         return _p.r(11).createClass("Polyline", {
-            base: _p.r(52),
+            base: _p.r(53),
             constructor: function(points) {
                 this.callBase(points);
             }
@@ -6869,9 +6876,9 @@ _p[54] = {
 };
 
 //src/graphic/radialgradient.js
-_p[55] = {
+_p[56] = {
     value: function(require, exports, module) {
-        var Gradient = _p.r(35);
+        var Gradient = _p.r(36);
         return _p.r(11).createClass("RadialGradientBrush", {
             base: Gradient,
             constructor: function(paper) {
@@ -6914,9 +6921,9 @@ _p[55] = {
 };
 
 //src/graphic/rect.js
-_p[56] = {
+_p[57] = {
     value: function(require, exports, module) {
-        var RectUtils = {}, Utils = _p.r(12), Point = _p.r(50), Box = _p.r(25);
+        var RectUtils = {}, Utils = _p.r(12), Point = _p.r(51), Box = _p.r(26);
         Utils.extend(RectUtils, {
             //根据传递进来的width、height和radius属性，
             //获取最适合的radius值
@@ -6931,7 +6938,7 @@ _p[56] = {
      * @base kity.Path
      */
         var Rect = _p.r(11).createClass("Rect", {
-            base: _p.r(46),
+            base: _p.r(47),
             /**
          * @constructor
          * @for kity.Rect
@@ -7092,11 +7099,11 @@ _p[56] = {
 };
 
 //src/graphic/regularpolygon.js
-_p[57] = {
+_p[58] = {
     value: function(require, exports, module) {
-        var Point = _p.r(50);
+        var Point = _p.r(51);
         return _p.r(11).createClass("RegularPolygon", {
-            base: _p.r(46),
+            base: _p.r(47),
             constructor: function(side, radius, x, y) {
                 this.callBase();
                 this.radius = radius || 0;
@@ -7147,9 +7154,9 @@ _p[57] = {
  * @author: techird
  * @copyright: Baidu FEX, 2014
  */
-_p[58] = {
+_p[59] = {
     value: function(require, exports, module) {
-        var svg = _p.r(67);
+        var svg = _p.r(68);
         return _p.r(11).createClass("Resource", {
             constructor: function(nodeType, paper) {
                 this.callBase();
@@ -7166,10 +7173,10 @@ _p[58] = {
 };
 
 //src/graphic/ring.js
-_p[59] = {
+_p[60] = {
     value: function(require, exports, module) {
         return _p.r(11).createClass({
-            base: _p.r(68),
+            base: _p.r(69),
             constructor: function(innerRadius, outerRadius) {
                 this.callBase([ innerRadius, outerRadius ], 360, 0);
             },
@@ -7190,17 +7197,17 @@ _p[59] = {
 };
 
 //src/graphic/shape.js
-_p[60] = {
+_p[61] = {
     value: function(require, exports, module) {
-        var svg = _p.r(67);
+        var svg = _p.r(68);
         var utils = _p.r(12);
-        var EventHandler = _p.r(33);
-        var Styled = _p.r(66);
-        var Data = _p.r(31);
-        var Matrix = _p.r(43);
-        var Pen = _p.r(48);
+        var EventHandler = _p.r(34);
+        var Styled = _p.r(67);
+        var Data = _p.r(32);
+        var Matrix = _p.r(44);
+        var Pen = _p.r(49);
         var slice = Array.prototype.slice;
-        var Box = _p.r(25);
+        var Box = _p.r(26);
         var Shape = _p.r(11).createClass("Shape", {
             mixins: [ EventHandler, Styled, Data ],
             constructor: function Shape(tagName) {
@@ -7409,9 +7416,9 @@ _p[60] = {
 };
 
 //src/graphic/shapecontainer.js
-_p[61] = {
+_p[62] = {
     value: function(require, exports, module) {
-        var Container = _p.r(29);
+        var Container = _p.r(30);
         var utils = _p.r(12);
         var ShapeContainer = _p.r(11).createClass("ShapeContainer", {
             base: Container,
@@ -7522,7 +7529,7 @@ _p[61] = {
                 return this.shapeNode || this.node;
             }
         });
-        var Shape = _p.r(60);
+        var Shape = _p.r(61);
         _p.r(11).extendClass(Shape, {
             bringTo: function(index) {
                 this.container.arrangeShape(this, index);
@@ -7572,9 +7579,9 @@ _p[61] = {
 /*
  * 图形事件包装类
  * */
-_p[62] = {
+_p[63] = {
     value: function(require, exprots, module) {
-        var Matrix = _p.r(43), Utils = _p.r(12), Point = _p.r(50);
+        var Matrix = _p.r(44), Utils = _p.r(12), Point = _p.r(51);
         return _p.r(11).createClass("ShapeEvent", {
             constructor: function(event) {
                 var target = null;
@@ -7640,10 +7647,10 @@ _p[62] = {
 /*
  * 图形上的点抽象
  */
-_p[63] = {
+_p[64] = {
     value: function(require, exports, module) {
         return _p.r(11).createClass("ShapePoint", {
-            base: _p.r(50),
+            base: _p.r(51),
             constructor: function(px, py) {
                 this.callBase(px, py);
             },
@@ -7676,7 +7683,7 @@ _p[63] = {
 /**
  * 标准颜色映射
  */
-_p[64] = {
+_p[65] = {
     value: {
         COLOR_STANDARD: {
             aliceblue: "#f0f8ff",
@@ -7832,7 +7839,7 @@ _p[64] = {
 };
 
 //src/graphic/star.js
-_p[65] = {
+_p[66] = {
     value: function(require, exports, module) {
         /**
      * @see http://www.jdawiseman.com/papers/easymath/surds_star_inner_radius.html
@@ -7846,9 +7853,9 @@ _p[65] = {
             "10": .726542528005,
             "12": .707106781187
         };
-        var Point = _p.r(50);
+        var Point = _p.r(51);
         return _p.r(11).createClass("Star", {
-            base: _p.r(46),
+            base: _p.r(47),
             constructor: function(vertex, radius, shrink, offset, angleOffset) {
                 this.callBase();
                 this.vertex = vertex || 3;
@@ -7913,7 +7920,7 @@ _p[65] = {
 };
 
 //src/graphic/styled.js
-_p[66] = {
+_p[67] = {
     value: function(require, exports, module) {
         // polyfill for ie
         var ClassList = _p.r(11).createClass("ClassList", {
@@ -7974,7 +7981,7 @@ _p[66] = {
 };
 
 //src/graphic/svg.js
-_p[67] = {
+_p[68] = {
     value: function(require, exports, module) {
         var doc = document;
         var id = 0;
@@ -7996,11 +8003,11 @@ _p[67] = {
 };
 
 //src/graphic/sweep.js
-_p[68] = {
+_p[69] = {
     value: function(require, exports, module) {
-        var Point = _p.r(50);
+        var Point = _p.r(51);
         return _p.r(11).createClass("Sweep", {
-            base: _p.r(46),
+            base: _p.r(47),
             constructor: function(sectionArray, angle, angleOffset) {
                 this.callBase();
                 this.sectionArray = sectionArray || [];
@@ -8062,11 +8069,11 @@ _p[68] = {
 };
 
 //src/graphic/text.js
-_p[69] = {
+_p[70] = {
     value: function(require, exports, module) {
-        var TextContent = _p.r(70);
-        var ShapeContainer = _p.r(61);
-        var svg = _p.r(67);
+        var TextContent = _p.r(71);
+        var ShapeContainer = _p.r(62);
+        var svg = _p.r(68);
         var utils = _p.r(12);
         var offsetHash = {};
         function getTextBoundOffset(text) {
@@ -8210,9 +8217,9 @@ _p[69] = {
 };
 
 //src/graphic/textcontent.js
-_p[70] = {
+_p[71] = {
     value: function(require, exports, module) {
-        var Shape = _p.r(60);
+        var Shape = _p.r(61);
         return _p.r(11).createClass("TextContent", {
             base: Shape,
             constructor: function(nodeType) {
@@ -8286,10 +8293,10 @@ _p[70] = {
 };
 
 //src/graphic/textspan.js
-_p[71] = {
+_p[72] = {
     value: function(require, exports, module) {
-        var TextContent = _p.r(70);
-        var Styled = _p.r(66);
+        var TextContent = _p.r(71);
+        var Styled = _p.r(67);
         return _p.r(11).createClass("TextSpan", {
             base: TextContent,
             mixins: [ Styled ],
@@ -8305,12 +8312,12 @@ _p[71] = {
 /*
  * USE 功能
  */
-_p[72] = {
+_p[73] = {
     value: function(require, exports, module) {
-        var Svg = _p.r(67);
+        var Svg = _p.r(68);
         var Class = _p.r(11);
         var Use = Class.createClass("Use", {
-            base: _p.r(60),
+            base: _p.r(61),
             constructor: function(shape) {
                 this.callBase("use");
                 this.ref(shape);
@@ -8335,7 +8342,7 @@ _p[72] = {
                 return this;
             }
         });
-        var Shape = _p.r(60);
+        var Shape = _p.r(61);
         Class.extendClass(Shape, {
             // fast-use
             use: function() {
@@ -8347,10 +8354,10 @@ _p[72] = {
 };
 
 //src/graphic/vector.js
-_p[73] = {
+_p[74] = {
     value: function(require, exports, module) {
-        var Point = _p.r(50);
-        var Matrix = _p.r(43);
+        var Point = _p.r(51);
+        var Matrix = _p.r(44);
         var Vector = _p.r(11).createClass("Vector", {
             base: Point,
             constructor: function(x, y) {
@@ -8421,13 +8428,13 @@ _p[73] = {
 };
 
 //src/graphic/view.js
-_p[74] = {
+_p[75] = {
     value: function(require, exports, module) {
-        var ShapeContainer = _p.r(61);
-        var ViewBox = _p.r(75);
+        var ShapeContainer = _p.r(62);
+        var ViewBox = _p.r(76);
         return _p.r(11).createClass("View", {
             mixins: [ ShapeContainer, ViewBox ],
-            base: _p.r(74),
+            base: _p.r(75),
             constructor: function() {
                 this.callBase("view");
             }
@@ -8436,7 +8443,7 @@ _p[74] = {
 };
 
 //src/graphic/viewbox.js
-_p[75] = {
+_p[76] = {
     value: function(require, exports, module) {
         return _p.r(11).createClass("ViewBox", {
             getViewBox: function() {
@@ -8474,7 +8481,7 @@ _p[75] = {
 /**
  * @fileOverview kity 暴露的方法或对象
  */
-_p[76] = {
+_p[77] = {
     value: function(require, exports, module) {
         var kity = {}, utils = _p.r(12);
         kity.version = "2.0.0";
@@ -8485,49 +8492,49 @@ _p[76] = {
             Utils: utils,
             Browser: _p.r(10),
             // shape
-            Box: _p.r(25),
-            Bezier: _p.r(23),
-            BezierPoint: _p.r(24),
-            Circle: _p.r(26),
-            Clip: _p.r(27),
-            Color: _p.r(28),
-            Container: _p.r(29),
-            Curve: _p.r(30),
-            Ellipse: _p.r(32),
-            Group: _p.r(36),
-            Gradient: _p.r(35),
-            HyperLink: _p.r(37),
-            Image: _p.r(38),
-            Line: _p.r(39),
-            LinearGradient: _p.r(40),
-            Mask: _p.r(42),
-            Matrix: _p.r(43),
-            Marker: _p.r(41),
-            Palette: _p.r(44),
-            Paper: _p.r(45),
-            Path: _p.r(46),
-            Pattern: _p.r(47),
-            Pen: _p.r(48),
-            Point: _p.r(50),
-            PointContainer: _p.r(51),
-            Polygon: _p.r(53),
-            Polyline: _p.r(54),
-            Pie: _p.r(49),
-            RadialGradient: _p.r(55),
-            Resource: _p.r(58),
-            Rect: _p.r(56),
-            RegularPolygon: _p.r(57),
-            Ring: _p.r(59),
-            Shape: _p.r(60),
-            ShapePoint: _p.r(63),
-            ShapeContainer: _p.r(61),
-            Sweep: _p.r(68),
-            Star: _p.r(65),
-            Text: _p.r(69),
-            TextSpan: _p.r(71),
-            Use: _p.r(72),
-            Vector: _p.r(73),
-            g: _p.r(34),
+            Box: _p.r(26),
+            Bezier: _p.r(24),
+            BezierPoint: _p.r(25),
+            Circle: _p.r(27),
+            Clip: _p.r(28),
+            Color: _p.r(29),
+            Container: _p.r(30),
+            Curve: _p.r(31),
+            Ellipse: _p.r(33),
+            Group: _p.r(37),
+            Gradient: _p.r(36),
+            HyperLink: _p.r(38),
+            Image: _p.r(39),
+            Line: _p.r(40),
+            LinearGradient: _p.r(41),
+            Mask: _p.r(43),
+            Matrix: _p.r(44),
+            Marker: _p.r(42),
+            Palette: _p.r(45),
+            Paper: _p.r(46),
+            Path: _p.r(47),
+            Pattern: _p.r(48),
+            Pen: _p.r(49),
+            Point: _p.r(51),
+            PointContainer: _p.r(52),
+            Polygon: _p.r(54),
+            Polyline: _p.r(55),
+            Pie: _p.r(50),
+            RadialGradient: _p.r(56),
+            Resource: _p.r(59),
+            Rect: _p.r(57),
+            RegularPolygon: _p.r(58),
+            Ring: _p.r(60),
+            Shape: _p.r(61),
+            ShapePoint: _p.r(64),
+            ShapeContainer: _p.r(62),
+            Sweep: _p.r(69),
+            Star: _p.r(66),
+            Text: _p.r(70),
+            TextSpan: _p.r(72),
+            Use: _p.r(73),
+            Vector: _p.r(74),
+            g: _p.r(35),
             // animate
             Animator: _p.r(0),
             Easing: _p.r(1),
@@ -8541,32 +8548,27 @@ _p[76] = {
             requestFrame: _p.r(2).requestFrame,
             releaseFrame: _p.r(2).releaseFrame,
             // filter
-            Filter: _p.r(20),
-            GaussianblurFilter: _p.r(21),
-            ProjectionFilter: _p.r(22),
+            Filter: _p.r(21),
+            GaussianblurFilter: _p.r(22),
+            ProjectionFilter: _p.r(23),
             // effect
-            ColorMatrixEffect: _p.r(13),
-            CompositeEffect: _p.r(14),
-            ConvolveMatrixEffect: _p.r(15),
-            Effect: _p.r(16),
-            GaussianblurEffect: _p.r(17),
-            OffsetEffect: _p.r(18)
+            ColorMatrixEffect: _p.r(14),
+            CompositeEffect: _p.r(15),
+            ConvolveMatrixEffect: _p.r(16),
+            Effect: _p.r(17),
+            GaussianblurEffect: _p.r(18),
+            OffsetEffect: _p.r(19)
         });
-        return window.kity = kity;
+        module.exports = kity;
     }
 };
 
 var moduleMapping = {
-    kity: 76
+    "expose-kity": 13
 };
 
 function use(name) {
     _p.r([ moduleMapping[name] ]);
 }
-/* global use, inc: true */
-
-/**
- * 模块暴露
- */
-use('kity');
+use('expose-kity');
 })();
