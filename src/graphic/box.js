@@ -278,8 +278,8 @@ define(function(require, exports, module) {
             }
             var x = this.left - left,
                 y = this.top - top,
-                width = this.width + right,
-                height = this.height + top;
+                width = this.width + right + left,
+                height = this.height + top + bottom;
             return new Box(x, y, width, height);
         },
 
