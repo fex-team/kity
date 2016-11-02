@@ -47,6 +47,11 @@ define(function(require, exports) {
      *         return this.base('toString') + ',' + this.toString();
      *     }
      * })
+     *
+     * var bob = new Male();
+     *
+     * console.log(bob.speak()); // I am a person, I am a man
+     *
      * ```
      */
     Class.prototype.base = function(name) {
@@ -85,6 +90,7 @@ define(function(require, exports) {
      * });
      *
      * var dog = new Dog('Dummy');
+     *
      * console.log(dog.toString()); // "I am an animal name Dummy, a dog";
      * ```
      */
@@ -94,6 +100,38 @@ define(function(require, exports) {
         return method.apply(this, arguments);
     };
 
+    /**
+     * @method mixin()
+     * @for kity.Class
+     * @protected
+     * @grammar mixin(name, args...) => {any}
+     * @description 调用 mixins 中指定名称的函数
+     * @param {string} name 函数的名称
+     * @param {parameter} args... 传递给 mixins 中的函数的参数
+     *
+     * @example
+     *
+     * ```js
+     * var Work = kity.createClass('Work', {
+     *     showTitle: function () {
+     *         return 'Frontend Engineer';
+     *     }
+     * });
+     *
+     * var Person = kity.createClass('Person', {
+     *     mixins: [Work],
+     *
+     *     toString: function() {
+     *         return 'I am a person, my work title is : ' + this.mixin('showTitle');
+     *     }
+     * });
+     *
+     * var fe = new Person();
+     *
+     * console.log(fe.toString()); // I am a person, my work title is Frontend Engineer
+     *
+     * ```
+     */
     Class.prototype.mixin = function(name) {
         var caller = arguments.callee.caller;
         var mixins = caller.__KityMethodClass.__KityMixins;
@@ -104,6 +142,41 @@ define(function(require, exports) {
         return method.apply(this, Array.prototype.slice.call(arguments, 1));
     };
 
+
+    /**
+     * @method callMixin()
+     * @for kity.Class
+     * @protected
+     * @grammar callMixin(args...) => {any}
+     * @description 调用 mixins 中同名函数
+     * @param {parameter} args... 传递到 mixins 同名函数的参数
+     *
+     * @example
+     *
+     * ```js
+     * var Skill = kity.createClass('Skill', {
+     *     toString: function () {
+     *         return 'I can speak';
+     *     }
+     * });
+     *
+     * var Dog = kity.createClass('Dog', {
+     *     mixins: [Skill],
+     *
+     *     constructor: function (name) {
+     *        this.name = name;
+     *     }
+     *
+     *     toString: function() {
+     *         return 'I am ' + this.name + ', ' + this.callMixin();
+     *     }
+     * });
+     *
+     * var dog = new Dog('Snoppy');
+     *
+     * console.log(dog.toString()); // "I am Snoppy, I can speak";
+     * ```
+     */
     Class.prototype.callMixin = function() {
         var caller = arguments.callee.caller;
         var methodName = caller.__KityMethodName;
@@ -126,7 +199,7 @@ define(function(require, exports) {
      * @method pipe()
      * @for kity.Class
      * @grammar pipe() => {this}
-     * @description 以当前对象为上线文以及管道函数的第一个参数，执行一个管道函数
+     * @description 以当前对象为上下文以及管道函数的第一个参数，执行一个管道函数
      * @param  {Function} fn 进行管道操作的函数
      *
      * @example
@@ -303,6 +376,7 @@ define(function(require, exports) {
      *     constructor: function(name, color) {
      *         // 调用父类构造函数
      *         this.callBase(name);
+     *         this.color = color;
      *     },
      *     toString: function() {
      *         return 'A ' + this.color + ' cat, ' + this.callBase();
@@ -329,13 +403,12 @@ define(function(require, exports) {
      *     mixins: [Walkable],
      *     constructor: function(name) {
      *         this.callBase(name);
-     *         this.callMixins();
+     *         this.callMixin();
      *     }
      * });
      *
-     * var dog = new Dog('doggy');
-     * console.log(dog.toString() + ' say:');
-     * dog.walk();
+     * var dog = new Dog('snoppy');
+     * console.log(dog.toString() + ' say: ' + dog.walk()); // snoppy say: I am walking fast
      * ```
      */
     exports.createClass = function(classname, defines) {
