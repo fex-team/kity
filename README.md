@@ -1,5 +1,6 @@
 Kity Vector Libary [![Build Status](https://travis-ci.org/fex-team/kity.svg?branch=dev)](https://travis-ci.org/fex-team/kity)
 =======
+You can translate this from Chinese to English For more Info
 
 Kity 是一个基于 SVG 的矢量图形库，帮助你快速在页面上创建和使用矢量元素。
 
