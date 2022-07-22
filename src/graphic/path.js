@@ -12,7 +12,7 @@ define(function(require, exports, module) {
         constructor: function(path) {
             this.segment = [];
             this.path = path;
-            this.__clear = false;
+            this._clear = false;
         },
         getPath: function() {
             return this.path;
