@@ -23,7 +23,7 @@ define(function(require) {
      * pa.start(path, 300);
      * ```
      */
-    var PathAnimator = require('../core/class').createClass('OpacityAnimator', {
+    var PathAnimator = require('../core/class').createClass('PathAnimator', {
         base: Animator,
 
         /**
