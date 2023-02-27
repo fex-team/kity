@@ -6,8 +6,6 @@ define(function(require, exports, module) {
     return require('../core/class').createClass('View', {
         mixins: [ShapeContainer, ViewBox],
 
-        base: require('./view'),
-
         constructor: function() {
 
             this.callBase('view');
