@@ -181,7 +181,7 @@ define(function(require, exports, module) {
                     this.node.setAttribute('stroke-width', width);
                 }
             } else if (pen === null) {
-                this.node.removeAttribute('stroe');
+                this.node.removeAttribute('stroke');
             }
             return this;
         },
