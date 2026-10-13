@@ -54,7 +54,7 @@ define(function(require, exports, module) {
          */
         clip: function(shape) {
 
-            shape.getNode().setAttribute('clip-path', this);
+            shape.getNode().setAttribute('clip-path', 'url(#' + this.getId() + ')');
             return this;
 
         }
